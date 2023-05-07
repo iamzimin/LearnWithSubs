@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/module"
         android:icon="@drawable/module"
-        android:iconTint="?attr/bottom_menu_color"
+        android:iconTint="?attr/background_dark"
         android:title="@string/module"/>
 
     <item android:id="@+id/list"
         android:icon="@drawable/list_unordered"
-        android:iconTint="?attr/bottom_menu_color"
+        android:iconTint="?attr/background_dark"
         android:title="@string/list"/>
 
     <item android:id="@+id/play"
         android:icon="@drawable/play_circle"
-        android:iconTint="?attr/bottom_menu_color"
-        android:title="@string/video"/>
+        android:iconTint="?attr/background_dark"
+        android:title="@string/video"
+        />
 
     <item android:id="@+id/favourite"
         android:icon="@drawable/favourite"
-        android:iconTint="?attr/bottom_menu_color"
+        android:iconTint="?attr/background_dark"
         android:title="@string/favourite"/>
 
     <item android:id="@+id/account"
         android:icon="@drawable/user"
-        android:iconTint="?attr/bottom_menu_color"
+        android:iconTint="?attr/background_dark"
         android:title="@string/account"/>
 </menu>

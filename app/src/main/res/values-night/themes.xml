@@ -14,8 +14,9 @@
 
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/backgroundDark</item>
-        <item name="bottom_menu_color">@color/white</item>
+        <item name="background_dark">@color/backgroundDark</item>
         <item name="text_color">@color/textMainDark</item>
+        <item name="search_field">@color/searchFieldDark</item>
 
     </style>
 </resources>

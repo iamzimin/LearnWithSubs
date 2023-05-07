@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="bottom_menu_color"/>
+    <attr name="background_dark"/>
     <attr name="text_color"/>
+    <attr name="search_field"/>
 </resources>

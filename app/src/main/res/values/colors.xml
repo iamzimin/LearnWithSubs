@@ -15,5 +15,6 @@
     <color name="bottomIconsDark">#FFFFFFFF</color>
     <color name="backgroundDark">#2F2E3E</color>
     <color name="textMainDark">#FFFFFFFF</color>
+    <color name="searchFieldDark">#3C445F</color>
 
 </resources>
