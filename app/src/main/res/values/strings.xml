@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">LearnWithSubs</string>
+    <string name="videos">Videos</string>
+    <string name="module">Module</string>
+    <string name="list">List</string>
+    <string name="video">Video</string>
+    <string name="favourite">Favourite</string>
+    <string name="account">Account</string>
+</resources>
