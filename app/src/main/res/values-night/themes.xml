@@ -17,7 +17,14 @@
         <item name="background_dark">@color/backgroundDark</item>
         <item name="text_color">@color/textMainDark</item>
         <item name="search_field">@color/searchFieldDark</item>
+
         <item name="background_tile_dark">@color/backgroundTileDark</item>
+        <item name="select_outline_dark">@color/selectOutlineDark</item>
+
+        <item name="text_unavailable_dark">@color/textUnavailableDark</item>
+        <item name="video_unavailable_dark">@color/videoUnavailableDark</item>
+
+
 
     </style>
 </resources>

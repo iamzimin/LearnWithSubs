@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
@@ -13,6 +13,9 @@
 
     app:cardCornerRadius="20dp"
     app:cardBackgroundColor="?attr/background_tile_dark"
+
+    app:strokeWidth="1dp"
+    app:strokeColor="?attr/select_outline_dark"
 
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
@@ -58,8 +61,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/video_preview"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/video_name"
@@ -67,7 +69,8 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:text="File name hello hello"
-                android:textSize="17sp"
+                android:textColor="?attr/text_color"
+                android:textSize="@dimen/video_name_in_video_tile"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -78,7 +81,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Duration: 1:23:45"
-                android:textSize="10sp"
+                android:textColor="?attr/text_color"
+                android:textSize="@dimen/video_description_in_video_tile"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -90,7 +94,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:text="Saved words: 123"
-                android:textSize="10sp"
+                android:textColor="?attr/text_color"
+                android:textSize="@dimen/video_description_in_video_tile"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/duration"
                 app:layout_constraintTop_toTopOf="parent"
@@ -110,4 +115,4 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

@@ -20,6 +20,12 @@
     <color name="backgroundDark">#2F2E3E</color>
     <color name="textMainDark">#FFFFFFFF</color>
     <color name="searchFieldDark">#3C445F</color>
+
     <color name="backgroundTileDark">#46475C</color>
+    <color name="selectOutlineDark">#FFFFFFFF</color>
+
+    <color name="textUnavailableDark">#767582</color>
+    <color name="videoUnavailableDark">#404153</color>
+
 
 </resources>
