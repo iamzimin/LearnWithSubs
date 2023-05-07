@@ -3,4 +3,5 @@
     <attr name="background_dark"/>
     <attr name="text_color"/>
     <attr name="search_field"/>
+    <attr name="background_tile_dark"/>
 </resources>

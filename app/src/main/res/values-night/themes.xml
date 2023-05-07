@@ -17,6 +17,7 @@
         <item name="background_dark">@color/backgroundDark</item>
         <item name="text_color">@color/textMainDark</item>
         <item name="search_field">@color/searchFieldDark</item>
+        <item name="background_tile_dark">@color/backgroundTileDark</item>
 
     </style>
 </resources>

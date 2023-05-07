@@ -48,9 +48,10 @@
 
 
     <include
+        android:id="@+id/include"
         layout="@layout/search_view"
         android:layout_width="match_parent"
-        android:layout_height="71dp"
+        android:layout_height="41dp"
         android:layout_marginHorizontal="20dp"
         app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,5 +59,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/video"
         app:layout_constraintVertical_bias="0.026" />
+
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/video_list"-->
+<!--        android:layout_width="361dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="12dp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/navigation"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/include"-->
+<!--        app:layout_constraintVertical_bias="0.005" />-->
+
+    <include
+        layout="@layout/video_selected_tile"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginHorizontal="20dp"
+
+        app:layout_constraintBottom_toTopOf="@+id/navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        app:layout_constraintVertical_bias="0.018" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
