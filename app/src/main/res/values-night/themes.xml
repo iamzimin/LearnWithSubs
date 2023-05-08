@@ -26,6 +26,8 @@
         <item name="video_text_unavailable_dark">@color/video_text_unavailable_dark</item>
         <item name="background_unavailable_video_tile_dark">@color/background_unavailable_video_tile_dark</item>
 
+        <item name="video_upload_green_button">@color/video_upload_green_button</item>
+
 
 
     </style>

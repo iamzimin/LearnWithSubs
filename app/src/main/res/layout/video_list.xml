@@ -10,7 +10,7 @@
         android:id="@+id/video"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="10dp"
         android:text="@string/videos"
         android:textColor="?attr/text_color"
         android:textSize="@dimen/section_name"
@@ -25,12 +25,12 @@
         android:layout_width="55dp"
         android:layout_height="25dp"
 
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="10dp"
         android:padding="0dp"
         android:scaleType="centerCrop"
 
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.88"
+        app:layout_constraintHorizontal_bias="0.93"
         app:layout_constraintStart_toEndOf="@+id/video"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/menu_horizontal"
@@ -51,69 +51,46 @@
         android:id="@+id/include"
         layout="@layout/search_view"
         android:layout_width="match_parent"
-        android:layout_height="41dp"
-        android:layout_marginHorizontal="20dp"
+        android:layout_height="35dp"
+        android:layout_marginHorizontal="10dp"
         app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/video"
-        app:layout_constraintVertical_bias="0.026" />
+        app:layout_constraintVertical_bias="0.020" />
 
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/video_list"-->
-<!--        android:layout_width="361dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="12dp"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/navigation"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/include"-->
-<!--        app:layout_constraintVertical_bias="0.005" />-->
-
-
-
-    <include
-        android:id="@+id/include2"
-        layout="@layout/video_tile"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginHorizontal="20dp"
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/video_list"
+        android:layout_width="361dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include"
-        app:layout_constraintVertical_bias="0.018" />
+        app:layout_constraintVertical_bias="0.005" />
 
     <include
-        android:id="@+id/include3"
-        layout="@layout/video_selected_tile"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-
-        android:layout_marginHorizontal="20dp"
+        android:id="@+id/button_video_upload"
+        layout="@layout/add_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toTopOf="@+id/navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.65"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include2"
-        app:layout_constraintVertical_bias="0.038" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <include
-        layout="@layout/video_uploading_tile"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginHorizontal="20dp"
 
-        app:layout_constraintBottom_toTopOf="@+id/navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include3"
-        app:layout_constraintVertical_bias="0.047" />
-
+    <ImageView
+        android:id="@+id/upload_image"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/button_video_upload"
+        app:layout_constraintEnd_toEndOf="@+id/button_video_upload"
+        app:layout_constraintStart_toStartOf="@+id/button_video_upload"
+        app:layout_constraintTop_toTopOf="@+id/button_video_upload"
+        app:srcCompat="@drawable/upload" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

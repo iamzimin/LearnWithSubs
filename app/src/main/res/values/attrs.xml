@@ -11,4 +11,6 @@
     <attr name="video_text_unavailable_dark"/>
     <attr name="background_unavailable_video_tile_dark"/>
 
+    <attr name="video_upload_green_button"/>
+
 </resources>
