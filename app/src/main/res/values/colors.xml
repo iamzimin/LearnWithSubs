@@ -9,23 +9,23 @@
     <color name="white">#FFFFFFFF</color>
 
 
-    <color name="mainColor">#9D80F6</color>
-    <color name="checkMark">#44FF36</color>
+    <color name="main_color">#9D80F6</color>
+    <color name="check_mark">#44FF36</color>
 
     <!--____________Light Theme____________-->
 
 
     <!--____________Dark Theme____________-->
-    <color name="bottomIconsDark">#FFFFFFFF</color>
-    <color name="backgroundDark">#2F2E3E</color>
-    <color name="textMainDark">#FFFFFFFF</color>
-    <color name="searchFieldDark">#3C445F</color>
+    <color name="bottom_icons_dark">#FFFFFFFF</color>
+    <color name="background_dark">#2F2E3E</color>
+    <color name="text_main_dark">#FFFFFFFF</color>
+    <color name="search_field_dark">#3C445F</color>
 
-    <color name="backgroundTileDark">#46475C</color>
-    <color name="selectOutlineDark">#FFFFFFFF</color>
+    <color name="background_video_tile_dark">#46475C</color>
+    <color name="select_video_outline_dark">#FFFFFFFF</color>
 
-    <color name="textUnavailableDark">#767582</color>
-    <color name="videoUnavailableDark">#404153</color>
+    <color name="video_text_unavailable_dark">#767582</color>
+    <color name="background_unavailable_video_tile_dark">#404153</color>
 
 
 </resources>

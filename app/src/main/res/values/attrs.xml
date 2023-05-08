@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="bottom_icons_dark"/>
     <attr name="background_dark"/>
     <attr name="text_color"/>
     <attr name="search_field"/>
 
-    <attr name="background_tile_dark"/>
-    <attr name="select_outline_dark"/>
+    <attr name="background_video_tile_dark"/>
+    <attr name="select_video_outline_dark"/>
 
-    <attr name="text_unavailable_dark"/>
-    <attr name="video_unavailable_dark"/>
+    <attr name="video_text_unavailable_dark"/>
+    <attr name="background_unavailable_video_tile_dark"/>
 
 </resources>

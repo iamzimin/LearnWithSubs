@@ -13,7 +13,7 @@
         android:layout_marginTop="24dp"
         android:text="@string/videos"
         android:textColor="?attr/text_color"
-        android:textSize="20sp"
+        android:textSize="@dimen/section_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +43,7 @@
         android:layout_gravity="start"
         app:menu="@menu/bottom_menu"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:itemIconSize="28dp"
+        app:itemIconSize="@dimen/icon_bottom_menu"
         android:background="?attr/background_dark"/>
 
 

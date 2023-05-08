@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="section_name">20sp</dimen>
     <dimen name="video_name_in_video_tile">17sp</dimen>
     <dimen name="video_description_in_video_tile">11sp</dimen>
+    <dimen name="icon_bottom_menu">28sp</dimen>
 </resources>

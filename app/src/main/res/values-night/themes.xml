@@ -10,19 +10,21 @@
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/backgroundDark</item>
+        <item name="android:statusBarColor">@color/background_dark</item>
 
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@color/backgroundDark</item>
-        <item name="background_dark">@color/backgroundDark</item>
-        <item name="text_color">@color/textMainDark</item>
-        <item name="search_field">@color/searchFieldDark</item>
+        <item name="android:windowBackground">@color/background_dark</item>
 
-        <item name="background_tile_dark">@color/backgroundTileDark</item>
-        <item name="select_outline_dark">@color/selectOutlineDark</item>
+        <item name="bottom_icons_dark">@color/bottom_icons_dark</item>
+        <item name="background_dark">@color/background_dark</item>
+        <item name="text_color">@color/text_main_dark</item>
+        <item name="search_field">@color/search_field_dark</item>
 
-        <item name="text_unavailable_dark">@color/textUnavailableDark</item>
-        <item name="video_unavailable_dark">@color/videoUnavailableDark</item>
+        <item name="background_video_tile_dark">@color/background_video_tile_dark</item>
+        <item name="select_video_outline_dark">@color/select_video_outline_dark</item>
+
+        <item name="video_text_unavailable_dark">@color/video_text_unavailable_dark</item>
+        <item name="background_unavailable_video_tile_dark">@color/background_unavailable_video_tile_dark</item>
 
 
 
