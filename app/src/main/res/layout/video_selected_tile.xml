@@ -12,9 +12,9 @@
     android:foreground="?android:attr/selectableItemBackground"
 
     app:cardCornerRadius="20dp"
-    app:cardBackgroundColor="?attr/background_video_tile_dark"
+    app:cardBackgroundColor="@color/TEST"
 
-    app:strokeWidth="1dp"
+    app:strokeWidth="0dp"
     app:strokeColor="?attr/select_video_outline_dark"
 
     app:layout_constraintBottom_toBottomOf="parent"

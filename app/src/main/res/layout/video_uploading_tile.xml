@@ -91,7 +91,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.078" />
+                app:layout_constraintVertical_bias="0.3" />
 
             <TextView
                 android:id="@+id/duration"
@@ -103,30 +103,30 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.527" />
+                app:layout_constraintVertical_bias="0.7" />
 
-            <TextView
-                android:id="@+id/saved_words"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:text="Saved words: 123"
-                android:textColor="?attr/video_text_unavailable_dark"
-                android:textSize="@dimen/video_description_in_video_tile"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/duration"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.527" />
+<!--            <TextView-->
+<!--                android:id="@+id/saved_words"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="12dp"-->
+<!--                android:text="Saved words: 123"-->
+<!--                android:textColor="?attr/video_text_unavailable_dark"-->
+<!--                android:textSize="@dimen/video_description_in_video_tile"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/duration"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintVertical_bias="0.527" />-->
 
-            <ProgressBar
-                android:id="@+id/video_progress"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="22dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.938" />
+<!--            <ProgressBar-->
+<!--                android:id="@+id/video_progress"-->
+<!--                style="?android:attr/progressBarStyleHorizontal"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="22dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintVertical_bias="0.938" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
