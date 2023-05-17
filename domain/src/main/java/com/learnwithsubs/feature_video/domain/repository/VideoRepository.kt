@@ -7,7 +7,7 @@ interface VideoRepository {
 
     fun getVideos(): Flow<List<Video>>
 
-    suspend fun getNoteById(id: Int) : Video?
+    suspend fun getVideoById(id: Int) : Video?
 
     suspend fun insertVideo(video: Video)
 

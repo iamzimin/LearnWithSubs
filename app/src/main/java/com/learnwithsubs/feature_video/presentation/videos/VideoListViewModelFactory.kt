@@ -1,4 +1,4 @@
-package com.learnwithsubs.feature_video.presentation
+package com.learnwithsubs.feature_video.presentation.videos
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

@@ -8,12 +8,19 @@ import com.learnwithsubs.R
 import com.learnwithsubs.databinding.VideoListBinding
 import com.learnwithsubs.feature_video.presentation.adapter.VideoAdapter
 import com.learnwithsubs.feature_video.presentation.adapter.VideoAdapter.RecyclerViewItemDecoration
+import com.learnwithsubs.feature_video.presentation.app.VideoApp
+import com.learnwithsubs.feature_video.presentation.videos.VideoListViewModel
+import com.learnwithsubs.feature_video.presentation.videos.VideoListViewModelFactory
+import javax.inject.Inject
 import kotlin.random.Random
 
-
+//@AndroidEntryPoint
 class VideoListActivity : AppCompatActivity() {
-    lateinit var binding: VideoListBinding
-    private val adapter = VideoAdapter()
+//    lateinit var binding: VideoListBinding
+//    private val adapter = VideoAdapter()
+
+    @Inject
+    lateinit var vmFactory: VideoListViewModelFactory
 
     private lateinit var vm: VideoListViewModel
 
@@ -22,13 +29,17 @@ class VideoListActivity : AppCompatActivity() {
         setContentView(R.layout.video_list)
         supportActionBar?.hide()
 
-        vm = ViewModelProvider(this).get(VideoListViewModel::class.java)
+        (applicationContext as VideoApp).videoAppComponent.inject(this)
 
-        binding = VideoListBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        test()
+        vm = ViewModelProvider(this, vmFactory)
+            .get(VideoListViewModel::class.java)
+
+        //binding = VideoListBinding.inflate(layoutInflater)
+        //setContentView(vm.binding.root)
+        //test()
     }
 
+    /*
     private fun test() {
         binding.videoList.layoutManager = LinearLayoutManager(this@VideoListActivity)
         binding.videoList.adapter = adapter
@@ -39,4 +50,5 @@ class VideoListActivity : AppCompatActivity() {
             adapter.addVideo(Random.nextInt(1, 4))
         }
     }
+     */
 }

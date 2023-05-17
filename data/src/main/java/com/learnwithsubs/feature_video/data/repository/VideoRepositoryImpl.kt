@@ -12,7 +12,7 @@ class VideoRepositoryImpl(
         return dao.getVideos()
     }
 
-    override suspend fun getNoteById(id: Int): Video? {
+    override suspend fun getVideoById(id: Int): Video? {
         return dao.getNoteById(id)
     }
 
