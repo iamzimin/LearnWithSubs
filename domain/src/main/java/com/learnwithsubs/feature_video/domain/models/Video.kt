@@ -12,6 +12,7 @@ data class Video(
     val duration: Long,
     val saveWords: Int = 0,
     val progress: Int = 0,
+    //val uploadingProgress: Int = 0,
     val URI: String,
     val timestamp: Long
 )

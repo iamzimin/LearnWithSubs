@@ -11,19 +11,27 @@ import com.learnwithsubs.databinding.VideoTileBinding
 import com.learnwithsubs.databinding.VideoUploadingTileBinding
 import com.learnwithsubs.feature_video.domain.models.Video
 
-class VideoAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class VideoAdapter(videoListInit: ArrayList<Video>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private var videoList: ArrayList<Video> = videoListInit
 
     companion object {
         const val NORMAL_VIDEO = 1
         const val SELECTED_VIDEO = 2
         const val LOADING_VIDEO = 3
+
+        const val DURATION = "Duration" //TODO
+        const val SAVED_WORDS = "Saved words" //TODO
     }
 
-    var videoList = ArrayList<Video>()
+    fun updateData(videoList: ArrayList<Video>) {
+        this@VideoAdapter.videoList = videoList
+        notifyDataSetChanged()
+    }
 
-    fun addVideo(id: Int) {
+    fun addVideo() {
         val video = Video(
-            videoStatus = id,
+            videoStatus = 2,
             name = "123",
             preview = 0,
             duration = 0,
@@ -82,14 +90,13 @@ class VideoAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
 
-
     // ViewHolder для обычного видео
     class NormalVideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = VideoTileBinding.bind(itemView)
         fun bind(video: Video) = with(binding) {
-                binding.videoName.text = "VideoName"
-                binding.duration.text = "Duration: 1:23:45"
-                binding.savedWords.text = "Saved words: 789"
+                binding.videoName.text = video.name
+                binding.duration.text = video.duration.toString()
+                binding.savedWords.text = video.saveWords.toString()
                 //binding.videoPreview.setImageResource(video.preview)
                 binding.videoProgress.progress = 88
             }
@@ -98,9 +105,9 @@ class VideoAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     class SelectedVideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = VideoSelectedTileBinding.bind(itemView)
         fun bind(video: Video) = with(binding) {
-            binding.videoName.text = "VideoName"
-            binding.duration.text = "Duration: 1:23:45"
-            binding.savedWords.text = "Saved words: 789"
+            binding.videoName.text = video.name
+            binding.duration.text = video.duration.toString()
+            binding.savedWords.text = video.saveWords.toString()
             //binding.videoPreview.setImageResource(video.preview)
             binding.videoProgress.progress = 88
         }
@@ -110,8 +117,9 @@ class VideoAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     class LoadingVideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = VideoUploadingTileBinding.bind(itemView)
         fun bind(video: Video) = with(binding) {
-            binding.videoName.text = "VideoName"
-            binding.duration.text = "Duration: 1:23:45"
+            binding.videoName.text = video.name
+            binding.duration.text = video.duration.toString()
+            binding.progressVideoLoading.progress = video.progress
             //binding.videoPreview.setImageResource(video.preview)
         }
     }
