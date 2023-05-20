@@ -28,22 +28,9 @@ class VideoListViewModel @Inject constructor(
         ) {
             videoList.value = it
         }
-
-
-
     }
 
-    fun test() {
-        val video = Video(
-            videoStatus = Random.nextInt(1, 4),
-            name = "123",
-            preview = 0,
-            duration = 0,
-            saveWords = Random.nextInt(1, 1000),
-            progress = Random.nextInt(1, 101),
-            URI = "",
-            timestamp = 0
-        )
+    fun addVideo(video: Video) {
         currentList.add(video)
         videoList.value = currentList.toList()
     }

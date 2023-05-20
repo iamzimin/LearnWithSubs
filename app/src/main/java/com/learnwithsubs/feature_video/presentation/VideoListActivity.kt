@@ -1,23 +1,26 @@
 package com.learnwithsubs.feature_video.presentation
 
+import VideoPicker
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.learnwithsubs.R
 import com.learnwithsubs.databinding.VideoListBinding
-import com.learnwithsubs.feature_video.domain.models.Video
 import com.learnwithsubs.feature_video.presentation.adapter.VideoAdapter
 import com.learnwithsubs.feature_video.presentation.app.VideoApp
 import com.learnwithsubs.feature_video.presentation.videos.VideoListViewModel
 import com.learnwithsubs.feature_video.presentation.videos.VideoListViewModelFactory
 import javax.inject.Inject
 
+
 class VideoListActivity : AppCompatActivity() {
+    private val PICK_VIDEO_REQUEST = 1
+    private val videoPicker = VideoPicker(this, PICK_VIDEO_REQUEST)
 
     @Inject
     lateinit var vmFactory: VideoListViewModelFactory
@@ -34,8 +37,7 @@ class VideoListActivity : AppCompatActivity() {
 
         val uploadVideoButton = findViewById<CardView>(R.id.button_video_upload)
         uploadVideoButton.setOnClickListener {
-            vm.test()
-            //adapter.addVideo()
+            videoPicker.pickVideo()
         }
 
         (applicationContext as VideoApp).videoAppComponent.inject(this)
@@ -48,6 +50,11 @@ class VideoListActivity : AppCompatActivity() {
 
 
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        videoPicker.onActivityResult(requestCode, resultCode, data, vm, applicationContext)
     }
 
     private fun setupRecyclerView() {
