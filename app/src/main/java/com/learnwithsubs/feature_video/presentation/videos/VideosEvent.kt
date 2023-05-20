@@ -6,6 +6,6 @@ import com.learnwithsubs.feature_video.domain.util.VideoOrder
 sealed class VideosEvent {
     data class Order(val videoOrder: VideoOrder): VideosEvent()
     data class DeleteVideo(val video: Video): VideosEvent()
-//    object RestoreVideo: VideosEvent()
+    data class LoadVideo(val video: Video): VideosEvent()
 //    object ToggleOrderSection: VideosEvent()
 }

@@ -1,7 +1,6 @@
 package com.learnwithsubs.feature_video.presentation
 
 import VideoPicker
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -47,9 +46,6 @@ class VideoListActivity : AppCompatActivity() {
         vm.videoList.observe(this, Observer { video ->
             adapter.updateData(ArrayList(video))
         })
-
-
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

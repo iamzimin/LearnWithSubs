@@ -30,11 +30,6 @@ class VideoListViewModel @Inject constructor(
         }
     }
 
-    fun addVideo(video: Video) {
-        currentList.add(video)
-        videoList.value = currentList.toList()
-    }
-
     fun onEvent(event: VideosEvent) {
         when (event) {
             is VideosEvent.Order -> {
@@ -43,10 +38,21 @@ class VideoListViewModel @Inject constructor(
             }
             is VideosEvent.DeleteVideo -> {
                 viewModelScope.launch {
-                    videoUseCases.deleteVideoUseCase(event.video)
+                    videoUseCases.deleteVideoUseCase.invoke(event.video)
                 }
             }
+            is VideosEvent.LoadVideo -> {
+                addVideo(event.video)
+            }
         }
+    }
+
+    private fun addVideo(video: Video) {
+        currentList.add(video)
+        viewModelScope.launch {
+            videoUseCases.loadVideoUseCase.invoke(video)
+        }
+        videoList.value = currentList.toList()
     }
 
 //    private fun getVideos(videoOrder: VideoOrder) {

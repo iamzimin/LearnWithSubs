@@ -16,13 +16,10 @@ class VideoAdapter(videoListInit: ArrayList<Video>) : RecyclerView.Adapter<Recyc
 
     private var videoList: ArrayList<Video> = videoListInit
 
-    //private var DURATION = ""
-    //private var SAVED_WORDS = ""
     companion object {
         const val NORMAL_VIDEO = 1
         const val SELECTED_VIDEO = 2
         const val LOADING_VIDEO = 3
-
     }
 
     fun updateData(videoList: ArrayList<Video>) {

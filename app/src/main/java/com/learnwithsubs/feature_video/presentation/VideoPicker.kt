@@ -9,6 +9,7 @@ import android.provider.OpenableColumns
 import com.learnwithsubs.feature_video.domain.models.Video
 import com.learnwithsubs.feature_video.presentation.adapter.VideoAdapter
 import com.learnwithsubs.feature_video.presentation.videos.VideoListViewModel
+import com.learnwithsubs.feature_video.presentation.videos.VideosEvent
 import java.util.Date
 
 
@@ -41,7 +42,7 @@ class VideoPicker(private val activity: Activity, private val requestCode: Int) 
                 URI = selectedVideoUri.toString(),
                 timestamp = currentTime
             )
-            vm.addVideo(video)
+            vm.onEvent(event = VideosEvent.LoadVideo(video = video))
         }
     }
 
@@ -61,7 +62,7 @@ class VideoPicker(private val activity: Activity, private val requestCode: Int) 
         return displayName ?: "Video"
     }
 
-    fun getVideoDuration(videoUri: Uri, context: Context): Long {
+    private fun getVideoDuration(videoUri: Uri, context: Context): Long {
         val retriever = MediaMetadataRetriever()
         retriever.setDataSource(context, Uri.parse(videoUri.toString()))
 
