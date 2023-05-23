@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.learnwithsubs.R
 import com.learnwithsubs.databinding.VideoListBinding
 import com.learnwithsubs.feature_video_list.presentation.adapter.VideoListAdapter
-import com.learnwithsubs.feature_video_list.presentation.app.VideoListApp
+import com.learnwithsubs.app.App
 import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewModel
 import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewModelFactory
 import javax.inject.Inject
@@ -39,7 +39,7 @@ class VideoListActivity : AppCompatActivity() {
             videoListPicker.pickVideo()
         }
 
-        (applicationContext as VideoListApp).videoListAppComponent.inject(this)
+        (applicationContext as App).videoListAppComponent.inject(this)
         vm = ViewModelProvider(this, vmFactory)
             .get(VideoListViewModel::class.java)
 

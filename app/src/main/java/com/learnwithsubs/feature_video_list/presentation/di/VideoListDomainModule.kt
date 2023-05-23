@@ -14,7 +14,7 @@ class VideoListDomainModule {
 
     @Provides
     @Singleton
-    fun provideVideoUseCases(repository: VideoListRepository): VideoListUseCases {
+    fun provideVideoListUseCases(repository: VideoListRepository): VideoListUseCases {
         return VideoListUseCases(
             getVideoListUseCase = GetVideoListUseCase(repository),
             deleteVideoUseCase = DeleteVideoUseCase(repository),
