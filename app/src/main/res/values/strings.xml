@@ -11,4 +11,7 @@
 
     <string name="video_duration">Duration</string>
     <string name="video_saved_words">Saved words</string>
+    <string name="video_is_uploading">Video is uploading</string>
+
+    <string name="storage_access_required">Storage access required</string>
 </resources>
