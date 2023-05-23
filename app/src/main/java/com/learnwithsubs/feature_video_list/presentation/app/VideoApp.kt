@@ -1,17 +1,17 @@
 package com.learnwithsubs.feature_video_list.presentation.app
 
 import android.app.Application
-import com.learnwithsubs.feature_video_list.presentation.di.DaggerVideoAppComponent
-import com.learnwithsubs.feature_video_list.presentation.di.VideoAppComponent
-import com.learnwithsubs.feature_video_list.presentation.di.VideoAppModule
+import com.learnwithsubs.feature_video_list.presentation.di.DaggerVideoListAppComponent
+import com.learnwithsubs.feature_video_list.presentation.di.VideoListAppComponent
+import com.learnwithsubs.feature_video_list.presentation.di.VideoListAppModule
 
 class VideoApp : Application() {
-    lateinit var videoAppComponent: VideoAppComponent
+    lateinit var videoListAppComponent: VideoListAppComponent
     override fun onCreate() {
         super.onCreate()
-        videoAppComponent = DaggerVideoAppComponent
+        videoListAppComponent = DaggerVideoListAppComponent
             .builder()
-            .videoAppModule(VideoAppModule(context = this))
+            .videoListAppModule(VideoListAppModule(context = this))
             .build()
     }
 }

@@ -3,7 +3,7 @@ package com.learnwithsubs.feature_video_list.domain.repository
 import com.learnwithsubs.feature_video_list.domain.models.Video
 import kotlinx.coroutines.flow.Flow
 
-interface VideoRepository {
+interface VideoListRepository {
 
     fun getVideos(): Flow<List<Video>>
 

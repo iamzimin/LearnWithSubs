@@ -9,7 +9,7 @@ import com.learnwithsubs.feature_video_list.domain.models.Video
     version = 1
 )
 abstract class VideoDatabase: RoomDatabase() {
-    abstract val videoDao: VideoDao
+    abstract val videoListDao: VideoListDao
 
     companion object {
         const val DATABASE_NAME = "videos_db"

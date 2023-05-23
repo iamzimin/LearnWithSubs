@@ -2,14 +2,14 @@ package com.learnwithsubs.feature_video_list.presentation.videos
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.learnwithsubs.feature_video_list.domain.usecase.VideoUseCases
+import com.learnwithsubs.feature_video_list.domain.usecase.VideoListUseCases
 
 class VideoListViewModelFactory(
-    val videoUseCases: VideoUseCases
+    val videoListUseCases: VideoListUseCases
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return VideoListViewModel(
-            videoUseCases = videoUseCases
+            videoListUseCases = videoListUseCases
         ) as T
     }
 }

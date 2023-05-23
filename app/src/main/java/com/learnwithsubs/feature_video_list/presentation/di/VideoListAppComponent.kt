@@ -7,11 +7,11 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [
-        VideoAppModule::class,
-        VideoDomainModule::class,
-        VideoDataModule::class
+        VideoListAppModule::class,
+        VideoListDomainModule::class,
+        VideoListDataModule::class
     ]
 )
-interface VideoAppComponent {
+interface VideoListAppComponent {
     fun inject(videoListActivity: VideoListActivity)
 }

@@ -1,6 +1,6 @@
 package com.learnwithsubs.feature_video_list.presentation
 
-import VideoPicker
+import VideoListPicker
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.learnwithsubs.R
 import com.learnwithsubs.databinding.VideoListBinding
-import com.learnwithsubs.feature_video_list.presentation.adapter.VideoAdapter
+import com.learnwithsubs.feature_video_list.presentation.adapter.VideoListAdapter
 import com.learnwithsubs.feature_video_list.presentation.app.VideoApp
 import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewModel
 import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewModelFactory
@@ -19,13 +19,13 @@ import javax.inject.Inject
 
 class VideoListActivity : AppCompatActivity() {
     private val PICK_VIDEO_REQUEST = 1
-    private val videoPicker = VideoPicker(this, PICK_VIDEO_REQUEST)
+    private val videoListPicker = VideoListPicker(this, PICK_VIDEO_REQUEST)
 
     @Inject
     lateinit var vmFactory: VideoListViewModelFactory
     private lateinit var vm: VideoListViewModel
 
-    private val adapter = VideoAdapter(videoListInit = ArrayList())
+    private val adapter = VideoListAdapter(videoListInit = ArrayList())
     private lateinit var binding: VideoListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,10 +36,10 @@ class VideoListActivity : AppCompatActivity() {
 
         val uploadVideoButton = findViewById<CardView>(R.id.button_video_upload)
         uploadVideoButton.setOnClickListener {
-            videoPicker.pickVideo()
+            videoListPicker.pickVideo()
         }
 
-        (applicationContext as VideoApp).videoAppComponent.inject(this)
+        (applicationContext as VideoApp).videoListAppComponent.inject(this)
         vm = ViewModelProvider(this, vmFactory)
             .get(VideoListViewModel::class.java)
 
@@ -50,7 +50,7 @@ class VideoListActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        videoPicker.onActivityResult(requestCode, resultCode, data, vm, applicationContext)
+        videoListPicker.onActivityResult(requestCode, resultCode, data, vm, applicationContext)
     }
 
     private fun setupRecyclerView() {
@@ -58,7 +58,7 @@ class VideoListActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.videoList.layoutManager = LinearLayoutManager(this@VideoListActivity)
         binding.videoList.adapter = adapter
-        val itemDecoration = VideoAdapter.RecyclerViewItemDecoration(16)
+        val itemDecoration = VideoListAdapter.RecyclerViewItemDecoration(16)
         binding.videoList.addItemDecoration(itemDecoration)
     }
 }

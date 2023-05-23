@@ -2,15 +2,15 @@ package com.learnwithsubs.feature_video_list.presentation.di
 
 import android.content.Context
 import androidx.room.Room
-import com.learnwithsubs.feature_video_list.data.repository.VideoRepositoryImpl
+import com.learnwithsubs.feature_video_list.data.repository.VideoListRepositoryImpl
 import com.learnwithsubs.feature_video_list.data.storage.VideoDatabase
-import com.learnwithsubs.feature_video_list.domain.repository.VideoRepository
+import com.learnwithsubs.feature_video_list.domain.repository.VideoListRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class VideoDataModule {
+class VideoListDataModule {
 
     @Provides
     @Singleton
@@ -24,8 +24,8 @@ class VideoDataModule {
 
     @Provides
     @Singleton
-    fun provideVideoRepository(db: VideoDatabase): VideoRepository {
-        return VideoRepositoryImpl(db.videoDao)
+    fun provideVideoRepository(db: VideoDatabase): VideoListRepository {
+        return VideoListRepositoryImpl(db.videoListDao)
     }
 
 }

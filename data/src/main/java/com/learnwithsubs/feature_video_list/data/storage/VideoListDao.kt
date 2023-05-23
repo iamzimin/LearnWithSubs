@@ -5,7 +5,7 @@ import com.learnwithsubs.feature_video_list.domain.models.Video
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface VideoDao {
+interface VideoListDao {
 
     @Query("SELECT * FROM video")
     fun getVideos(): Flow<List<Video>>

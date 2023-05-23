@@ -22,15 +22,15 @@
     <ImageButton
         android:id="@+id/menu_button"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="55dp"
-        android:layout_height="25dp"
+        android:layout_width="31dp"
+        android:layout_height="27dp"
 
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="12dp"
         android:padding="0dp"
         android:scaleType="centerCrop"
 
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.93"
+        app:layout_constraintHorizontal_bias="0.90"
         app:layout_constraintStart_toEndOf="@+id/video"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/menu_horizontal"
@@ -48,7 +48,7 @@
 
 
     <include
-        android:id="@+id/include"
+        android:id="@+id/search_bar"
         layout="@layout/search_view"
         android:layout_width="match_parent"
         android:layout_height="35dp"
@@ -68,7 +68,7 @@
         app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include"
+        app:layout_constraintTop_toBottomOf="@+id/search_bar"
         app:layout_constraintVertical_bias="0.005" />
 
     <include

@@ -1,13 +1,16 @@
-package com.learnwithsubs.feature_video_view
+package com.learnwithsubs.feature_video_view.presentation
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.MediaController
+import android.widget.ImageButton
+import android.widget.SeekBar
+import android.widget.TextView
 import android.widget.Toast
 import android.widget.VideoView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.learnwithsubs.R
@@ -16,6 +19,20 @@ class VideoViewActivity : AppCompatActivity() {
     companion object {
         private const val STORAGE_PERMISSION_REQUEST_CODE = 1
     }
+
+//    private val videoControls = findViewById<ConstraintLayout>(R.id.video_controls)
+//
+//    private val exitVideoView = findViewById<ImageButton>(R.id.exit_video_view)
+//    private val videoName = findViewById<TextView>(R.id.video_name)
+//    private val videoMenuButton = findViewById<ImageButton>(R.id.video_menu_button)
+//
+//    private val playVideoButton = findViewById<ImageButton>(R.id.play_video_button)
+//    private val pauseVideoButton = findViewById<ImageButton>(R.id.pause_video_button)
+//    private val forwardVideoButton = findViewById<ImageButton>(R.id.forward_5_video_button)
+//    private val rewindVideoButton = findViewById<ImageButton>(R.id.rewind_5_video_button)
+//
+//    private val videoTime = findViewById<TextView>(R.id.video_time)
+//    private val videoPlayStatus = findViewById<SeekBar>(R.id.video_play_status)
 
     private lateinit var videoView: VideoView
 
@@ -33,7 +50,7 @@ class VideoViewActivity : AppCompatActivity() {
 
     private fun openVideo(uri: String?) {
         videoView = findViewById(R.id.videoView)
-        val mediaController = MediaController(this)
+        val mediaController = CustomMediaController(this)
         mediaController.setAnchorView(videoView)
         videoView.setMediaController(mediaController)
 

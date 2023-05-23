@@ -7,13 +7,13 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import com.learnwithsubs.feature_video_list.domain.models.Video
-import com.learnwithsubs.feature_video_list.presentation.adapter.VideoAdapter
+import com.learnwithsubs.feature_video_list.presentation.adapter.VideoListAdapter
 import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewModel
 import com.learnwithsubs.feature_video_list.presentation.videos.VideosEvent
 import java.util.Date
 
 
-class VideoPicker(private val activity: Activity, private val requestCode: Int) {
+class VideoListPicker(private val activity: Activity, private val requestCode: Int) {
 
     fun pickVideo() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
@@ -35,7 +35,7 @@ class VideoPicker(private val activity: Activity, private val requestCode: Int) 
             val currentTime = Date().time
 
             val video = Video(
-                videoStatus = VideoAdapter.LOADING_VIDEO,
+                videoStatus = VideoListAdapter.LOADING_VIDEO,
                 name = videoName,
                 preview = 0,
                 duration = videoDuration,

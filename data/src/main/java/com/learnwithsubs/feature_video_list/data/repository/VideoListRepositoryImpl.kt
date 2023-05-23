@@ -1,13 +1,13 @@
 package com.learnwithsubs.feature_video_list.data.repository
 
-import com.learnwithsubs.feature_video_list.data.storage.VideoDao
+import com.learnwithsubs.feature_video_list.data.storage.VideoListDao
 import com.learnwithsubs.feature_video_list.domain.models.Video
-import com.learnwithsubs.feature_video_list.domain.repository.VideoRepository
+import com.learnwithsubs.feature_video_list.domain.repository.VideoListRepository
 import kotlinx.coroutines.flow.Flow
 
-class VideoRepositoryImpl(
-    private val dao: VideoDao
-) : VideoRepository {
+class VideoListRepositoryImpl(
+    private val dao: VideoListDao
+) : VideoListRepository {
     override fun getVideos(): Flow<List<Video>> {
         return dao.getVideos()
     }

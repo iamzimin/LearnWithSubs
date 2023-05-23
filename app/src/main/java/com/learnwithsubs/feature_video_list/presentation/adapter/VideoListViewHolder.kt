@@ -9,7 +9,7 @@ import com.learnwithsubs.databinding.VideoSelectedTileBinding
 import com.learnwithsubs.databinding.VideoTileBinding
 import com.learnwithsubs.databinding.VideoUploadingTileBinding
 import com.learnwithsubs.feature_video_list.domain.models.Video
-import com.learnwithsubs.feature_video_view.VideoViewActivity
+import com.learnwithsubs.feature_video_view.presentation.VideoViewActivity
 import java.util.concurrent.TimeUnit
 
 // Родительский класс для всех видео ViewHolder

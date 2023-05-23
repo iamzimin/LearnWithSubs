@@ -1,14 +1,14 @@
 package com.learnwithsubs.feature_video_list.domain.usecase
 
 import com.learnwithsubs.feature_video_list.domain.models.Video
-import com.learnwithsubs.feature_video_list.domain.repository.VideoRepository
+import com.learnwithsubs.feature_video_list.domain.repository.VideoListRepository
 import com.learnwithsubs.feature_video_list.domain.util.OrderType
 import com.learnwithsubs.feature_video_list.domain.util.VideoOrder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class GetVideoListUseCase(
-    private val repository: VideoRepository
+    private val repository: VideoListRepository
 ) {
     operator fun invoke(
         videoOrder: VideoOrder = VideoOrder.Date(OrderType.Descending)

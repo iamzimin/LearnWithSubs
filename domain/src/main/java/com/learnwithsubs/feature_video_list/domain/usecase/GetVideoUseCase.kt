@@ -1,13 +1,13 @@
 package com.learnwithsubs.feature_video_list.domain.usecase
 
 import com.learnwithsubs.feature_video_list.domain.models.Video
-import com.learnwithsubs.feature_video_list.domain.repository.VideoRepository
+import com.learnwithsubs.feature_video_list.domain.repository.VideoListRepository
 
 class GetVideoUseCase(
-    private val videoRepository: VideoRepository
+    private val videoListRepository: VideoListRepository
 ) {
 
     suspend operator fun invoke(id: Int): Video? {
-        return videoRepository.getVideoById(id = id)
+        return videoListRepository.getVideoById(id = id)
     }
 }

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.learnwithsubs.R
 import com.learnwithsubs.feature_video_list.domain.models.Video
 
-class VideoAdapter(videoListInit: ArrayList<Video>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class VideoListAdapter(videoListInit: ArrayList<Video>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var videoList: ArrayList<Video> = videoListInit
 
@@ -19,7 +19,7 @@ class VideoAdapter(videoListInit: ArrayList<Video>) : RecyclerView.Adapter<Recyc
     }
 
     fun updateData(videoList: ArrayList<Video>) {
-        this@VideoAdapter.videoList = videoList
+        this@VideoListAdapter.videoList = videoList
         notifyDataSetChanged() //TODO передавать в качестве агрументов id обновлённого видоса
     }
 

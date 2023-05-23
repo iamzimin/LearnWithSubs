@@ -5,24 +5,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.learnwithsubs.feature_video_list.domain.models.Video
-import com.learnwithsubs.feature_video_list.domain.usecase.VideoUseCases
+import com.learnwithsubs.feature_video_list.domain.usecase.VideoListUseCases
 import com.learnwithsubs.feature_video_list.domain.util.OrderType
 import com.learnwithsubs.feature_video_list.domain.util.VideoOrder
-import com.learnwithsubs.feature_video_list.presentation.adapter.VideoAdapter
+import com.learnwithsubs.feature_video_list.presentation.adapter.VideoListAdapter
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class VideoListViewModel @Inject constructor(
-    val videoUseCases: VideoUseCases
+    val videoListUseCases: VideoListUseCases
 ) : ViewModel() {
 
     val videoList = MediatorLiveData<List<Video>>()
     private val currentList = videoList.value?.toMutableList() ?: mutableListOf()
     init {
         videoList.addSource(
-            videoUseCases.getVideoListUseCase.invoke(
+            videoListUseCases.getVideoListUseCase.invoke(
                 videoOrder = VideoOrder.Date(OrderType.Descending)
             ).asLiveData()
         ) {
@@ -38,7 +38,7 @@ class VideoListViewModel @Inject constructor(
             }
             is VideosEvent.DeleteVideo -> {
                 viewModelScope.launch {
-                    videoUseCases.deleteVideoUseCase.invoke(event.video)
+                    videoListUseCases.deleteVideoUseCase.invoke(event.video)
                 }
             }
             is VideosEvent.LoadVideo -> {
@@ -52,14 +52,14 @@ class VideoListViewModel @Inject constructor(
 
     private fun editVideo(video: Video) { //TODO temp for test!!!
         viewModelScope.launch {
-            videoUseCases.loadVideoUseCase.invoke(video)
+            videoListUseCases.loadVideoUseCase.invoke(video)
         }
     }
 
     private fun addVideo(video: Video) {
         currentList.add(video)
         viewModelScope.launch {
-            videoUseCases.loadVideoUseCase.invoke(video)
+            videoListUseCases.loadVideoUseCase.invoke(video)
         }
 
 
@@ -72,7 +72,7 @@ class VideoListViewModel @Inject constructor(
                 val lastVideo = videoListValue.first()
                 val newVideo = Video(
                     id = lastVideo.id,
-                    videoStatus = VideoAdapter.NORMAL_VIDEO,
+                    videoStatus = VideoListAdapter.NORMAL_VIDEO,
                     name = lastVideo.name,
                     preview = 0,
                     duration = lastVideo.duration,
