@@ -31,7 +31,7 @@ class NormalVideoViewHolder(itemView: View) : VideoViewHolder(itemView) {
 
     override fun bind(video: Video) {
         binding.videoName.text = video.name
-        binding.duration.text = "${duration}: ${video.duration}"
+        binding.duration.text = "${duration}: ${formatDuration(video.duration)}"
         binding.savedWords.text = "${savedWords}: ${video.saveWords}"
         //binding.videoPreview.setImageResource(video.preview)
         binding.videoProgress.progress = 88
@@ -44,7 +44,7 @@ class SelectedVideoViewHolder(itemView: View) : VideoViewHolder(itemView) {
 
     override fun bind(video: Video) {
         binding.videoName.text = video.name
-        binding.duration.text = "${duration}: ${video.duration}"
+        binding.duration.text = "${duration}: ${formatDuration(video.duration)}"
         binding.savedWords.text = "${savedWords}: ${video.saveWords}"
         //binding.videoPreview.setImageResource(video.preview)
         binding.videoProgress.progress = 88

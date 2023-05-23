@@ -24,7 +24,7 @@ class VideoAdapter(videoListInit: ArrayList<Video>) : RecyclerView.Adapter<Recyc
 
     fun updateData(videoList: ArrayList<Video>) {
         this@VideoAdapter.videoList = videoList
-        notifyDataSetChanged()
+        notifyDataSetChanged() //TODO передавать в качестве агрументов id обновлённого видоса
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

@@ -10,7 +10,13 @@ import com.learnwithsubs.feature_video.domain.models.Video
 import com.learnwithsubs.feature_video.domain.usecase.VideoUseCases
 import com.learnwithsubs.feature_video.domain.util.OrderType
 import com.learnwithsubs.feature_video.domain.util.VideoOrder
+import com.learnwithsubs.feature_video.presentation.adapter.VideoAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -44,6 +50,15 @@ class VideoListViewModel @Inject constructor(
             is VideosEvent.LoadVideo -> {
                 addVideo(event.video)
             }
+            is VideosEvent.UpdateVideo -> {
+                editVideo(event.video)
+            }
+        }
+    }
+
+    private fun editVideo(video: Video) { //TODO temp for test!!!
+        viewModelScope.launch {
+            videoUseCases.loadVideoUseCase.invoke(video)
         }
     }
 
@@ -52,6 +67,30 @@ class VideoListViewModel @Inject constructor(
         viewModelScope.launch {
             videoUseCases.loadVideoUseCase.invoke(video)
         }
+
+
+        //TODO temp for test!!!
+        GlobalScope.launch {
+            delay(2000)
+            val videoListValue: List<Video>? = videoList.value
+
+            if (!videoListValue.isNullOrEmpty()) {
+                val lastVideo = videoListValue.first()
+                val newVideo = Video(
+                    id = lastVideo.id,
+                    videoStatus = VideoAdapter.NORMAL_VIDEO,
+                    name = lastVideo.name,
+                    preview = 0,
+                    duration = lastVideo.duration,
+                    URI = lastVideo.URI,
+                    timestamp = lastVideo.timestamp
+                )
+                editVideo(video = newVideo)
+            }
+        }
+
+
+
         videoList.value = currentList.toList()
     }
 

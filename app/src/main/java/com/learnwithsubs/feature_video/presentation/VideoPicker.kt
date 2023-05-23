@@ -47,17 +47,20 @@ class VideoPicker(private val activity: Activity, private val requestCode: Int) 
     }
 
     private fun getVideoNameFromUri(videoUri: Uri, context: Context): String {
-        val cursor: Cursor? = context.contentResolver.query(videoUri, null, null, null, null)
+        val projection = arrayOf(OpenableColumns.DISPLAY_NAME)
         var displayName: String? = null
-
-        cursor.use { curs ->
-            if (curs != null && curs.moveToFirst()) {
-                val displayNameIndex: Int = curs.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                if (displayNameIndex != -1) {
-                    displayName = curs.getString(displayNameIndex)
+        try {
+            val cursor: Cursor? = context.contentResolver.query(videoUri, projection, null, null, null)
+            cursor.use { curs ->
+                if (curs != null && curs.moveToFirst()) {
+                    val displayNameIndex: Int = curs.getColumnIndex(MediaStore.Video.Media.DISPLAY_NAME)
+                    if (displayNameIndex != -1) {
+                        displayName = curs.getString(displayNameIndex)
+                    }
                 }
             }
         }
+        catch(_: Exception) { return "Video" }
 
         return displayName ?: "Video"
     }
