@@ -7,7 +7,7 @@
         android:maxSdkVersion="32" />
 
     <application
-        android:name=".feature_video_list.presentation.app.VideoApp"
+        android:name=".feature_video_list.presentation.app.VideoListApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

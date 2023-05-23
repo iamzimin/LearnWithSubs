@@ -5,7 +5,7 @@ import com.learnwithsubs.feature_video_list.presentation.di.DaggerVideoListAppCo
 import com.learnwithsubs.feature_video_list.presentation.di.VideoListAppComponent
 import com.learnwithsubs.feature_video_list.presentation.di.VideoListAppModule
 
-class VideoApp : Application() {
+class VideoListApp : Application() {
     lateinit var videoListAppComponent: VideoListAppComponent
     override fun onCreate() {
         super.onCreate()
