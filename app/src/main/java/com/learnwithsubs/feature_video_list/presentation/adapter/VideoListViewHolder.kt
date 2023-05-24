@@ -18,10 +18,10 @@ abstract class VideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
     protected val savedWords: String = itemView.context.getString(R.string.video_saved_words)
     protected val videoIsUploading: String = itemView.context.getString(R.string.video_is_uploading)
 
-    protected fun formatDuration(duration: Long): String {
-        val hours = TimeUnit.MILLISECONDS.toHours(duration)
-        val minutes = TimeUnit.MILLISECONDS.toMinutes(duration) % 60
-        val seconds = TimeUnit.MILLISECONDS.toSeconds(duration) % 60
+    protected fun formatDuration(duration: Int): String {
+        val hours = TimeUnit.MILLISECONDS.toHours(duration.toLong())
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(duration.toLong()) % 60
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(duration.toLong()) % 60
 
         return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
@@ -38,11 +38,11 @@ class NormalVideoViewHolder(itemView: View) : VideoViewHolder(itemView) {
         binding.duration.text = "${duration}: ${formatDuration(video.duration)}"
         binding.savedWords.text = "${savedWords}: ${video.saveWords}"
         //binding.videoPreview.setImageResource(video.preview)
-        binding.videoProgress.progress = 88
+        binding.videoProgress.progress = ((video.watchProgress / video.duration.toDouble()) * 100).toInt()
 
         itemView.setOnClickListener {
             val intent = Intent(itemView.context, VideoViewActivity::class.java)
-            intent.putExtra("videoURI",video.URI)
+            intent.putExtra("videoData", video)
             itemView.context.startActivity(intent)
         }
     }
@@ -57,7 +57,7 @@ class SelectedVideoViewHolder(itemView: View) : VideoViewHolder(itemView) {
         binding.duration.text = "${duration}: ${formatDuration(video.duration)}"
         binding.savedWords.text = "${savedWords}: ${video.saveWords}"
         //binding.videoPreview.setImageResource(video.preview)
-        binding.videoProgress.progress = 88
+        binding.videoProgress.progress = ((video.watchProgress / video.duration.toDouble()) * 100).toInt()
     }
 }
 
@@ -70,7 +70,6 @@ class LoadingVideoViewHolder(itemView: View) : VideoViewHolder(itemView) {
         binding.duration.text = "${duration}: ${formatDuration(video.duration)}"
         binding.progressVideoLoading.progress = video.uploadingProgress
         //binding.videoPreview.setImageResource(video.preview)
-
 
         itemView.setOnClickListener {
             Toast.makeText(itemView.context.applicationContext, videoIsUploading, Toast.LENGTH_SHORT).show()

@@ -12,6 +12,7 @@ import com.learnwithsubs.R
 import com.learnwithsubs.databinding.VideoListBinding
 import com.learnwithsubs.feature_video_list.presentation.adapter.VideoListAdapter
 import com.learnwithsubs.app.App
+import com.learnwithsubs.feature_video_list.domain.models.Video
 import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewModel
 import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewModelFactory
 import javax.inject.Inject
@@ -43,10 +44,19 @@ class VideoListActivity : AppCompatActivity() {
         vm = ViewModelProvider(this, vmFactory)
             .get(VideoListViewModel::class.java)
 
-        vm.videoList.observe(this, Observer { video ->
+        vm.videoList.observe(this) { video ->
             adapter.updateData(ArrayList(video))
-        })
+        }
     }
+
+//    override fun onResume() {
+//        super.onResume()
+//        val observer = Observer<List<Video>> { videoListData ->
+//            adapter.updateData(ArrayList(videoListData))
+//        }
+//        vm.videoList.observe(this, observer)
+//    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

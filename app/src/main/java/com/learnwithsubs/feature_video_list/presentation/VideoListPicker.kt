@@ -65,15 +65,15 @@ class VideoListPicker(private val activity: Activity, private val requestCode: I
         return displayName ?: "Video"
     }
 
-    private fun getVideoDuration(videoUri: Uri, context: Context): Long {
+    private fun getVideoDuration(videoUri: Uri, context: Context): Int {
         val retriever = MediaMetadataRetriever()
         retriever.setDataSource(context, Uri.parse(videoUri.toString()))
 
         val durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-        val duration = durationString?.toLongOrNull() ?: 0L
+        val duration = durationString?.toIntOrNull()?: 0L
 
         retriever.release()
 
-        return duration
+        return duration.toInt()
     }
 }

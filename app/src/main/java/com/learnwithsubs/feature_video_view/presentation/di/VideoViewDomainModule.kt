@@ -2,6 +2,7 @@ package com.learnwithsubs.feature_video_view.presentation.di
 
 import com.learnwithsubs.feature_video_view.domain.repository.VideoViewRepository
 import com.learnwithsubs.feature_video_view.domain.usecase.GetVideoSubtitlesUseCase
+import com.learnwithsubs.feature_video_view.domain.usecase.UpdateVideoUseCase
 import com.learnwithsubs.feature_video_view.domain.usecase.VideoViewUseCases
 import dagger.Module
 import dagger.Provides
@@ -15,6 +16,7 @@ class VideoViewDomainModule {
     fun provideVideoViewUseCase(repository: VideoViewRepository): VideoViewUseCases {
         return VideoViewUseCases(
             getVideoSubtitlesUseCase = GetVideoSubtitlesUseCase(repository),
+            updateVideoUseCase = UpdateVideoUseCase(repository),
         )
     }
 }

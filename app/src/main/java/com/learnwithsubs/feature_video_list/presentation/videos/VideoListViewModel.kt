@@ -11,7 +11,9 @@ import com.learnwithsubs.feature_video_list.domain.util.VideoOrder
 import com.learnwithsubs.feature_video_list.presentation.adapter.VideoListAdapter
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class VideoListViewModel @Inject constructor(
@@ -21,13 +23,7 @@ class VideoListViewModel @Inject constructor(
     val videoList = MediatorLiveData<List<Video>>()
     private val currentList = videoList.value?.toMutableList() ?: mutableListOf()
     init {
-        videoList.addSource(
-            videoListUseCases.getVideoListUseCase.invoke(
-                videoOrder = VideoOrder.Date(OrderType.Descending)
-            ).asLiveData()
-        ) {
-            videoList.value = it
-        }
+        updateList()
     }
 
     fun onEvent(event: VideosEvent) {
@@ -50,6 +46,16 @@ class VideoListViewModel @Inject constructor(
         }
     }
 
+    private fun updateList() {
+        videoList.addSource(
+            videoListUseCases.getVideoListUseCase.invoke(
+                videoOrder = VideoOrder.Date(OrderType.Descending)
+            ).asLiveData()
+        ) {
+            videoList.value = it
+        }
+    }
+
     private fun editVideo(video: Video) { //TODO temp for test!!!
         viewModelScope.launch {
             videoListUseCases.loadVideoUseCase.invoke(video)
@@ -65,7 +71,7 @@ class VideoListViewModel @Inject constructor(
 
         //TODO temp for test!!!
         GlobalScope.launch {
-            delay(2000)
+            delay(1000)
             val videoListValue: List<Video>? = videoList.value
 
             if (!videoListValue.isNullOrEmpty()) {
@@ -87,6 +93,21 @@ class VideoListViewModel @Inject constructor(
 
         videoList.value = currentList.toList()
     }
+
+    /*
+    fun updateList() {
+        val updatedList: Flow<List<Video>> = videoListUseCases.getVideoListUseCase.invoke(
+            videoOrder = VideoOrder.Date(OrderType.Descending)
+        )
+        videoList.value = runBlocking {
+            val videoList = mutableListOf<Video>()
+            updatedList.collect { videos ->
+                videoList.addAll(videos)
+            }
+            videoList
+        }
+    }
+     */
 
 //    private fun getVideos(videoOrder: VideoOrder) {
 //        videoUseCases.getVideoListUseCase.invoke(videoOrder = videoOrder)
