@@ -14,12 +14,12 @@ class VideoViewViewModel @Inject constructor(
 ) : ViewModel() {
     var currentVideo: MutableLiveData<Video> = MutableLiveData<Video>()
 
-    var videoUri = MutableLiveData<String>()
+    var videoPath = MutableLiveData<String>()
     var videoName = MutableLiveData<String>()
 
     private var maxVideoTime: Int = 0
     private var maxTimeString: String = ""
-    private var currentTime: Int = 0
+    private var currentVideoWatchTime: Int = 0
     var videoTime = MutableLiveData<String>()
 
     var videoSeekBarProgress = MutableLiveData<Int>()
@@ -29,7 +29,7 @@ class VideoViewViewModel @Inject constructor(
 
 
     fun openVideo(video: Video) {
-        videoUri.value = video.URI
+        videoPath.value = video.outputPath
         videoName.value = video.name
         maxVideoTime = video.duration
         maxTimeString = formatTime(time = maxVideoTime)
@@ -37,6 +37,7 @@ class VideoViewViewModel @Inject constructor(
     }
 
     fun saveVideo(video: Video) {
+        /*
         val updatedVideo = Video(
             id = video.id,
             videoStatus = video.videoStatus,
@@ -50,13 +51,15 @@ class VideoViewViewModel @Inject constructor(
             timestamp = video.timestamp,
             subtitles = video.subtitles,
         )
+         */
+        video.watchProgress = currentVideoWatchTime
         viewModelScope.launch(Dispatchers.IO) {
-            videoViewUseCases.updateVideoUseCase.invoke(video = updatedVideo)
+            videoViewUseCases.updateVideoUseCase.invoke(video = video)
         }
     }
 
     fun updateCurrentTime(currTime: Int) {
-        currentTime = currTime
+        currentVideoWatchTime = currTime
         val time = formatTime(time = currTime) + " / $maxTimeString"
         videoTime.value = time
         videoSeekBarProgress.value = (((currTime / maxVideoTime.toDouble())) * 100).toInt()

@@ -1,7 +1,6 @@
 package com.learnwithsubs.feature_video_view.presentation
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.Uri
@@ -88,7 +87,7 @@ class VideoViewActivity : AppCompatActivity() {
         // Live Data - Click Listener
 
         // URI listener
-        vm.videoUri.observe(this) { uri ->
+        vm.videoPath.observe(this) { uri ->
             val videoUriParse = Uri.parse(uri)
             videoView.setVideoURI(videoUriParse)
             videoView.requestFocus()

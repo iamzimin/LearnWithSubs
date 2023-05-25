@@ -9,14 +9,16 @@ import kotlinx.parcelize.Parcelize
 @Entity
 data class Video(
     @PrimaryKey val id: Int? = null,
-    val videoStatus: Int,
-    val name: String,
+    var videoStatus: Int,
+    var name: String,
     val preview: Int,
     val duration: Int,
-    val watchProgress: Int = 0,
-    val saveWords: Int = 0,
-    val uploadingProgress: Int = 0,
-    val URI: String = " ",
+    var watchProgress: Int = 0,
+    var saveWords: Int = 0,
+    var uploadingProgress: Int = 0,
+    val URI: String = "",
+    val inputPath: String = "",
+    val outputPath: String = "",
     val timestamp: Long,
     val subtitles: String = "",
 ) : Parcelable

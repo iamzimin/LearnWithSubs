@@ -1,10 +1,22 @@
 package com.learnwithsubs.feature_video_list.presentation
 
 import VideoListPicker
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.media.MediaCodec
+import android.media.MediaExtractor
+import android.media.MediaFormat
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +27,8 @@ import com.learnwithsubs.app.App
 import com.learnwithsubs.feature_video_list.domain.models.Video
 import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewModel
 import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewModelFactory
+import java.io.File
+import java.io.FileOutputStream
 import javax.inject.Inject
 
 
@@ -41,12 +55,23 @@ class VideoListActivity : AppCompatActivity() {
         }
 
         (applicationContext as App).videoListAppComponent.inject(this)
-        vm = ViewModelProvider(this, vmFactory)
-            .get(VideoListViewModel::class.java)
+        vm = ViewModelProvider(this, vmFactory)[VideoListViewModel::class.java]
+
+        val PERMISSION_REQUEST_CODE = 123
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), PERMISSION_REQUEST_CODE)
+        }
 
         vm.videoList.observe(this) { video ->
             adapter.updateData(ArrayList(video))
         }
+
+        vm.test.observe(this) {
+            Toast.makeText(applicationContext, "всё плохо", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
 //    override fun onResume() {

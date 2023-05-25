@@ -1,4 +1,5 @@
 import android.app.Activity
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
@@ -24,21 +25,19 @@ class VideoListPicker(private val activity: Activity, private val requestCode: I
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?, vm: VideoListViewModel, context: Context) {
         if (requestCode == this.requestCode && resultCode == Activity.RESULT_OK) {
             val selectedVideoUri: Uri = data?.data ?: return
-            val videoName: String = getVideoNameFromUri(
-                videoUri = selectedVideoUri,
-                context = context
-            )
-            val videoDuration = getVideoDuration(
-                videoUri = selectedVideoUri,
-                context = context
-            )
+            val videoName: String = getVideoNameFromUri(videoUri = selectedVideoUri, context = context)
+            val videoDuration = getVideoDuration(videoUri = selectedVideoUri, context = context)
             val currentTime = Date().time
+            val path: String = getVideoPath(context = context, videoUri = selectedVideoUri)
+            //val path = selectedVideoUri.path ?: return
 
             val video = Video(
                 videoStatus = VideoListAdapter.LOADING_VIDEO,
                 name = videoName,
                 preview = 0,
+                inputPath = path,
                 duration = videoDuration,
+                outputPath = "/storage/emulated/0/Movies/LearnWithSubs/${videoName}",
                 URI = selectedVideoUri.toString(),
                 timestamp = currentTime
             )
@@ -63,6 +62,21 @@ class VideoListPicker(private val activity: Activity, private val requestCode: I
         catch(_: Exception) { return "Video" }
 
         return displayName ?: "Video"
+    }
+
+    private fun getVideoPath(context: Context, videoUri: Uri): String {
+        val contentResolver: ContentResolver = context.contentResolver
+        val projection = arrayOf(MediaStore.Video.Media.DATA)
+        val cursor = contentResolver.query(videoUri, projection, null, null, null)
+
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val columnIndex = it.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
+                return it.getString(columnIndex)
+            }
+        }
+
+        return ""
     }
 
     private fun getVideoDuration(videoUri: Uri, context: Context): Int {
