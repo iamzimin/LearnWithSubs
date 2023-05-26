@@ -18,4 +18,7 @@ interface VideoListDao {
 
     @Delete
     suspend fun deleteVideo(video: Video)
+
+    @Query("SELECT * FROM video ORDER BY id DESC LIMIT 1")
+    suspend fun getLastVideo(): Video?
 }

@@ -13,4 +13,6 @@ interface VideoListRepository {
 
     suspend fun deleteVideo(video: Video)
 
+    suspend fun getLastVideo(): Video?
+
 }

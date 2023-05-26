@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 @Entity
 data class Video(
     @PrimaryKey val id: Int? = null,
-    var videoStatus: Int,
+    var videoStatus: VideoStatus,
     var name: String,
     val preview: Int,
     val duration: Int,
@@ -18,7 +18,14 @@ data class Video(
     var uploadingProgress: Int = 0,
     val URI: String = "",
     val inputPath: String = "",
-    val outputPath: String = "",
+    var outputPath: String = "",
     val timestamp: Long,
     val subtitles: String = "",
 ) : Parcelable
+
+
+enum class VideoStatus(val value: Int) {
+    NORMAL_VIDEO(1),
+    SELECTED_VIDEO(2),
+    LOADING_VIDEO(3)
+}

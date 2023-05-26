@@ -8,6 +8,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import com.learnwithsubs.feature_video_list.domain.models.Video
+import com.learnwithsubs.feature_video_list.domain.models.VideoStatus
 import com.learnwithsubs.feature_video_list.presentation.adapter.VideoListAdapter
 import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewModel
 import com.learnwithsubs.feature_video_list.presentation.videos.VideosEvent
@@ -32,12 +33,11 @@ class VideoListPicker(private val activity: Activity, private val requestCode: I
             //val path = selectedVideoUri.path ?: return
 
             val video = Video(
-                videoStatus = VideoListAdapter.LOADING_VIDEO,
+                videoStatus = VideoStatus.LOADING_VIDEO,
                 name = videoName,
                 preview = 0,
                 inputPath = path,
                 duration = videoDuration,
-                outputPath = "/storage/emulated/0/Movies/LearnWithSubs/${videoName}",
                 URI = selectedVideoUri.toString(),
                 timestamp = currentTime
             )
