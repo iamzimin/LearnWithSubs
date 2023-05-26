@@ -74,13 +74,10 @@ class VideoListActivity : AppCompatActivity() {
 
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        val observer = Observer<List<Video>> { videoListData ->
-//            adapter.updateData(ArrayList(videoListData))
-//        }
-//        vm.videoList.observe(this, observer)
-//    }
+    override fun onResume() {
+        super.onResume()
+        vm.updateList()
+    }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

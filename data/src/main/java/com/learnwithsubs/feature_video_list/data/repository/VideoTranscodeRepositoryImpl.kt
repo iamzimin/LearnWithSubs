@@ -3,6 +3,7 @@ package com.learnwithsubs.feature_video_list.data.repository
 import android.content.Context
 import android.os.Environment
 import android.util.Log
+import android.widget.Toast
 import com.arthenica.mobileffmpeg.Config
 import com.arthenica.mobileffmpeg.Config.RETURN_CODE_CANCEL
 import com.arthenica.mobileffmpeg.Config.RETURN_CODE_SUCCESS
@@ -59,6 +60,11 @@ class VideoTranscodeRepositoryImpl(
                 }
                 else -> {
                     Log.i(Config.TAG, "Async command execution failed with returnCode=$returnCode.")
+                    Toast.makeText(
+                        context.applicationContext,
+                        "Async command execution failed with returnCode=$returnCode.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     continuation.resume(null)
                 }
             }

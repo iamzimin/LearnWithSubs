@@ -48,7 +48,7 @@ class VideoListViewModel @Inject constructor(
         }
     }
 
-    private fun updateList() {
+    fun updateList() {
         videoList.addSource(
             videoListUseCases.getVideoListUseCase.invoke(
                 videoOrder = VideoOrder.Date(OrderType.Descending)
