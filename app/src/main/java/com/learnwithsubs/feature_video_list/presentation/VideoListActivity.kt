@@ -68,16 +68,12 @@ class VideoListActivity : AppCompatActivity() {
             adapter.updateData(ArrayList(video))
         }
 
-        vm.test.observe(this) {
-            Toast.makeText(applicationContext, "всё плохо", Toast.LENGTH_SHORT).show()
-        }
-
     }
 
-    override fun onResume() {
-        super.onResume()
-        vm.updateList()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        vm.updateList()
+//    }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

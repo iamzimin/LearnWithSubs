@@ -23,7 +23,6 @@ class VideoListViewModel @Inject constructor(
     val videoList = MediatorLiveData<List<Video>>()
     //private var currentList = videoList.value?.toMutableList() ?: mutableListOf()
 
-    var test = MutableLiveData<Boolean>()
     init {
         updateList()
     }

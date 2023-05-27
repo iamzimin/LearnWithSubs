@@ -22,6 +22,8 @@ import com.learnwithsubs.R
 import com.learnwithsubs.app.App
 import com.learnwithsubs.feature_video_view.presentation.videos.VideoViewViewModel
 import com.learnwithsubs.feature_video_view.presentation.videos.VideoViewViewModelFactory
+import java.util.Timer
+import java.util.TimerTask
 import javax.inject.Inject
 
 
@@ -87,9 +89,9 @@ class VideoViewActivity : AppCompatActivity() {
         // Live Data - Click Listener
 
         // URI listener
-        vm.videoPath.observe(this) { uri ->
-            val videoUriParse = Uri.parse(uri)
-            videoView.setVideoURI(videoUriParse)
+        vm.videoPath.observe(this) { path ->
+            val videoPath = Uri.parse(path)
+            videoView.setVideoURI(videoPath)
             videoView.requestFocus()
             videoView.start()
             val watchProgress = vm.currentVideo.value?.watchProgress ?: 0
@@ -150,7 +152,15 @@ class VideoViewActivity : AppCompatActivity() {
             vm.isButtonsShowed.value = vm.isButtonsShowed.value != true
         }
         vm.isButtonsShowed.observe(this) { isButtonsShowed ->
-            videoControls.visibility = if (isButtonsShowed) View.VISIBLE else View.INVISIBLE
+            videoControls.visibility = if (isButtonsShowed) View.VISIBLE else View.GONE
+            if (isButtonsShowed) {
+                Handler().postDelayed({
+                    runOnUiThread {
+                        videoControls.visibility = View.GONE
+                        vm.isButtonsShowed.value = false
+                    }
+                }, 5000)
+            }
         }
 
 
@@ -166,10 +176,10 @@ class VideoViewActivity : AppCompatActivity() {
                 if (isPlaying) start() else pause()
             }
             playVideoButton.apply {
-                visibility = if (isPlaying) View.INVISIBLE else View.VISIBLE
+                visibility = if (isPlaying) View.GONE else View.VISIBLE
             }
             pauseVideoButton.apply {
-                visibility = if (!isPlaying) View.INVISIBLE else View.VISIBLE
+                visibility = if (!isPlaying) View.GONE else View.VISIBLE
             }
         }
 
@@ -181,9 +191,15 @@ class VideoViewActivity : AppCompatActivity() {
     }
 
 
-    override fun onPause() {
+
+    override fun onStop() {
+        super.onStop()
         vm.currentVideo.value?.let { vm.saveVideo(it) }
-        super.onPause()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        vm.currentVideo.value?.let { vm.openVideo(video = it) }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

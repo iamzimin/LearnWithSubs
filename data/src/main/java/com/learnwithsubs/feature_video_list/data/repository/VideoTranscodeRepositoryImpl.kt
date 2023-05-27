@@ -64,7 +64,7 @@ class VideoTranscodeRepositoryImpl(
                         context.applicationContext,
                         "Async command execution failed with returnCode=$returnCode.",
                         Toast.LENGTH_SHORT
-                    ).show()
+                    ).show() //TODO edit toast
                     continuation.resume(null)
                 }
             }

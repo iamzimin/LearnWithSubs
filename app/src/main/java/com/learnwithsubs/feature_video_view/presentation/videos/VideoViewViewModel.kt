@@ -1,5 +1,6 @@
 package com.learnwithsubs.feature_video_view.presentation.videos
 
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -34,29 +35,16 @@ class VideoViewViewModel @Inject constructor(
         maxVideoTime = video.duration
         maxTimeString = formatTime(time = maxVideoTime)
         videoPlaying.value = true
+        isButtonsShowed.value = true
     }
 
     fun saveVideo(video: Video) {
-        /*
-        val updatedVideo = Video(
-            id = video.id,
-            videoStatus = video.videoStatus,
-            name = video.name,
-            preview = video.preview,
-            duration = video.duration,
-            watchProgress = currentTime,
-            saveWords = video.saveWords,
-            uploadingProgress = video.uploadingProgress,
-            URI = video.URI,
-            timestamp = video.timestamp,
-            subtitles = video.subtitles,
-        )
-         */
         video.watchProgress = currentVideoWatchTime
         viewModelScope.launch(Dispatchers.IO) {
             videoViewUseCases.updateVideoUseCase.invoke(video = video)
         }
     }
+
 
     fun updateCurrentTime(currTime: Int) {
         currentVideoWatchTime = currTime
