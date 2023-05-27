@@ -1,11 +1,13 @@
 package com.learnwithsubs.feature_video_list.presentation.videos
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.learnwithsubs.feature_video_list.domain.models.Video
+import com.learnwithsubs.feature_video_list.domain.repository.VideoTranscodeRepository
 import com.learnwithsubs.feature_video_list.domain.usecase.VideoListUseCases
 import com.learnwithsubs.feature_video_list.domain.util.OrderType
 import com.learnwithsubs.feature_video_list.domain.util.VideoOrder
@@ -17,8 +19,11 @@ import kotlinx.coroutines.withContext
 
 
 class VideoListViewModel @Inject constructor(
-    val videoListUseCases: VideoListUseCases
+    val videoListUseCases: VideoListUseCases,
+    videoTranscodeRepository: VideoTranscodeRepository
 ) : ViewModel() {
+    private val videoFrameNumberLiveData: LiveData<Video> = videoTranscodeRepository.getVideoFrameNumberLiveData()
+
 
     val videoList = MediatorLiveData<List<Video>>()
     //private var currentList = videoList.value?.toMutableList() ?: mutableListOf()
@@ -47,7 +52,7 @@ class VideoListViewModel @Inject constructor(
         }
     }
 
-    fun updateList() {
+    private fun updateList() {
         videoList.addSource(
             videoListUseCases.getVideoListUseCase.invoke(
                 videoOrder = VideoOrder.Date(OrderType.Descending)
@@ -72,15 +77,23 @@ class VideoListViewModel @Inject constructor(
             }
 
             //TODO обработать возможный null
-            val updatedVideo: Video? = withContext(Dispatchers.IO) {
+            val recodedVideo: Video? = withContext(Dispatchers.IO) {
                 lastVideo?.let { videoListUseCases.transcodeVideoUseCase.invoke(it) }
             }
 
             //TODO обработать возможный null
             withContext(Dispatchers.IO) {
-                updatedVideo?.let { videoListUseCases.loadVideoUseCase.invoke(it) }
+                recodedVideo?.let { videoListUseCases.loadVideoUseCase.invoke(it) }
             }
         }
+    }
+
+    //fun getVideoFrameNumberLiveData(): LiveData<Int> = videoFrameNumberLiveData
+    fun getVideoFrameNumberLiveData(): LiveData<Video> {
+        viewModelScope.launch {
+            videoFrameNumberLiveData.value?.let { videoListUseCases.loadVideoUseCase.invoke(it) }
+        }
+        return videoFrameNumberLiveData
     }
 
     /*

@@ -19,7 +19,7 @@ class VideoListDomainModule {
     @Singleton
     fun provideVideoListUseCases(
         videoListRepository: VideoListRepository,
-        transcodeRepository: VideoTranscodeRepository
+        transcodeRepository: VideoTranscodeRepository,
     ): VideoListUseCases {
         return VideoListUseCases(
             getVideoListUseCase = GetVideoListUseCase(videoListRepository),

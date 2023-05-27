@@ -77,4 +77,5 @@ dependencies {
 
     //FFmpeg
     //implementation 'com.arthenica:mobile-ffmpeg-full:4.4'
+
 }

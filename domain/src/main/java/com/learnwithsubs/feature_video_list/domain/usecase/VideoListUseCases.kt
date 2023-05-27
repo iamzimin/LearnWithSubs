@@ -6,4 +6,5 @@ data class VideoListUseCases(
     val loadVideoUseCase: LoadVideoUseCase,
     val getLastVideoUseCase: GetLastVideoUseCase,
     val transcodeVideoUseCase: TranscodeVideoUseCase,
+//    val getVideoProgressUseCase: GetVideoProgressUseCase,
 )

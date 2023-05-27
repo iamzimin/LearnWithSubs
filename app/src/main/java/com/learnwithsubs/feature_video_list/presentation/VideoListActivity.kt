@@ -20,6 +20,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.learnwithsubs.R
 import com.learnwithsubs.databinding.VideoListBinding
 import com.learnwithsubs.feature_video_list.presentation.adapter.VideoListAdapter
@@ -50,6 +52,10 @@ class VideoListActivity : AppCompatActivity() {
         setupRecyclerView()
 
         val uploadVideoButton = findViewById<CardView>(R.id.button_video_upload)
+        val recyclerView = findViewById<RecyclerView>(R.id.video_list)
+        (recyclerView?.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+
+
         uploadVideoButton.setOnClickListener {
             videoListPicker.pickVideo()
         }
@@ -66,6 +72,10 @@ class VideoListActivity : AppCompatActivity() {
 
         vm.videoList.observe(this) { video ->
             adapter.updateData(ArrayList(video))
+        }
+
+        vm.getVideoFrameNumberLiveData().observe(this) { videoFrameNumber ->
+            adapter.updateVideo(videoFrameNumber)
         }
 
     }

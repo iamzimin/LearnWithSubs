@@ -48,4 +48,11 @@ dependencies {
 
     //FFmpeg
     implementation 'com.arthenica:mobile-ffmpeg-full:4.4'
+
+    //ViewModel - LiveData
+    def lifecycle_version = "2.6.1"
+    implementation("androidx.lifecycle:lifecycle-common:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1'
 }

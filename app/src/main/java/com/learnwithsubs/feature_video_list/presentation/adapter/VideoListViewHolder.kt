@@ -68,7 +68,8 @@ class LoadingVideoViewHolder(itemView: View) : VideoViewHolder(itemView) {
     override fun bind(video: Video) {
         binding.videoName.text = video.name
         binding.duration.text = "${duration}: ${formatDuration(video.duration)}"
-        binding.progressVideoLoading.progress = video.uploadingProgress
+        //binding.progressVideoLoading.progress = 55
+        binding.progressVideoLoadingText.text = video.uploadingProgress.toString()
         //binding.videoPreview.setImageResource(video.preview)
 
         itemView.setOnClickListener {

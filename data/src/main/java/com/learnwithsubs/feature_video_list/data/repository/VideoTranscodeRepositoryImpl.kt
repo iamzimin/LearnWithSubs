@@ -1,9 +1,10 @@
 package com.learnwithsubs.feature_video_list.data.repository
 
 import android.content.Context
-import android.os.Environment
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.arthenica.mobileffmpeg.Config
 import com.arthenica.mobileffmpeg.Config.RETURN_CODE_CANCEL
 import com.arthenica.mobileffmpeg.Config.RETURN_CODE_SUCCESS
@@ -15,16 +16,17 @@ import java.io.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+
 class VideoTranscodeRepositoryImpl(
     private val context: Context
 ) : VideoTranscodeRepository {
+    private val videoFrameNumberLiveData: MutableLiveData<Video> = MutableLiveData()
 
     override suspend fun transcodeVideo(video: Video): Video? = suspendCoroutine { continuation ->
         //Internal Storage
         val storageDir = File(context.filesDir, "LearnWithSubs")
-        if (!storageDir.exists()) {
+        if (!storageDir.exists())
             storageDir.mkdirs()
-        }
 
         val bitrate = "2M"
         val videoType = ".mp4"
@@ -43,8 +45,26 @@ class VideoTranscodeRepositoryImpl(
 
         val bitrate = "2M"
         val command = "-i ${video.inputPath} -c:v mpeg4 -b:v $bitrate ${video.outputPath} -y"
+         */
+
+        /*
+        Config.enableStatisticsCallback { newStatistics ->
+            Log.d(
+                Config.TAG,
+                String.format(
+                    "frame: %d, time: %d",
+                    newStatistics.videoFrameNumber,
+                    newStatistics.time,
+                )
+            )
+        }
 
          */
+
+        Config.enableStatisticsCallback { newStatistics ->
+            video.uploadingProgress = ((newStatistics.time / video.duration.toDouble()) * 100).toInt()
+            videoFrameNumberLiveData.postValue(video)
+        }
 
         val executionId = FFmpeg.executeAsync(command) { executionId, returnCode ->
             when (returnCode) {
@@ -71,4 +91,5 @@ class VideoTranscodeRepositoryImpl(
         }
     }
 
+    override fun getVideoFrameNumberLiveData(): LiveData<Video> = videoFrameNumberLiveData
 }

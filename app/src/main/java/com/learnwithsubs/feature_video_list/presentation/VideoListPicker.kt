@@ -30,7 +30,6 @@ class VideoListPicker(private val activity: Activity, private val requestCode: I
             val videoDuration = getVideoDuration(videoUri = selectedVideoUri, context = context)
             val currentTime = Date().time
             val path: String = getVideoPath(context = context, videoUri = selectedVideoUri)
-            //val path = selectedVideoUri.path ?: return
 
             val video = Video(
                 videoStatus = VideoStatus.LOADING_VIDEO,
@@ -63,6 +62,7 @@ class VideoListPicker(private val activity: Activity, private val requestCode: I
 
         return displayName ?: "Video"
     }
+
 
     private fun getVideoPath(context: Context, videoUri: Uri): String {
         val contentResolver: ContentResolver = context.contentResolver
