@@ -11,22 +11,29 @@ import com.learnwithsubs.feature_video_list.domain.repository.VideoTranscodeRepo
 import com.learnwithsubs.feature_video_list.domain.usecase.VideoListUseCases
 import com.learnwithsubs.feature_video_list.domain.util.OrderType
 import com.learnwithsubs.feature_video_list.domain.util.VideoOrder
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.withContext
+import java.util.LinkedList
 
 
 class VideoListViewModel @Inject constructor(
     val videoListUseCases: VideoListUseCases,
     val videoTranscodeRepository: VideoTranscodeRepository
 ) : ViewModel() {
-    val videoProgressLiveData: MutableLiveData<List<Video>?> = videoTranscodeRepository.getVideoProgressLiveData()
-
-
     val videoList = MediatorLiveData<List<Video>>()
-    //private var currentList = videoList.value?.toMutableList() ?: mutableListOf()
+
+    val videoProgressLiveData: MutableLiveData<Video?> = videoTranscodeRepository.getVideoProgressLiveData()
+
+
+    private val videoSemaphore = Semaphore(1)
+    private val list = LinkedList<Video?>()
+
 
     init {
         updateList()
@@ -66,7 +73,8 @@ class VideoListViewModel @Inject constructor(
         viewModelScope.launch { videoListUseCases.loadVideoUseCase.invoke(video) }
     }
 
-    private fun addVideo(video: Video) {
+
+    /*private fun addVideo(video: Video) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 videoListUseCases.loadVideoUseCase.invoke(video)
@@ -86,13 +94,31 @@ class VideoListViewModel @Inject constructor(
                 recodedVideo?.let { videoListUseCases.loadVideoUseCase.invoke(it) }
             }
         }
+    }*/
+     
+
+    private fun addVideo(video: Video) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                videoListUseCases.loadVideoUseCase.invoke(video)
+                val lastVideo: Video? = videoListUseCases.getLastVideoUseCase.invoke()
+                list.add(lastVideo)
+
+                videoSemaphore.acquire()
+                try {
+                    val poolList = list.poll()
+
+                    //TODO обработать возможный null
+                    val recodedVideo: Video? = poolList?.let { videoListUseCases.transcodeVideoUseCase.invoke(it) }
+
+                    //TODO обработать возможный null
+                    recodedVideo?.let { videoListUseCases.loadVideoUseCase.invoke(it) }
+                } finally {
+                    videoSemaphore.release()
+                }
+            }
+        }
     }
 
-    //fun getVideoFrameNumberLiveData(): LiveData<Int> = videoFrameNumberLiveData
 
-    /*
-    private fun getVideos(videoOrder: VideoOrder) {
-        videoUseCases.getVideoListUseCase.invoke(videoOrder = videoOrder)
-            .onEach { videos: List<Video> -> }
-    }*/
 }

@@ -23,10 +23,9 @@ import kotlin.coroutines.suspendCoroutine
 class VideoTranscodeRepositoryImpl(
     private val context: Context
 ) : VideoTranscodeRepository {
-    private val videoProgressLiveData: MutableLiveData<List<Video>?> = MutableLiveData()
-    private val videoInProcess: MutableList<Video> = mutableListOf()
+    private val videoProgressLiveData: MutableLiveData<Video?> = MutableLiveData()
 
-    override suspend fun transcodeVideo(video: Video, loadVideoUseCase: LoadVideoUseCase): Video? = suspendCoroutine { continuation ->
+    override suspend fun transcodeVideo(video: Video): Video? = suspendCoroutine { continuation ->
         //Internal Storage
         val storageDir = File(context.filesDir, "LearnWithSubs")
         if (!storageDir.exists())
@@ -52,28 +51,11 @@ class VideoTranscodeRepositoryImpl(
          */
 
         Config.enableStatisticsCallback { newStatistics ->
-            val callbackVideo: Video? = videoInProcess.find { it.exId == newStatistics.executionId }
-            if (callbackVideo != null) {
-                val process = ((newStatistics.time / callbackVideo.duration.toDouble()) * 100).toInt()
-                videoInProcess.forEach { video ->
-                    if (video.exId == newStatistics.executionId) {
-                        video.uploadingProgress = process
-                    }
-                }
-                runBlocking {
-                    launch {
-                        videoInProcess.forEach { video ->
-                            loadVideoUseCase.invoke(video)
-                        }
-                    }
-                }
-                videoProgressLiveData.postValue(videoInProcess)
-            }
+            video.uploadingProgress = ((newStatistics.time / video.duration.toDouble()) * 100).toInt()
+            videoProgressLiveData.postValue(video)
         }
 
-        val executionId = FFmpeg.executeAsync(command) { executionId, returnCode ->
-            videoInProcess.removeAll { it.exId == executionId }
-
+        FFmpeg.executeAsync(command) { executionId, returnCode ->
             when (returnCode) {
                 RETURN_CODE_SUCCESS -> {
                     Log.i(Config.TAG, "Async command execution completed successfully.")
@@ -96,12 +78,10 @@ class VideoTranscodeRepositoryImpl(
                 }
             }
         }
-        video.exId = executionId
-        videoInProcess.add(video)
 
     }
 
-    override fun getVideoProgressLiveData(): MutableLiveData<List<Video>?> {
+    override fun getVideoProgressLiveData(): MutableLiveData<Video?> {
         return videoProgressLiveData
     }
 }

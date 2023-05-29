@@ -75,8 +75,8 @@ class VideoListActivity : AppCompatActivity() {
         }
 
         vm.videoProgressLiveData.observe(this) { videoProgress ->
-            videoProgress?.forEach { video ->
-                adapter.updateVideo(video)
+            if (videoProgress != null) {
+                adapter.updateVideo(videoProgress)
             }
         }
 

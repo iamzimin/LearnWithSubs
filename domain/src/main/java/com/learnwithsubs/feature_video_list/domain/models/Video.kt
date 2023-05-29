@@ -15,7 +15,6 @@ data class Video(
     val duration: Int,
     var watchProgress: Int = 0,
     var saveWords: Int = 0,
-    var exId: Long = 0,
     var uploadingProgress: Int = 0,
     val URI: String = "",
     val inputPath: String = "",

@@ -7,9 +7,10 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.provider.MediaStore
 import android.provider.OpenableColumns
+import com.arthenica.mobileffmpeg.FFprobe
+import com.arthenica.mobileffmpeg.MediaInformation
 import com.learnwithsubs.feature_video_list.domain.models.Video
 import com.learnwithsubs.feature_video_list.domain.models.VideoStatus
-import com.learnwithsubs.feature_video_list.presentation.adapter.VideoListAdapter
 import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewModel
 import com.learnwithsubs.feature_video_list.presentation.videos.VideosEvent
 import java.util.Date
@@ -26,10 +27,10 @@ class VideoListPicker(private val activity: Activity, private val requestCode: I
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?, vm: VideoListViewModel, context: Context) {
         if (requestCode == this.requestCode && resultCode == Activity.RESULT_OK) {
             val selectedVideoUri: Uri = data?.data ?: return
+            val path: String = getVideoPath(context = context, videoUri = selectedVideoUri)
             val videoName: String = getVideoNameFromUri(videoUri = selectedVideoUri, context = context)
             val videoDuration = getVideoDuration(videoUri = selectedVideoUri, context = context)
             val currentTime = Date().time
-            val path: String = getVideoPath(context = context, videoUri = selectedVideoUri)
 
             val video = Video(
                 videoStatus = VideoStatus.LOADING_VIDEO,
@@ -89,5 +90,6 @@ class VideoListPicker(private val activity: Activity, private val requestCode: I
         retriever.release()
 
         return duration.toInt()
+        //return 1000
     }
 }
