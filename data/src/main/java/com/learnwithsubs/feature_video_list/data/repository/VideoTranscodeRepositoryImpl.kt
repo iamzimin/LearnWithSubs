@@ -20,7 +20,7 @@ import kotlin.coroutines.suspendCoroutine
 class VideoTranscodeRepositoryImpl(
     private val context: Context
 ) : VideoTranscodeRepository {
-    private val videoProgressLiveData: MutableLiveData<Video?> = MutableLiveData()
+    private val videoProgressLiveData: MutableLiveData<List<Video>?> = MutableLiveData()
     private val videoInProcess: MutableList<Video> = mutableListOf()
 
     override suspend fun transcodeVideo(video: Video): Video? = suspendCoroutine { continuation ->
@@ -65,15 +65,20 @@ class VideoTranscodeRepositoryImpl(
         Config.enableStatisticsCallback { newStatistics ->
             val callbackVideo: Video? = videoInProcess.find { it.exId == newStatistics.executionId }
             if (callbackVideo != null) {
-                callbackVideo.uploadingProgress =
-                    ((newStatistics.time / callbackVideo.duration.toDouble()) * 100).toInt()
-                videoProgressLiveData.postValue(callbackVideo)
+                val process = ((newStatistics.time / callbackVideo.duration.toDouble()) * 100).toInt()
+                videoInProcess.forEach { video ->
+                    if (video.exId == newStatistics.executionId) {
+                        video.uploadingProgress = process
+                    }
+                }
+                videoProgressLiveData.postValue(videoInProcess)
+
             }
         }
 
         val executionId = FFmpeg.executeAsync(command) { executionId, returnCode ->
             videoInProcess.removeAll { it.exId == executionId }
-6
+
             when (returnCode) {
                 RETURN_CODE_SUCCESS -> {
                     Log.i(Config.TAG, "Async command execution completed successfully.")
@@ -101,5 +106,5 @@ class VideoTranscodeRepositoryImpl(
 
     }
 
-    override fun getVideoProgressLiveData(): LiveData<Video?> = videoProgressLiveData
+    override fun getVideoProgressLiveData(): MutableLiveData<List<Video>?> = videoProgressLiveData
 }

@@ -2,6 +2,7 @@ package com.learnwithsubs.feature_video_list.presentation.videos
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -19,9 +20,9 @@ import kotlinx.coroutines.withContext
 
 class VideoListViewModel @Inject constructor(
     val videoListUseCases: VideoListUseCases,
-    videoTranscodeRepository: VideoTranscodeRepository
+    val videoTranscodeRepository: VideoTranscodeRepository
 ) : ViewModel() {
-    private val viedoProgressLiveData: LiveData<Video?> = videoTranscodeRepository.getVideoProgressLiveData()
+    private val videoProgressLiveData: MutableLiveData<List<Video>?> = videoTranscodeRepository.getVideoProgressLiveData()
 
 
     val videoList = MediatorLiveData<List<Video>>()
@@ -88,11 +89,15 @@ class VideoListViewModel @Inject constructor(
     }
 
     //fun getVideoFrameNumberLiveData(): LiveData<Int> = videoFrameNumberLiveData
-    fun getVideoFrameNumberLiveData(): LiveData<Video?> {
-        viewModelScope.launch {
-            viedoProgressLiveData.value?.let { videoListUseCases.loadVideoUseCase.invoke(it) }
-        }
-        return viedoProgressLiveData
+    fun getVideoFrameNumberLiveData(): MutableLiveData<List<Video>?> {
+//        videoProgressLiveData.value?.forEach { video ->
+//            viewModelScope.launch {
+//                videoProgressLiveData.value.let {
+//                    videoListUseCases.loadVideoUseCase.invoke(video)
+//                }
+//            }
+//        }
+        return videoProgressLiveData
     }
 
     /*
