@@ -2,7 +2,6 @@ package com.learnwithsubs.feature_video_list.presentation.videos
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -22,7 +21,7 @@ class VideoListViewModel @Inject constructor(
     val videoListUseCases: VideoListUseCases,
     videoTranscodeRepository: VideoTranscodeRepository
 ) : ViewModel() {
-    private val videoFrameNumberLiveData: LiveData<Video> = videoTranscodeRepository.getVideoFrameNumberLiveData()
+    private val viedoProgressLiveData: LiveData<Video?> = videoTranscodeRepository.getVideoProgressLiveData()
 
 
     val videoList = MediatorLiveData<List<Video>>()
@@ -89,11 +88,11 @@ class VideoListViewModel @Inject constructor(
     }
 
     //fun getVideoFrameNumberLiveData(): LiveData<Int> = videoFrameNumberLiveData
-    fun getVideoFrameNumberLiveData(): LiveData<Video> {
+    fun getVideoFrameNumberLiveData(): LiveData<Video?> {
         viewModelScope.launch {
-            videoFrameNumberLiveData.value?.let { videoListUseCases.loadVideoUseCase.invoke(it) }
+            viedoProgressLiveData.value?.let { videoListUseCases.loadVideoUseCase.invoke(it) }
         }
-        return videoFrameNumberLiveData
+        return viedoProgressLiveData
     }
 
     /*

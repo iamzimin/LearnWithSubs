@@ -74,8 +74,10 @@ class VideoListActivity : AppCompatActivity() {
             adapter.updateData(ArrayList(video))
         }
 
-        vm.getVideoFrameNumberLiveData().observe(this) { videoFrameNumber ->
-            adapter.updateVideo(videoFrameNumber)
+        vm.getVideoFrameNumberLiveData().observe(this) { videoProgress ->
+            if (videoProgress != null) {
+                adapter.updateVideo(videoProgress)
+            }
         }
 
     }
