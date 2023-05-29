@@ -22,7 +22,7 @@ class VideoListViewModel @Inject constructor(
     val videoListUseCases: VideoListUseCases,
     val videoTranscodeRepository: VideoTranscodeRepository
 ) : ViewModel() {
-    private val videoProgressLiveData: MutableLiveData<List<Video>?> = videoTranscodeRepository.getVideoProgressLiveData()
+    val videoProgressLiveData: MutableLiveData<List<Video>?> = videoTranscodeRepository.getVideoProgressLiveData()
 
 
     val videoList = MediatorLiveData<List<Video>>()
@@ -89,16 +89,6 @@ class VideoListViewModel @Inject constructor(
     }
 
     //fun getVideoFrameNumberLiveData(): LiveData<Int> = videoFrameNumberLiveData
-    fun getVideoFrameNumberLiveData(): MutableLiveData<List<Video>?> {
-//        videoProgressLiveData.value?.forEach { video ->
-//            viewModelScope.launch {
-//                videoProgressLiveData.value.let {
-//                    videoListUseCases.loadVideoUseCase.invoke(video)
-//                }
-//            }
-//        }
-        return videoProgressLiveData
-    }
 
     /*
     private fun getVideos(videoOrder: VideoOrder) {

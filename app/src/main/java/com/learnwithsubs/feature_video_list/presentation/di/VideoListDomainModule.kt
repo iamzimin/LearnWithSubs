@@ -14,19 +14,27 @@ import javax.inject.Singleton
 
 @Module
 class VideoListDomainModule {
+    @Provides
+    @Singleton
+    fun provideLoadVideoUseCase(
+        videoListRepository: VideoListRepository
+    ): LoadVideoUseCase {
+        return LoadVideoUseCase(videoListRepository)
+    }
 
     @Provides
     @Singleton
     fun provideVideoListUseCases(
         videoListRepository: VideoListRepository,
         transcodeRepository: VideoTranscodeRepository,
+        loadVideoUseCase: LoadVideoUseCase
     ): VideoListUseCases {
         return VideoListUseCases(
             getVideoListUseCase = GetVideoListUseCase(videoListRepository),
             deleteVideoUseCase = DeleteVideoUseCase(videoListRepository),
             loadVideoUseCase = LoadVideoUseCase(videoListRepository),
             getLastVideoUseCase = GetLastVideoUseCase(videoListRepository),
-            transcodeVideoUseCase = TranscodeVideoUseCase(transcodeRepository),
+            transcodeVideoUseCase = TranscodeVideoUseCase(transcodeRepository, loadVideoUseCase),
         )
     }
 

@@ -12,6 +12,9 @@ import com.arthenica.mobileffmpeg.FFmpeg
 import com.learnwithsubs.feature_video_list.domain.models.Video
 import com.learnwithsubs.feature_video_list.domain.models.VideoStatus
 import com.learnwithsubs.feature_video_list.domain.repository.VideoTranscodeRepository
+import com.learnwithsubs.feature_video_list.domain.usecase.LoadVideoUseCase
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.io.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -23,7 +26,7 @@ class VideoTranscodeRepositoryImpl(
     private val videoProgressLiveData: MutableLiveData<List<Video>?> = MutableLiveData()
     private val videoInProcess: MutableList<Video> = mutableListOf()
 
-    override suspend fun transcodeVideo(video: Video): Video? = suspendCoroutine { continuation ->
+    override suspend fun transcodeVideo(video: Video, loadVideoUseCase: LoadVideoUseCase): Video? = suspendCoroutine { continuation ->
         //Internal Storage
         val storageDir = File(context.filesDir, "LearnWithSubs")
         if (!storageDir.exists())
@@ -48,20 +51,6 @@ class VideoTranscodeRepositoryImpl(
         val command = "-i ${video.inputPath} -c:v mpeg4 -b:v $bitrate ${video.outputPath} -y"
          */
 
-        /*
-        Config.enableStatisticsCallback { newStatistics ->
-            Log.d(
-                Config.TAG,
-                String.format(
-                    "frame: %d, time: %d",
-                    newStatistics.videoFrameNumber,
-                    newStatistics.time,
-                )
-            )
-        }
-
-         */
-
         Config.enableStatisticsCallback { newStatistics ->
             val callbackVideo: Video? = videoInProcess.find { it.exId == newStatistics.executionId }
             if (callbackVideo != null) {
@@ -71,8 +60,14 @@ class VideoTranscodeRepositoryImpl(
                         video.uploadingProgress = process
                     }
                 }
+                runBlocking {
+                    launch {
+                        videoInProcess.forEach { video ->
+                            loadVideoUseCase.invoke(video)
+                        }
+                    }
+                }
                 videoProgressLiveData.postValue(videoInProcess)
-
             }
         }
 
@@ -106,5 +101,7 @@ class VideoTranscodeRepositoryImpl(
 
     }
 
-    override fun getVideoProgressLiveData(): MutableLiveData<List<Video>?> = videoProgressLiveData
+    override fun getVideoProgressLiveData(): MutableLiveData<List<Video>?> {
+        return videoProgressLiveData
+    }
 }
