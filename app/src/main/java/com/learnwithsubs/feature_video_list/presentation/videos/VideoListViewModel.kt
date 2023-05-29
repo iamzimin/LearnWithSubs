@@ -1,6 +1,5 @@
 package com.learnwithsubs.feature_video_list.presentation.videos
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,12 +10,10 @@ import com.learnwithsubs.feature_video_list.domain.repository.VideoTranscodeRepo
 import com.learnwithsubs.feature_video_list.domain.usecase.VideoListUseCases
 import com.learnwithsubs.feature_video_list.domain.util.OrderType
 import com.learnwithsubs.feature_video_list.domain.util.VideoOrder
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.withContext
 import java.util.LinkedList
@@ -32,7 +29,7 @@ class VideoListViewModel @Inject constructor(
 
 
     private val videoSemaphore = Semaphore(1)
-    private val list = LinkedList<Video?>()
+    private val processQueue = LinkedList<Video?>()
 
 
     init {
@@ -102,11 +99,11 @@ class VideoListViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 videoListUseCases.loadVideoUseCase.invoke(video)
                 val lastVideo: Video? = videoListUseCases.getLastVideoUseCase.invoke()
-                list.add(lastVideo)
+                processQueue.add(lastVideo)
 
                 videoSemaphore.acquire()
                 try {
-                    val poolList = list.poll()
+                    val poolList = processQueue.poll()
 
                     //TODO обработать возможный null
                     val recodedVideo: Video? = poolList?.let { videoListUseCases.transcodeVideoUseCase.invoke(it) }
@@ -117,7 +114,7 @@ class VideoListViewModel @Inject constructor(
                     videoSemaphore.release()
                 }
             }
-        }
+       }
     }
 
 

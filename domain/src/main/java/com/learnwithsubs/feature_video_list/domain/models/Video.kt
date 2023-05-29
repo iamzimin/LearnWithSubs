@@ -12,7 +12,7 @@ data class Video(
     var videoStatus: VideoStatus,
     var name: String,
     val preview: Int,
-    val duration: Int,
+    val duration: Int, //TODO mabye Long
     var watchProgress: Int = 0,
     var saveWords: Int = 0,
     var uploadingProgress: Int = 0,

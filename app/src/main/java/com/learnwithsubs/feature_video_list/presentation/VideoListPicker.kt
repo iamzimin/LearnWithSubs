@@ -8,11 +8,14 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import com.arthenica.mobileffmpeg.FFprobe
-import com.arthenica.mobileffmpeg.MediaInformation
 import com.learnwithsubs.feature_video_list.domain.models.Video
 import com.learnwithsubs.feature_video_list.domain.models.VideoStatus
 import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewModel
 import com.learnwithsubs.feature_video_list.presentation.videos.VideosEvent
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
 import java.util.Date
 
 
@@ -24,12 +27,19 @@ class VideoListPicker(private val activity: Activity, private val requestCode: I
         activity.startActivityForResult(intent, requestCode)
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?, vm: VideoListViewModel, context: Context) {
+    fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?,
+        vm: VideoListViewModel,
+        context: Context
+    ) {
         if (requestCode == this.requestCode && resultCode == Activity.RESULT_OK) {
             val selectedVideoUri: Uri = data?.data ?: return
-            val path: String = getVideoPath(context = context, videoUri = selectedVideoUri)
-            val videoName: String = getVideoNameFromUri(videoUri = selectedVideoUri, context = context)
-            val videoDuration = getVideoDuration(videoUri = selectedVideoUri, context = context)
+            val path: String = getVideoPath(context = context, videoUri = selectedVideoUri) ?: return
+
+            val videoName: String = getVideoNameFromUri(selectedVideoUri, context)
+            val videoDuration = getVideoDuration(selectedVideoUri, context)
             val currentTime = Date().time
 
             val video = Video(
@@ -49,47 +59,55 @@ class VideoListPicker(private val activity: Activity, private val requestCode: I
         val projection = arrayOf(OpenableColumns.DISPLAY_NAME)
         var displayName: String? = null
         try {
-            val cursor: Cursor? = context.contentResolver.query(videoUri, projection, null, null, null)
+            val cursor: Cursor? =
+                context.contentResolver.query(videoUri, projection, null, null, null)
             cursor.use { curs ->
                 if (curs != null && curs.moveToFirst()) {
-                    val displayNameIndex: Int = curs.getColumnIndex(MediaStore.Video.Media.DISPLAY_NAME)
+                    val displayNameIndex: Int =
+                        curs.getColumnIndex(MediaStore.Video.Media.DISPLAY_NAME)
                     if (displayNameIndex != -1) {
                         displayName = curs.getString(displayNameIndex)
                     }
                 }
             }
         }
-        catch(_: Exception) { return "Video" }
-
+        catch (_: Exception) { return "Video" }
+        
         return displayName ?: "Video"
     }
 
+    private fun getVideoPath(context: Context, videoUri: Uri): String? {
+        val contentResolver = context.contentResolver ?: return null
 
-    private fun getVideoPath(context: Context, videoUri: Uri): String {
-        val contentResolver: ContentResolver = context.contentResolver
-        val projection = arrayOf(MediaStore.Video.Media.DATA)
-        val cursor = contentResolver.query(videoUri, projection, null, null, null)
-
-        cursor?.use {
-            if (it.moveToFirst()) {
-                val columnIndex = it.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
-                return it.getString(columnIndex)
+        val filePath =
+            (context.applicationInfo.dataDir + File.separator + System.currentTimeMillis())
+        val file = File(filePath)
+        try {
+            val inputStream = contentResolver.openInputStream(videoUri)
+            val outputStream: OutputStream = FileOutputStream(file)
+            val buf = ByteArray(1024)
+            var len: Int
+            if (inputStream != null) {
+                while (inputStream.read(buf).also { len = it } > 0) outputStream.write(buf, 0, len)
             }
+            outputStream.close()
+            inputStream?.close()
         }
-
-        return ""
+        catch (ignore: IOException) {
+            return null
+        }
+        return file.absolutePath
     }
 
     private fun getVideoDuration(videoUri: Uri, context: Context): Int {
         val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(context, Uri.parse(videoUri.toString()))
+        retriever.setDataSource(context, Uri.parse(videoUri.toString())) //TODO если файл сломан -> ошибка
 
         val durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-        val duration = durationString?.toIntOrNull()?: 0L
+        val duration = durationString?.toIntOrNull() ?: 0L
 
         retriever.release()
 
         return duration.toInt()
-        //return 1000
     }
 }

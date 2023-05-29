@@ -3,18 +3,15 @@ package com.learnwithsubs.feature_video_list.data.repository
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.arthenica.mobileffmpeg.Config
 import com.arthenica.mobileffmpeg.Config.RETURN_CODE_CANCEL
 import com.arthenica.mobileffmpeg.Config.RETURN_CODE_SUCCESS
 import com.arthenica.mobileffmpeg.FFmpeg
+import com.arthenica.mobileffmpeg.FFprobe
 import com.learnwithsubs.feature_video_list.domain.models.Video
 import com.learnwithsubs.feature_video_list.domain.models.VideoStatus
 import com.learnwithsubs.feature_video_list.domain.repository.VideoTranscodeRepository
-import com.learnwithsubs.feature_video_list.domain.usecase.LoadVideoUseCase
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.io.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -31,7 +28,9 @@ class VideoTranscodeRepositoryImpl(
         if (!storageDir.exists())
             storageDir.mkdirs()
 
-        val bitrate = "2M"
+        val info = FFprobe.getMediaInformation(video.inputPath)
+
+        val bitrate = "${info.bitrate}B"
         val videoType = ".mp4"
 
         val outputPath = File(storageDir, "${video.id.toString()}$videoType")
