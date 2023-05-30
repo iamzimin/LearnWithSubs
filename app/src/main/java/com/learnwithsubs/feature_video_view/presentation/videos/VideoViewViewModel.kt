@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.learnwithsubs.feature_video_list.domain.models.Video
+import com.learnwithsubs.feature_video_view.domain.models.Subtitle
 import com.learnwithsubs.feature_video_view.domain.usecase.VideoViewUseCases
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,8 +29,12 @@ class VideoViewViewModel @Inject constructor(
     var videoPlaying = MutableLiveData<Boolean>()
     var isButtonsShowed = MutableLiveData<Boolean>()
 
+    private var subtitleList: List<Subtitle> = emptyList()
+
 
     fun openVideo(video: Video) {
+        subtitleList = videoViewUseCases.getVideoSubtitlesUseCase.invoke(currentVideo.value)
+
         videoPath.value = video.outputPath
         videoName.value = video.name
         maxVideoTime = video.duration
@@ -45,13 +50,21 @@ class VideoViewViewModel @Inject constructor(
         }
     }
 
-
     fun updateCurrentTime(currTime: Int) {
         currentVideoWatchTime = currTime
         val time = formatTime(time = currTime) + " / $maxTimeString"
         videoTime.value = time
         videoSeekBarProgress.value = (((currTime / maxVideoTime.toDouble())) * 100).toInt()
     }
+
+
+    fun getCurrentSubtitles(time: Long): String {
+        val currentSubtitle = subtitleList.find { subtitle ->
+            time >= subtitle.startTime && time <= subtitle.endTime
+        }
+        return currentSubtitle?.text ?: ""
+    }
+
 
     private fun formatTime(time: Int): String {
         val currHours = time / 1000 / 3600

@@ -3,11 +3,18 @@ package com.learnwithsubs.feature_video_view.presentation
 import android.Manifest
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.BackgroundColorSpan
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.SeekBar
 import android.widget.TextView
@@ -22,8 +29,6 @@ import com.learnwithsubs.R
 import com.learnwithsubs.app.App
 import com.learnwithsubs.feature_video_view.presentation.videos.VideoViewViewModel
 import com.learnwithsubs.feature_video_view.presentation.videos.VideoViewViewModelFactory
-import java.util.Timer
-import java.util.TimerTask
 import javax.inject.Inject
 
 
@@ -41,8 +46,18 @@ class VideoViewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        configSystemUI()
         setContentView(R.layout.video_view)
-        supportActionBar?.hide()
+
+//        val decorView = window.decorView
+//        decorView.systemUiVisibility =
+//            (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY // Set the content to appear under the system bars so that the
+//                    // content doesn't resize when the system bars hide and show.
+//                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN // Hide the nav bar and status bar
+//                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                    or View.SYSTEM_UI_FLAG_FULLSCREEN)
 
 
         // Get view by id
@@ -58,11 +73,10 @@ class VideoViewActivity : AppCompatActivity() {
         val forwardVideoButton = findViewById<ImageButton>(R.id.forward_5_video_button)
         val rewindVideoButton = findViewById<ImageButton>(R.id.rewind_5_video_button)
 
+        val subtitleTextView = findViewById<TextView>(R.id.subtitle)
+
         val videoTime = findViewById<TextView>(R.id.video_time)
         val videoPlaySeekBar = findViewById<SeekBar>(R.id.video_play_status)
-
-
-
 
 
         // Set VM
@@ -76,14 +90,15 @@ class VideoViewActivity : AppCompatActivity() {
         videoView.setMediaController(mediaController)
 
         //Video Play
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-//            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_VIDEO) != PackageManager.PERMISSION_GRANTED)
-//            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_MEDIA_VIDEO), STORAGE_PERMISSION_REQUEST_CODE)
-//        else
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_VIDEO) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= 33)
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_MEDIA_VIDEO), STORAGE_PERMISSION_REQUEST_CODE)
+            else
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), STORAGE_PERMISSION_REQUEST_CODE)
+        }
+        else
             vm.currentVideo.value?.let { vm.openVideo(video = it) }
-
-
-
 
 
         // Live Data - Click Listener
@@ -106,16 +121,38 @@ class VideoViewActivity : AppCompatActivity() {
 
 
         // Video time update
-        val handler = Handler(Looper.getMainLooper()) // TODO может не правильно в mvvm (возможда онибка с некорректным отображением времени)
-        handler.post(object : Runnable {
+        val timeUpdate =
+            Handler(Looper.getMainLooper()) // TODO может не правильно в mvvm (возможна онибка с некорректным отображением времени)
+        timeUpdate.post(object : Runnable {
             override fun run() {
                 vm.updateCurrentTime(videoView.currentPosition)
-                handler.postDelayed(this, 1000)
+                timeUpdate.postDelayed(this, 1000)
             }
         })
         vm.videoTime.observe(this) { time ->
             videoTime.text = time
         }
+
+
+        // Video subtitle update
+        val subtitleUpdate =
+            Handler(Looper.getMainLooper()) // TODO может не правильно в mvvm (возможна онибка с некорректным отображением времени)
+        subtitleUpdate.post(object : Runnable {
+            override fun run() {
+                val sub = vm.getCurrentSubtitles(videoView.currentPosition.toLong())
+                val spannableString = SpannableString(sub)
+                val backgroundColor = BackgroundColorSpan(Color.BLACK)
+                spannableString.setSpan(
+                    backgroundColor,
+                    0,
+                    sub.length,
+                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                )
+
+                subtitleTextView.text = spannableString
+                subtitleUpdate.postDelayed(this, 300)
+            }
+        })
 
 
         // Seek bar
@@ -129,13 +166,14 @@ class VideoViewActivity : AppCompatActivity() {
                     videoView.seekTo(newPosition)
                 }
             }
+
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
 
         // Button forward/
-        videoView.setOnPreparedListener {vid ->
+        videoView.setOnPreparedListener { vid ->
             forwardVideoButton.setOnClickListener {
                 val new = vid.currentPosition + 5000
                 vid.seekTo(new)
@@ -190,7 +228,18 @@ class VideoViewActivity : AppCompatActivity() {
         }
     }
 
-
+    private fun configSystemUI() {
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_FULLSCREEN or
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        )
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.statusBarColor = Color.argb(128, 0, 0, 0)
+    }
 
     override fun onStop() {
         super.onStop()
@@ -206,6 +255,7 @@ class VideoViewActivity : AppCompatActivity() {
         super.onConfigurationChanged(newConfig)
         currentPosition = videoView.currentPosition
     }
+
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)

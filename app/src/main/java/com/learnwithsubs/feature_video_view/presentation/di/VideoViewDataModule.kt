@@ -24,7 +24,7 @@ class VideoViewDataModule {
 
     @Provides
     @Singleton
-    fun provideVideoRepository(db: VideoDatabase): VideoViewRepository {
-        return VideoViewRepositoryImpl(db.videoViewDao)
+    fun provideVideoRepository(db: VideoDatabase, context: Context): VideoViewRepository {
+        return VideoViewRepositoryImpl(db.videoViewDao, context)
     }
 }
