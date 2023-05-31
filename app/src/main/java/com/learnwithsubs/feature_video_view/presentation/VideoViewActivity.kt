@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.text.Spannable
@@ -49,17 +50,6 @@ class VideoViewActivity : AppCompatActivity() {
         configSystemUI()
         setContentView(R.layout.video_view)
 
-//        val decorView = window.decorView
-//        decorView.systemUiVisibility =
-//            (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY // Set the content to appear under the system bars so that the
-//                    // content doesn't resize when the system bars hide and show.
-//                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN // Hide the nav bar and status bar
-//                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//                    or View.SYSTEM_UI_FLAG_FULLSCREEN)
-
-
         // Get view by id
         videoView = findViewById(R.id.videoView)
         val videoControls = findViewById<ConstraintLayout>(R.id.video_controls)
@@ -101,6 +91,8 @@ class VideoViewActivity : AppCompatActivity() {
             vm.currentVideo.value?.let { vm.openVideo(video = it) }
 
 
+
+
         // Live Data - Click Listener
 
         // URI listener
@@ -121,8 +113,7 @@ class VideoViewActivity : AppCompatActivity() {
 
 
         // Video time update
-        val timeUpdate =
-            Handler(Looper.getMainLooper()) // TODO может не правильно в mvvm (возможна онибка с некорректным отображением времени)
+        val timeUpdate = Handler(Looper.getMainLooper()) // TODO может не правильно в mvvm (возможна онибка с некорректным отображением времени)
         timeUpdate.post(object : Runnable {
             override fun run() {
                 vm.updateCurrentTime(videoView.currentPosition)
@@ -135,8 +126,7 @@ class VideoViewActivity : AppCompatActivity() {
 
 
         // Video subtitle update
-        val subtitleUpdate =
-            Handler(Looper.getMainLooper()) // TODO может не правильно в mvvm (возможна онибка с некорректным отображением времени)
+        val subtitleUpdate = Handler(Looper.getMainLooper()) // TODO может не правильно в mvvm (возможна онибка с некорректным отображением времени)
         subtitleUpdate.post(object : Runnable {
             override fun run() {
                 val sub = vm.getCurrentSubtitles(videoView.currentPosition.toLong())
@@ -172,7 +162,7 @@ class VideoViewActivity : AppCompatActivity() {
         })
 
 
-        // Button forward/
+        // Button forward
         videoView.setOnPreparedListener { vid ->
             forwardVideoButton.setOnClickListener {
                 val new = vid.currentPosition + 5000
@@ -186,21 +176,24 @@ class VideoViewActivity : AppCompatActivity() {
 
 
         // Button show
+        var timer: CountDownTimer? = null
         videoView.setOnClickListener {
-            vm.isButtonsShowed.value = vm.isButtonsShowed.value != true
+            vm.isButtonsShowedLiveData.value = vm.isButtonsShowedLiveData.value != true
         }
-        vm.isButtonsShowed.observe(this) { isButtonsShowed ->
+        vm.isButtonsShowedLiveData.observe(this) { isButtonsShowed ->
             videoControls.visibility = if (isButtonsShowed) View.VISIBLE else View.GONE
             if (isButtonsShowed) {
-                Handler().postDelayed({
-                    runOnUiThread {
+                timer = object : CountDownTimer(5000, 1000) {
+                    override fun onTick(millisUntilFinished: Long) {}
+                    override fun onFinish() {
                         videoControls.visibility = View.GONE
-                        vm.isButtonsShowed.value = false
+                        vm.isButtonsShowedLiveData.value = false
                     }
-                }, 5000)
+                }.start()
             }
+            else
+                timer?.cancel()
         }
-
 
         // Video play/pause
         pauseVideoButton.setOnClickListener {

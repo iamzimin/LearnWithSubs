@@ -14,7 +14,7 @@ class VideoViewRepositoryImpl(
 ) : VideoViewRepository {
     override fun getVideoSubtitles(video: Video?): List<Subtitle> {
         if (video == null) {
-            Toast.makeText(context.applicationContext, "Video = null", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context.applicationContext, "Video = null", Toast.LENGTH_SHORT).show() //TODO
             return emptyList()
         }
 

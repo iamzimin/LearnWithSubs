@@ -1,6 +1,11 @@
 package com.learnwithsubs.feature_video_view.presentation.videos
 
+import android.net.Uri
+import android.os.CountDownTimer
 import android.view.View
+import android.widget.ImageButton
+import android.widget.VideoView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,7 +32,7 @@ class VideoViewViewModel @Inject constructor(
     var videoSeekBarProgress = MutableLiveData<Int>()
 
     var videoPlaying = MutableLiveData<Boolean>()
-    var isButtonsShowed = MutableLiveData<Boolean>()
+    var isButtonsShowedLiveData = MutableLiveData<Boolean>()
 
     private var subtitleList: List<Subtitle> = emptyList()
 
@@ -40,8 +45,9 @@ class VideoViewViewModel @Inject constructor(
         maxVideoTime = video.duration
         maxTimeString = formatTime(time = maxVideoTime)
         videoPlaying.value = true
-        isButtonsShowed.value = true
+        isButtonsShowedLiveData.value = true
     }
+
 
     fun saveVideo(video: Video) {
         video.watchProgress = currentVideoWatchTime
@@ -50,13 +56,13 @@ class VideoViewViewModel @Inject constructor(
         }
     }
 
+
     fun updateCurrentTime(currTime: Int) {
         currentVideoWatchTime = currTime
         val time = formatTime(time = currTime) + " / $maxTimeString"
         videoTime.value = time
         videoSeekBarProgress.value = (((currTime / maxVideoTime.toDouble())) * 100).toInt()
     }
-
 
     fun getCurrentSubtitles(time: Long): String {
         val currentSubtitle = subtitleList.find { subtitle ->
