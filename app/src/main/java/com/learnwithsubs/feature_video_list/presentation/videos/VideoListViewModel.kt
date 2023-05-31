@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.learnwithsubs.feature_video_list.domain.models.Video
+import com.learnwithsubs.feature_video_list.domain.models.VideoLoadingType
 import com.learnwithsubs.feature_video_list.domain.repository.VideoTranscodeRepository
 import com.learnwithsubs.feature_video_list.domain.usecase.VideoListUseCases
 import com.learnwithsubs.feature_video_list.domain.util.OrderType
@@ -92,7 +93,7 @@ class VideoListViewModel @Inject constructor(
             }
         }
     }*/
-     
+
 
     private fun addVideo(video: Video) {
         viewModelScope.launch {
@@ -102,13 +103,17 @@ class VideoListViewModel @Inject constructor(
                 processQueue.add(lastVideo)
 
                 videoSemaphore.acquire()
-                try {
-                    val poolList = processQueue.poll()
+                try { //TODO обработать возможный null
+                    val poolList = processQueue.poll() ?: return@withContext
 
-                    //TODO обработать возможный null
-                    val recodedVideo: Video? = poolList?.let { videoListUseCases.transcodeVideoUseCase.invoke(it) }
+                    poolList.loadingType = VideoLoadingType.LOADING_AUDIO
+                    videoListUseCases.loadVideoUseCase.invoke(poolList)
+                    val extractedAudioPath: String? = videoListUseCases.extractAudioUseCase.invoke(poolList)
 
-                    //TODO обработать возможный null
+                    poolList.loadingType = VideoLoadingType.DECODING_VIDEO
+                    videoListUseCases.loadVideoUseCase.invoke(poolList)
+                    val recodedVideo: Video? = videoListUseCases.transcodeVideoUseCase.invoke(poolList)
+
                     recodedVideo?.let { videoListUseCases.loadVideoUseCase.invoke(it) }
                 } finally {
                     videoSemaphore.release()

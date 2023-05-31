@@ -3,6 +3,7 @@ package com.learnwithsubs.feature_video_list.presentation.di
 import com.learnwithsubs.feature_video_list.domain.repository.VideoListRepository
 import com.learnwithsubs.feature_video_list.domain.repository.VideoTranscodeRepository
 import com.learnwithsubs.feature_video_list.domain.usecase.DeleteVideoUseCase
+import com.learnwithsubs.feature_video_list.domain.usecase.ExtractAudioUseCase
 import com.learnwithsubs.feature_video_list.domain.usecase.GetLastVideoUseCase
 import com.learnwithsubs.feature_video_list.domain.usecase.GetVideoListUseCase
 import com.learnwithsubs.feature_video_list.domain.usecase.LoadVideoUseCase
@@ -27,6 +28,7 @@ class VideoListDomainModule {
             loadVideoUseCase = LoadVideoUseCase(videoListRepository),
             getLastVideoUseCase = GetLastVideoUseCase(videoListRepository),
             transcodeVideoUseCase = TranscodeVideoUseCase(transcodeRepository),
+            extractAudioUseCase = ExtractAudioUseCase(transcodeRepository),
         )
     }
 

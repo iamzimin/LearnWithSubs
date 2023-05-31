@@ -105,7 +105,20 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.7" />
 
-<!--            <TextView-->
+            <TextView
+                android:id="@+id/loading_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="Status: "
+                android:textColor="?attr/video_text_unavailable_dark"
+                android:textSize="@dimen/video_description_in_video_tile"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/duration"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.7" />
+
+            <!--            <TextView-->
 <!--                android:id="@+id/saved_words"-->
 <!--                android:layout_width="wrap_content"-->
 <!--                android:layout_height="wrap_content"-->

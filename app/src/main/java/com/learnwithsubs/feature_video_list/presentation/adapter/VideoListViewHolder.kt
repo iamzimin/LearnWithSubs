@@ -9,6 +9,7 @@ import com.learnwithsubs.databinding.VideoSelectedTileBinding
 import com.learnwithsubs.databinding.VideoTileBinding
 import com.learnwithsubs.databinding.VideoUploadingTileBinding
 import com.learnwithsubs.feature_video_list.domain.models.Video
+import com.learnwithsubs.feature_video_list.domain.models.VideoLoadingType
 import com.learnwithsubs.feature_video_view.presentation.VideoViewActivity
 import java.util.concurrent.TimeUnit
 
@@ -68,8 +69,21 @@ class LoadingVideoViewHolder(itemView: View) : VideoViewHolder(itemView) {
     override fun bind(video: Video) {
         binding.videoName.text = video.name
         binding.duration.text = "${duration}: ${formatDuration(video.duration)}"
-        //binding.progressVideoLoading.progress = 55
         binding.progressVideoLoadingText.text = video.uploadingProgress.toString()
+        val status = "${itemView.context.getString(R.string.video_loading_status)}: "
+        when (video.loadingType) {
+            VideoLoadingType.WAITING ->
+                binding.loadingStatus.text = status + itemView.context.getString(R.string.video_loading_status_waiting)
+            VideoLoadingType.EXTRACTING_AUDIO ->
+                binding.loadingStatus.text = status + itemView.context.getString(R.string.video_loading_status_extracting_audio)
+            VideoLoadingType.DECODING_VIDEO ->
+                binding.loadingStatus.text = status + itemView.context.getString(R.string.video_loading_status_decoding_video)
+            VideoLoadingType.LOADING_AUDIO ->
+                binding.loadingStatus.text = status + itemView.context.getString(R.string.video_loading_status_loading_audio)
+            VideoLoadingType.GENERATING_SUBTITLES ->
+                binding.loadingStatus.text = status + itemView.context.getString(R.string.video_loading_status_generating_subtitles)
+        }
+
         //binding.videoPreview.setImageResource(video.preview)
 
         itemView.setOnClickListener {

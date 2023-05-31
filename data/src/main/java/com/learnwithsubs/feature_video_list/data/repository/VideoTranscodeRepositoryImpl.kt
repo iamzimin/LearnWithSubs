@@ -1,6 +1,7 @@
 package com.learnwithsubs.feature_video_list.data.repository
 
 import android.content.Context
+import android.os.Environment
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
@@ -21,10 +22,73 @@ class VideoTranscodeRepositoryImpl(
     private val context: Context
 ) : VideoTranscodeRepository {
     private val videoProgressLiveData: MutableLiveData<Video?> = MutableLiveData()
+    private val internalStorageDir = File(Environment.getExternalStorageDirectory().toString() + "/Movies/", "LearnWithSubs")
+
+    private var isVideoReady = false
+    private var isAudioReady = false
 
     override suspend fun transcodeVideo(video: Video): Video? = suspendCoroutine { continuation ->
         //Internal Storage
-        val internalStorageDir = File(context.filesDir, "LearnWithSubs")
+        //val internalStorageDir = File(context.filesDir, "LearnWithSubs")
+
+        if (!internalStorageDir.exists())
+            internalStorageDir.mkdirs()
+
+        val videoType = ".mp4"
+
+        val outputVideoPath = File(internalStorageDir, "${video.id.toString()}$videoType")
+        val command = "-i ${video.inputPath} -c:v mpeg4 -b:v ${video.bitrate}B $outputVideoPath -y"
+
+        /*
+        External Storage!
+
+        val storageDir = File(Environment.getExternalStorageDirectory().toString() + "/Movies/", "LearnWithSubs")
+        if (!storageDir.exists())
+            storageDir.mkdirs()
+
+        video.outputPath = "$storageDir/${video.id}.mp4"
+
+        val bitrate = "2M"
+        val command = "-i ${video.inputPath} -c:v mpeg4 -b:v $bitrate ${video.outputPath} -y"
+         */
+
+        Config.enableStatisticsCallback { newStatistics ->
+            video.uploadingProgress = ((newStatistics.time / video.duration.toDouble()) * 100).toInt()
+            videoProgressLiveData.postValue(video)
+        }
+
+        FFmpeg.executeAsync(command) { executionId, returnCode ->
+            when (returnCode) {
+                RETURN_CODE_SUCCESS -> {
+                    Log.i(Config.TAG, "Async command execution completed successfully.")
+                    isVideoReady = true
+                    if (isAudioReady) {
+                        video.videoStatus = VideoStatus.NORMAL_VIDEO
+                        isVideoReady = false
+                        isAudioReady = false
+                    }
+                    video.outputPath = outputVideoPath.absolutePath
+                    continuation.resume(video)
+                }
+                RETURN_CODE_CANCEL -> {
+                    Log.i(Config.TAG, "Async command execution cancelled by user.")
+                    continuation.resume(null)
+                }
+                else -> {
+                    Log.i(Config.TAG, "Async command execution failed with returnCode=$returnCode.")
+                    Toast.makeText(
+                        context.applicationContext,
+                        "Async command execution failed with returnCode=$returnCode.",
+                        Toast.LENGTH_SHORT
+                    ).show() //TODO edit toast
+                    continuation.resume(null)
+                }
+            }
+        }
+
+    }
+
+    override suspend fun extractAudio(video: Video): String? = suspendCoroutine { continuation ->
         if (!internalStorageDir.exists())
             internalStorageDir.mkdirs()
 
@@ -436,30 +500,13 @@ And now it's not a lie""".trimIndent()
             writer.write(str)
             writer.close()
         }catch (e: Exception) {
-            //TODO edit toast
+            // TODO edit toast
             Toast.makeText(context.applicationContext, "Write error = $e.", Toast.LENGTH_SHORT).show()
         }
 
-        val info = FFprobe.getMediaInformation(video.inputPath)
-
-        val bitrate = "${info.bitrate}B"
-        val videoType = ".mp4"
-
-        val outputPath = File(internalStorageDir, "${video.id.toString()}$videoType")
-        val command = "-i ${video.inputPath} -c:v mpeg4 -b:v $bitrate $outputPath -y"
-
-        /*
-        External Storage!
-
-        val storageDir = File(Environment.getExternalStorageDirectory().toString() + "/Movies/", "LearnWithSubs")
-        if (!storageDir.exists())
-            storageDir.mkdirs()
-
-        video.outputPath = "$storageDir/${video.id}.mp4"
-
-        val bitrate = "2M"
-        val command = "-i ${video.inputPath} -c:v mpeg4 -b:v $bitrate ${video.outputPath} -y"
-         */
+        val audioType = ".mp3"
+        val outputAudioPath = File(internalStorageDir, "${video.id.toString()}$audioType")
+        val command = "-i ${video.inputPath} -q:a 0 -map a $outputAudioPath -y"
 
         Config.enableStatisticsCallback { newStatistics ->
             video.uploadingProgress = ((newStatistics.time / video.duration.toDouble()) * 100).toInt()
@@ -470,9 +517,13 @@ And now it's not a lie""".trimIndent()
             when (returnCode) {
                 RETURN_CODE_SUCCESS -> {
                     Log.i(Config.TAG, "Async command execution completed successfully.")
-                    video.videoStatus = VideoStatus.NORMAL_VIDEO
-                    video.outputPath = outputPath.absolutePath
-                    continuation.resume(video)
+                    isAudioReady = true
+                    if (isVideoReady) {
+                        video.videoStatus = VideoStatus.NORMAL_VIDEO
+                        isVideoReady = false
+                        isAudioReady = false
+                    }
+                    continuation.resume(outputAudioPath.absolutePath)
                 }
                 RETURN_CODE_CANCEL -> {
                     Log.i(Config.TAG, "Async command execution cancelled by user.")
@@ -489,7 +540,6 @@ And now it's not a lie""".trimIndent()
                 }
             }
         }
-
     }
 
     override fun getVideoProgressLiveData(): MutableLiveData<Video?> {

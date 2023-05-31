@@ -9,6 +9,7 @@ import android.provider.MediaStore
 import android.provider.OpenableColumns
 import com.arthenica.mobileffmpeg.FFprobe
 import com.learnwithsubs.feature_video_list.domain.models.Video
+import com.learnwithsubs.feature_video_list.domain.models.VideoLoadingType
 import com.learnwithsubs.feature_video_list.domain.models.VideoStatus
 import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewModel
 import com.learnwithsubs.feature_video_list.presentation.videos.VideosEvent
@@ -40,14 +41,17 @@ class VideoListPicker(private val activity: Activity, private val requestCode: I
 
             val videoName: String = getVideoNameFromUri(selectedVideoUri, context)
             val videoDuration = getVideoDuration(selectedVideoUri, context)
+            val bitrate = getVideoBitrate(videoPath = path)
             val currentTime = Date().time
 
             val video = Video(
                 videoStatus = VideoStatus.LOADING_VIDEO,
+                loadingType = VideoLoadingType.WAITING,
                 name = videoName,
                 preview = 0,
                 inputPath = path,
                 duration = videoDuration,
+                bitrate = bitrate,
                 URI = selectedVideoUri.toString(),
                 timestamp = currentTime
             )
@@ -109,5 +113,10 @@ class VideoListPicker(private val activity: Activity, private val requestCode: I
         retriever.release()
 
         return duration.toInt()
+    }
+
+    private fun getVideoBitrate(videoPath: String): Int {
+        val info = FFprobe.getMediaInformation(videoPath)
+        return info.bitrate.toInt()
     }
 }

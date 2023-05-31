@@ -1,6 +1,7 @@
 package com.learnwithsubs.feature_video_view.data.repository
 
 import android.content.Context
+import android.os.Environment
 import android.widget.Toast
 import com.learnwithsubs.feature_video_list.domain.models.Video
 import com.learnwithsubs.feature_video_view.data.storage.VideoViewDao
@@ -14,20 +15,28 @@ class VideoViewRepositoryImpl(
 ) : VideoViewRepository {
     override fun getVideoSubtitles(video: Video?): List<Subtitle> {
         if (video == null) {
-            Toast.makeText(context.applicationContext, "Video = null", Toast.LENGTH_SHORT).show() //TODO
+            Toast.makeText(context.applicationContext, "Video = null", Toast.LENGTH_SHORT)
+                .show() //TODO
             return emptyList()
         }
 
-        val internalStorageDir = File(context.filesDir, "LearnWithSubs/${video.id}.srt")
+        val internalStorageDir = File(
+            Environment.getExternalStorageDirectory().toString() + "/Movies/",
+            "LearnWithSubs/${video.id}.srt"
+        )
+        //val internalStorageDir = File(context.filesDir, "LearnWithSubs/${video.id}.srt")
         var subs = ""
         if (internalStorageDir.exists()) {
             val reader = internalStorageDir.bufferedReader()
             subs = reader.readText()
             reader.close()
         }
-        val converted = convertSubtitles(subs)
+        if (subs == "") {
+            Toast.makeText(context.applicationContext, "Subtitles not found", Toast.LENGTH_SHORT).show() // TODO
+            return emptyList()
+        }
 
-        return converted
+        return convertSubtitles(subs)
     }
 
     override suspend fun updateVideo(video: Video) {
@@ -57,7 +66,6 @@ class VideoViewRepositoryImpl(
         val seconds = parts[2].toLong()
         val milliseconds = parts[3].toLong()
 
-        val totalMilliseconds = (hours * 3600000) + (minutes * 60000) + (seconds * 1000) + milliseconds
-        return totalMilliseconds
+        return (hours * 3600000) + (minutes * 60000) + (seconds * 1000) + milliseconds
     }
 }
