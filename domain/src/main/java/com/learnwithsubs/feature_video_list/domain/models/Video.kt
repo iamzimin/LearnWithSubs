@@ -22,9 +22,7 @@ data class Video(
     val inputPath: String = "",
     var outputPath: String = "",
     val timestamp: Long,
-    val subtitles: String = "",
 ) : Parcelable
-
 
 enum class VideoStatus(val value: Int) {
     NORMAL_VIDEO(1),
@@ -38,4 +36,5 @@ enum class VideoLoadingType(val value: Int) {
     DECODING_VIDEO(3),
     LOADING_AUDIO(4),
     GENERATING_SUBTITLES(5),
+    DONE(6)
 }

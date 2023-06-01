@@ -22,6 +22,7 @@
     <string name="video_loading_status_decoding_video">Decoding video</string>
     <string name="video_loading_status_extracting_audio">Extracting audio</string>
     <string name="video_loading_status_generating_subtitles">Generating subtitles</string>
+    <string name="video_loading_status_done">Done</string>
 
 
 

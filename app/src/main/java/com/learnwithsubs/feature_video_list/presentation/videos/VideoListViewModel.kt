@@ -106,14 +106,22 @@ class VideoListViewModel @Inject constructor(
                 try { //TODO обработать возможный null
                     val poolList = processQueue.poll() ?: return@withContext
 
-                    poolList.loadingType = VideoLoadingType.LOADING_AUDIO
+                    // Обработка извлечение аудио
+                    poolList.loadingType = VideoLoadingType.EXTRACTING_AUDIO
                     videoListUseCases.loadVideoUseCase.invoke(poolList)
-                    val extractedAudioPath: String? = videoListUseCases.extractAudioUseCase.invoke(poolList)
+                    val extractedAudio: Video? = videoListUseCases.extractAudioUseCase.invoke(poolList)
 
+                    // Загрузка аудио
+                    poolList.loadingType = VideoLoadingType.GENERATING_SUBTITLES
+                    videoListUseCases.loadVideoUseCase.invoke(poolList)
+                    videoListUseCases.sendAudioToServerUseCase.invoke(extractedAudio)
+
+                    // Декодирование видео
                     poolList.loadingType = VideoLoadingType.DECODING_VIDEO
                     videoListUseCases.loadVideoUseCase.invoke(poolList)
                     val recodedVideo: Video? = videoListUseCases.transcodeVideoUseCase.invoke(poolList)
 
+                    // Успешное завершение
                     recodedVideo?.let { videoListUseCases.loadVideoUseCase.invoke(it) }
                 } finally {
                     videoSemaphore.release()

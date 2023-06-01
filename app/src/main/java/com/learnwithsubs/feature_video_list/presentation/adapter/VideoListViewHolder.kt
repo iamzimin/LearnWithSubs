@@ -69,7 +69,8 @@ class LoadingVideoViewHolder(itemView: View) : VideoViewHolder(itemView) {
     override fun bind(video: Video) {
         binding.videoName.text = video.name
         binding.duration.text = "${duration}: ${formatDuration(video.duration)}"
-        binding.progressVideoLoadingText.text = video.uploadingProgress.toString()
+        binding.progressVideoLoadingText.text =
+            if (video.uploadingProgress == 0) "" else video.uploadingProgress.toString()
         val status = "${itemView.context.getString(R.string.video_loading_status)}: "
         when (video.loadingType) {
             VideoLoadingType.WAITING ->
@@ -82,6 +83,8 @@ class LoadingVideoViewHolder(itemView: View) : VideoViewHolder(itemView) {
                 binding.loadingStatus.text = status + itemView.context.getString(R.string.video_loading_status_loading_audio)
             VideoLoadingType.GENERATING_SUBTITLES ->
                 binding.loadingStatus.text = status + itemView.context.getString(R.string.video_loading_status_generating_subtitles)
+            VideoLoadingType.DONE ->
+                binding.loadingStatus.text = status + itemView.context.getString(R.string.video_loading_status_done)
         }
 
         //binding.videoPreview.setImageResource(video.preview)

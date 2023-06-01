@@ -6,7 +6,7 @@ import com.learnwithsubs.feature_video_list.domain.repository.VideoTranscodeRepo
 class ExtractAudioUseCase(
     private val videoTranscodeRepository: VideoTranscodeRepository
 ) {
-    suspend fun invoke(video: Video): String? {
+    suspend fun invoke(video: Video): Video? {
         return videoTranscodeRepository.extractAudio(video)
     }
 }

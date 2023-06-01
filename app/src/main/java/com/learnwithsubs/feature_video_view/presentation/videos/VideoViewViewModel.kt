@@ -40,7 +40,7 @@ class VideoViewViewModel @Inject constructor(
     fun openVideo(video: Video) {
         subtitleList = videoViewUseCases.getVideoSubtitlesUseCase.invoke(currentVideo.value)
 
-        videoPath.value = video.outputPath
+        videoPath.value = "${video.outputPath}.mp4"
         videoName.value = video.name
         maxVideoTime = video.duration
         maxTimeString = formatTime(time = maxVideoTime)

@@ -7,4 +7,5 @@ data class VideoListUseCases(
     val getLastVideoUseCase: GetLastVideoUseCase,
     val transcodeVideoUseCase: TranscodeVideoUseCase,
     val extractAudioUseCase: ExtractAudioUseCase,
+    val sendAudioToServerUseCase: SendAudioToServerUseCase,
 )

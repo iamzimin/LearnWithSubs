@@ -7,6 +7,6 @@ import com.learnwithsubs.feature_video_list.domain.usecase.LoadVideoUseCase
 
 interface VideoTranscodeRepository {
     suspend fun transcodeVideo(video: Video): Video?
-    suspend fun extractAudio(video: Video): String?
+    suspend fun extractAudio(video: Video): Video?
     fun getVideoProgressLiveData(): MutableLiveData<Video?>
 }

@@ -1,7 +1,6 @@
 package com.learnwithsubs.feature_video_view.data.repository
 
 import android.content.Context
-import android.os.Environment
 import android.widget.Toast
 import com.learnwithsubs.feature_video_list.domain.models.Video
 import com.learnwithsubs.feature_video_view.data.storage.VideoViewDao
@@ -20,14 +19,11 @@ class VideoViewRepositoryImpl(
             return emptyList()
         }
 
-        val internalStorageDir = File(
-            Environment.getExternalStorageDirectory().toString() + "/Movies/",
-            "LearnWithSubs/${video.id}.srt"
-        )
-        //val internalStorageDir = File(context.filesDir, "LearnWithSubs/${video.id}.srt")
+        val subtitlesPath = File("${video.outputPath}.srt")
+
         var subs = ""
-        if (internalStorageDir.exists()) {
-            val reader = internalStorageDir.bufferedReader()
+        if (subtitlesPath.exists()) {
+            val reader = subtitlesPath.bufferedReader()
             subs = reader.readText()
             reader.close()
         }
@@ -45,16 +41,21 @@ class VideoViewRepositoryImpl(
 
     private fun convertSubtitles(subtitles: String): List<Subtitle> {
         val subtitleLines = subtitles.split("\n\n")
-
-        val subtitleList = subtitleLines.map { subtitleLine ->
-            val parts = subtitleLine.split("\n")
-            val number = parts[0].toInt()
-            val timeRange = parts[1].split(" --> ")
-            val startTime = parseTime(timeRange[0])
-            val endTime = parseTime(timeRange[1])
-            val text = parts[2]
-            Subtitle(number, startTime, endTime, text)
+        var subtitleList = emptyList<Subtitle>()
+        try {
+            subtitleList = subtitleLines.map { subtitleLine ->
+                val parts = subtitleLine.split("\n")
+                val number = parts[0].toInt()
+                val timeRange = parts[1].split(" --> ")
+                val startTime = parseTime(timeRange[0])
+                val endTime = parseTime(timeRange[1])
+                val text = parts[2]
+                Subtitle(number, startTime, endTime, text)
+            }
+        }catch (e: Exception) {
+            Toast.makeText(context.applicationContext, "Wrong subtitle format", Toast.LENGTH_SHORT).show() // TODO
         }
+
         return subtitleList
     }
 
