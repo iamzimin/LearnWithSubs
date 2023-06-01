@@ -7,7 +7,7 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 
 interface ServerInteractionRepository {
-    //@Multipart
+    @Multipart
     @POST("/generate_subtitles")
-    suspend fun sendAudioToServer(/*@Part audio: MultipartBody.Part*/): Response<String>
+    suspend fun sendAudioToServer(@Part audio: MultipartBody.Part): Response<String>
 }

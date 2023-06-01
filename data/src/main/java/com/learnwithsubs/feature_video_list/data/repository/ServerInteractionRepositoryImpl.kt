@@ -1,6 +1,7 @@
 package com.learnwithsubs.feature_video_list.data.repository
 
 import com.learnwithsubs.feature_video_list.domain.repository.ServerInteractionRepository
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.Retrofit
 
@@ -9,9 +10,9 @@ class ServerInteractionRepositoryImpl(
     private val retrofit: Retrofit
 ): ServerInteractionRepository {
 
-    override suspend fun sendAudioToServer(/*audio: MultipartBody.Part*/): Response<String> {
+    override suspend fun sendAudioToServer(audio: MultipartBody.Part): Response<String> {
         val apiService = retrofit.create(ServerInteractionRepository::class.java)
-        return apiService.sendAudioToServer()
+        return apiService.sendAudioToServer(audio)
     }
 
     /*
