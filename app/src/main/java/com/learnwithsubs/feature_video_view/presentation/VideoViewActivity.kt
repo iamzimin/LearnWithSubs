@@ -17,6 +17,7 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
@@ -64,6 +65,7 @@ class VideoViewActivity : AppCompatActivity() {
         val rewindVideoButton = findViewById<ImageButton>(R.id.rewind_5_video_button)
 
         val subtitleTextView = findViewById<TextView>(R.id.subtitle)
+        val layoutParams = subtitleTextView.layoutParams as ConstraintLayout.LayoutParams
 
         val videoTime = findViewById<TextView>(R.id.video_time)
         val videoPlaySeekBar = findViewById<SeekBar>(R.id.video_play_status)
@@ -175,7 +177,7 @@ class VideoViewActivity : AppCompatActivity() {
         }
 
 
-        // Button show
+        // Button show - Subtitles position
         var timer: CountDownTimer? = null
         videoView.setOnClickListener {
             vm.isButtonsShowedLiveData.value = vm.isButtonsShowedLiveData.value != true
@@ -190,9 +192,14 @@ class VideoViewActivity : AppCompatActivity() {
                         vm.isButtonsShowedLiveData.value = false
                     }
                 }.start()
+                layoutParams.setMargins(layoutParams.leftMargin, layoutParams.topMargin, layoutParams.rightMargin, 180)
+                subtitleTextView.layoutParams = layoutParams
             }
-            else
+            else {
                 timer?.cancel()
+                layoutParams.setMargins(layoutParams.leftMargin, layoutParams.topMargin, layoutParams.rightMargin, 40)
+                subtitleTextView.layoutParams = layoutParams
+            }
         }
 
         // Video play/pause
