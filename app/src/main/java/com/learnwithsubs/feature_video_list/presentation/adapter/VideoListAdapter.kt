@@ -1,24 +1,23 @@
 package com.learnwithsubs.feature_video_list.presentation.adapter
 
+import android.graphics.Color
 import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import com.learnwithsubs.R
 import com.learnwithsubs.feature_video_list.domain.models.Video
 import com.learnwithsubs.feature_video_list.domain.models.VideoStatus
 
-class VideoListAdapter(videoListInit: ArrayList<Video>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class VideoListAdapter(
+    videoListInit: ArrayList<Video>
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var videoList: ArrayList<Video> = videoListInit
-
-//    companion object {
-//        const val NORMAL_VIDEO = 1
-//        const val SELECTED_VIDEO = 2
-//        const val LOADING_VIDEO = 3
-//    }
+    var isNormalMode = true
 
     fun updateData(videoList: ArrayList<Video>) {
         this@VideoListAdapter.videoList = videoList
@@ -39,27 +38,34 @@ class VideoListAdapter(videoListInit: ArrayList<Video>) :
             notifyItemChanged(position)
     }
 
+    fun updateSelection(position: Int) {
+        val video = videoList[position]
+        video.isSelected = !video.isSelected
+        isNormalMode = true
+        for (vid in videoList) {
+            if (vid.isSelected) {
+                isNormalMode = false
+                break
+            }
+        }
+        notifyItemChanged(position)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             VideoStatus.NORMAL_VIDEO.value -> NormalVideoViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.video_tile, parent, false)
-            )
-
-            VideoStatus.SELECTED_VIDEO.value -> SelectedVideoViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.video_selected_tile, parent, false)
+                LayoutInflater.from(parent.context).inflate(R.layout.video_tile, parent, false), this
             )
 
             VideoStatus.LOADING_VIDEO.value -> LoadingVideoViewHolder(
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.video_uploading_tile, parent, false)
+                    .inflate(R.layout.video_uploading_tile, parent, false), this
             )
 
             else -> {
                 LoadingVideoViewHolder(
                     LayoutInflater.from(parent.context)
-                        .inflate(R.layout.video_uploading_tile, parent, false)
+                        .inflate(R.layout.video_uploading_tile, parent, false), this
                 )
             }
         }
@@ -70,16 +76,13 @@ class VideoListAdapter(videoListInit: ArrayList<Video>) :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val video = videoList[position]
+        val context = holder.itemView.context
 
-        when (videoList[position].videoStatus) {
+        when (video.videoStatus) {
             VideoStatus.NORMAL_VIDEO -> {
                 val normalHolder = holder as NormalVideoViewHolder
                 normalHolder.bind(videoList[position])
-            }
-
-            VideoStatus.SELECTED_VIDEO -> {
-                val selectedHolder = holder as SelectedVideoViewHolder
-                selectedHolder.bind(videoList[position])
             }
 
             VideoStatus.LOADING_VIDEO -> {
@@ -87,7 +90,14 @@ class VideoListAdapter(videoListInit: ArrayList<Video>) :
                 loadingHolder.bind(videoList[position])
             }
         }
-
+        if (video.isSelected) {
+            val color = ContextCompat.getColor(context, R.color.background_video_selected_tile_dark) // TODO цвета берутся не с attr
+            (holder.itemView as MaterialCardView).setCardBackgroundColor(color)
+        }
+        else {
+            val color = ContextCompat.getColor(context, R.color.background_video_tile_dark)
+            (holder.itemView as MaterialCardView).setCardBackgroundColor(color)
+        }
     }
 
     override fun getItemViewType(position: Int): Int {

@@ -11,6 +11,7 @@ data class Video(
     @PrimaryKey val id: Int? = null,
     var videoStatus: VideoStatus,
     var loadingType: VideoLoadingType,
+    var isSelected: Boolean = false,
     var name: String,
     val preview: Int,
     val duration: Int, //TODO mabye Long
@@ -26,7 +27,7 @@ data class Video(
 
 enum class VideoStatus(val value: Int) {
     NORMAL_VIDEO(1),
-    SELECTED_VIDEO(2),
+    //SELECTED_VIDEO(2),
     LOADING_VIDEO(3)
 }
 

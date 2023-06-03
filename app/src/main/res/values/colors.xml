@@ -27,6 +27,7 @@
 
     <!--Video Tile-->
     <color name="background_video_tile_dark">#46475C</color>
+    <color name="background_video_selected_tile_dark">#646478</color>
     <color name="select_video_outline_dark">#FFFFFFFF</color>
 
     <!--Unavailable Video Tile-->

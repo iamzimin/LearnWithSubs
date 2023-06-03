@@ -7,6 +7,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.learnwithsubs.feature_video_list.domain.models.Video
 import com.learnwithsubs.feature_video_list.domain.models.VideoLoadingType
+import com.learnwithsubs.feature_video_list.domain.models.VideoStatus
 import com.learnwithsubs.feature_video_list.domain.repository.VideoTranscodeRepository
 import com.learnwithsubs.feature_video_list.domain.usecase.VideoListUseCases
 import com.learnwithsubs.feature_video_list.domain.util.OrderType
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.withContext
 import java.util.LinkedList
@@ -26,15 +28,23 @@ class VideoListViewModel @Inject constructor(
 ) : ViewModel() {
     val videoList = MediatorLiveData<List<Video>>()
 
-    val videoProgressLiveData: MutableLiveData<Video?> = videoTranscodeRepository.getVideoProgressLiveData()
+    val videoToUpdate = MutableLiveData<Video>()
+    val videoToAdd = MutableLiveData<Video>()
 
+    val videoProgressLiveData: MutableLiveData<Video?> = videoTranscodeRepository.getVideoProgressLiveData()
 
     private val videoSemaphore = Semaphore(1)
     private val processQueue = LinkedList<Video?>()
 
 
     init {
-        updateList()
+        videoList.addSource(
+            videoListUseCases.getVideoListUseCase.invoke(
+                videoOrder = VideoOrder.Date(OrderType.Descending)
+            ).asLiveData()
+        ) { list ->
+            videoList.value = list
+        }
     }
 
     fun onEvent(event: VideosEvent) {
@@ -58,41 +68,23 @@ class VideoListViewModel @Inject constructor(
     }
 
     private fun updateList() {
-        videoList.addSource(
-            videoListUseCases.getVideoListUseCase.invoke(
-                videoOrder = VideoOrder.Date(OrderType.Descending)
-            ).asLiveData()
-        ) { list ->
-            videoList.value = list
+        /*
+        val videoFlow: Flow<List<Video>> = videoListUseCases.getVideoListUseCase.invoke(
+            videoOrder = VideoOrder.Date(OrderType.Descending)
+        )
+
+        viewModelScope.launch {
+            videoFlow.collect { videos ->
+                videoList = ArrayList(videos)
+                videoListUpdate.value = videoList
+            }
         }
+         */
     }
 
     private fun editVideo(video: Video) {
         viewModelScope.launch { videoListUseCases.loadVideoUseCase.invoke(video) }
     }
-
-
-    /*private fun addVideo(video: Video) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                videoListUseCases.loadVideoUseCase.invoke(video)
-            }
-
-            val lastVideo: Video? = withContext(Dispatchers.IO) {
-                videoListUseCases.getLastVideoUseCase.invoke()
-            }
-
-            //TODO обработать возможный null
-            val recodedVideo: Video? = withContext(Dispatchers.IO) {
-                lastVideo?.let { videoListUseCases.transcodeVideoUseCase.invoke(it) }
-            }
-
-            //TODO обработать возможный null
-            withContext(Dispatchers.IO) {
-                recodedVideo?.let { videoListUseCases.loadVideoUseCase.invoke(it) }
-            }
-        }
-    }*/
 
 
     private fun addVideo(video: Video) {
@@ -108,17 +100,18 @@ class VideoListViewModel @Inject constructor(
 
                     // Обработка извлечение аудио
                     poolList.loadingType = VideoLoadingType.EXTRACTING_AUDIO
-                    videoListUseCases.loadVideoUseCase.invoke(poolList)
-                    val extractedAudio: Video? = videoListUseCases.extractAudioUseCase.invoke(poolList)
+                    videoToUpdate.postValue(poolList)
+                    val extractedAudio: Video? =
+                        videoListUseCases.extractAudioUseCase.invoke(poolList)
 
                     // Загрузка аудио
                     poolList.loadingType = VideoLoadingType.GENERATING_SUBTITLES
-                    videoListUseCases.loadVideoUseCase.invoke(poolList)
+                    videoToUpdate.postValue(poolList)
                     videoListUseCases.sendAudioToServerUseCase.invoke(extractedAudio)
 
                     // Декодирование видео
                     poolList.loadingType = VideoLoadingType.DECODING_VIDEO
-                    videoListUseCases.loadVideoUseCase.invoke(poolList)
+                    videoToUpdate.postValue(poolList)
                     val recodedVideo: Video? = videoListUseCases.transcodeVideoUseCase.invoke(poolList)
 
                     // Успешное завершение
@@ -127,7 +120,7 @@ class VideoListViewModel @Inject constructor(
                     videoSemaphore.release()
                 }
             }
-       }
+        }
     }
 
 
