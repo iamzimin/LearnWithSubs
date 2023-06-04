@@ -12,9 +12,8 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Button
 import android.widget.ImageButton
-import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -41,7 +40,7 @@ class VideoListActivity : AppCompatActivity() {
     lateinit var vmFactory: VideoListViewModelFactory
     private lateinit var vm: VideoListViewModel
 
-    private val adapter = VideoListAdapter(videoListInit = ArrayList())
+    val adapter = VideoListAdapter(videoListInit = ArrayList())
     private lateinit var binding: VideoListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,27 +97,46 @@ class VideoListActivity : AppCompatActivity() {
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.video_list_menu)
+        val isNeedSelect = adapter.videoSelected.size == adapter.videoList.size
+
+        val sort = dialog.findViewById<CardView>(R.id.sort_by_card)
+        val select = dialog.findViewById<CardView>(R.id.de_select_all_card)
+        val delete = dialog.findViewById<CardView>(R.id.delete_card)
+
+        val selectText = dialog.findViewById<TextView>(R.id.de_select_all_text)
+        selectText.text = if (isNeedSelect) applicationContext.getString(R.string.deselect_all) else applicationContext.getString(R.string.select_all)
 
 
-//        val sort = dialog.findViewById<Button>(R.id.button1)
-//        val select = dialog.findViewById<Button>(R.id.button2)
-//        val delete = dialog.findViewById<Button>(R.id.button3)
-//        sort.setOnClickListener {
-//            Toast.makeText(applicationContext, "sort.text", Toast.LENGTH_SHORT).show()
-//        }
-//        select.setOnClickListener {
-//            Toast.makeText(applicationContext, "select.text", Toast.LENGTH_SHORT).show()
-//        }
-//        delete.setOnClickListener {
-//            Toast.makeText(applicationContext, "delete.text", Toast.LENGTH_SHORT).show()
-//        }
+
+        sort.setOnClickListener {
+            Toast.makeText(applicationContext, "sort.text", Toast.LENGTH_SHORT).show()
+        }
+
+        select.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(p0: View?) {
+                if (isNeedSelect) {
+                    adapter.isNormalMode = true
+                    adapter.videoSelected.clear()
+                    vm.deSelectVideo(isNeedSelect = false)
+                }
+                else {
+                    adapter.isNormalMode = false
+                    vm.deSelectVideo(isNeedSelect = true)
+                    adapter.videoSelected = ArrayList(adapter.videoList)
+                }
+                dialog.dismiss()
+            }
+
+        })
+
+        delete.setOnClickListener {
+            vm.deleteSelectedVideo()
+            dialog.dismiss()
+        }
+
         dialog.show()
         if (dialog.window != null) {
-            dialog.show()
-            dialog.window!!.setLayout(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
+            dialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.window!!.setGravity(Gravity.BOTTOM)
         }

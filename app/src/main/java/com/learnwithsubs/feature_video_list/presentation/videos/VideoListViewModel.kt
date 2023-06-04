@@ -4,6 +4,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.learnwithsubs.feature_video_list.domain.models.Video
 import com.learnwithsubs.feature_video_list.domain.models.VideoLoadingType
@@ -23,7 +24,7 @@ class VideoListViewModel @Inject constructor(
     val videoListUseCases: VideoListUseCases,
     val videoTranscodeRepository: VideoTranscodeRepository
 ) : ViewModel() {
-    val videoList = MediatorLiveData<List<Video>>()
+    val videoList = MediatorLiveData<List<Video>?>()
 
     val videoToUpdate = MutableLiveData<Video>()
     val videoProgressLiveData: MutableLiveData<Video?> = videoTranscodeRepository.getVideoProgressLiveData()
@@ -105,5 +106,16 @@ class VideoListViewModel @Inject constructor(
         }
     }
 
+    fun deSelectVideo(isNeedSelect: Boolean) {
+        val copiedVideoList = videoList.value?.map { video -> video.copy(isSelected = isNeedSelect) }
+        videoList.value = copiedVideoList?.toMutableList()
+    }
+
+    fun deleteSelectedVideo() {
+        val videoToDelete = videoList.value?.filter { it.isSelected }
+        viewModelScope.launch {
+            videoToDelete?.forEach { videoListUseCases.deleteVideoUseCase.invoke(it)}
+        }
+    }
 
 }

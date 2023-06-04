@@ -48,17 +48,20 @@ class NormalVideoViewHolder(
         //binding.videoPreview.setImageResource(video.preview)
         binding.videoProgress.progress = ((video.watchProgress / video.duration.toDouble()) * 100).toInt()
 
-        itemView.setOnClickListener {
-            if (adapter.isNormalMode) {
-                val intent = Intent(itemView.context, VideoViewActivity::class.java)
-                intent.putExtra("videoData", video)
-                itemView.context.startActivity(intent)
+        itemView.setOnClickListener (object : View.OnClickListener {
+            override fun onClick(p0: View?) {
+                if (adapter.isNormalMode) {
+                    val intent = Intent(itemView.context, VideoViewActivity::class.java)
+                    intent.putExtra("videoData", video)
+                    itemView.context.startActivity(intent)
+                }
+                else {
+                    val position = adapterPosition
+                    adapter.updateSelection(position)
+                }
             }
-            else {
-                val position = adapterPosition
-                adapter.updateSelection(position)
-            }
-        }
+        })
+
         itemView.setOnLongClickListener {
             val position = adapterPosition
             adapter.updateSelection(position)
@@ -97,15 +100,17 @@ class LoadingVideoViewHolder(
         }
 
         //binding.videoPreview.setImageResource(video.preview)
-
-        itemView.setOnClickListener {
-            if (adapter.isNormalMode)
-                Toast.makeText(itemView.context.applicationContext, videoIsUploading, Toast.LENGTH_SHORT).show()
-            else {
-                val position = adapterPosition
-                adapter.updateSelection(position)
+        itemView.setOnClickListener (object : View.OnClickListener {
+            override fun onClick(p0: View?) {
+                if (adapter.isNormalMode)
+                    Toast.makeText(itemView.context.applicationContext, videoIsUploading, Toast.LENGTH_SHORT).show()
+                else {
+                    val position = adapterPosition
+                    adapter.updateSelection(position)
+                }
             }
-        }
+
+        })
 
         itemView.setOnLongClickListener {
             val position = adapterPosition

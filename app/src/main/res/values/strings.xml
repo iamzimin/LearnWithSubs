@@ -24,6 +24,11 @@
     <string name="video_loading_status_generating_subtitles">Generating subtitles</string>
     <string name="video_loading_status_done">Done</string>
 
+    <string name="sort_by">Sort by</string>
+    <string name="select_all">Select all</string>
+    <string name="deselect_all">Deselect all</string>
+    <string name="delete">Delete</string>
+
 
 
 </resources>

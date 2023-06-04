@@ -16,8 +16,8 @@ class VideoListAdapter(
     videoListInit: ArrayList<Video>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var videoList: ArrayList<Video> = videoListInit
-    private var videoSelected = ArrayList<Video>()
+    var videoList: ArrayList<Video> = videoListInit
+    var videoSelected = ArrayList<Video>()
     var isNormalMode = true
 
     fun updateData(videoList: ArrayList<Video>) {
@@ -28,6 +28,18 @@ class VideoListAdapter(
         }
         notifyDataSetChanged() //TODO передавать в качестве агрументов id обновлённого видоса
     }
+    /*
+        fun updateData(videoList: ArrayList<Video>) {
+        this@VideoListAdapter.videoList.clear()
+        this@VideoListAdapter.videoList.addAll(videoList)
+
+        videoSelected.clear()
+        videoSelected.addAll(videoList.filter { it.isSelected })
+
+        isNormalMode = videoList.isEmpty()
+        notifyDataSetChanged()
+    }
+     */
 
     fun updateVideo(videoToUpdate: Video) {
         var position: Int? = null
@@ -54,6 +66,7 @@ class VideoListAdapter(
 
         notifyItemChanged(position)
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
