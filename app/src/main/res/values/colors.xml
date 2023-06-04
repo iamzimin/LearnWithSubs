@@ -37,4 +37,8 @@
     <!--Video upload-->
     <color name="video_upload_green_button">#63C863</color>
 
+    <!--Pop-up Menu-->
+    <color name="pop_up_menu_background">#4D4D67</color>
+    <color name="pop_up_menu_line">#2F2E3E</color>
+
 </resources>

@@ -20,13 +20,20 @@
         <item name="text_color">@color/text_main_dark</item>
         <item name="search_field">@color/search_field_dark</item>
 
+        <!--Video Tile-->
         <item name="background_video_tile_dark">@color/background_video_tile_dark</item>
         <item name="select_video_outline_dark">@color/select_video_outline_dark</item>
 
+        <!--Unavailable Video Tile-->
         <item name="video_text_unavailable_dark">@color/video_text_unavailable_dark</item>
         <item name="background_unavailable_video_tile_dark">@color/background_unavailable_video_tile_dark</item>
 
+        <!--Video upload-->
         <item name="video_upload_green_button">@color/video_upload_green_button</item>
+
+        <!--Pop-up Menu-->
+        <item name="pop_up_menu_background">@color/pop_up_menu_background</item>
+        <item name="pop_up_menu_line">@color/pop_up_menu_line</item>
 
 
 

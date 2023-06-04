@@ -2,9 +2,20 @@ package com.learnwithsubs.feature_video_list.presentation
 
 import VideoListPicker
 import android.Manifest
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.Gravity
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
@@ -40,13 +51,11 @@ class VideoListActivity : AppCompatActivity() {
         setupRecyclerView()
 
         val uploadVideoButton = findViewById<CardView>(R.id.button_video_upload)
+        val menuButton = findViewById<ImageButton>(R.id.menu_button)
+
         val recyclerView = findViewById<RecyclerView>(R.id.video_list)
         (recyclerView?.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
-
-        uploadVideoButton.setOnClickListener {
-            videoListPicker.pickVideo()
-        }
 
         (applicationContext as App).videoListAppComponent.inject(this)
         vm = ViewModelProvider(this, vmFactory)[VideoListViewModel::class.java]
@@ -57,6 +66,16 @@ class VideoListActivity : AppCompatActivity() {
             ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), PERMISSION_REQUEST_CODE)
         }
+
+
+        uploadVideoButton.setOnClickListener {
+            videoListPicker.pickVideo()
+        }
+
+        menuButton.setOnClickListener {
+            openMenu()
+        }
+
 
         vm.videoList.observe(this) { video ->
             adapter.updateData(ArrayList(video))
@@ -72,6 +91,37 @@ class VideoListActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+
+    private fun openMenu() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.video_list_menu)
+
+
+//        val sort = dialog.findViewById<Button>(R.id.button1)
+//        val select = dialog.findViewById<Button>(R.id.button2)
+//        val delete = dialog.findViewById<Button>(R.id.button3)
+//        sort.setOnClickListener {
+//            Toast.makeText(applicationContext, "sort.text", Toast.LENGTH_SHORT).show()
+//        }
+//        select.setOnClickListener {
+//            Toast.makeText(applicationContext, "select.text", Toast.LENGTH_SHORT).show()
+//        }
+//        delete.setOnClickListener {
+//            Toast.makeText(applicationContext, "delete.text", Toast.LENGTH_SHORT).show()
+//        }
+        dialog.show()
+        if (dialog.window != null) {
+            dialog.show()
+            dialog.window!!.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window!!.setGravity(Gravity.BOTTOM)
+        }
     }
 
 
