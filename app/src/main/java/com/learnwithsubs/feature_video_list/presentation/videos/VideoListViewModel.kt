@@ -29,8 +29,6 @@ class VideoListViewModel @Inject constructor(
     val videoList = MediatorLiveData<List<Video>>()
 
     val videoToUpdate = MutableLiveData<Video>()
-    val videoToAdd = MutableLiveData<Video>()
-
     val videoProgressLiveData: MutableLiveData<Video?> = videoTranscodeRepository.getVideoProgressLiveData()
 
     private val videoSemaphore = Semaphore(1)
@@ -101,17 +99,19 @@ class VideoListViewModel @Inject constructor(
                     // Обработка извлечение аудио
                     poolList.loadingType = VideoLoadingType.EXTRACTING_AUDIO
                     videoToUpdate.postValue(poolList)
-                    val extractedAudio: Video? =
-                        videoListUseCases.extractAudioUseCase.invoke(poolList)
+                    //videoListUseCases.loadVideoUseCase.invoke(poolList)
+                    val extractedAudio: Video? = videoListUseCases.extractAudioUseCase.invoke(poolList)
 
                     // Загрузка аудио
                     poolList.loadingType = VideoLoadingType.GENERATING_SUBTITLES
                     videoToUpdate.postValue(poolList)
+                    //videoListUseCases.loadVideoUseCase.invoke(poolList)
                     videoListUseCases.sendAudioToServerUseCase.invoke(extractedAudio)
 
                     // Декодирование видео
                     poolList.loadingType = VideoLoadingType.DECODING_VIDEO
                     videoToUpdate.postValue(poolList)
+                    //videoListUseCases.loadVideoUseCase.invoke(poolList)
                     val recodedVideo: Video? = videoListUseCases.transcodeVideoUseCase.invoke(poolList)
 
                     // Успешное завершение

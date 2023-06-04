@@ -1,6 +1,5 @@
 package com.learnwithsubs.feature_video_list.presentation.adapter
 
-import android.graphics.Color
 import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.View
@@ -17,37 +16,35 @@ class VideoListAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var videoList: ArrayList<Video> = videoListInit
+    private var videoSelected = ArrayList<Video>()
     var isNormalMode = true
 
     fun updateData(videoList: ArrayList<Video>) {
         this@VideoListAdapter.videoList = videoList
+        videoSelected.forEach { selectedVideo ->
+            val videoToUpdate = videoList.find { it.id == selectedVideo.id }
+            videoToUpdate?.isSelected = selectedVideo.isSelected
+        }
         notifyDataSetChanged() //TODO передавать в качестве агрументов id обновлённого видоса
     }
 
     fun updateVideo(videoToUpdate: Video) {
-        var position: Int? = null
-        for (i in 0 until this@VideoListAdapter.videoList.size) {
-            val video = this@VideoListAdapter.videoList[i]
-            if (video.id == videoToUpdate.id) {
-                this@VideoListAdapter.videoList[i] = videoToUpdate
-                position = i
-                break
-            }
+        val id = videoList.indexOf(videoToUpdate)
+        if (id != -1) {
+            this@VideoListAdapter.videoList[id] = videoToUpdate
+            notifyItemChanged(id)
         }
-        if (position != null)
-            notifyItemChanged(position)
     }
 
     fun updateSelection(position: Int) {
         val video = videoList[position]
         video.isSelected = !video.isSelected
-        isNormalMode = true
-        for (vid in videoList) {
-            if (vid.isSelected) {
-                isNormalMode = false
-                break
-            }
-        }
+        if (video.isSelected)
+            videoSelected.add(video)
+        else
+            videoSelected.remove(videoSelected.find { it.id == video.id })
+        isNormalMode = videoSelected.isEmpty()
+
         notifyItemChanged(position)
     }
 

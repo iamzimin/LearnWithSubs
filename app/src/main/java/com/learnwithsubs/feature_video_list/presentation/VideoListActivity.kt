@@ -4,33 +4,21 @@ import VideoListPicker
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.media.MediaCodec
-import android.media.MediaExtractor
-import android.media.MediaFormat
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.Settings
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.learnwithsubs.R
+import com.learnwithsubs.app.App
 import com.learnwithsubs.databinding.VideoListBinding
 import com.learnwithsubs.feature_video_list.presentation.adapter.VideoListAdapter
-import com.learnwithsubs.app.App
-import com.learnwithsubs.feature_video_list.domain.models.Video
 import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewModel
 import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewModelFactory
-import java.io.File
-import java.io.FileOutputStream
 import javax.inject.Inject
 
 
@@ -74,6 +62,10 @@ class VideoListActivity : AppCompatActivity() {
             adapter.updateData(ArrayList(video))
         }
 
+        vm.videoToUpdate.observe(this) { video ->
+            adapter.updateVideo(video)
+        }
+
         vm.videoProgressLiveData.observe(this) { videoProgress ->
             if (videoProgress != null) {
                 adapter.updateVideo(videoProgress)
@@ -81,11 +73,6 @@ class VideoListActivity : AppCompatActivity() {
         }
 
     }
-
-//    override fun onResume() {
-//        super.onResume()
-//        vm.updateList()
-//    }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
