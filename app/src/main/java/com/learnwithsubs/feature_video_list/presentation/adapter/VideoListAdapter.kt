@@ -11,6 +11,7 @@ import com.learnwithsubs.R
 import com.learnwithsubs.feature_video_list.domain.models.Video
 import com.learnwithsubs.feature_video_list.domain.models.VideoStatus
 
+
 class VideoListAdapter(
     videoListInit: ArrayList<Video>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -29,11 +30,17 @@ class VideoListAdapter(
     }
 
     fun updateVideo(videoToUpdate: Video) {
-        val id = videoList.indexOf(videoToUpdate)
-        if (id != -1) {
-            this@VideoListAdapter.videoList[id] = videoToUpdate
-            notifyItemChanged(id)
+        var position: Int? = null
+        for (i in 0 until this@VideoListAdapter.videoList.size) {
+            val video = this@VideoListAdapter.videoList[i]
+            if (video.id == videoToUpdate.id) {
+                this@VideoListAdapter.videoList[i] = videoToUpdate
+                position = i
+                break
+            }
         }
+        if (position != null)
+            notifyItemChanged(position)
     }
 
     fun updateSelection(position: Int) {

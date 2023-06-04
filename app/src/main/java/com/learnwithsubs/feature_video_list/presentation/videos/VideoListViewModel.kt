@@ -7,19 +7,16 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.learnwithsubs.feature_video_list.domain.models.Video
 import com.learnwithsubs.feature_video_list.domain.models.VideoLoadingType
-import com.learnwithsubs.feature_video_list.domain.models.VideoStatus
 import com.learnwithsubs.feature_video_list.domain.repository.VideoTranscodeRepository
 import com.learnwithsubs.feature_video_list.domain.usecase.VideoListUseCases
 import com.learnwithsubs.feature_video_list.domain.util.OrderType
 import com.learnwithsubs.feature_video_list.domain.util.VideoOrder
-import kotlinx.coroutines.launch
-import javax.inject.Inject
-
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.withContext
 import java.util.LinkedList
+import javax.inject.Inject
 
 
 class VideoListViewModel @Inject constructor(
@@ -63,21 +60,6 @@ class VideoListViewModel @Inject constructor(
                 editVideo(event.video)
             }
         }
-    }
-
-    private fun updateList() {
-        /*
-        val videoFlow: Flow<List<Video>> = videoListUseCases.getVideoListUseCase.invoke(
-            videoOrder = VideoOrder.Date(OrderType.Descending)
-        )
-
-        viewModelScope.launch {
-            videoFlow.collect { videos ->
-                videoList = ArrayList(videos)
-                videoListUpdate.value = videoList
-            }
-        }
-         */
     }
 
     private fun editVideo(video: Video) {
