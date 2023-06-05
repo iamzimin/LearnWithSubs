@@ -13,7 +13,6 @@
         <item name="android:clickable">false</item>
         <item name="android:focusable">false</item>
         <item name="android:colorControlActivated">@color/red</item>
-        <!--        <item name="android:button">@null</item>-->
     </style>
     <style name="ButtonSortByStyle" parent="Widget.MaterialComponents.Button">
         <item name="android:backgroundTint">@color/button_normal</item>

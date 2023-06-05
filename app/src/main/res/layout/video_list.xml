@@ -66,9 +66,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/video_list"
         android:layout_width="match_parent"
-        android:layout_marginHorizontal="5dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:layout_marginVertical="15dp"
+        android:paddingBottom="160dp"
         app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

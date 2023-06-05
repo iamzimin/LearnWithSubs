@@ -111,7 +111,6 @@ class VideoListActivity : AppCompatActivity() {
         selectText.text = if (isNeedSelect) applicationContext.getString(R.string.deselect_all) else applicationContext.getString(R.string.select_all)
 
 
-
         sort.setOnClickListener {
             openSortByMenu()
             dialog.dismiss()
@@ -131,7 +130,6 @@ class VideoListActivity : AppCompatActivity() {
                 }
                 dialog.dismiss()
             }
-
         })
 
         delete.setOnClickListener {
@@ -141,9 +139,9 @@ class VideoListActivity : AppCompatActivity() {
 
         dialog.show()
         if (dialog.window != null) {
-            dialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialog.window!!.setGravity(Gravity.BOTTOM)
+            dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window?.setGravity(Gravity.BOTTOM)
         }
     }
 
@@ -170,72 +168,59 @@ class VideoListActivity : AppCompatActivity() {
             ascendingButton.setBackgroundColor(if (ascending)applicationContext.getColor(R.color.button_pressed) else applicationContext.getColor(R.color.button_normal))
             descendingButton.setBackgroundColor(if (ascending) applicationContext.getColor(R.color.button_normal) else applicationContext.getColor(R.color.button_pressed))
         }
-        fun setCheckBoxes(name: Boolean, date: Boolean, duration: Boolean) {
-            nameCheckBox.isChecked = name
-            dateCheckBox.isChecked = date
-            durationCheckBox.isChecked = duration
-        }
-        fun setSortType(orderType: OrderType) {
-            vm.sortMode.orderType = orderType
-        }
-        fun setSortMode(orderMode: VideoOrder) {
-            vm.sortMode = orderMode
-        }
-        fun resetSortMode(sortMode: VideoOrder) {
-            vm.sortMode = sortMode
-            setButtonColors(sortMode.orderType == OrderType.Ascending)
-            setCheckBoxes(
-                name = sortMode is VideoOrder.Name,
-                date = sortMode is VideoOrder.Date,
-                duration = sortMode is VideoOrder.Duration
-            )
-        }
 
-        
-        setButtonColors(vm.sortMode.orderType == OrderType.Ascending)
-        setCheckBoxes(
-            name = vm.sortMode is VideoOrder.Name,
-            date = vm.sortMode is VideoOrder.Date,
-            duration = vm.sortMode is VideoOrder.Duration
-        )
+        nameCheckBox.isChecked = vm.sortMode.value is VideoOrder.Name
+        dateCheckBox.isChecked = vm.sortMode.value is VideoOrder.Date
+        durationCheckBox.isChecked = vm.sortMode.value is VideoOrder.Duration
+
+        val sortType = vm.sortMode.value ?: VideoListViewModel.DEFAULT_SORT_MODE
+        setButtonColors(ascending = sortType.orderType is OrderType.Ascending)
 
         ascendingButton.setOnClickListener {
             setButtonColors(ascending = true)
-            setSortType(OrderType.Ascending)
+            val currentOrderType = vm.sortMode.value?.apply { orderType = OrderType.Ascending } ?: VideoListViewModel.DEFAULT_SORT_MODE
+            vm.setSortMode(currentOrderType)
         }
 
         descendingButton.setOnClickListener {
             setButtonColors(ascending = false)
-            setSortType(OrderType.Descending)
+            val currentOrderType = vm.sortMode.value?.apply { orderType = OrderType.Descending } ?: VideoListViewModel.DEFAULT_SORT_MODE
+            vm.setSortMode(currentOrderType)
         }
 
         nameCardView.setOnClickListener {
-            setCheckBoxes(name = true, date = false, duration = false)
-            setSortMode(VideoOrder.Name(vm.sortMode.orderType))
+            val currentOrderType = vm.sortMode.value?.orderType ?: VideoListViewModel.DEFAULT_SORT_MODE.orderType
+            vm.setSortMode(VideoOrder.Name(currentOrderType))
         }
         dateCardView.setOnClickListener {
-            setCheckBoxes(name = false, date = true, duration = false)
-            setSortMode(VideoOrder.Date(vm.sortMode.orderType))
+            val currentOrderType = vm.sortMode.value?.orderType ?: VideoListViewModel.DEFAULT_SORT_MODE.orderType
+            vm.setSortMode(VideoOrder.Date(currentOrderType))
         }
         durationCardView.setOnClickListener {
-            setCheckBoxes(name = false, date = false, duration = true)
-            setSortMode(VideoOrder.Duration(vm.sortMode.orderType))
+            val currentOrderType = vm.sortMode.value?.orderType ?: VideoListViewModel.DEFAULT_SORT_MODE.orderType
+            vm.setSortMode(VideoOrder.Duration(currentOrderType))
         }
 
         clearButton.setOnClickListener {
-            resetSortMode(VideoOrder.Date(OrderType.Descending))
+            vm.setSortMode(VideoOrder.Date(OrderType.Descending))
         }
         applyButton.setOnClickListener {
             vm.updateVideoList()
             sortByDialog.dismiss()
         }
 
+        vm.sortMode.observe(this) { sortMode ->
+            nameCheckBox.isChecked = sortMode is VideoOrder.Name
+            dateCheckBox.isChecked = sortMode is VideoOrder.Date
+            durationCheckBox.isChecked = sortMode is VideoOrder.Duration
+        }
+
         sortByDialog.show()
         if (sortByDialog.window != null) {
             sortByDialog.window?.attributes?.windowAnimations = 0
-            sortByDialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            sortByDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            sortByDialog.window!!.setGravity(Gravity.BOTTOM)
+            sortByDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            sortByDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            sortByDialog.window?.setGravity(Gravity.BOTTOM)
         }
     }
 

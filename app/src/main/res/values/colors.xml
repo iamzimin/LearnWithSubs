@@ -22,7 +22,7 @@
 
     <!--____________Dark Theme____________-->
     <color name="button_normal">#464664</color>
-    <color name="button_pressed">#3C3C5A</color>
+    <color name="button_pressed">#373750</color>
 
 
     <color name="bottom_icons_dark">#FFFFFFFF</color>

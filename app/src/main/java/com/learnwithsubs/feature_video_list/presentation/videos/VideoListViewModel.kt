@@ -24,8 +24,11 @@ class VideoListViewModel @Inject constructor(
     val videoListUseCases: VideoListUseCases,
     val videoTranscodeRepository: VideoTranscodeRepository
 ) : ViewModel() {
+
     val videoList = MediatorLiveData<List<Video>?>()
-    var sortMode: VideoOrder = VideoOrder.Date(OrderType.Descending)
+    var sortMode: MutableLiveData<VideoOrder> = MutableLiveData<VideoOrder>().apply {
+        value = DEFAULT_SORT_MODE
+    }
 
     val videoToUpdate = MutableLiveData<Video>()
     val videoProgressLiveData: MutableLiveData<Video?> = videoTranscodeRepository.getVideoProgressLiveData()
@@ -33,6 +36,9 @@ class VideoListViewModel @Inject constructor(
     private val videoSemaphore = Semaphore(1)
     private val processQueue = LinkedList<Video?>()
 
+    companion object {
+        val DEFAULT_SORT_MODE: VideoOrder = VideoOrder.Date(OrderType.Descending)
+    }
 
     init {
         updateVideoList()
@@ -40,7 +46,7 @@ class VideoListViewModel @Inject constructor(
     fun updateVideoList() {
         videoList.addSource(
             videoListUseCases.getVideoListUseCase.invoke(
-                videoOrder = sortMode
+                videoOrder = sortMode.value ?: DEFAULT_SORT_MODE
             ).asLiveData()
         ) { list ->
             videoList.value = ArrayList(list)
@@ -85,20 +91,20 @@ class VideoListViewModel @Inject constructor(
 
                     // Обработка извлечение аудио
                     poolList.loadingType = VideoLoadingType.EXTRACTING_AUDIO
-                    videoToUpdate.postValue(poolList)
-                    //videoListUseCases.loadVideoUseCase.invoke(poolList)
+                    //videoToUpdate.postValue(poolList)
+                    videoListUseCases.loadVideoUseCase.invoke(poolList)
                     val extractedAudio: Video? = videoListUseCases.extractAudioUseCase.invoke(poolList)
 
                     // Загрузка аудио
                     poolList.loadingType = VideoLoadingType.GENERATING_SUBTITLES
-                    videoToUpdate.postValue(poolList)
-                    //videoListUseCases.loadVideoUseCase.invoke(poolList)
+                    //videoToUpdate.postValue(poolList)
+                    videoListUseCases.loadVideoUseCase.invoke(poolList)
                     videoListUseCases.sendAudioToServerUseCase.invoke(extractedAudio)
 
                     // Декодирование видео
                     poolList.loadingType = VideoLoadingType.DECODING_VIDEO
-                    videoToUpdate.postValue(poolList)
-                    //videoListUseCases.loadVideoUseCase.invoke(poolList)
+                    //videoToUpdate.postValue(poolList)
+                    videoListUseCases.loadVideoUseCase.invoke(poolList)
                     val recodedVideo: Video? = videoListUseCases.transcodeVideoUseCase.invoke(poolList)
 
                     // Успешное завершение
@@ -120,6 +126,10 @@ class VideoListViewModel @Inject constructor(
         viewModelScope.launch {
             videoToDelete?.forEach { videoListUseCases.deleteVideoUseCase.invoke(it)}
         }
+    }
+
+    fun setSortMode(orderMode: VideoOrder) {
+        sortMode.value = orderMode
     }
 
 }
