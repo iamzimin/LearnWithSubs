@@ -21,6 +21,10 @@
 
 
     <!--____________Dark Theme____________-->
+    <color name="button_normal">#464664</color>
+    <color name="button_pressed">#3C3C5A</color>
+
+
     <color name="bottom_icons_dark">#FFFFFFFF</color>
     <color name="background_dark">#2F2E3E</color>
     <color name="text_main_dark">#FFFFFFFF</color>

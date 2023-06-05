@@ -25,6 +25,7 @@ class VideoListViewModel @Inject constructor(
     val videoTranscodeRepository: VideoTranscodeRepository
 ) : ViewModel() {
     val videoList = MediatorLiveData<List<Video>?>()
+    var sortMode: VideoOrder = VideoOrder.Date(OrderType.Descending)
 
     val videoToUpdate = MutableLiveData<Video>()
     val videoProgressLiveData: MutableLiveData<Video?> = videoTranscodeRepository.getVideoProgressLiveData()
@@ -34,12 +35,15 @@ class VideoListViewModel @Inject constructor(
 
 
     init {
+        updateVideoList()
+    }
+    fun updateVideoList() {
         videoList.addSource(
             videoListUseCases.getVideoListUseCase.invoke(
-                videoOrder = VideoOrder.Date(OrderType.Descending)
+                videoOrder = sortMode
             ).asLiveData()
         ) { list ->
-            videoList.value = list
+            videoList.value = ArrayList(list)
         }
     }
 
