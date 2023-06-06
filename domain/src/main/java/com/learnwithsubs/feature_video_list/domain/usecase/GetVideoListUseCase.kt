@@ -5,13 +5,15 @@ import com.learnwithsubs.feature_video_list.domain.repository.VideoListRepositor
 import com.learnwithsubs.feature_video_list.domain.util.OrderType
 import com.learnwithsubs.feature_video_list.domain.util.VideoOrder
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 
 class GetVideoListUseCase(
     private val repository: VideoListRepository
 ) {
     operator fun invoke(
-        videoOrder: VideoOrder = VideoOrder.Date(OrderType.Descending)
+        videoOrder: VideoOrder = VideoOrder.Date(OrderType.Descending),
+        filter: String?,
     ) : Flow<List<Video>> {
         return repository.getVideos().map { videos ->
             when(videoOrder.orderType) {
@@ -29,6 +31,10 @@ class GetVideoListUseCase(
                         is VideoOrder.Duration -> videos.sortedByDescending {it.duration}
                     }
                 }
+            }.filter { video ->
+                filter?.let {
+                    video.name.lowercase().contains(it.lowercase())
+                } ?: true
             }
         }
     }

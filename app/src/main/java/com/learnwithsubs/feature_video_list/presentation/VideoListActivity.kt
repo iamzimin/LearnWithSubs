@@ -8,12 +8,15 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -52,6 +55,7 @@ class VideoListActivity : AppCompatActivity() {
         supportActionBar?.hide()
         setupRecyclerView()
 
+        val searchEditText = findViewById<EditText>(R.id.search_edit_text)
         val uploadVideoButton = findViewById<CardView>(R.id.button_video_upload)
         val menuButton = findViewById<ImageButton>(R.id.menu_button)
 
@@ -77,6 +81,16 @@ class VideoListActivity : AppCompatActivity() {
         menuButton.setOnClickListener {
             openMenu()
         }
+
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                vm.filterVideo(filter = s.toString())
+            }
+
+        })
 
 
         vm.videoList.observe(this) { video ->
@@ -205,7 +219,7 @@ class VideoListActivity : AppCompatActivity() {
             vm.setSortMode(VideoOrder.Date(OrderType.Descending))
         }
         applyButton.setOnClickListener {
-            vm.updateVideoList()
+            vm.updateVideoList(videoOrder = vm.sortMode.value, filter = vm.filter)
             sortByDialog.dismiss()
         }
 

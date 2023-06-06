@@ -29,6 +29,7 @@ class VideoListViewModel @Inject constructor(
     var sortMode: MutableLiveData<VideoOrder> = MutableLiveData<VideoOrder>().apply {
         value = DEFAULT_SORT_MODE
     }
+    var filter: String? = null
 
     val videoToUpdate = MutableLiveData<Video>()
     val videoProgressLiveData: MutableLiveData<Video?> = videoTranscodeRepository.getVideoProgressLiveData()
@@ -41,12 +42,14 @@ class VideoListViewModel @Inject constructor(
     }
 
     init {
-        updateVideoList()
+        updateVideoList(videoOrder = sortMode.value, filter = filter)
     }
-    fun updateVideoList() {
+
+    fun updateVideoList(videoOrder: VideoOrder?, filter: String?) {
         videoList.addSource(
             videoListUseCases.getVideoListUseCase.invoke(
-                videoOrder = sortMode.value ?: DEFAULT_SORT_MODE
+                videoOrder = videoOrder ?: DEFAULT_SORT_MODE,
+                filter = filter
             ).asLiveData()
         ) { list ->
             videoList.value = ArrayList(list)
@@ -76,7 +79,6 @@ class VideoListViewModel @Inject constructor(
     private fun editVideo(video: Video) {
         viewModelScope.launch { videoListUseCases.loadVideoUseCase.invoke(video) }
     }
-
 
     private fun addVideo(video: Video) {
         viewModelScope.launch {
@@ -130,6 +132,10 @@ class VideoListViewModel @Inject constructor(
 
     fun setSortMode(orderMode: VideoOrder) {
         sortMode.value = orderMode
+    }
+    fun filterVideo(filter: String?) {
+        this.filter = filter
+        updateVideoList(videoOrder = sortMode.value, filter = filter)
     }
 
 }
