@@ -35,6 +35,7 @@ import com.learnwithsubs.feature_video_list.domain.util.VideoOrder
 import com.learnwithsubs.feature_video_list.presentation.adapter.VideoListAdapter
 import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewModel
 import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewModelFactory
+import com.learnwithsubs.feature_video_list.presentation.videos.VideosEvent
 import javax.inject.Inject
 
 
@@ -87,7 +88,8 @@ class VideoListActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                vm.filterVideo(filter = s.toString())
+                //vm.filterVideo(filter = s.toString()) /!/
+                vm.onEvent(event = VideosEvent.Filter(filter = s.toString()))
             }
 
         })
@@ -135,11 +137,13 @@ class VideoListActivity : AppCompatActivity() {
                 if (isNeedSelect) {
                     adapter.isNormalMode = true
                     adapter.videoSelected.clear()
-                    vm.deSelectVideo(isNeedSelect = false)
+                    //vm.deSelectVideo(isNeedSelect = false) /!/
+                    vm.onEvent(event = VideosEvent.DeSelect(isNeedSelect = false))
                 }
                 else {
                     adapter.isNormalMode = false
-                    vm.deSelectVideo(isNeedSelect = true)
+                    //vm.deSelectVideo(isNeedSelect = true) /!/
+                    vm.onEvent(event = VideosEvent.DeSelect(isNeedSelect = true))
                     adapter.videoSelected = ArrayList(adapter.videoList)
                 }
                 dialog.dismiss()
@@ -147,7 +151,8 @@ class VideoListActivity : AppCompatActivity() {
         })
 
         delete.setOnClickListener {
-            vm.deleteSelectedVideo()
+            //vm.deleteSelectedVideo() /!/
+            vm.onEvent(event = VideosEvent.DeleteSelectedVideos(videos = vm.videoList.value?.filter { it.isSelected }))
             dialog.dismiss()
         }
 
@@ -193,33 +198,40 @@ class VideoListActivity : AppCompatActivity() {
         ascendingButton.setOnClickListener {
             setButtonColors(ascending = true)
             val currentOrderType = vm.sortMode.value?.apply { orderType = OrderType.Ascending } ?: VideoListViewModel.DEFAULT_SORT_MODE
-            vm.setSortMode(currentOrderType)
+            //vm.setSortMode(currentOrderType) /!/
+            vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = currentOrderType))
         }
 
         descendingButton.setOnClickListener {
             setButtonColors(ascending = false)
             val currentOrderType = vm.sortMode.value?.apply { orderType = OrderType.Descending } ?: VideoListViewModel.DEFAULT_SORT_MODE
-            vm.setSortMode(currentOrderType)
+            //vm.setSortMode(currentOrderType) /!/
+            vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = currentOrderType))
         }
 
         nameCardView.setOnClickListener {
             val currentOrderType = vm.sortMode.value?.orderType ?: VideoListViewModel.DEFAULT_SORT_MODE.orderType
-            vm.setSortMode(VideoOrder.Name(currentOrderType))
+            //vm.setSortMode(VideoOrder.Name(currentOrderType)) /!/
+            vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = VideoOrder.Name(orderType = currentOrderType)))
         }
         dateCardView.setOnClickListener {
             val currentOrderType = vm.sortMode.value?.orderType ?: VideoListViewModel.DEFAULT_SORT_MODE.orderType
-            vm.setSortMode(VideoOrder.Date(currentOrderType))
+            //vm.setSortMode(VideoOrder.Date(currentOrderType)) /!/
+            vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = VideoOrder.Date(orderType = currentOrderType)))
         }
         durationCardView.setOnClickListener {
             val currentOrderType = vm.sortMode.value?.orderType ?: VideoListViewModel.DEFAULT_SORT_MODE.orderType
-            vm.setSortMode(VideoOrder.Duration(currentOrderType))
+            //vm.setSortMode(VideoOrder.Duration(currentOrderType)) /!/
+            vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = VideoOrder.Duration(orderType = currentOrderType)))
         }
 
         clearButton.setOnClickListener {
-            vm.setSortMode(VideoOrder.Date(OrderType.Descending))
+            //vm.setSortMode(VideoListViewModel.DEFAULT_SORT_MODE) /!/
+            vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = VideoListViewModel.DEFAULT_SORT_MODE))
         }
         applyButton.setOnClickListener {
-            vm.updateVideoList(videoOrder = vm.sortMode.value, filter = vm.filter)
+            //vm.updateVideoList(videoOrder = vm.sortMode.value, filter = vm.filter) /!/
+            vm.onEvent(event = VideosEvent.UpdateVideoList(videoOrder = vm.sortMode.value, filter = vm.filter))
             sortByDialog.dismiss()
         }
 

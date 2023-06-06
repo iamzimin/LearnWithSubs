@@ -4,7 +4,6 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.learnwithsubs.feature_video_list.domain.models.Video
 import com.learnwithsubs.feature_video_list.domain.models.VideoLoadingType
@@ -26,9 +25,7 @@ class VideoListViewModel @Inject constructor(
 ) : ViewModel() {
 
     val videoList = MediatorLiveData<List<Video>?>()
-    var sortMode: MutableLiveData<VideoOrder> = MutableLiveData<VideoOrder>().apply {
-        value = DEFAULT_SORT_MODE
-    }
+    var sortMode: MutableLiveData<VideoOrder> = MutableLiveData<VideoOrder>().apply { value = DEFAULT_SORT_MODE }
     var filter: String? = null
 
     val videoToUpdate = MutableLiveData<Video>()
@@ -45,7 +42,22 @@ class VideoListViewModel @Inject constructor(
         updateVideoList(videoOrder = sortMode.value, filter = filter)
     }
 
-    fun updateVideoList(videoOrder: VideoOrder?, filter: String?) {
+    fun onEvent(event: VideosEvent) {
+        when (event) {
+            is VideosEvent.UpdateVideoList -> updateVideoList(videoOrder = sortMode.value, filter = filter)
+            is VideosEvent.Filter -> {
+                setFilterMode(filter = event.filter)
+                updateVideoList(videoOrder = sortMode.value, filter = filter)
+            }
+            is VideosEvent.SetOrderMode -> setOrderMode(orderMode = event.orderMode)
+            is VideosEvent.DeSelect -> deSelectVideo(isNeedSelect = event.isNeedSelect)
+            is VideosEvent.DeleteSelectedVideos -> deleteSelectedVideo(selectedVideos = event.videos)
+            is VideosEvent.LoadVideo -> addVideo(event.video)
+            is VideosEvent.UpdateVideo -> editVideo(event.video)
+        }
+    }
+
+    private fun updateVideoList(videoOrder: VideoOrder?, filter: String?) {
         videoList.addSource(
             videoListUseCases.getVideoListUseCase.invoke(
                 videoOrder = videoOrder ?: DEFAULT_SORT_MODE,
@@ -53,26 +65,6 @@ class VideoListViewModel @Inject constructor(
             ).asLiveData()
         ) { list ->
             videoList.value = ArrayList(list)
-        }
-    }
-
-    fun onEvent(event: VideosEvent) {
-        when (event) {
-            is VideosEvent.Order -> {
-                //if (false) TODO add a check for the same choice
-                //return getVideos(videoOrder = event.videoOrder)
-            }
-            is VideosEvent.DeleteVideo -> {
-                viewModelScope.launch {
-                    videoListUseCases.deleteVideoUseCase.invoke(event.video)
-                }
-            }
-            is VideosEvent.LoadVideo -> {
-                addVideo(event.video)
-            }
-            is VideosEvent.UpdateVideo -> {
-                editVideo(event.video)
-            }
         }
     }
 
@@ -118,24 +110,22 @@ class VideoListViewModel @Inject constructor(
         }
     }
 
-    fun deSelectVideo(isNeedSelect: Boolean) {
+    private fun deSelectVideo(isNeedSelect: Boolean) {
         val copiedVideoList = videoList.value?.map { video -> video.copy(isSelected = isNeedSelect) }
         videoList.value = copiedVideoList?.toMutableList()
     }
 
-    fun deleteSelectedVideo() {
-        val videoToDelete = videoList.value?.filter { it.isSelected }
+    private fun deleteSelectedVideo(selectedVideos: List<Video>?) {
         viewModelScope.launch {
-            videoToDelete?.forEach { videoListUseCases.deleteVideoUseCase.invoke(it)}
+            selectedVideos?.forEach { videoListUseCases.deleteVideoUseCase.invoke(it)}
         }
     }
 
-    fun setSortMode(orderMode: VideoOrder) {
+    private fun setOrderMode(orderMode: VideoOrder) {
         sortMode.value = orderMode
     }
-    fun filterVideo(filter: String?) {
+    private fun setFilterMode(filter: String?) {
         this.filter = filter
-        updateVideoList(videoOrder = sortMode.value, filter = filter)
     }
 
 }
