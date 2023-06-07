@@ -15,6 +15,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
@@ -92,11 +93,17 @@ class VideoListActivity : AppCompatActivity() {
             }
             override fun afterTextChanged(s: Editable?) {}
         })
+        searchEditText.setOnEditorActionListener { textView, actionId, keyEvent ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
+                textView.clearFocus()
+                true
+            } else false
+        }
         /*searchEditText.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) searchEditText.clearFocus()
         }*/
         // Скрытие убрать фокус с EditText при скрытии клавиатуры TODO mb error
-        val decorView = window.decorView
+        /*val decorView = window.decorView
         decorView.setOnApplyWindowInsetsListener { _, insets ->
             val r = Rect()
             decorView.getWindowVisibleDisplayFrame(r)
@@ -105,7 +112,7 @@ class VideoListActivity : AppCompatActivity() {
             val isKeyboardVisible = keypadHeight > screenHeight * 0.15
             if (!isKeyboardVisible) searchEditText.clearFocus()
             insets
-        }
+        }*/
 
 
 
@@ -130,7 +137,7 @@ class VideoListActivity : AppCompatActivity() {
     private fun openMenu() {
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.video_list_menu)
+        dialog.setContentView(R.layout.video_list_menu_dialog)
         val isNeedSelect = adapter.videoSelected.size == adapter.videoList.size
 
         val sort = dialog.findViewById<CardView>(R.id.sort_by_card)
@@ -152,12 +159,10 @@ class VideoListActivity : AppCompatActivity() {
                 if (isNeedSelect) {
                     adapter.isNormalMode = true
                     adapter.videoSelected.clear()
-                    //vm.deSelectVideo(isNeedSelect = false) /!/
                     vm.onEvent(event = VideosEvent.DeSelect(isNeedSelect = false))
                 }
                 else {
                     adapter.isNormalMode = false
-                    //vm.deSelectVideo(isNeedSelect = true) /!/
                     vm.onEvent(event = VideosEvent.DeSelect(isNeedSelect = true))
                     adapter.videoSelected = ArrayList(adapter.videoList)
                 }
@@ -165,13 +170,14 @@ class VideoListActivity : AppCompatActivity() {
             }
         })
 
-        rename.setOnClickListener {
-            val video = vm.videoList.value?.find { video -> video.id == adapter.videoSelected[0].id }
-                ?: return@setOnClickListener //TODO add toast
-            video.name = "Test"
-            vm.onEvent(event = VideosEvent.RenameVideo(video = video))
-            dialog.dismiss()
-        }
+        rename.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(p0: View?) {
+                if (adapter.videoSelected.size == 1)
+                    vm.editableVideo = adapter.videoSelected[0]
+                openRenameMenu()
+                dialog.dismiss()
+            }
+        })
 
         delete.setOnClickListener {
             //vm.deleteSelectedVideo() /!/
@@ -187,10 +193,44 @@ class VideoListActivity : AppCompatActivity() {
         }
     }
 
+    private fun openRenameMenu() {
+        val renameMenu = Dialog(this)
+        renameMenu.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        renameMenu.setContentView(R.layout.video_list_menu_rename_dialog)
+
+        val editText = renameMenu.findViewById<EditText>(R.id.video_name_edittext)
+        editText.setText(vm.editableVideo?.name)
+
+        editText.setOnEditorActionListener { textView, actionId, keyEvent ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
+                textView.clearFocus()
+                val video = vm.videoList.value?.find { video -> video.id == vm.editableVideo?.id }
+                if (video == null) {  //TODO add toast
+                    adapter.videoSelected.clear()
+                    renameMenu.dismiss()
+                    return@setOnEditorActionListener true
+                }
+                video.name = textView.text.toString()
+                video.isSelected = false
+                vm.onEvent(event = VideosEvent.RenameVideo(video = video))
+                adapter.videoSelected.clear()
+                renameMenu.dismiss()
+                true
+            } else false
+        }
+
+        renameMenu.show()
+        if (renameMenu.window != null) {
+            renameMenu.window?.attributes?.windowAnimations = 0
+            renameMenu.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            renameMenu.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+    }
+
     private fun openSortByMenu() {
         val sortByDialog = Dialog(this)
         sortByDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        sortByDialog.setContentView(R.layout.video_list_menu_sort_by)
+        sortByDialog.setContentView(R.layout.video_list_menu_sort_by_dialog)
 
         val ascendingButton = sortByDialog.findViewById<Button>(R.id.ascending)
         val descendingButton = sortByDialog.findViewById<Button>(R.id.descending)

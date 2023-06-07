@@ -39,6 +39,9 @@
     <string name="clear">Clear</string>
     <string name="apply">Apply</string>
 
+    <string name="enter_name">Enter name</string>
+    <string name="rename_video">Rename Video</string>
+
 
 
 </resources>

@@ -28,6 +28,7 @@ class VideoListViewModel @Inject constructor(
     val videoList = MediatorLiveData<List<Video>?>()
     var sortMode: MutableLiveData<VideoOrder> = MutableLiveData<VideoOrder>().apply { value = DEFAULT_SORT_MODE }
     var filter: String? = null
+    var editableVideo: Video? = null
 
     val videoToUpdate = MutableLiveData<Video>()
     val videoProgressLiveData: MutableLiveData<Video?> = videoTranscodeRepository.getVideoProgressLiveData()
