@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+    <!--video list menu-->
+    <style name="CardViewVideoListMenu" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_marginHorizontal">20dp</item>
+        <item name="android:layout_marginTop">15dp</item>
+    </style>
+
     <!--video list menu sort by-->
     <style name="CardViewSortByStyle" parent="Widget.MaterialComponents.CardView">
         <item name="cardBackgroundColor">@android:color/transparent</item>
@@ -17,6 +24,8 @@
     <style name="ButtonSortByStyle" parent="Widget.MaterialComponents.Button">
         <item name="android:backgroundTint">@color/button_normal</item>
     </style>
+
+
 
 
 </resources>

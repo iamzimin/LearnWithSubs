@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 import java.util.LinkedList
 import javax.inject.Inject
 
@@ -54,6 +55,7 @@ class VideoListViewModel @Inject constructor(
             is VideosEvent.DeleteSelectedVideos -> deleteSelectedVideo(selectedVideos = event.videos)
             is VideosEvent.LoadVideo -> addVideo(event.video)
             is VideosEvent.UpdateVideo -> editVideo(event.video)
+            is VideosEvent.RenameVideo -> renameVideo(event.video)
         }
     }
 
@@ -118,6 +120,12 @@ class VideoListViewModel @Inject constructor(
     private fun deleteSelectedVideo(selectedVideos: List<Video>?) {
         viewModelScope.launch {
             selectedVideos?.forEach { videoListUseCases.deleteVideoUseCase.invoke(it)}
+        }
+    }
+
+    private fun renameVideo(video: Video) {
+        viewModelScope.launch {
+            videoListUseCases.loadVideoUseCase.invoke(video = video)
         }
     }
 

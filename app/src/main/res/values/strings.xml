@@ -28,6 +28,16 @@
     <string name="select_all">Select all</string>
     <string name="deselect_all">Deselect all</string>
     <string name="delete">Delete</string>
+    <string name="rename">Rename</string>
+
+
+    <string name="name">Name</string>
+    <string name="date">Date</string>
+    <string name="duration">Duration</string>
+    <string name="ascending">Ascending</string>
+    <string name="descending">Descending</string>
+    <string name="clear">Clear</string>
+    <string name="apply">Apply</string>
 
 
 

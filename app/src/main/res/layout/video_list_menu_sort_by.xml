@@ -14,9 +14,10 @@
 
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/imageView3"
@@ -27,9 +28,7 @@
             android:minWidth="70dp"
             android:minHeight="7dp"
             android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="center_horizontal" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout_sort_type"
@@ -47,7 +46,7 @@
                 android:layout_height="wrap_content"
                 style="@style/ButtonSortByStyle"
                 android:layout_marginEnd="5dp"
-                android:text="Ascending"
+                android:text="@string/ascending"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/descending"
                 app:layout_constraintTop_toTopOf="parent"
@@ -60,7 +59,7 @@
                 android:layout_height="wrap_content"
                 style="@style/ButtonSortByStyle"
                 android:layout_marginStart="5dp"
-                android:text="Descending"
+                android:text="@string/descending"
                 app:layout_constraintStart_toEndOf="@+id/ascending"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -99,7 +98,7 @@
                         android:id="@+id/name_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Name"
+                        android:text="@string/name"
                         android:textColor="@color/text_main_dark"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -137,7 +136,7 @@
                         android:id="@+id/date_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Date"
+                        android:text="@string/date"
                         android:textColor="@color/text_main_dark"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -176,7 +175,7 @@
                         android:id="@+id/duration_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Duration"
+                        android:text="@string/duration"
                         android:textColor="@color/text_main_dark"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -220,7 +219,7 @@
                 android:layout_height="wrap_content"
                 style="@style/ButtonSortByStyle"
                 android:layout_marginEnd="5dp"
-                android:text="Clear"
+                android:text="@string/clear"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/apply_button"
                 app:layout_constraintTop_toTopOf="parent"
@@ -233,7 +232,7 @@
                 android:layout_height="wrap_content"
                 style="@style/ButtonSortByStyle"
                 android:layout_marginStart="5dp"
-                android:text="Apply"
+                android:text="@string/apply"
                 app:layout_constraintStart_toEndOf="@+id/clear_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -243,7 +242,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 
 </LinearLayout>

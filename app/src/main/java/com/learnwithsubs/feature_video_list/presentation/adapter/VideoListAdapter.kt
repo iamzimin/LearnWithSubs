@@ -17,7 +17,7 @@ class VideoListAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var videoList: ArrayList<Video> = videoListInit
-    var videoSelected = ArrayList<Video>()
+    var videoSelected = ArrayList<Video>() // TODO очистить массив когда пользователь начинает искать видео if (adapter.videoList.isNotEmpty()) adapter.videoSelected.clear()
     var isNormalMode = true
 
     fun updateData(videoList: ArrayList<Video>) {

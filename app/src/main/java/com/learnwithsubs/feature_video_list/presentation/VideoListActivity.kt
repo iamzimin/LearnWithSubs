@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
@@ -85,14 +86,27 @@ class VideoListActivity : AppCompatActivity() {
 
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun afterTextChanged(s: Editable?) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 //vm.filterVideo(filter = s.toString()) /!/
                 vm.onEvent(event = VideosEvent.Filter(filter = s.toString()))
             }
-
+            override fun afterTextChanged(s: Editable?) {}
         })
+        /*searchEditText.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) searchEditText.clearFocus()
+        }*/
+        // Скрытие убрать фокус с EditText при скрытии клавиатуры TODO mb error
+        val decorView = window.decorView
+        decorView.setOnApplyWindowInsetsListener { _, insets ->
+            val r = Rect()
+            decorView.getWindowVisibleDisplayFrame(r)
+            val screenHeight = decorView.rootView.height
+            val keypadHeight = screenHeight - r.bottom
+            val isKeyboardVisible = keypadHeight > screenHeight * 0.15
+            if (!isKeyboardVisible) searchEditText.clearFocus()
+            insets
+        }
+
 
 
         vm.videoList.observe(this) { video ->
@@ -121,11 +135,12 @@ class VideoListActivity : AppCompatActivity() {
 
         val sort = dialog.findViewById<CardView>(R.id.sort_by_card)
         val select = dialog.findViewById<CardView>(R.id.de_select_all_card)
+        val rename = dialog.findViewById<CardView>(R.id.rename_card)
         val delete = dialog.findViewById<CardView>(R.id.delete_card)
 
         val selectText = dialog.findViewById<TextView>(R.id.de_select_all_text)
         selectText.text = if (isNeedSelect) applicationContext.getString(R.string.deselect_all) else applicationContext.getString(R.string.select_all)
-
+        rename.visibility = if (adapter.videoSelected.size == 1) View.VISIBLE else View.GONE
 
         sort.setOnClickListener {
             openSortByMenu()
@@ -149,6 +164,14 @@ class VideoListActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
         })
+
+        rename.setOnClickListener {
+            val video = vm.videoList.value?.find { video -> video.id == adapter.videoSelected[0].id }
+                ?: return@setOnClickListener //TODO add toast
+            video.name = "Test"
+            vm.onEvent(event = VideosEvent.RenameVideo(video = video))
+            dialog.dismiss()
+        }
 
         delete.setOnClickListener {
             //vm.deleteSelectedVideo() /!/
