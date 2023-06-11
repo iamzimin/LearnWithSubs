@@ -3,14 +3,15 @@ package com.learnwithsubs.feature_video_list.presentation
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.FrameLayout
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.learnwithsubs.ModuleListFragment
 import com.learnwithsubs.R
@@ -45,33 +46,10 @@ class VideoListActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), PERMISSION_REQUEST_CODE)
         }
 
-        navigation.setOnNavigationItemSelectedListener { item ->
-            val fragment: Fragment = when (item.itemId) {
-                R.id.module_bottom_menu -> ModuleListFragment()
-                R.id.video_bottom_menu -> VideoListFragment()
-                else -> return@setOnNavigationItemSelectedListener false
-            }
-
-            replaceFragment(fragment)
-            true
+        val navHostFragment: NavHostFragment? = fragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment?
+        if (navHostFragment != null) { NavigationUI.setupWithNavController(
+            findViewById<View>(R.id.navigation) as BottomNavigationView,
+            navHostFragment.navController)
         }
-
-        val initialFragment = VideoListFragment()
-        replaceFragment(initialFragment)
-    }
-
-//    private fun replaceFragment(fragment: Fragment) {
-//        val transaction = fragmentManager.beginTransaction()
-//
-//        transaction.replace(R.id.fragment_container, fragment)
-//        transaction.commit()
-//    }
-
-    private fun replaceFragment(fragment: Fragment) {
-        val fl = findViewById<FrameLayout>(R.id.fragment_container)
-        fl.removeAllViews()
-        val transaction1: FragmentTransaction = supportFragmentManager.beginTransaction()
-        transaction1.add(R.id.fragment_container, fragment)
-        transaction1.commit()
     }
 }

@@ -14,8 +14,7 @@
     <item android:id="@+id/video_bottom_menu"
         android:icon="@drawable/play_circle"
         android:iconTint="?attr/background_dark"
-        android:title="@string/video"
-        />
+        android:title="@string/video"/>
 
     <item android:id="@+id/favourite_bottom_menu"
         android:icon="@drawable/favourite"

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_nav"
+    app:startDestination="@+id/video_bottom_menu">
+
+    <fragment android:id="@+id/module_bottom_menu"
+        android:name="com.learnwithsubs.ModuleListFragment"
+        tools:layout="@layout/module_list_fragment"
+        android:label="@string/module"/>
+
+    <fragment android:id="@+id/words_bottom_menu"
+        android:name="com.learnwithsubs.ModuleListFragment"
+        tools:layout="@layout/module_list_fragment"
+        android:label="@string/list"/>
+
+    <fragment android:id="@+id/video_bottom_menu"
+        android:name="com.learnwithsubs.feature_video_list.presentation.VideoListFragment"
+        tools:layout="@layout/video_list_fragment"
+        android:label="@string/video"/>
+
+    <fragment android:id="@+id/favourite_bottom_menu"
+        android:name="com.learnwithsubs.ModuleListFragment"
+        tools:layout="@layout/module_list_fragment"
+        android:label="@string/favourite"/>
+
+    <fragment android:id="@+id/account_bottom_menu"
+        android:name="com.learnwithsubs.ModuleListFragment"
+        tools:layout="@layout/module_list_fragment"
+        android:label="@string/account"/>
+
+</navigation>

@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,16 +17,16 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.learnwithsubs.R
-import com.learnwithsubs.databinding.VideoListBinding
 import com.learnwithsubs.databinding.VideoListFragmentBinding
 import com.learnwithsubs.feature_video_list.domain.util.OrderType
 import com.learnwithsubs.feature_video_list.domain.util.VideoOrder
@@ -36,9 +35,8 @@ import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewMod
 import com.learnwithsubs.feature_video_list.presentation.videos.VideoListViewModelFactory
 import com.learnwithsubs.feature_video_list.presentation.videos.VideosEvent
 
+
 class VideoListFragment : Fragment() {
-//    private val PICK_VIDEO_REQUEST = 1
-//    private val videoListPicker = VideoListPicker(requireActivity(), PICK_VIDEO_REQUEST)
     private val PICK_VIDEO_REQUEST = 1
     private lateinit var videoListPicker: VideoListPicker
 
@@ -53,9 +51,9 @@ class VideoListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.video_list_fragment, container, false)
         videoListActivity = requireActivity() as VideoListActivity
         binding = VideoListFragmentBinding.inflate(inflater, container, false)
+        val view = binding.root
         setupRecyclerView()
 
         vmFactory = videoListActivity.vmFactory
@@ -109,7 +107,7 @@ class VideoListFragment : Fragment() {
             }
         }
 
-        return view
+        return binding.root
     }
 
 
@@ -303,16 +301,8 @@ class VideoListFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        videoListPicker.onActivityResult(requestCode, resultCode, data, vm, videoListActivity.applicationContext)
+        videoListPicker.onActivityResult(requestCode, resultCode, data, vm, videoListActivity)
     }
-
-//    private fun setupRecyclerView() {
-//        val layoutManager = LinearLayoutManager(videoListActivity)
-//        binding.videoList.layoutManager = layoutManager
-//        binding.videoList.adapter = adapter
-//        val itemDecoration = VideoListAdapter.RecyclerViewItemDecoration(16)
-//        binding.videoList.addItemDecoration(itemDecoration)
-//    }
 
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(videoListActivity)
@@ -320,8 +310,5 @@ class VideoListFragment : Fragment() {
         binding.videoList.adapter = adapter
         val itemDecoration = VideoListAdapter.RecyclerViewItemDecoration(16)
         binding.videoList.addItemDecoration(itemDecoration)
-
-        val container = videoListActivity.findViewById<FrameLayout>(R.id.fragment_container)
-        container.addView(binding.root)
     }
 }
