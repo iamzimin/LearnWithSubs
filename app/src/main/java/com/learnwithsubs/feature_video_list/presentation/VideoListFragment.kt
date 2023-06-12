@@ -21,7 +21,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -59,7 +58,7 @@ class VideoListFragment : Fragment() {
         vmFactory = videoListActivity.vmFactory
         vm = ViewModelProvider(videoListActivity, vmFactory)[VideoListViewModel::class.java]
 
-        videoListPicker = VideoListPicker(videoListActivity, PICK_VIDEO_REQUEST)
+        videoListPicker = VideoListPicker(this, PICK_VIDEO_REQUEST)
 
         val searchEditText = view.findViewById<EditText>(R.id.search_edit_text)
         val uploadVideoButton = view.findViewById<CardView>(R.id.button_video_upload)
@@ -301,7 +300,7 @@ class VideoListFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        videoListPicker.onActivityResult(requestCode, resultCode, data, vm, videoListActivity)
+        videoListPicker.loadVideoOnResult(requestCode, resultCode, data, vm, videoListActivity)
     }
 
     private fun setupRecyclerView() {

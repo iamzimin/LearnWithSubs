@@ -1,5 +1,4 @@
 import android.app.Activity
-import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
@@ -7,6 +6,7 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.provider.MediaStore
 import android.provider.OpenableColumns
+import androidx.fragment.app.Fragment
 import com.arthenica.mobileffmpeg.FFprobe
 import com.learnwithsubs.feature_video_list.domain.models.Video
 import com.learnwithsubs.feature_video_list.domain.models.VideoLoadingType
@@ -20,15 +20,15 @@ import java.io.OutputStream
 import java.util.Date
 
 
-class VideoListPicker(private val activity: Activity, private val requestCode: Int) {
+class VideoListPicker(private val fragment: Fragment, private val requestCode: Int) {
 
     fun pickVideo() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
+        val intent = Intent(Intent.ACTION_PICK)
         intent.type = "video/*"
-        activity.startActivityForResult(intent, requestCode)
+        fragment.startActivityForResult(intent, requestCode)
     }
 
-    fun onActivityResult(
+    fun loadVideoOnResult(
         requestCode: Int,
         resultCode: Int,
         data: Intent?,
