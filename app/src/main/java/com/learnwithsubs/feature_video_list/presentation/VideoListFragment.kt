@@ -137,8 +137,7 @@ class VideoListFragment : Fragment() {
         select.setOnClickListener(object : View.OnClickListener {
             override fun onClick(p0: View?) {
                 if (isNeedSelect) {
-                    adapter.isNormalMode = true
-                    adapter.videoSelected.clear()
+                    adapter.clearSelect()
                     vm.onEvent(event = VideosEvent.DeSelect(isNeedSelect = false))
                 }
                 else {
@@ -162,6 +161,7 @@ class VideoListFragment : Fragment() {
         delete.setOnClickListener {
             //vm.deleteSelectedVideo() /!/
             vm.onEvent(event = VideosEvent.DeleteSelectedVideos(videos = vm.videoList.value?.filter { it.isSelected }))
+            adapter.clearSelect()
             dialog.dismiss()
         }
 
@@ -186,14 +186,14 @@ class VideoListFragment : Fragment() {
                 textView.clearFocus()
                 val video = vm.videoList.value?.find { video -> video.id == vm.editableVideo?.id }
                 if (video == null) {  //TODO add toast
-                    adapter.videoSelected.clear(); adapter.isNormalMode = true
+                    adapter.clearSelect()
                     renameMenu.dismiss()
                     return@setOnEditorActionListener true
                 }
                 video.name = textView.text.toString()
                 video.isSelected = false
                 vm.onEvent(event = VideosEvent.RenameVideo(video = video))
-                adapter.videoSelected.clear(); adapter.isNormalMode = true
+                adapter.clearSelect()
                 renameMenu.dismiss()
                 true
             } else false

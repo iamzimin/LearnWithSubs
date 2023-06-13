@@ -20,7 +20,11 @@ class VideoListAdapter(
     var videoSelected = ArrayList<Video>() // TODO очистить массив когда пользователь начинает искать видео if (adapter.videoList.isNotEmpty()) adapter.videoSelected.clear()
     var isNormalMode = true
 
+
+
+
     fun updateData(videoList: ArrayList<Video>) {
+
         this@VideoListAdapter.videoList = videoList
         videoSelected.forEach { selectedVideo ->
             val videoToUpdate = videoList.find { it.id == selectedVideo.id }
@@ -65,6 +69,11 @@ class VideoListAdapter(
         isNormalMode = videoSelected.isEmpty()
 
         notifyItemChanged(position)
+    }
+
+    fun clearSelect() {
+        videoSelected.clear()
+        isNormalMode = true
     }
 
 
