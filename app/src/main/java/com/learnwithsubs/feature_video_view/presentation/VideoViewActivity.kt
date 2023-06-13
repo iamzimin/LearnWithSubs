@@ -13,6 +13,7 @@ import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.BackgroundColorSpan
+import android.text.style.ForegroundColorSpan
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
@@ -67,6 +68,7 @@ class VideoViewActivity : AppCompatActivity() {
         val rewindVideoButton = findViewById<ImageButton>(R.id.rewind_5_video_button)
 
         val subtitleTextView = findViewById<TextView>(R.id.subtitle)
+        subtitleTextView.setBackgroundResource(android.R.color.black)
         val layoutParams = subtitleTextView.layoutParams as ConstraintLayout.LayoutParams
 
         val videoTime = findViewById<TextView>(R.id.video_time)
@@ -101,7 +103,8 @@ class VideoViewActivity : AppCompatActivity() {
 
                 val subMenu = menu.addSubMenu("") // TODO
                 subMenu.add(Menu.NONE, android.R.id.selectAll, 1, R.string.select_all)
-                subMenu.add(Menu.NONE, android.R.id.copy, 1, R.string.copy)
+                subMenu.add(Menu.NONE, android.R.id.copy, 2, R.string.copy)
+                subMenu.add(Menu.NONE, android.R.id.shareText, 3, R.string.share)
                 return true
             }
 
@@ -163,16 +166,16 @@ class VideoViewActivity : AppCompatActivity() {
             override fun run() {
                 if (videoView.isPlaying) {
                     val sub = vm.getCurrentSubtitles(videoView.currentPosition.toLong())
+                    /*
                     val spannableString = SpannableString(sub)
-                    val backgroundColor = BackgroundColorSpan(Color.BLACK)
+                    val backgroundColor = ForegroundColorSpan(Color.BLACK)
                     spannableString.setSpan(
                         backgroundColor,
                         0,
                         sub.length,
                         Spannable.SPAN_INCLUSIVE_INCLUSIVE
-                    )
-
-                    subtitleTextView.text = spannableString
+                    )*/
+                    subtitleTextView.text = sub
                 }
                 subtitleUpdate.postDelayed(this, 300)
             }
@@ -220,6 +223,7 @@ class VideoViewActivity : AppCompatActivity() {
                 timer = object : CountDownTimer(5000, 1000) {
                     override fun onTick(millisUntilFinished: Long) {}
                     override fun onFinish() {
+                        if (!videoView.isPlaying) return
                         videoControls.visibility = View.GONE
                         vm.isButtonsShowedLiveData.value = false
                     }
@@ -237,9 +241,11 @@ class VideoViewActivity : AppCompatActivity() {
         // Video play/pause
         pauseVideoButton.setOnClickListener {
             vm.videoPlaying.value = vm.videoPlaying.value != true
+            timer?.start()
         }
         playVideoButton.setOnClickListener {
             vm.videoPlaying.value = vm.videoPlaying.value != true
+            timer?.start()
         }
         vm.videoPlaying.observe(this) { isPlaying ->
             videoView.apply {

@@ -26,16 +26,15 @@
 
     <TextView
         android:id="@+id/subtitle"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="80dp"
         android:gravity="center"
         android:text=""
         android:textIsSelectable="true"
         android:textColor="@color/white"
         android:textSize="18sp"
-        android:layout_marginBottom="80dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
