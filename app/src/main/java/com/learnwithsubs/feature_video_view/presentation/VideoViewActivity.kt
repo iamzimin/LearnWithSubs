@@ -13,11 +13,13 @@ import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.BackgroundColorSpan
+import android.view.ActionMode
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageButton
-import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
@@ -92,6 +94,34 @@ class VideoViewActivity : AppCompatActivity() {
         else
             vm.currentVideo.value?.let { vm.openVideo(video = it) }
 
+        subtitleTextView.setCustomSelectionActionModeCallback(object : ActionMode.Callback {
+            override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
+                menu.clear()
+                menu.add(R.string.translate)
+
+                val subMenu = menu.addSubMenu("") // TODO
+                subMenu.add(Menu.NONE, android.R.id.selectAll, 1, R.string.select_all)
+                subMenu.add(Menu.NONE, android.R.id.copy, 1, R.string.copy)
+                return true
+            }
+
+            override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
+                return true
+            }
+
+            override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
+                when (item.title.toString()) {
+                    getString(R.string.translate) -> {
+                        val selectedText = subtitleTextView.text.substring(subtitleTextView.selectionStart, subtitleTextView.selectionEnd)
+                        Toast.makeText(this@VideoViewActivity, selectedText, Toast.LENGTH_SHORT).show()
+                        return true
+                    }
+                }
+                return false
+            }
+
+            override fun onDestroyActionMode(mode: ActionMode) {}
+        })
 
 
 
@@ -131,17 +161,19 @@ class VideoViewActivity : AppCompatActivity() {
         val subtitleUpdate = Handler(Looper.getMainLooper()) // TODO может не правильно в mvvm (возможна онибка с некорректным отображением времени)
         subtitleUpdate.post(object : Runnable {
             override fun run() {
-                val sub = vm.getCurrentSubtitles(videoView.currentPosition.toLong())
-                val spannableString = SpannableString(sub)
-                val backgroundColor = BackgroundColorSpan(Color.BLACK)
-                spannableString.setSpan(
-                    backgroundColor,
-                    0,
-                    sub.length,
-                    Spannable.SPAN_INCLUSIVE_INCLUSIVE
-                )
+                if (videoView.isPlaying) {
+                    val sub = vm.getCurrentSubtitles(videoView.currentPosition.toLong())
+                    val spannableString = SpannableString(sub)
+                    val backgroundColor = BackgroundColorSpan(Color.BLACK)
+                    spannableString.setSpan(
+                        backgroundColor,
+                        0,
+                        sub.length,
+                        Spannable.SPAN_INCLUSIVE_INCLUSIVE
+                    )
 
-                subtitleTextView.text = spannableString
+                    subtitleTextView.text = spannableString
+                }
                 subtitleUpdate.postDelayed(this, 300)
             }
         })

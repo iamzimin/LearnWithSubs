@@ -8,6 +8,8 @@
     <string name="account">Account</string>
     <string name="search">Search</string>
 
+    <string name="translate">Translate</string>
+
 
     <string name="video_duration">Duration</string>
     <string name="video_saved_words">Saved words</string>
@@ -24,6 +26,7 @@
     <string name="video_loading_status_generating_subtitles">Generating subtitles</string>
     <string name="video_loading_status_done">Done</string>
 
+    <string name="copy">Copy</string>
     <string name="sort_by">Sort by</string>
     <string name="select_all">Select all</string>
     <string name="deselect_all">Deselect all</string>
