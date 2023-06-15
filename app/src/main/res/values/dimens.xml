@@ -4,4 +4,6 @@
     <dimen name="video_name_in_video_tile">17sp</dimen>
     <dimen name="video_description_in_video_tile">11sp</dimen>
     <dimen name="icon_bottom_menu">28sp</dimen>
+    <dimen name="language_in_translate_dialog">18sp</dimen>
+    <dimen name="word_to_translate_in_translate_dialog">17sp</dimen>
 </resources>

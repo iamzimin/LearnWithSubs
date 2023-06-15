@@ -1,9 +1,11 @@
 package com.learnwithsubs.feature_video_view.presentation
 
 import android.Manifest
+import android.app.Dialog
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -18,6 +20,7 @@ import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageButton
@@ -117,6 +120,7 @@ class VideoViewActivity : AppCompatActivity() {
                     getString(R.string.translate) -> {
                         val selectedText = subtitleTextView.text.substring(subtitleTextView.selectionStart, subtitleTextView.selectionEnd)
                         Toast.makeText(this@VideoViewActivity, selectedText, Toast.LENGTH_SHORT).show()
+                        openTranslateDialog()
                         return true
                     }
                 }
@@ -263,6 +267,23 @@ class VideoViewActivity : AppCompatActivity() {
         // Exit
         exitVideoView.setOnClickListener {
             finish()
+        }
+    }
+
+    private fun openTranslateDialog() {
+        val renameMenu = Dialog(this@VideoViewActivity)
+        renameMenu.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        renameMenu.setContentView(R.layout.translate_dialog)
+
+
+
+
+
+
+        renameMenu.show()
+        if (renameMenu.window != null) {
+            renameMenu.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            renameMenu.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
     }
 
