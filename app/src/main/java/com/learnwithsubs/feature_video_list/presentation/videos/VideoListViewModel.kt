@@ -7,15 +7,16 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.learnwithsubs.feature_video_list.domain.models.Video
 import com.learnwithsubs.feature_video_list.domain.models.VideoLoadingType
+import com.learnwithsubs.feature_video_list.domain.models.VideoStatus
 import com.learnwithsubs.feature_video_list.domain.repository.VideoTranscodeRepository
 import com.learnwithsubs.feature_video_list.domain.usecase.VideoListUseCases
 import com.learnwithsubs.feature_video_list.domain.util.OrderType
 import com.learnwithsubs.feature_video_list.domain.util.VideoOrder
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 import java.util.LinkedList
 import javax.inject.Inject
 
@@ -88,23 +89,32 @@ class VideoListViewModel @Inject constructor(
 
                     // Обработка извлечение аудио
                     poolList.loadingType = VideoLoadingType.EXTRACTING_AUDIO
-                    //videoToUpdate.postValue(poolList)
                     videoListUseCases.loadVideoUseCase.invoke(poolList)
                     val extractedAudio: Video? = videoListUseCases.extractAudioUseCase.invoke(poolList)
 
-                    // Загрузка аудио
-                    poolList.loadingType = VideoLoadingType.GENERATING_SUBTITLES
-                    //videoToUpdate.postValue(poolList)
-                    videoListUseCases.loadVideoUseCase.invoke(poolList)
-                    videoListUseCases.sendAudioToServerUseCase.invoke(extractedAudio)
-
                     // Декодирование видео
-                    poolList.loadingType = VideoLoadingType.DECODING_VIDEO
-                    //videoToUpdate.postValue(poolList)
-                    videoListUseCases.loadVideoUseCase.invoke(poolList)
-                    val recodedVideo: Video? = videoListUseCases.transcodeVideoUseCase.invoke(poolList)
+                    val transcodeVideo = async {
+                        poolList.loadingType = VideoLoadingType.DECODING_VIDEO
+                        videoListUseCases.loadVideoUseCase.invoke(poolList)
+                        return@async videoListUseCases.transcodeVideoUseCase.invoke(poolList)
+                    }
+
+                    // Загрузка аудио
+                    val sendAudio = async {
+                       return@async videoListUseCases.sendAudioToServerUseCase.invoke(extractedAudio)
+                    }
+
+                    val recodedVideo = transcodeVideo.await()
+                    // После выполненеия декодирования ставится стстус генерации субтитров, если они ещё не готовы
+                    if (sendAudio.isActive) {
+                        poolList.loadingType = VideoLoadingType.GENERATING_SUBTITLES
+                        videoListUseCases.loadVideoUseCase.invoke(poolList)
+                    }
+                    sendAudio.await()
+
 
                     // Успешное завершение
+                    recodedVideo?.videoStatus = VideoStatus.NORMAL_VIDEO
                     recodedVideo?.let { videoListUseCases.loadVideoUseCase.invoke(it) }
                 } finally {
                     videoSemaphore.release()

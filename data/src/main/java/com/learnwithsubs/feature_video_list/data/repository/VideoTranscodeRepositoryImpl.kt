@@ -25,8 +25,8 @@ class VideoTranscodeRepositoryImpl(
     //val internalStorageDir = File(context.filesDir, "LearnWithSubs")
     private val externalStorageDir = File(Environment.getExternalStorageDirectory().toString() + "/Movies/", "LearnWithSubs")
 
-    private var isVideoReady = false
-    private var isAudioReady = false
+    //private var isVideoReady = false
+    //private var isAudioReady = false
 
     override suspend fun transcodeVideo(video: Video): Video? = suspendCoroutine { continuation ->
         if (!externalStorageDir.exists())
@@ -46,12 +46,7 @@ class VideoTranscodeRepositoryImpl(
             when (returnCode) {
                 RETURN_CODE_SUCCESS -> {
                     Log.i(Config.TAG, "Async command execution completed successfully.")
-                    isVideoReady = true
-                    if (isAudioReady) {
-                        video.videoStatus = VideoStatus.NORMAL_VIDEO
-                        isVideoReady = false
-                        isAudioReady = false
-                    }
+                    video.uploadingProgress = 0
                     video.outputPath = "${externalStorageDir.absolutePath}/${video.id}"
                     continuation.resume(video)
                 }
@@ -90,12 +85,12 @@ class VideoTranscodeRepositoryImpl(
             when (returnCode) {
                 RETURN_CODE_SUCCESS -> {
                     Log.i(Config.TAG, "Async command execution completed successfully.")
-                    isAudioReady = true
-                    if (isVideoReady) {
-                        video.videoStatus = VideoStatus.NORMAL_VIDEO
-                        isVideoReady = false
-                        isAudioReady = false
-                    }
+//                    isAudioReady = true
+//                    if (isVideoReady) {
+//                        video.videoStatus = VideoStatus.NORMAL_VIDEO
+//                        isVideoReady = false
+//                        isAudioReady = false
+//                    }
                     video.outputPath = "${externalStorageDir.absolutePath}/${video.id}"
                     continuation.resume(video)
                 }
