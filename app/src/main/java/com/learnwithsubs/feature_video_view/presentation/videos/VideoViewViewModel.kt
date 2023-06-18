@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.learnwithsubs.feature_video_list.domain.models.Video
+import com.learnwithsubs.feature_video_view.domain.models.DictionaryWord
 import com.learnwithsubs.feature_video_view.domain.models.Subtitle
 import com.learnwithsubs.feature_video_view.domain.usecase.VideoViewUseCases
 import kotlinx.coroutines.Dispatchers
@@ -81,6 +82,10 @@ class VideoViewViewModel @Inject constructor(
             String.format("%02d:%02d:%02d", currHours, currMinutes, currSeconds)
         else
             String.format("%02d:%02d", currMinutes, currSeconds)
+    }
+
+    fun getWordsFromDictionary(): ArrayList<DictionaryWord> {
+        return ArrayList(videoViewUseCases.getWordsFromDictionaryUseCase.invoke())
     }
 
 }

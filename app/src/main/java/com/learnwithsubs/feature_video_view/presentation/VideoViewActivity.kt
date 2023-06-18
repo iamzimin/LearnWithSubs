@@ -282,13 +282,15 @@ class VideoViewActivity : AppCompatActivity() {
         renameMenu.requestWindowFeature(Window.FEATURE_NO_TITLE)
         renameMenu.setContentView(R.layout.translate_dialog)
 
-        val test: ArrayList<DictionaryWord> = ArrayList()
-        var word = DictionaryWord(1, "apple", "яблоко", "существительное")
-        test.add(element = word)
-        word = DictionaryWord(2, "cat", "кошка", "существительное")
-        test.add(element = word)
-        word = DictionaryWord(3, "run", "бегать", "глагол")
-        test.add(element = word)
+//        val test: ArrayList<DictionaryWord> = ArrayList()
+//        var word = DictionaryWord(1, "apple", "яблоко", "существительное")
+//        test.add(element = word)
+//        word = DictionaryWord(2, "cat", "кошка", "существительное")
+//        test.add(element = word)
+//        word = DictionaryWord(3, "run", "бегать", "глагол")
+//        test.add(element = word)
+
+        val test = vm.getWordsFromDictionary()
 
         val adapter = DictionaryAdapter(wordsInit = test)
 
