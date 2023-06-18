@@ -33,8 +33,13 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.learnwithsubs.R
 import com.learnwithsubs.app.App
+import com.learnwithsubs.databinding.TranslateDialogBinding
+import com.learnwithsubs.databinding.VideoListFragmentBinding
+import com.learnwithsubs.feature_video_view.domain.models.DictionaryWord
+import com.learnwithsubs.feature_video_view.presentation.adapter.DictionaryAdapter
 import com.learnwithsubs.feature_video_view.presentation.videos.VideoViewViewModel
 import com.learnwithsubs.feature_video_view.presentation.videos.VideoViewViewModelFactory
 import javax.inject.Inject
@@ -49,6 +54,7 @@ class VideoViewActivity : AppCompatActivity() {
     lateinit var vmFactory: VideoViewViewModelFactory
     private lateinit var vm: VideoViewViewModel
 
+    private lateinit var translateDialogBinding: TranslateDialogBinding
     private lateinit var videoView: VideoView
     private var currentPosition = 0
 
@@ -56,6 +62,7 @@ class VideoViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         configSystemUI()
         setContentView(R.layout.video_view)
+        translateDialogBinding = TranslateDialogBinding.inflate(layoutInflater)
 
         // Get view by id
         videoView = findViewById(R.id.videoView)
@@ -275,8 +282,21 @@ class VideoViewActivity : AppCompatActivity() {
         renameMenu.requestWindowFeature(Window.FEATURE_NO_TITLE)
         renameMenu.setContentView(R.layout.translate_dialog)
 
+        val test: ArrayList<DictionaryWord> = ArrayList()
+        var word = DictionaryWord(1, "apple", "яблоко", "существительное")
+        test.add(element = word)
+        word = DictionaryWord(2, "cat", "кошка", "существительное")
+        test.add(element = word)
+        word = DictionaryWord(3, "run", "бегать", "глагол")
+        test.add(element = word)
 
+        val adapter = DictionaryAdapter(wordsInit = test)
 
+        renameMenu.setContentView(translateDialogBinding.root)
+        translateDialogBinding.dictionaryRecycler.layoutManager = LinearLayoutManager(this)
+        translateDialogBinding.dictionaryRecycler.adapter = adapter
+        val itemDecoration = DictionaryAdapter.RecyclerViewItemDecoration(16)
+        translateDialogBinding.dictionaryRecycler.addItemDecoration(itemDecoration)
 
 
 

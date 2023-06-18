@@ -82,6 +82,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/input_word"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -106,6 +107,15 @@
 
         </RelativeLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical"
+            android:background="@color/background_dark">
+
+        </LinearLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -113,6 +123,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/output_word"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -140,9 +151,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="5dp">
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/dictionary_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
