@@ -1,11 +1,5 @@
 package com.learnwithsubs.feature_video_view.presentation.videos
 
-import android.net.Uri
-import android.os.CountDownTimer
-import android.view.View
-import android.widget.ImageButton
-import android.widget.VideoView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -36,6 +30,10 @@ class VideoViewViewModel @Inject constructor(
     var isButtonsShowedLiveData = MutableLiveData<Boolean>()
 
     private var subtitleList: List<Subtitle> = emptyList()
+
+    val dictionaryListLiveData = videoViewUseCases.getWordsFromDictionaryUseCase.dictionaryListLiveData
+    val translationLiveData = videoViewUseCases.getWordsFromDictionaryUseCase.translationLiveData
+    var textToTranslate: String = ""
 
 
     fun openVideo(video: Video) {
@@ -84,8 +82,8 @@ class VideoViewViewModel @Inject constructor(
             String.format("%02d:%02d", currMinutes, currSeconds)
     }
 
-    fun getWordsFromDictionary(): ArrayList<DictionaryWord> {
-        return ArrayList(videoViewUseCases.getWordsFromDictionaryUseCase.invoke())
+    fun getWordsFromDictionary(key: String, lang: String, word: String): ArrayList<DictionaryWord> {
+        return ArrayList(videoViewUseCases.getWordsFromDictionaryUseCase.invoke(key, lang, word))
     }
 
 }

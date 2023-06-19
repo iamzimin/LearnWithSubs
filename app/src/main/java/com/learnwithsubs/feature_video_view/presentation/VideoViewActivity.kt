@@ -12,10 +12,6 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.BackgroundColorSpan
-import android.text.style.ForegroundColorSpan
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
@@ -37,8 +33,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.learnwithsubs.R
 import com.learnwithsubs.app.App
 import com.learnwithsubs.databinding.TranslateDialogBinding
-import com.learnwithsubs.databinding.VideoListFragmentBinding
-import com.learnwithsubs.feature_video_view.domain.models.DictionaryWord
 import com.learnwithsubs.feature_video_view.presentation.adapter.DictionaryAdapter
 import com.learnwithsubs.feature_video_view.presentation.videos.VideoViewViewModel
 import com.learnwithsubs.feature_video_view.presentation.videos.VideoViewViewModelFactory
@@ -58,11 +52,17 @@ class VideoViewActivity : AppCompatActivity() {
     private lateinit var videoView: VideoView
     private var currentPosition = 0
 
+    private lateinit var renameMenu: Dialog
+    private val dictionaryAdapter = DictionaryAdapter(wordsInit = ArrayList())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         configSystemUI()
         setContentView(R.layout.video_view)
+
         translateDialogBinding = TranslateDialogBinding.inflate(layoutInflater)
+        renameMenu = Dialog(this@VideoViewActivity)
+        setupTranslateDialog()
 
         // Get view by id
         videoView = findViewById(R.id.videoView)
@@ -126,6 +126,7 @@ class VideoViewActivity : AppCompatActivity() {
                 when (item.title.toString()) {
                     getString(R.string.translate) -> {
                         val selectedText = subtitleTextView.text.substring(subtitleTextView.selectionStart, subtitleTextView.selectionEnd)
+                        vm.textToTranslate = selectedText
                         Toast.makeText(this@VideoViewActivity, selectedText, Toast.LENGTH_SHORT).show()
                         openTranslateDialog()
                         return true
@@ -278,33 +279,35 @@ class VideoViewActivity : AppCompatActivity() {
     }
 
     private fun openTranslateDialog() {
-        val renameMenu = Dialog(this@VideoViewActivity)
+        vm.getWordsFromDictionary(
+            key = "...",
+            lang = "en-ru", // TODO
+            word = vm.textToTranslate
+        )
+        vm.translationLiveData.observe(this@VideoViewActivity) { transl ->
+            if (transl != null) {
+                translateDialogBinding.inputWord.text = vm.textToTranslate
+                translateDialogBinding.outputWord.text = transl
+            }
+            renameMenu.show()
+        }
+        vm.dictionaryListLiveData.observe(this@VideoViewActivity) { dictList ->
+            dictionaryAdapter.updateData(dictList)
+        }
+    }
+
+    private fun setupTranslateDialog() {
         renameMenu.requestWindowFeature(Window.FEATURE_NO_TITLE)
         renameMenu.setContentView(R.layout.translate_dialog)
 
-//        val test: ArrayList<DictionaryWord> = ArrayList()
-//        var word = DictionaryWord(1, "apple", "яблоко", "существительное")
-//        test.add(element = word)
-//        word = DictionaryWord(2, "cat", "кошка", "существительное")
-//        test.add(element = word)
-//        word = DictionaryWord(3, "run", "бегать", "глагол")
-//        test.add(element = word)
-
-        val test = vm.getWordsFromDictionary()
-
-        val adapter = DictionaryAdapter(wordsInit = test)
-
         renameMenu.setContentView(translateDialogBinding.root)
         translateDialogBinding.dictionaryRecycler.layoutManager = LinearLayoutManager(this)
-        translateDialogBinding.dictionaryRecycler.adapter = adapter
+        translateDialogBinding.dictionaryRecycler.adapter = dictionaryAdapter
         val itemDecoration = DictionaryAdapter.RecyclerViewItemDecoration(16)
         translateDialogBinding.dictionaryRecycler.addItemDecoration(itemDecoration)
 
-
-
-        renameMenu.show()
         if (renameMenu.window != null) {
-            renameMenu.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            //renameMenu.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             renameMenu.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
     }

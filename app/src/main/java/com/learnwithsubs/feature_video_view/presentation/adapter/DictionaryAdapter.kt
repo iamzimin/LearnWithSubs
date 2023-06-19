@@ -15,6 +15,7 @@ class DictionaryAdapter(
 
 
     fun updateData(wordsList: ArrayList<DictionaryWord>) {
+        this@DictionaryAdapter.wordsList = wordsList
         notifyDataSetChanged()
     }
 

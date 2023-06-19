@@ -1,5 +1,6 @@
 package com.learnwithsubs.feature_video_view.domain.usecase
 
+import androidx.lifecycle.MutableLiveData
 import com.learnwithsubs.feature_video_view.domain.models.DictionaryWord
 import com.learnwithsubs.feature_video_view.domain.models.DictionaryYandexResponse
 import com.learnwithsubs.feature_video_view.domain.repository.TranslatorRepository
@@ -10,20 +11,25 @@ import retrofit2.Response
 class GetWordsFromDictionaryUseCase(
     private val translatorRepository: TranslatorRepository
 ) {
-    fun invoke(): List<DictionaryWord> { //key: String, lang: String, word: String
+    val dictionaryListLiveData: MutableLiveData<ArrayList<DictionaryWord>> = MutableLiveData()
+    val translationLiveData: MutableLiveData<String?> = MutableLiveData()
+
+    fun invoke(key: String, lang: String, word: String): List<DictionaryWord> {
         val dictionaryWordList: ArrayList<DictionaryWord> = ArrayList()
 
         translatorRepository.getWordsFromDictionary(
-            key = "...",
-            lang = "en-ru",
-            word = "red"
+            key = key,
+            lang = lang,
+            word = word
         ).enqueue(object : Callback<DictionaryYandexResponse> {
             override fun onResponse(call: Call<DictionaryYandexResponse>, response: Response<DictionaryYandexResponse>) {
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
-                    val definition = apiResponse?.def
+                    val definition = apiResponse?.def ?: return //TODO
+                    if (definition.isEmpty()) return
 
-                    val transl = definition?.get(0)?.tr?.get(0)?.text
+                    val transl = definition[0].tr[0].text
+                    translationLiveData.value = transl
                     /*
                     definition?.forEachIndexed {  defID, speechPart ->
                         speechPart.tr.forEachIndexed { spID, translation ->
@@ -46,45 +52,44 @@ class GetWordsFromDictionaryUseCase(
                         }
                     }*/
 
-                    if (definition != null) {
-                        for (defID in definition.indices) {
-                            val speechPart = definition[defID]
-                            val translations = speechPart.tr
+                    for (defID in definition.indices) {
+                        val speechPart = definition[defID]
+                        val translations = speechPart.tr
 
-                            for (spID in translations.indices) {
-                                val translation = translations[spID]
-                                val syn: ArrayList<String> = ArrayList()
-                                val mean: ArrayList<String> = ArrayList()
-                                var word: DictionaryWord
+                        for (spID in translations.indices) {
+                            val translation = translations[spID]
+                            val syn: ArrayList<String> = ArrayList()
+                            val mean: ArrayList<String> = ArrayList()
+                            var dWord: DictionaryWord
 
-                                if (translation.syn != null && translation.mean != null) {
-                                    for (synonymID in translation.syn.indices) {
-                                        val synonym = translation.syn[synonymID]
-                                        syn.add(synonym.text)
-                                    }
-                                    for (meanID in translation.mean.indices) {
-                                        val meaning = translation.mean[meanID]
-                                        mean.add(meaning.text)
-                                    }
-                                    word = DictionaryWord(
-                                        spID + 1,
-                                        syn.joinToString(", "),
-                                        mean.joinToString(", "),
-                                        speechPart.pos
-                                    )
+                            if (translation.syn != null && translation.mean != null) {
+                                for (synonymID in translation.syn.indices) {
+                                    val synonym = translation.syn[synonymID]
+                                    syn.add(synonym.text)
                                 }
-                                else {
-                                    word = DictionaryWord(
-                                        spID + 1,
-                                        translation.text,
-                                        translation.mean?.get(0)?.text ?: translations[0].text,
-                                        speechPart.pos
-                                    )
+                                for (meanID in translation.mean.indices) {
+                                    val meaning = translation.mean[meanID]
+                                    mean.add(meaning.text)
                                 }
-                                dictionaryWordList.add(word)
+                                dWord = DictionaryWord(
+                                    spID + 1,
+                                    syn.joinToString(", "),
+                                    mean.joinToString(", "),
+                                    speechPart.pos
+                                )
                             }
+                            else {
+                                dWord = DictionaryWord(
+                                    spID + 1,
+                                    translation.text,
+                                    translation.mean?.get(0)?.text ?: translations[0].text,
+                                    speechPart.pos
+                                )
+                            }
+                            dictionaryWordList.add(dWord)
                         }
                     }
+                    dictionaryListLiveData.value = dictionaryWordList
 
                 } else {
                     val tests = 1
