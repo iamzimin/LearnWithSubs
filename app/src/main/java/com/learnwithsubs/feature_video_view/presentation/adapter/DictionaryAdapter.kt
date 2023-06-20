@@ -12,6 +12,7 @@ class DictionaryAdapter(
     wordsInit: ArrayList<DictionaryWord>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     private var wordsList: ArrayList<DictionaryWord> = wordsInit
+    private var onItemClickListener: OnDictionaryClick? = null
 
 
     fun updateData(wordsList: ArrayList<DictionaryWord>) {
@@ -19,10 +20,14 @@ class DictionaryAdapter(
         notifyDataSetChanged()
     }
 
+    fun setOnItemClickListener(listener: OnDictionaryClick) {
+        onItemClickListener = listener
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return DictionaryNormalHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.translated_tile, parent, false))
+                R.layout.translated_tile, parent, false), onItemClickListener)
     }
 
     override fun getItemCount(): Int {

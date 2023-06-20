@@ -16,7 +16,6 @@ import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageButton
@@ -33,13 +32,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.learnwithsubs.R
 import com.learnwithsubs.app.App
 import com.learnwithsubs.databinding.TranslateDialogBinding
+import com.learnwithsubs.feature_video_view.TranslationKeyAPI
 import com.learnwithsubs.feature_video_view.presentation.adapter.DictionaryAdapter
+import com.learnwithsubs.feature_video_view.presentation.adapter.OnDictionaryClick
 import com.learnwithsubs.feature_video_view.presentation.videos.VideoViewViewModel
 import com.learnwithsubs.feature_video_view.presentation.videos.VideoViewViewModelFactory
+import java.util.Locale
 import javax.inject.Inject
 
 
-class VideoViewActivity : AppCompatActivity() {
+class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
     companion object {
         private const val STORAGE_PERMISSION_REQUEST_CODE = 1
     }
@@ -279,15 +281,28 @@ class VideoViewActivity : AppCompatActivity() {
     }
 
     private fun openTranslateDialog() {
+        val inputLang = R.string.english  // TODO взять язык из настроек
+        val outputLang = R.string.russian // TODO взять язык из настроек
+
+        translateDialogBinding.inputLanguage.text = getString(inputLang)
+        translateDialogBinding.outputLanguage.text = getString(outputLang)
+
+        val config = Configuration(resources.configuration)
+        config.setLocale(Locale("en"))
+        val englishResources = createConfigurationContext(config).resources
+
         vm.getWordsFromDictionary(
-            key = "...",
-            lang = "en-ru", // TODO
+            key = TranslationKeyAPI.YANDEX_DICTIONARY_KEY,
+            inputLang = englishResources.getString(inputLang),
+            outputLang = englishResources.getString(outputLang),
             word = vm.textToTranslate
         )
         vm.translationLiveData.observe(this@VideoViewActivity) { transl ->
             if (transl != null) {
-                translateDialogBinding.inputWord.text = vm.textToTranslate
-                translateDialogBinding.outputWord.text = transl
+                translateDialogBinding.inputWord.setText(vm.textToTranslate)
+                translateDialogBinding.outputWord.setText(transl)
+                translateDialogBinding.inputWord.clearFocus()
+                translateDialogBinding.outputWord.clearFocus()
             }
             renameMenu.show()
         }
@@ -299,6 +314,8 @@ class VideoViewActivity : AppCompatActivity() {
     private fun setupTranslateDialog() {
         renameMenu.requestWindowFeature(Window.FEATURE_NO_TITLE)
         renameMenu.setContentView(R.layout.translate_dialog)
+
+        dictionaryAdapter.setOnItemClickListener(this@VideoViewActivity)
 
         renameMenu.setContentView(translateDialogBinding.root)
         translateDialogBinding.dictionaryRecycler.layoutManager = LinearLayoutManager(this)
@@ -355,6 +372,11 @@ class VideoViewActivity : AppCompatActivity() {
                 return
             }
         }
+    }
+
+    override fun onItemClick(similarWord: String, similarWordTranslate: String) {
+        translateDialogBinding.inputWord.setText(similarWord)
+        translateDialogBinding.outputWord.setText(similarWordTranslate)
     }
 
 }

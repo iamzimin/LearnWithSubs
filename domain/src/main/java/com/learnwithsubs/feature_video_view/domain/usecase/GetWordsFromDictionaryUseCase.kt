@@ -14,12 +14,12 @@ class GetWordsFromDictionaryUseCase(
     val dictionaryListLiveData: MutableLiveData<ArrayList<DictionaryWord>> = MutableLiveData()
     val translationLiveData: MutableLiveData<String?> = MutableLiveData()
 
-    fun invoke(key: String, lang: String, word: String): List<DictionaryWord> {
+    fun invoke(key: String, inputLang: Pair<String, String>, outputLang: Pair<String, String>, word: String): List<DictionaryWord> {
         val dictionaryWordList: ArrayList<DictionaryWord> = ArrayList()
 
         translatorRepository.getWordsFromDictionary(
             key = key,
-            lang = lang,
+            lang = "${inputLang.second}-${outputLang.second}",
             word = word
         ).enqueue(object : Callback<DictionaryYandexResponse> {
             override fun onResponse(call: Call<DictionaryYandexResponse>, response: Response<DictionaryYandexResponse>) {
@@ -30,27 +30,6 @@ class GetWordsFromDictionaryUseCase(
 
                     val transl = definition[0].tr[0].text
                     translationLiveData.value = transl
-                    /*
-                    definition?.forEachIndexed {  defID, speechPart ->
-                        speechPart.tr.forEachIndexed { spID, translation ->
-                            val syn: ArrayList<String> = ArrayList()
-                            val mean: ArrayList<String> =  ArrayList()
-                            translation.syn?.forEachIndexed { synonymID, synonym ->
-                                syn.add(synonym.text)
-                            }
-                            translation.mean?.forEachIndexed { meanID, meaning ->
-                                mean.add(meaning.text)
-                            }
-                            if (syn.isNotEmpty() && mean.isNotEmpty()) {
-                                val word = DictionaryWord(spID + 1,
-                                    syn.joinToString(", "),
-                                    mean.joinToString(", "),
-                                    speechPart.pos
-                                )
-                                dictionaryWordList.add(word)
-                            }
-                        }
-                    }*/
 
                     for (defID in definition.indices) {
                         val speechPart = definition[defID]
@@ -72,10 +51,10 @@ class GetWordsFromDictionaryUseCase(
                                     mean.add(meaning.text)
                                 }
                                 dWord = DictionaryWord(
-                                    spID + 1,
-                                    syn.joinToString(", "),
-                                    mean.joinToString(", "),
-                                    speechPart.pos
+                                    id = spID + 1,
+                                    word = syn.joinToString(", "),
+                                    translation = mean.joinToString(", "),
+                                    partSpeech = speechPart.pos,
                                 )
                             }
                             else {

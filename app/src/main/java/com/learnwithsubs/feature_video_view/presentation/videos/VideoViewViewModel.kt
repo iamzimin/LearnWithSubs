@@ -82,8 +82,10 @@ class VideoViewViewModel @Inject constructor(
             String.format("%02d:%02d", currMinutes, currSeconds)
     }
 
-    fun getWordsFromDictionary(key: String, lang: String, word: String): ArrayList<DictionaryWord> {
-        return ArrayList(videoViewUseCases.getWordsFromDictionaryUseCase.invoke(key, lang, word))
+    fun getWordsFromDictionary(key: String, inputLang: String, outputLang: String, word: String): ArrayList<DictionaryWord> {
+        val inputLangPair = Pair(inputLang, inputLang.substring(0, 2).lowercase())
+        val outputLangPair = Pair(outputLang, outputLang.substring(0, 2).lowercase())
+        return ArrayList(videoViewUseCases.getWordsFromDictionaryUseCase.invoke(key, inputLangPair, outputLangPair, word))
     }
 
 }

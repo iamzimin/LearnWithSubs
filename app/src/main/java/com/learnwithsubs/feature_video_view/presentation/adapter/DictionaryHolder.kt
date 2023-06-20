@@ -2,7 +2,6 @@ package com.learnwithsubs.feature_video_view.presentation.adapter
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.learnwithsubs.R
 import com.learnwithsubs.databinding.TranslatedTileBinding
 import com.learnwithsubs.feature_video_view.domain.models.DictionaryWord
 
@@ -13,8 +12,8 @@ abstract class DictionaryHolder(
 }
 
 class DictionaryNormalHolder(
-    itemView: View
-    //private val adapter: DictionaryAdapter
+    itemView: View,
+    private val listener: OnDictionaryClick?
 ) : DictionaryHolder(itemView) {
     private val binding = TranslatedTileBinding.bind(itemView)
 
@@ -25,7 +24,10 @@ class DictionaryNormalHolder(
 
         itemView.setOnClickListener (object : View.OnClickListener {
             override fun onClick(p0: View?) {
-               //
+                listener?.onItemClick(
+                    similarWord = binding.similarWord.text.toString(),
+                    similarWordTranslate = binding.similarWordTranslate.text.toString()
+                )
             }
         })
     }
