@@ -25,11 +25,11 @@
         android:theme="@style/Theme.LearnWithSubs"
         tools:targetApi="31" >
         <activity
-            android:name=".feature_video_view.presentation.VideoViewActivity"
+            android:name=".feature_video_view.VideoViewActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false" />
         <activity
-            android:name=".feature_video_list.presentation.VideoListActivity"
+            android:name=".feature_video_list.VideoListActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

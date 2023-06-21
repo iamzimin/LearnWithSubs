@@ -1,12 +1,12 @@
 package com.learnwithsubs.app
 
 import android.app.Application
-import com.learnwithsubs.feature_video_list.presentation.di.DaggerVideoListAppComponent
-import com.learnwithsubs.feature_video_list.presentation.di.VideoListAppComponent
-import com.learnwithsubs.feature_video_list.presentation.di.VideoListAppModule
-import com.learnwithsubs.feature_video_view.presentation.di.DaggerVideoViewAppComponent
-import com.learnwithsubs.feature_video_view.presentation.di.VideoViewAppComponent
-import com.learnwithsubs.feature_video_view.presentation.di.VideoViewAppModule
+import com.learnwithsubs.feature_video_list.di.DaggerVideoListAppComponent
+import com.learnwithsubs.feature_video_list.di.VideoListAppComponent
+import com.learnwithsubs.feature_video_list.di.VideoListAppModule
+import com.learnwithsubs.feature_video_view.di.DaggerVideoViewAppComponent
+import com.learnwithsubs.feature_video_view.di.VideoViewAppComponent
+import com.learnwithsubs.feature_video_view.di.VideoViewAppModule
 
 class App : Application() {
     lateinit var videoListAppComponent: VideoListAppComponent

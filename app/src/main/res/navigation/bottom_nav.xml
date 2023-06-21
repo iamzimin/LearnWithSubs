@@ -16,7 +16,7 @@
         android:label="@string/list"/>
 
     <fragment android:id="@+id/video_bottom_menu"
-        android:name="com.learnwithsubs.feature_video_list.presentation.VideoListFragment"
+        android:name="com.learnwithsubs.feature_video_list.VideoListFragment"
         tools:layout="@layout/video_list_fragment"
         android:label="@string/video"/>
 

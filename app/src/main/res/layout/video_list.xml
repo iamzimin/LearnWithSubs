@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".feature_video_list.presentation.VideoListActivity">
+    tools:context=".feature_video_list.VideoListActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:layout_width="match_parent"
