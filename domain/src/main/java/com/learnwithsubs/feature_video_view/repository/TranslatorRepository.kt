@@ -1,8 +1,8 @@
 package com.learnwithsubs.feature_video_view.repository
 
+import com.learnwithsubs.feature_video_view.models.TranslatorYandexBody
 import retrofit2.Call
 
 interface TranslatorRepository<T> {
-    fun getWordsFromDictionary(key: String, lang: String, word: String): Call<T>
-    fun getTranslation(word: String): String
+    fun getTranslation(body: TranslatorYandexBody): Call<T>
 }

@@ -9,10 +9,10 @@ data class Definition(
     val text: String,
     val pos: String,
     //val ts: String,
-    val tr: List<Translation>
+    val tr: List<DictionaryTranslation>
 )
 
-data class Translation(
+data class DictionaryTranslation(
     val text: String,
     val pos: String,
     //val gen: String?,

@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.learnwithsubs.feature_video_list.models.Video
-import com.learnwithsubs.feature_video_view.models.DictionaryWord
 import com.learnwithsubs.feature_video_view.models.Subtitle
 import com.learnwithsubs.feature_video_view.usecase.VideoViewUseCases
 import kotlinx.coroutines.Dispatchers
@@ -31,8 +30,11 @@ class VideoViewViewModel @Inject constructor(
 
     private var subtitleList: List<Subtitle> = emptyList()
 
-    val dictionaryListLiveData = videoViewUseCases.getWordsFromDictionaryUseCase.dictionaryListLiveData
-    val translationLiveData = videoViewUseCases.getWordsFromDictionaryUseCase.translationLiveData
+    var nativeLanguage = ""
+    var learnLanguage = ""
+    val dictionarySynonymsLiveData = videoViewUseCases.getWordsFromDictionaryUseCase.dictionaryListLiveData
+    val dictionaryTranslationLiveData = videoViewUseCases.getWordsFromDictionaryUseCase.translationLiveData
+    val translatorTranslationLiveData = videoViewUseCases.getTranslationUseCase.translationLiveData
     var textToTranslate: String = ""
 
 
@@ -82,10 +84,15 @@ class VideoViewViewModel @Inject constructor(
             String.format("%02d:%02d", currMinutes, currSeconds)
     }
 
-    fun getWordsFromDictionary(key: String, inputLang: String, outputLang: String, word: String): ArrayList<DictionaryWord> {
+    fun getWordsFromDictionary(key: String, inputLang: String, outputLang: String, word: String) {
         val inputLangPair = Pair(inputLang, inputLang.substring(0, 2).lowercase())
         val outputLangPair = Pair(outputLang, outputLang.substring(0, 2).lowercase())
-        return ArrayList(videoViewUseCases.getWordsFromDictionaryUseCase.invoke(key, inputLangPair, outputLangPair, word))
+        videoViewUseCases.getWordsFromDictionaryUseCase.invoke(key, inputLangPair, outputLangPair, word)
+    }
+
+    fun getWordsFromTranslator(word: String, learnLanguage: String) {
+        val outputLangPair = Pair(learnLanguage, learnLanguage.substring(0, 2).lowercase())
+        videoViewUseCases.getTranslationUseCase.invoke(word = word, learnLanguage = outputLangPair)
     }
 
 }

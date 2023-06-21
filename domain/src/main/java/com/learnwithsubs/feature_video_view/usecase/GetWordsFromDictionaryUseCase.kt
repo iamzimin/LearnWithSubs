@@ -3,21 +3,32 @@ package com.learnwithsubs.feature_video_view.usecase
 import androidx.lifecycle.MutableLiveData
 import com.learnwithsubs.feature_video_view.models.DictionaryWord
 import com.learnwithsubs.feature_video_view.models.DictionaryYandexResponse
-import com.learnwithsubs.feature_video_view.repository.TranslatorRepository
+import com.learnwithsubs.feature_video_view.repository.DictionaryRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class GetWordsFromDictionaryUseCase(
-    private val yandexTranslatorRepository: TranslatorRepository<DictionaryYandexResponse>
+    private val yandexDictionaryRepository: DictionaryRepository<DictionaryYandexResponse>
 ) {
-    val dictionaryListLiveData: MutableLiveData<ArrayList<DictionaryWord>> = MutableLiveData()
     val translationLiveData: MutableLiveData<String?> = MutableLiveData()
+    val dictionaryListLiveData: MutableLiveData<ArrayList<DictionaryWord>> = MutableLiveData()
 
-    fun invoke(key: String, inputLang: Pair<String, String>, outputLang: Pair<String, String>, word: String): List<DictionaryWord> {
+    fun invoke(key: String, inputLang: Pair<String, String>, outputLang: Pair<String, String>, word: String) {
         val dictionaryWordList: ArrayList<DictionaryWord> = ArrayList()
 
-        yandexTranslatorRepository.getWordsFromDictionary(
+        yandex(key = key, inputLang = inputLang, outputLang = outputLang, word = word, dictionaryWordList = dictionaryWordList)
+    }
+
+
+    private fun yandex(
+        key: String,
+        inputLang: Pair<String, String>,
+        outputLang: Pair<String, String>,
+        word: String,
+        dictionaryWordList: ArrayList<DictionaryWord>
+    ) {
+        yandexDictionaryRepository.getWordsFromDictionary(
             key = key,
             lang = "${inputLang.second}-${outputLang.second}",
             word = word
@@ -25,8 +36,11 @@ class GetWordsFromDictionaryUseCase(
             override fun onResponse(call: Call<DictionaryYandexResponse>, response: Response<DictionaryYandexResponse>) {
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
-                    val definition = apiResponse?.def ?: return //TODO
-                    if (definition.isEmpty()) return
+                    val definition = apiResponse?.def
+                    if (definition.isNullOrEmpty()){
+                        translationLiveData.value = null
+                        return
+                    }
 
                     val transl = definition[0].tr[0].text
                     translationLiveData.value = transl
@@ -80,6 +94,5 @@ class GetWordsFromDictionaryUseCase(
                 val tests = 1
             }
         })
-        return dictionaryWordList
     }
 }

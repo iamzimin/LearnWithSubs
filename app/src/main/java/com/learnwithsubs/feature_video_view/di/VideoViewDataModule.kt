@@ -3,11 +3,14 @@ package com.learnwithsubs.feature_video_view.di
 import android.content.Context
 import androidx.room.Room
 import com.learnwithsubs.feature_video_list.storage.VideoDatabase
-import com.learnwithsubs.feature_video_view.repository.YandexTranslatorRepositoryImpl
+import com.learnwithsubs.feature_video_view.repository.YandexDictionaryRepositoryImpl
 import com.learnwithsubs.feature_video_view.repository.VideoViewRepositoryImpl
 import com.learnwithsubs.feature_video_view.models.DictionaryYandexResponse
+import com.learnwithsubs.feature_video_view.models.TranslatorYandexResponse
+import com.learnwithsubs.feature_video_view.repository.DictionaryRepository
 import com.learnwithsubs.feature_video_view.repository.TranslatorRepository
 import com.learnwithsubs.feature_video_view.repository.VideoViewRepository
+import com.learnwithsubs.feature_video_view.repository.YandexTranslatorRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -31,7 +34,7 @@ class VideoViewDataModule {
     @Provides
     @Singleton
     @Named("YandexDictionary")
-    fun provideYandexTranslatorRetrofit(): Retrofit {
+    fun provideYandexDictionaryRetrofit(): Retrofit {
         /*
         val gson: Gson = GsonBuilder()
             .setLenient()
@@ -49,7 +52,18 @@ class VideoViewDataModule {
 
     @Provides
     @Singleton
-    fun provideGoogleTranslatorRetrofit(): Retrofit {
+    @Named("YandexTranslator")
+    fun provideYandexTranslatorRetrofit(): Retrofit {
+        val BASE_URL = "https://translate.api.cloud.yandex.net/"
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideGoogleDictionaryRetrofit(): Retrofit {
         val BASE_URL = "https://????/"
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -65,9 +79,17 @@ class VideoViewDataModule {
 
     @Provides
     @Singleton
-    fun provideYandexTranslatorRepository(
+    fun provideYandexDictionaryRepository(
         @Named("YandexDictionary") retrofit: Retrofit
-    ): TranslatorRepository<DictionaryYandexResponse> {
+    ): DictionaryRepository<DictionaryYandexResponse> {
+        return YandexDictionaryRepositoryImpl(retrofit)
+    }
+
+    @Provides
+    @Singleton
+    fun provideYandexTranslatorRepository(
+        @Named("YandexTranslator") retrofit: Retrofit
+    ): TranslatorRepository<TranslatorYandexResponse> {
         return YandexTranslatorRepositoryImpl(retrofit)
     }
 }

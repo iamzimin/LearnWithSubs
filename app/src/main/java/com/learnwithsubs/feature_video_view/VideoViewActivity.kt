@@ -65,6 +65,13 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
         renameMenu = Dialog(this@VideoViewActivity)
         setupTranslateDialog()
 
+        // Set VM
+        (applicationContext as App).videoViewAppComponent.inject(this)
+        vm = ViewModelProvider(this, vmFactory)[VideoViewViewModel::class.java]
+        vm.currentVideo.value = intent.getParcelableExtra("videoData")
+        getLanguageFromSettings()
+
+
         // Get view by id
         videoView = findViewById(R.id.videoView)
         val videoControls = findViewById<ConstraintLayout>(R.id.video_controls)
@@ -84,12 +91,6 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
 
         val videoTime = findViewById<TextView>(R.id.video_time)
         val videoPlaySeekBar = findViewById<SeekBar>(R.id.video_play_status)
-
-
-        // Set VM
-        (applicationContext as App).videoViewAppComponent.inject(this)
-        vm = ViewModelProvider(this, vmFactory)[VideoViewViewModel::class.java]
-        vm.currentVideo.value = intent.getParcelableExtra("videoData")
 
         // Set VideoView
         val mediaController = CustomMediaController(this)
@@ -272,42 +273,65 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
             }
         }
 
-
         // Exit
         exitVideoView.setOnClickListener {
             finish()
         }
+
+
+        // Translate
+        vm.dictionaryTranslationLiveData.observe(this@VideoViewActivity) { transl ->
+            if (transl != null) {
+                translateDialogBinding.outputWord.setText(transl)
+                translateDialogBinding.outputWord.clearFocus()
+            } else {
+                vm.getWordsFromTranslator(
+                    word = vm.textToTranslate,
+                    learnLanguage = vm.learnLanguage
+                )
+            }
+        }
+        vm.dictionarySynonymsLiveData.observe(this@VideoViewActivity) { dictList ->
+            dictionaryAdapter.updateData(wordsList = dictList)
+        }
+        vm.translatorTranslationLiveData.observe(this@VideoViewActivity) { transl ->
+            translateDialogBinding.outputWord.setText(transl)
+            translateDialogBinding.outputWord.clearFocus()
+        }
     }
 
     private fun openTranslateDialog() {
-        val inputLang = R.string.english  // TODO взять язык из настроек
-        val outputLang = R.string.russian // TODO взять язык из настроек
+        vm.getWordsFromDictionary(
+            key = TranslationKeyAPI.YANDEX_DICTIONARY_KEY,
+            inputLang = vm.nativeLanguage,
+            outputLang = vm.learnLanguage,
+            word = vm.textToTranslate
+        )
 
-        translateDialogBinding.inputLanguage.text = getString(inputLang)
-        translateDialogBinding.outputLanguage.text = getString(outputLang)
+        translateDialogBinding.inputWord.setText(vm.textToTranslate)
+        translateDialogBinding.inputWord.clearFocus()
+
+        renameMenu.setOnDismissListener {
+            translateDialogBinding.inputWord.setText("")
+            translateDialogBinding.outputWord.setText("")
+            dictionaryAdapter.updateData(wordsList = ArrayList())
+        }
+        renameMenu.show()
+    }
+
+    private fun getLanguageFromSettings() {
+        val nativeLanguage = R.string.english  // TODO взять язык из настроек
+        val learnLanguage = R.string.russian // TODO взять язык из настроек
+
+        translateDialogBinding.inputLanguage.text = getString(nativeLanguage)
+        translateDialogBinding.outputLanguage.text = getString(learnLanguage)
 
         val config = Configuration(resources.configuration)
         config.setLocale(Locale("en"))
         val englishResources = createConfigurationContext(config).resources
 
-        vm.getWordsFromDictionary(
-            key = TranslationKeyAPI.YANDEX_DICTIONARY_KEY,
-            inputLang = englishResources.getString(inputLang),
-            outputLang = englishResources.getString(outputLang),
-            word = vm.textToTranslate
-        )
-        vm.translationLiveData.observe(this@VideoViewActivity) { transl ->
-            if (transl != null) {
-                translateDialogBinding.inputWord.setText(vm.textToTranslate)
-                translateDialogBinding.outputWord.setText(transl)
-                translateDialogBinding.inputWord.clearFocus()
-                translateDialogBinding.outputWord.clearFocus()
-            }
-            renameMenu.show()
-        }
-        vm.dictionaryListLiveData.observe(this@VideoViewActivity) { dictList ->
-            dictionaryAdapter.updateData(dictList)
-        }
+        vm.nativeLanguage = englishResources.getString(nativeLanguage)
+        vm.learnLanguage = englishResources.getString(learnLanguage)
     }
 
     private fun setupTranslateDialog() {
@@ -323,7 +347,6 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
         translateDialogBinding.dictionaryRecycler.addItemDecoration(itemDecoration)
 
         if (renameMenu.window != null) {
-            //renameMenu.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             renameMenu.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
     }
