@@ -2,7 +2,8 @@ package com.learnwithsubs.feature_video_view.adapter
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.learnwithsubs.databinding.TranslatedTileBinding
+import com.learnwithsubs.databinding.TranslatePartspeechTileBinding
+import com.learnwithsubs.databinding.TranslateWordTileBinding
 import com.learnwithsubs.feature_video_view.models.DictionaryWord
 
 abstract class DictionaryHolder(
@@ -15,7 +16,7 @@ class DictionaryNormalHolder(
     itemView: View,
     private val listener: OnDictionaryClick?
 ) : DictionaryHolder(itemView) {
-    private val binding = TranslatedTileBinding.bind(itemView)
+    private val binding = TranslateWordTileBinding.bind(itemView)
 
     override fun bind(word: DictionaryWord) {
         binding.wordId.text = word.id.toString()
@@ -30,5 +31,15 @@ class DictionaryNormalHolder(
                 )
             }
         })
+    }
+}
+
+class DictionaryPartSpeechHolder(
+    itemView: View
+) : DictionaryHolder(itemView) {
+    private val binding = TranslatePartspeechTileBinding.bind(itemView)
+
+    override fun bind(word: DictionaryWord) {
+        binding.partSpeech.text = word.partSpeech
     }
 }

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.learnwithsubs.R
 import com.learnwithsubs.feature_video_view.models.DictionaryWord
+import com.learnwithsubs.feature_video_view.models.DictionaryType
 
 class DictionaryAdapter(
     wordsInit: ArrayList<DictionaryWord>
@@ -25,9 +26,21 @@ class DictionaryAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return DictionaryNormalHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.translated_tile, parent, false), onItemClickListener)
+        return when (viewType) {
+            DictionaryType.WORD.value -> DictionaryNormalHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.translate_word_tile, parent, false), onItemClickListener)
+
+            DictionaryType.PART_SPEECH.value -> DictionaryPartSpeechHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.translate_partspeech_tile, parent, false))
+
+            else -> { //TODO
+                DictionaryPartSpeechHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.translate_partspeech_tile, parent, false))
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -35,21 +48,27 @@ class DictionaryAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val loadingHolder = holder as DictionaryNormalHolder
-        loadingHolder.bind(wordsList[position])
+        val word = wordsList[position]
+
+        when (word.type) {
+            DictionaryType.WORD -> {
+                val normalHolder = holder as DictionaryNormalHolder
+                normalHolder.bind(wordsList[position])
+            }
+
+            DictionaryType.PART_SPEECH -> {
+                val loadingHolder = holder as DictionaryPartSpeechHolder
+                loadingHolder.bind(wordsList[position])
+            }
+        }
     }
 
-//    override fun getItemViewType(position: Int): Int {
-//        return wordsList[position].videoStatus.value
-//    }
+    override fun getItemViewType(position: Int): Int {
+        return wordsList[position].type.value
+    }
 
     class RecyclerViewItemDecoration(private val spaceSize: Int) : RecyclerView.ItemDecoration() {
-        override fun getItemOffsets(
-            outRect: Rect,
-            view: View,
-            parent: RecyclerView,
-            state: RecyclerView.State
-        ) {
+        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
             outRect.left = spaceSize
             outRect.right = spaceSize
             outRect.bottom = spaceSize

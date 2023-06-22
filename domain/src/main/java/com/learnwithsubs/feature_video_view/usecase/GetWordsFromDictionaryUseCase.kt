@@ -1,14 +1,17 @@
 package com.learnwithsubs.feature_video_view.usecase
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.learnwithsubs.feature_video_view.models.DictionaryWord
 import com.learnwithsubs.feature_video_view.models.DictionaryYandexResponse
+import com.learnwithsubs.feature_video_view.models.DictionaryType
 import com.learnwithsubs.feature_video_view.repository.DictionaryRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class GetWordsFromDictionaryUseCase(
+    private val context: Context,
     private val yandexDictionaryRepository: DictionaryRepository<DictionaryYandexResponse>
 ) {
     val translationLiveData: MutableLiveData<String?> = MutableLiveData()
@@ -48,6 +51,8 @@ class GetWordsFromDictionaryUseCase(
                     for (defID in definition.indices) {
                         val speechPart = definition[defID]
                         val translations = speechPart.tr
+                        val pSpeech = DictionaryWord(id = 0, word = "", translation = "", partSpeech = speechPart.pos, type = DictionaryType.PART_SPEECH)
+                        dictionaryWordList.add(pSpeech)
 
                         for (spID in translations.indices) {
                             val translation = translations[spID]
@@ -70,6 +75,7 @@ class GetWordsFromDictionaryUseCase(
                                     word = mean.joinToString(", "),
                                     translation = syn.joinToString(", "),
                                     partSpeech = speechPart.pos,
+                                    type = DictionaryType.WORD
                                 )
                             }
                             else {
@@ -77,7 +83,8 @@ class GetWordsFromDictionaryUseCase(
                                     id = spID + 1,
                                     word = translation.mean?.get(0)?.text ?: translations[0].text,
                                     translation = translation.text,
-                                    partSpeech = speechPart.pos
+                                    partSpeech = speechPart.pos,
+                                    type = DictionaryType.WORD
                                 )
                             }
                             dictionaryWordList.add(dWord)

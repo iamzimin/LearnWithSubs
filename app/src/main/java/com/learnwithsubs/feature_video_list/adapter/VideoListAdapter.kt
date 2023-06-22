@@ -131,12 +131,7 @@ class VideoListAdapter(
     }
 
     class RecyclerViewItemDecoration(private val spaceSize: Int) : RecyclerView.ItemDecoration() {
-        override fun getItemOffsets(
-            outRect: Rect,
-            view: View,
-            parent: RecyclerView,
-            state: RecyclerView.State
-        ) {
+        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
             outRect.left = spaceSize
             outRect.right = spaceSize
             outRect.bottom = spaceSize

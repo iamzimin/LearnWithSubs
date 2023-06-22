@@ -285,14 +285,12 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
                 translateDialogBinding.outputWord.setText(transl)
                 translateDialogBinding.outputWord.clearFocus()
             } else {
-                vm.getWordsFromTranslator(
-                    word = vm.textToTranslate,
-                    learnLanguage = vm.learnLanguage
-                )
+                vm.getWordsFromTranslator(word = vm.textToTranslate, learnLanguage = vm.learnLanguage)
             }
         }
         vm.dictionarySynonymsLiveData.observe(this@VideoViewActivity) { dictList ->
-            dictionaryAdapter.updateData(wordsList = dictList)
+            //dictionaryAdapter.updateData(wordsList = dictList)
+            dictList?.let { dictionaryAdapter.updateData(wordsList = it) }
         }
         vm.translatorTranslationLiveData.observe(this@VideoViewActivity) { transl ->
             translateDialogBinding.outputWord.setText(transl)
@@ -343,7 +341,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
         renameMenu.setContentView(translateDialogBinding.root)
         translateDialogBinding.dictionaryRecycler.layoutManager = LinearLayoutManager(this)
         translateDialogBinding.dictionaryRecycler.adapter = dictionaryAdapter
-        val itemDecoration = DictionaryAdapter.RecyclerViewItemDecoration(16)
+        val itemDecoration = DictionaryAdapter.RecyclerViewItemDecoration(10)
         translateDialogBinding.dictionaryRecycler.addItemDecoration(itemDecoration)
 
         if (renameMenu.window != null) {

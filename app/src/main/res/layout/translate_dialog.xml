@@ -1,190 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/rounded"
-    android:backgroundTint="?attr/pop_up_menu_background"
-    android:paddingBottom="20dp">
+    android:orientation="vertical">
+
+
+    <LinearLayout
+       android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/translate_dialog_background"
+        android:paddingBottom="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/input_language"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Russian"
+                        android:textColor="?attr/text_color"
+                        android:textSize="@dimen/language_in_translate_dialog"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/language_arrow"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/language_arrow"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="45dp"
+                        android:layout_height="30dp"
+                        android:clickable="false"
+                        android:focusable="false"
+
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="5dp"
+                        android:padding="4dp"
+                        android:scaleType="centerInside"
+
+                        app:srcCompat="@drawable/right_arrow"
+                        app:tint="?attr/text_color"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+
+                    <TextView
+                        android:id="@+id/output_language"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="English"
+                        android:textSize="@dimen/language_in_translate_dialog"
+                        android:textColor="?attr/text_color"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/language_arrow"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/input_word"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="10dp"
+                    android:maxHeight="100dp"
+                    android:paddingVertical="5dp"
+                    android:background="@android:color/transparent"
+                    android:layout_gravity="center"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/audio_input_word"
+                    android:text="Input word"
+                    android:textSize="@dimen/word_to_translate_in_translate_dialog"
+                    android:textColor="?attr/text_color" />
+
+                <ImageButton
+                    android:id="@+id/audio_input_word"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+
+                    android:padding="5dp"
+                    android:scaleType="centerInside"
+
+                    app:srcCompat="@drawable/sound_max"
+                    app:tint="?attr/text_color" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:orientation="vertical"
+                android:background="@color/background_dark">
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/output_word"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="10dp"
+                    android:maxHeight="100dp"
+                    android:paddingVertical="5dp"
+                    android:background="@android:color/transparent"
+                    android:layout_toStartOf="@id/audio_output_word"
+                    android:layout_gravity="center"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true"
+                    android:text="Output word"
+                    android:textSize="@dimen/word_to_translate_in_translate_dialog"
+                    android:textColor="?attr/text_color" />
+
+                <ImageButton
+                    android:id="@+id/audio_output_word"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+
+                    android:padding="5dp"
+                    android:scaleType="centerInside"
+
+                    app:srcCompat="@drawable/sound_max"
+                    app:tint="?attr/text_color" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/dictionary_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginHorizontal="15dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/translator_type"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:background="@color/background_dark">
-
-                <TextView
-                    android:id="@+id/input_language"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Russian"
-                    android:textColor="?attr/text_color"
-                    android:textSize="@dimen/language_in_translate_dialog"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/language_arrow"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-<!--                <ImageButton-->
-<!--                    android:id="@+id/switch_language"-->
-<!--                    style="@style/Widget.AppCompat.Button.Borderless"-->
-<!--                    android:layout_width="50dp"-->
-<!--                    android:layout_height="30dp"-->
-
-<!--                    android:layout_marginTop="0dp"-->
-<!--                    android:layout_marginEnd="5dp"-->
-<!--                    android:padding="0dp"-->
-<!--                    android:scaleType="centerInside"-->
-
-<!--                    app:srcCompat="@drawable/switch_horizontal"-->
-<!--                    app:tint="?attr/text_color"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"/>-->
-                <ImageView
-                    android:id="@+id/language_arrow"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="45dp"
-                    android:layout_height="30dp"
-                    android:clickable="false"
-                    android:focusable="false"
-
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="5dp"
-                    android:padding="3dp"
-                    android:scaleType="centerInside"
-
-                    app:srcCompat="@drawable/right_arrow"
-                    app:tint="?attr/text_color"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-
-                <TextView
-                    android:id="@+id/output_language"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="English"
-                    android:textSize="@dimen/language_in_translate_dialog"
-                    android:textColor="?attr/text_color"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/language_arrow"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/input_word"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:layout_gravity="center"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true"
-                android:text="Input word"
-                android:textSize="@dimen/word_to_translate_in_translate_dialog"
-                android:textColor="?attr/text_color" />
-
-            <ImageButton
-                android:id="@+id/audio_input_word"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="50dp"
-                android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-
-                android:padding="0dp"
-                android:scaleType="centerInside"
-
-                app:srcCompat="@drawable/sound_max"
-                app:tint="?attr/text_color"/>
-
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="5dp"
-            android:orientation="vertical"
-            android:background="@color/background_dark">
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/output_word"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:layout_gravity="center"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true"
-                android:text="Output word"
-                android:textSize="@dimen/word_to_translate_in_translate_dialog"
-                android:textColor="?attr/text_color" />
-
-            <ImageButton
-                android:id="@+id/audio_output_word"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="50dp"
-                android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-
-                android:padding="0dp"
-                android:scaleType="centerInside"
-
-                app:srcCompat="@drawable/sound_max"
-                app:tint="?attr/text_color"/>
-
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:orientation="vertical"
-            android:paddingTop="5dp">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/dictionary_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-
-        </LinearLayout>
-
-
+            android:textColor="?attr/text_color"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="10dp"
+            android:textSize="@dimen/word_to_translate_in_translate_dialog"
+            android:layout_gravity="end"
+            android:text="Yandex Translator"/>
     </LinearLayout>
+
 
 </LinearLayout>
