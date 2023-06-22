@@ -289,8 +289,10 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
             }
         }
         vm.dictionarySynonymsLiveData.observe(this@VideoViewActivity) { dictList ->
-            //dictionaryAdapter.updateData(wordsList = dictList)
-            dictList?.let { dictionaryAdapter.updateData(wordsList = it) }
+            if (dictList != null) {
+                val updatedPartSpeech = vm.changePartSpeech(context = this@VideoViewActivity.applicationContext, list = dictList)
+                dictionaryAdapter.updateData(wordsList = updatedPartSpeech)
+            }
         }
         vm.translatorTranslationLiveData.observe(this@VideoViewActivity) { transl ->
             translateDialogBinding.outputWord.setText(transl)

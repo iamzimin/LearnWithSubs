@@ -81,7 +81,7 @@ class GetWordsFromDictionaryUseCase(
                             else {
                                 dWord = DictionaryWord(
                                     id = spID + 1,
-                                    word = translation.mean?.get(0)?.text ?: translations[0].text,
+                                    word = translation.mean?.get(0)?.text ?: definition[defID].text,
                                     translation = translation.text,
                                     partSpeech = speechPart.pos,
                                     type = DictionaryType.WORD

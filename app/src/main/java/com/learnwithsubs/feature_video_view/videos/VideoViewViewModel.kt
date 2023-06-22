@@ -1,9 +1,12 @@
 package com.learnwithsubs.feature_video_view.videos
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.learnwithsubs.R
 import com.learnwithsubs.feature_video_list.models.Video
+import com.learnwithsubs.feature_video_view.models.DictionaryWord
 import com.learnwithsubs.feature_video_view.models.Subtitle
 import com.learnwithsubs.feature_video_view.usecase.VideoViewUseCases
 import kotlinx.coroutines.Dispatchers
@@ -93,6 +96,21 @@ class VideoViewViewModel @Inject constructor(
     fun getWordsFromTranslator(word: String, learnLanguage: String) {
         val outputLangPair = Pair(learnLanguage, learnLanguage.substring(0, 2).lowercase())
         videoViewUseCases.getTranslationUseCase.invoke(word = word, learnLanguage = outputLangPair)
+    }
+
+    fun changePartSpeech(context: Context, list: ArrayList<DictionaryWord>): ArrayList<DictionaryWord> {
+        for (elem in list) {
+            when (elem.partSpeech) {
+                "noun" -> elem.partSpeech = context.getString(R.string.noun)
+                "adjective" -> elem.partSpeech = context.getString(R.string.adjective)
+                "adverb" -> elem.partSpeech = context.getString(R.string.adverb)
+                "participle" -> elem.partSpeech = context.getString(R.string.participle)
+                "predicative" -> elem.partSpeech = context.getString(R.string.predicative)
+
+                else -> {}
+            }
+        }
+        return list
     }
 
 }
