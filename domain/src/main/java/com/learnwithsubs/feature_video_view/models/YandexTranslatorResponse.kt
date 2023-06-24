@@ -1,7 +1,7 @@
 package com.learnwithsubs.feature_video_view.models
 
 
-data class TranslatorYandexResponse(
+data class YandexTranslatorResponse(
     val translations: List<TranslatorTranslation>
 )
 

@@ -343,6 +343,8 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
         renameMenu.setContentView(translateDialogBinding.root)
         translateDialogBinding.dictionaryRecycler.layoutManager = LinearLayoutManager(this)
         translateDialogBinding.dictionaryRecycler.adapter = dictionaryAdapter
+        translateDialogBinding.translatorType.text = "Yandex Translator" // TODO select the type of translator from the settings
+
         val itemDecoration = DictionaryAdapter.RecyclerViewItemDecoration(10)
         translateDialogBinding.dictionaryRecycler.addItemDecoration(itemDecoration)
 

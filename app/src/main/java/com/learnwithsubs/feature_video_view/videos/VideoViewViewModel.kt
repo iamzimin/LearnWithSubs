@@ -95,7 +95,9 @@ class VideoViewViewModel @Inject constructor(
 
     fun getWordsFromTranslator(word: String, learnLanguage: String) {
         val outputLangPair = Pair(learnLanguage, learnLanguage.substring(0, 2).lowercase())
-        videoViewUseCases.getTranslationUseCase.invoke(word = word, learnLanguage = outputLangPair)
+        viewModelScope.launch {
+            videoViewUseCases.getTranslationUseCase.invoke(word = word, learnLanguage = outputLangPair)
+        }
     }
 
     fun changePartSpeech(context: Context, list: ArrayList<DictionaryWord>): ArrayList<DictionaryWord> {

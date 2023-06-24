@@ -6,7 +6,7 @@ import com.learnwithsubs.feature_video_list.storage.VideoDatabase
 import com.learnwithsubs.feature_video_view.repository.YandexDictionaryRepositoryImpl
 import com.learnwithsubs.feature_video_view.repository.VideoViewRepositoryImpl
 import com.learnwithsubs.feature_video_view.models.DictionaryYandexResponse
-import com.learnwithsubs.feature_video_view.models.TranslatorYandexResponse
+import com.learnwithsubs.feature_video_view.models.YandexTranslatorResponse
 import com.learnwithsubs.feature_video_view.repository.DictionaryRepository
 import com.learnwithsubs.feature_video_view.repository.TranslatorRepository
 import com.learnwithsubs.feature_video_view.repository.VideoViewRepository
@@ -63,6 +63,17 @@ class VideoViewDataModule {
 
     @Provides
     @Singleton
+    @Named("YandexIAmToken")
+    fun provideYandexIAmTokenRetrofit(): Retrofit {
+        val BASE_URL = "https://iam.api.cloud.yandex.net/"
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    @Provides
+    @Singleton
     fun provideGoogleDictionaryRetrofit(): Retrofit {
         val BASE_URL = "https://????/"
         return Retrofit.Builder()
@@ -88,8 +99,9 @@ class VideoViewDataModule {
     @Provides
     @Singleton
     fun provideYandexTranslatorRepository(
-        @Named("YandexTranslator") retrofit: Retrofit
-    ): TranslatorRepository<TranslatorYandexResponse> {
-        return YandexTranslatorRepositoryImpl(retrofit)
+        @Named("YandexTranslator") retrofitTranslator: Retrofit,
+        @Named("YandexIAmToken") retrofitIAmToken: Retrofit
+    ): TranslatorRepository<YandexTranslatorResponse> {
+        return YandexTranslatorRepositoryImpl(retrofitTranslator, retrofitIAmToken)
     }
 }

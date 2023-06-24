@@ -12,7 +12,7 @@
     <LinearLayout
        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/translate_dialog_background"
         android:paddingBottom="20dp">
 
@@ -38,7 +38,7 @@
                         android:id="@+id/input_language"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Russian"
+                        android:text="Language"
                         android:textColor="?attr/text_color"
                         android:textSize="@dimen/language_in_translate_dialog"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -70,7 +70,7 @@
                         android:id="@+id/output_language"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="English"
+                        android:text="Language"
                         android:textSize="@dimen/language_in_translate_dialog"
                         android:textColor="?attr/text_color"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -91,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingEnd="10dp"
-                    android:maxHeight="100dp"
+                    android:maxHeight="80dp"
                     android:paddingVertical="5dp"
                     android:background="@android:color/transparent"
                     android:layout_gravity="center"
@@ -136,7 +136,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingEnd="10dp"
-                    android:maxHeight="100dp"
+                    android:maxHeight="80dp"
                     android:paddingVertical="5dp"
                     android:background="@android:color/transparent"
                     android:layout_toStartOf="@id/audio_output_word"
@@ -164,8 +164,9 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/layout_test"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="180dp"
                 android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -192,7 +193,7 @@
             android:layout_marginTop="10dp"
             android:textSize="@dimen/word_to_translate_in_translate_dialog"
             android:layout_gravity="end"
-            android:text="Yandex Translator"/>
+            android:text="... Translator"/>
     </LinearLayout>
 
 
