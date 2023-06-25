@@ -3,7 +3,7 @@ package com.learnwithsubs.feature_video_view.usecase
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.learnwithsubs.feature_video_view.models.DictionaryWord
-import com.learnwithsubs.feature_video_view.models.DictionaryYandexResponse
+import com.learnwithsubs.feature_video_view.models.server.DictionaryYandexResponse
 import com.learnwithsubs.feature_video_view.models.DictionaryType
 import com.learnwithsubs.feature_video_view.repository.DictionaryRepository
 import retrofit2.Call
@@ -11,7 +11,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class GetWordsFromDictionaryUseCase(
-    private val context: Context,
     private val yandexDictionaryRepository: DictionaryRepository<DictionaryYandexResponse>
 ) {
     val translationLiveData: MutableLiveData<String?> = MutableLiveData()

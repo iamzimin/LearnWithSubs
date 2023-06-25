@@ -1,9 +1,10 @@
 package com.learnwithsubs.feature_video_view.di
 
 import android.content.Context
-import com.learnwithsubs.feature_video_view.models.DictionaryYandexResponse
-import com.learnwithsubs.feature_video_view.models.YandexTranslatorResponse
+import com.learnwithsubs.feature_video_view.models.server.DictionaryYandexResponse
+import com.learnwithsubs.feature_video_view.models.server.YandexTranslatorResponse
 import com.learnwithsubs.feature_video_view.repository.DictionaryRepository
+import com.learnwithsubs.feature_video_view.repository.ServerTimeService
 import com.learnwithsubs.feature_video_view.repository.TranslatorRepository
 import com.learnwithsubs.feature_video_view.repository.VideoViewRepository
 import com.learnwithsubs.feature_video_view.usecase.GetTranslationUseCase
@@ -25,12 +26,13 @@ class VideoViewDomainModule {
         videoViewRepository: VideoViewRepository,
         yandexDictionaryRepository: DictionaryRepository<DictionaryYandexResponse>,
         yandexTranslationRepository: TranslatorRepository<YandexTranslatorResponse>,
+        serverTimeService: ServerTimeService,
     ): VideoViewUseCases {
         return VideoViewUseCases(
             getVideoSubtitlesUseCase = GetVideoSubtitlesUseCase(videoViewRepository),
             updateVideoUseCase = UpdateVideoUseCase(videoViewRepository),
-            getWordsFromDictionaryUseCase = GetWordsFromDictionaryUseCase(context, yandexDictionaryRepository),
-            getTranslationUseCase = GetTranslationUseCase(yandexTranslationRepository),
+            getWordsFromDictionaryUseCase = GetWordsFromDictionaryUseCase(yandexDictionaryRepository),
+            getTranslationUseCase = GetTranslationUseCase(context, yandexTranslationRepository, serverTimeService),
         )
     }
 }

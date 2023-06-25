@@ -1,9 +1,9 @@
 package com.learnwithsubs.feature_video_view.repository
 
-import com.learnwithsubs.feature_video_view.models.YandexIAmBodyRequest
-import com.learnwithsubs.feature_video_view.models.YandexIAmBodyResponse
-import com.learnwithsubs.feature_video_view.models.YandexTranslatorBody
-import com.learnwithsubs.feature_video_view.models.YandexTranslatorResponse
+import com.learnwithsubs.feature_video_view.models.server.YandexIAmBodyRequest
+import com.learnwithsubs.feature_video_view.models.server.YandexIAmBodyResponse
+import com.learnwithsubs.feature_video_view.models.server.YandexTranslatorBody
+import com.learnwithsubs.feature_video_view.models.server.YandexTranslatorResponse
 import com.learnwithsubs.feature_video_view.service.YandexTranslatorService
 import retrofit2.Call
 import retrofit2.Retrofit

@@ -5,9 +5,11 @@ import androidx.room.Room
 import com.learnwithsubs.feature_video_list.storage.VideoDatabase
 import com.learnwithsubs.feature_video_view.repository.YandexDictionaryRepositoryImpl
 import com.learnwithsubs.feature_video_view.repository.VideoViewRepositoryImpl
-import com.learnwithsubs.feature_video_view.models.DictionaryYandexResponse
-import com.learnwithsubs.feature_video_view.models.YandexTranslatorResponse
+import com.learnwithsubs.feature_video_view.models.server.DictionaryYandexResponse
+import com.learnwithsubs.feature_video_view.models.server.YandexTranslatorResponse
 import com.learnwithsubs.feature_video_view.repository.DictionaryRepository
+import com.learnwithsubs.feature_video_view.repository.ServerTimeService
+import com.learnwithsubs.feature_video_view.repository.ServerTimeServiceImpl
 import com.learnwithsubs.feature_video_view.repository.TranslatorRepository
 import com.learnwithsubs.feature_video_view.repository.VideoViewRepository
 import com.learnwithsubs.feature_video_view.repository.YandexTranslatorRepositoryImpl
@@ -15,6 +17,7 @@ import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -84,6 +87,17 @@ class VideoViewDataModule {
 
     @Provides
     @Singleton
+    @Named("ServerTime")
+    fun provideServerTimeRetrofit(): Retrofit {
+        val BASE_URL = "https://timeapi.io/api/"
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    @Provides
+    @Singleton
     fun provideVideoRepository(db: VideoDatabase, context: Context): VideoViewRepository {
         return VideoViewRepositoryImpl(db.videoViewDao, context)
     }
@@ -103,5 +117,13 @@ class VideoViewDataModule {
         @Named("YandexIAmToken") retrofitIAmToken: Retrofit
     ): TranslatorRepository<YandexTranslatorResponse> {
         return YandexTranslatorRepositoryImpl(retrofitTranslator, retrofitIAmToken)
+    }
+
+    @Provides
+    @Singleton
+    fun provideServerTimeService(
+        @Named("ServerTime") serverTime: Retrofit
+    ): ServerTimeService {
+        return ServerTimeServiceImpl(serverTime)
     }
 }

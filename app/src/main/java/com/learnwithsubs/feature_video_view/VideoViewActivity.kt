@@ -129,7 +129,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
                     getString(R.string.translate) -> {
                         val selectedText = subtitleTextView.text.substring(subtitleTextView.selectionStart, subtitleTextView.selectionEnd)
                         vm.textToTranslate = selectedText
-                        Toast.makeText(this@VideoViewActivity, selectedText, Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(this@VideoViewActivity, selectedText, Toast.LENGTH_SHORT).show()
                         openTranslateDialog()
                         return true
                     }

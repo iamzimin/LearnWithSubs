@@ -1,6 +1,6 @@
 package com.learnwithsubs.feature_video_view.service
 
-import com.learnwithsubs.feature_video_view.models.DictionaryYandexResponse
+import com.learnwithsubs.feature_video_view.models.server.DictionaryYandexResponse
 import retrofit2.Call
 import retrofit2.http.POST
 import retrofit2.http.Query

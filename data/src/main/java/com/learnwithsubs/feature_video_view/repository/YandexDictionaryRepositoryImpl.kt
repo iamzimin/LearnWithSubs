@@ -1,6 +1,6 @@
 package com.learnwithsubs.feature_video_view.repository
 
-import com.learnwithsubs.feature_video_view.models.DictionaryYandexResponse
+import com.learnwithsubs.feature_video_view.models.server.DictionaryYandexResponse
 import com.learnwithsubs.feature_video_view.service.YandexDictionaryService
 import retrofit2.Call
 import retrofit2.Retrofit
