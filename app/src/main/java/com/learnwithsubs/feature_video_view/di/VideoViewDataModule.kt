@@ -6,18 +6,18 @@ import com.learnwithsubs.feature_video_list.storage.VideoDatabase
 import com.learnwithsubs.feature_video_view.repository.YandexDictionaryRepositoryImpl
 import com.learnwithsubs.feature_video_view.repository.VideoViewRepositoryImpl
 import com.learnwithsubs.feature_video_view.models.server.DictionaryYandexResponse
-import com.learnwithsubs.feature_video_view.models.server.YandexTranslatorResponse
 import com.learnwithsubs.feature_video_view.repository.DictionaryRepository
-import com.learnwithsubs.feature_video_view.repository.ServerTimeService
+import com.learnwithsubs.feature_video_view.service.ServerTimeService
 import com.learnwithsubs.feature_video_view.repository.ServerTimeServiceImpl
-import com.learnwithsubs.feature_video_view.repository.TranslatorRepository
+import com.learnwithsubs.feature_video_view.repository.YandexTranslatorRepository
 import com.learnwithsubs.feature_video_view.repository.VideoViewRepository
 import com.learnwithsubs.feature_video_view.repository.YandexTranslatorRepositoryImpl
+import com.learnwithsubs.feature_video_view.storage.YandexTranslatorStorageRepository
+import com.learnwithsubs.feature_video_view.storage.sharedprefs.SharedPrefsYandexTranslatorStorageRepository
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -104,6 +104,12 @@ class VideoViewDataModule {
 
     @Provides
     @Singleton
+    fun provideSharedPrefsYandexTranslatorStorageRepository(context: Context): YandexTranslatorStorageRepository {
+        return SharedPrefsYandexTranslatorStorageRepository(context)
+    }
+
+    @Provides
+    @Singleton
     fun provideYandexDictionaryRepository(
         @Named("YandexDictionary") retrofit: Retrofit
     ): DictionaryRepository<DictionaryYandexResponse> {
@@ -114,9 +120,10 @@ class VideoViewDataModule {
     @Singleton
     fun provideYandexTranslatorRepository(
         @Named("YandexTranslator") retrofitTranslator: Retrofit,
-        @Named("YandexIAmToken") retrofitIAmToken: Retrofit
-    ): TranslatorRepository<YandexTranslatorResponse> {
-        return YandexTranslatorRepositoryImpl(retrofitTranslator, retrofitIAmToken)
+        @Named("YandexIAmToken") retrofitIAmToken: Retrofit,
+        sharedPrefsYandexTranslator: YandexTranslatorStorageRepository
+    ): YandexTranslatorRepository {
+        return YandexTranslatorRepositoryImpl(retrofitTranslator, retrofitIAmToken, sharedPrefsYandexTranslator)
     }
 
     @Provides

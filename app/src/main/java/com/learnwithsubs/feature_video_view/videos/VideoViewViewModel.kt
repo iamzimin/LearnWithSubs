@@ -37,7 +37,7 @@ class VideoViewViewModel @Inject constructor(
     var learnLanguage = ""
     val dictionarySynonymsLiveData = videoViewUseCases.getWordsFromDictionaryUseCase.dictionaryListLiveData
     val dictionaryTranslationLiveData = videoViewUseCases.getWordsFromDictionaryUseCase.translationLiveData
-    val translatorTranslationLiveData = videoViewUseCases.getTranslationUseCase.translationLiveData
+    val translatorTranslationLiveData = MutableLiveData<String?>()
     var textToTranslate: String = ""
 
 
@@ -96,7 +96,8 @@ class VideoViewViewModel @Inject constructor(
     fun getWordsFromTranslator(word: String, learnLanguage: String) {
         val outputLangPair = Pair(learnLanguage, learnLanguage.substring(0, 2).lowercase())
         viewModelScope.launch {
-            videoViewUseCases.getTranslationUseCase.invoke(word = word, learnLanguage = outputLangPair)
+            val translate = videoViewUseCases.getTranslationUseCase.invoke(word = word, learnLanguage = outputLangPair)
+            translatorTranslationLiveData.postValue(translate)
         }
     }
 

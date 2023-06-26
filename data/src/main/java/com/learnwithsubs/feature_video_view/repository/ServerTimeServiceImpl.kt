@@ -1,6 +1,7 @@
 package com.learnwithsubs.feature_video_view.repository
 
 import com.learnwithsubs.feature_video_view.models.server.ServerTimeResponse
+import com.learnwithsubs.feature_video_view.service.ServerTimeService
 import retrofit2.Call
 import retrofit2.Retrofit
 

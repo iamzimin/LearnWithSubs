@@ -1,4 +1,4 @@
-package com.learnwithsubs.feature_video_view.repository
+package com.learnwithsubs.feature_video_view.service
 
 import com.learnwithsubs.feature_video_view.models.server.ServerTimeResponse
 import retrofit2.Call
