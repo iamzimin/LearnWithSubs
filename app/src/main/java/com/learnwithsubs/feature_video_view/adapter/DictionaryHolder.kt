@@ -4,12 +4,12 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.learnwithsubs.databinding.TranslatePartspeechTileBinding
 import com.learnwithsubs.databinding.TranslateWordTileBinding
-import com.learnwithsubs.feature_video_view.models.DictionaryWord
+import com.learnwithsubs.feature_video_view.models.DictionarySynonyms
 
 abstract class DictionaryHolder(
     itemView: View
 ) : RecyclerView.ViewHolder(itemView) {
-    abstract fun bind(word: DictionaryWord)
+    abstract fun bind(word: DictionarySynonyms)
 }
 
 class DictionaryNormalHolder(
@@ -18,7 +18,7 @@ class DictionaryNormalHolder(
 ) : DictionaryHolder(itemView) {
     private val binding = TranslateWordTileBinding.bind(itemView)
 
-    override fun bind(word: DictionaryWord) {
+    override fun bind(word: DictionarySynonyms) {
         binding.wordId.text = word.id.toString()
         binding.similarWord.text = word.word
         binding.similarWordTranslate.text = word.translation
@@ -39,7 +39,7 @@ class DictionaryPartSpeechHolder(
 ) : DictionaryHolder(itemView) {
     private val binding = TranslatePartspeechTileBinding.bind(itemView)
 
-    override fun bind(word: DictionaryWord) {
+    override fun bind(word: DictionarySynonyms) {
         binding.partSpeech.text = word.partSpeech
     }
 }

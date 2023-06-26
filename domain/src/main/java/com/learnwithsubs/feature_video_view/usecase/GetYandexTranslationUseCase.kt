@@ -1,9 +1,12 @@
 package com.learnwithsubs.feature_video_view.usecase
 
 import com.learnwithsubs.feature_video_view.TranslationKeyAPI
+import com.learnwithsubs.feature_video_view.models.TranslationModel
 import com.learnwithsubs.feature_video_view.models.server.YandexIAmBodyRequest
 import com.learnwithsubs.feature_video_view.models.server.YandexTranslatorBody
-import com.learnwithsubs.feature_video_view.repository.YandexTranslatorRepository
+import com.learnwithsubs.feature_video_view.models.server.YandexTranslatorResponse
+import com.learnwithsubs.feature_video_view.repository.TranslatorRepository
+import com.learnwithsubs.feature_video_view.repository.YandexTokenRepository
 import com.learnwithsubs.feature_video_view.service.ServerTimeService
 import retrofit2.awaitResponse
 import java.time.LocalDateTime
@@ -11,14 +14,15 @@ import java.time.ZoneOffset
 
 private const val TIMER_INTERVAL: Long =  10 * 60 * 60
 
-class GetTranslationUseCase(
-    private val yandexTranslatorRepository: YandexTranslatorRepository,
+class GetYandexTranslationUseCase(
+    private val translatorRepository: TranslatorRepository<YandexTranslatorResponse>,
+    private val yandexTokenRepository: YandexTokenRepository,
     private val serverTimeService: ServerTimeService
 ) {
-    suspend fun invoke(word: String, learnLanguage: Pair<String, String>): String? {
+    suspend fun invoke(model: TranslationModel): String? {
         val yandexTranslatorBody = YandexTranslatorBody(
-            targetLanguageCode = learnLanguage.second,
-            texts = word,
+            targetLanguageCode = model.learnLanguage_ISO639_1,
+            texts = model.word,
             folderId = TranslationKeyAPI.YANDEX_FOLDER_ID
         )
 
@@ -30,16 +34,16 @@ class GetTranslationUseCase(
             } else Long.MAX_VALUE
         } else Long.MAX_VALUE
 
-        var yandexIAmToken = yandexTranslatorRepository.getYandexIAmToken()
-        if (dateTime - yandexTranslatorRepository.getLastUpdateTimeYandexIAmToken() >= TIMER_INTERVAL) {
+        var yandexIAmToken = yandexTokenRepository.getYandexIAmToken()
+        if (dateTime - yandexTokenRepository.getLastUpdateTimeYandexIAmToken() >= TIMER_INTERVAL) {
             val yandexIAmBodyRequest = YandexIAmBodyRequest(yandexPassportOauthToken = TranslationKeyAPI.YANDEX_OAUTH)
-            val iAmTokenResponse = yandexTranslatorRepository.getYandexIAmToken(body = yandexIAmBodyRequest).awaitResponse()
+            val iAmTokenResponse = yandexTokenRepository.getYandexIAmToken(body = yandexIAmBodyRequest).awaitResponse()
             if (iAmTokenResponse.isSuccessful) {
                 val responseBody = iAmTokenResponse.body()
                 if (responseBody != null) {
                     yandexIAmToken = responseBody.iamToken
-                    yandexTranslatorRepository.saveYandexIAmToken(iamtoken = responseBody.iamToken)
-                    yandexTranslatorRepository.saveLastUpdateTimeYandexIAmToken(time = dateTime)
+                    yandexTokenRepository.saveYandexIAmToken(iamtoken = responseBody.iamToken)
+                    yandexTokenRepository.saveLastUpdateTimeYandexIAmToken(time = dateTime)
                 }
             }
         }
@@ -47,15 +51,11 @@ class GetTranslationUseCase(
         if (yandexIAmToken == null) // TODO if null
             return null
 
-        val serviceType = "Yandex"
-        return when (serviceType) {
-            "Yandex" -> yandex(contentType = "application/json", authorization = "Bearer $yandexIAmToken", body = yandexTranslatorBody)
-            else -> return null
-        }
-    }
-
-    private suspend fun yandex(contentType: String, authorization: String, body: YandexTranslatorBody): String? {
-        val yandexResponse = yandexTranslatorRepository.getYandexTranslation(contentType = contentType, authorization = authorization, body = body).awaitResponse()
+        val yandexResponse = translatorRepository.getTranslation(
+            contentType = "application/json",
+            authorization = "Bearer $yandexIAmToken",
+            body = yandexTranslatorBody
+        ).awaitResponse()
         return if (yandexResponse.isSuccessful) {
             val apiResponse = yandexResponse.body()
             val translationList = apiResponse?.translations

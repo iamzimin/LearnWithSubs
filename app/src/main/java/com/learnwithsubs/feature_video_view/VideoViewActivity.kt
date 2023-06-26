@@ -280,19 +280,13 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
 
 
         // Translate
-        vm.dictionaryTranslationLiveData.observe(this@VideoViewActivity) { transl ->
-            if (transl != null) {
-                translateDialogBinding.outputWord.setText(transl)
+        vm.dictionaryWordsLiveData.observe(this@VideoViewActivity) { dict ->
+            if (dict != null) {
+                translateDialogBinding.outputWord.setText(dict.translation)
                 translateDialogBinding.outputWord.clearFocus()
-            } else {
-                vm.getWordsFromTranslator(word = vm.textToTranslate, learnLanguage = vm.learnLanguage)
-            }
-        }
-        vm.dictionarySynonymsLiveData.observe(this@VideoViewActivity) { dictList ->
-            if (dictList != null) {
-                val updatedPartSpeech = vm.changePartSpeech(context = this@VideoViewActivity.applicationContext, list = dictList)
+                val updatedPartSpeech = vm.changePartSpeech(context = this@VideoViewActivity.applicationContext, list = dict.synonyms)
                 dictionaryAdapter.updateData(wordsList = updatedPartSpeech)
-            }
+            } else vm.getWordsFromTranslator(word = vm.textToTranslate, learnLanguage = vm.learnLanguage)
         }
         vm.translatorTranslationLiveData.observe(this@VideoViewActivity) { transl ->
             translateDialogBinding.outputWord.setText(transl)
@@ -302,7 +296,6 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
 
     private fun openTranslateDialog() {
         vm.getWordsFromDictionary(
-            key = TranslationKeyAPI.YANDEX_DICTIONARY_KEY,
             inputLang = vm.nativeLanguage,
             outputLang = vm.learnLanguage,
             word = vm.textToTranslate

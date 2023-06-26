@@ -6,8 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.learnwithsubs.R
 import com.learnwithsubs.feature_video_list.models.Video
+import com.learnwithsubs.feature_video_view.models.DictionaryModel
+import com.learnwithsubs.feature_video_view.models.DictionarySynonyms
 import com.learnwithsubs.feature_video_view.models.DictionaryWord
 import com.learnwithsubs.feature_video_view.models.Subtitle
+import com.learnwithsubs.feature_video_view.models.TranslationModel
 import com.learnwithsubs.feature_video_view.usecase.VideoViewUseCases
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,10 +38,9 @@ class VideoViewViewModel @Inject constructor(
 
     var nativeLanguage = ""
     var learnLanguage = ""
-    val dictionarySynonymsLiveData = videoViewUseCases.getWordsFromDictionaryUseCase.dictionaryListLiveData
-    val dictionaryTranslationLiveData = videoViewUseCases.getWordsFromDictionaryUseCase.translationLiveData
+    var textToTranslate = ""
+    val dictionaryWordsLiveData =  MutableLiveData<DictionaryWord?>()
     val translatorTranslationLiveData = MutableLiveData<String?>()
-    var textToTranslate: String = ""
 
 
     fun openVideo(video: Video) {
@@ -87,21 +89,33 @@ class VideoViewViewModel @Inject constructor(
             String.format("%02d:%02d", currMinutes, currSeconds)
     }
 
-    fun getWordsFromDictionary(key: String, inputLang: String, outputLang: String, word: String) {
-        val inputLangPair = Pair(inputLang, inputLang.substring(0, 2).lowercase())
-        val outputLangPair = Pair(outputLang, outputLang.substring(0, 2).lowercase())
-        videoViewUseCases.getWordsFromDictionaryUseCase.invoke(key, inputLangPair, outputLangPair, word)
+    fun getWordsFromDictionary(word: String, inputLang: String, outputLang: String) {
+        val dictionaryModel = DictionaryModel(
+            word = word,
+            inputLanguage = inputLang,
+            inputLanguage_ISO639_1 = inputLang.substring(0, 2).lowercase(),
+            outputLanguage = outputLang,
+            outputLanguage_ISO639_1 = outputLang.substring(0, 2).lowercase()
+        )
+        viewModelScope.launch {
+            val translate = videoViewUseCases.getWordsFromYandexDictionaryUseCase.invoke(model = dictionaryModel)
+            dictionaryWordsLiveData.postValue(translate)
+        }
     }
 
     fun getWordsFromTranslator(word: String, learnLanguage: String) {
-        val outputLangPair = Pair(learnLanguage, learnLanguage.substring(0, 2).lowercase())
+        val translationModel = TranslationModel(
+            word = word,
+            learnLanguage = learnLanguage,
+            learnLanguage_ISO639_1 = learnLanguage.substring(0, 2).lowercase()
+        )
         viewModelScope.launch {
-            val translate = videoViewUseCases.getTranslationUseCase.invoke(word = word, learnLanguage = outputLangPair)
+            val translate = videoViewUseCases.getYandexTranslationUseCase.invoke(model = translationModel)
             translatorTranslationLiveData.postValue(translate)
         }
     }
 
-    fun changePartSpeech(context: Context, list: ArrayList<DictionaryWord>): ArrayList<DictionaryWord> {
+    fun changePartSpeech(context: Context, list: ArrayList<DictionarySynonyms>):  ArrayList<DictionarySynonyms> {
         for (elem in list) {
             when (elem.partSpeech) {
                 "noun" -> elem.partSpeech = context.getString(R.string.noun)

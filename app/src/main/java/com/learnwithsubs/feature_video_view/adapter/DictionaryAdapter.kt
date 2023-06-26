@@ -6,17 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.learnwithsubs.R
-import com.learnwithsubs.feature_video_view.models.DictionaryWord
+import com.learnwithsubs.feature_video_view.models.DictionarySynonyms
 import com.learnwithsubs.feature_video_view.models.DictionaryType
 
 class DictionaryAdapter(
-    wordsInit: ArrayList<DictionaryWord>
+    wordsInit: ArrayList<DictionarySynonyms>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-    private var wordsList: ArrayList<DictionaryWord> = wordsInit
+    private var wordsList: ArrayList<DictionarySynonyms> = wordsInit
     private var onItemClickListener: OnDictionaryClick? = null
 
 
-    fun updateData(wordsList: ArrayList<DictionaryWord>) {
+    fun updateData(wordsList: ArrayList<DictionarySynonyms>) {
         this@DictionaryAdapter.wordsList = wordsList
         notifyDataSetChanged()
     }

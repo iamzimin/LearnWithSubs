@@ -1,6 +1,6 @@
 package com.learnwithsubs.feature_video_view.models.server
 
-data class DictionaryYandexResponse(
+data class YandexDictionaryResponse(
     val head: Any?,
     val def: List<Definition>
 )

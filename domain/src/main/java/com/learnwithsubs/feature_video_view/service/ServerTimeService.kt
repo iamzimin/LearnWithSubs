@@ -5,6 +5,6 @@ import retrofit2.Call
 import retrofit2.http.GET
 
 interface ServerTimeService {
-    @GET("Time/current/zone?timeZone=Europe/Amsterdam")
+    @GET("Time/current/zone?timeZone=Iceland")
     fun getCurrentTime(): Call<ServerTimeResponse>
 }

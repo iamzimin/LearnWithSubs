@@ -1,6 +1,6 @@
 package com.learnwithsubs.feature_video_view.service
 
-import com.learnwithsubs.feature_video_view.models.server.DictionaryYandexResponse
+import com.learnwithsubs.feature_video_view.models.server.YandexDictionaryResponse
 import retrofit2.Call
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -11,5 +11,5 @@ interface YandexDictionaryService {
         @Query("key") key: String,
         @Query("lang") lang: String,
         @Query("text") word: String
-    ): Call<DictionaryYandexResponse>
+    ): Call<YandexDictionaryResponse>
 }

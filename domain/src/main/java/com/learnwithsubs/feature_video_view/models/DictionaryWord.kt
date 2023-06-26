@@ -1,6 +1,11 @@
 package com.learnwithsubs.feature_video_view.models
 
 data class DictionaryWord(
+    var translation: String,
+    var synonyms: ArrayList<DictionarySynonyms>
+)
+
+data class DictionarySynonyms(
     val id: Int,
     val word: String,
     val translation: String,
