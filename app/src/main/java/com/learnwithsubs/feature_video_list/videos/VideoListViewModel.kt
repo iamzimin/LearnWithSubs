@@ -112,6 +112,7 @@ class VideoListViewModel @Inject constructor(
                     }
                     sendAudio.await()
 
+                    recodedVideo?.let { videoListUseCases.extractVideoPreviewUseCase.invoke(it) }
 
                     // Успешное завершение
                     recodedVideo?.videoStatus = VideoStatus.NORMAL_VIDEO

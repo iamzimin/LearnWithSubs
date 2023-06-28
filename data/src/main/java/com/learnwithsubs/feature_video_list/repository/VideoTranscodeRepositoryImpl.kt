@@ -1,6 +1,8 @@
 package com.learnwithsubs.feature_video_list.repository
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.media.MediaMetadataRetriever
 import android.os.Environment
 import android.util.Log
 import android.widget.Toast
@@ -9,10 +11,13 @@ import com.arthenica.mobileffmpeg.Config
 import com.arthenica.mobileffmpeg.Config.RETURN_CODE_CANCEL
 import com.arthenica.mobileffmpeg.Config.RETURN_CODE_SUCCESS
 import com.arthenica.mobileffmpeg.FFmpeg
+import com.learnwithsubs.feature_video_list.VideoConstants
 import com.learnwithsubs.feature_video_list.models.Video
-import com.learnwithsubs.feature_video_list.models.VideoStatus
-import com.learnwithsubs.feature_video_list.repository.VideoTranscodeRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -23,22 +28,17 @@ class VideoTranscodeRepositoryImpl(
     private val videoProgressLiveData: MutableLiveData<Video?> = MutableLiveData()
 
     //val internalStorageDir = File(context.filesDir, "LearnWithSubs")
-    private val externalStorageDir = File(Environment.getExternalStorageDirectory().toString() + "/Movies/", "LearnWithSubs")
-
-    //private var isVideoReady = false
-    //private var isAudioReady = false
+    private val externalStorageDir = File(Environment.getExternalStorageDirectory().toString(), "LearnWithSubs")
 
     override suspend fun transcodeVideo(video: Video): Video? = suspendCoroutine { continuation ->
-        if (!externalStorageDir.exists())
-            externalStorageDir.mkdirs()
+        val videoFolder = getVideoFolderPath(video)
 
-        val videoType = ".mp4"
-
-        val outputVideoPath = File(externalStorageDir, "${video.id.toString()}$videoType")
-        val command = "-i ${video.inputPath} -c:v mpeg4 -b:v ${video.bitrate}B $outputVideoPath -y"
+        val outputVideoPath = File(videoFolder, VideoConstants.COPIED_VIDEO)
+        val command = "-i ${video.inputPath} -c:v mpeg4 -b:v ${video.bitrate}B ${outputVideoPath.absolutePath} -y"
 
         Config.enableStatisticsCallback { newStatistics ->
             video.uploadingProgress = ((newStatistics.time / video.duration.toDouble()) * 100).toInt()
+            if (video.uploadingProgress > 100) video.uploadingProgress = 0
             videoProgressLiveData.postValue(video)
         }
 
@@ -47,7 +47,7 @@ class VideoTranscodeRepositoryImpl(
                 RETURN_CODE_SUCCESS -> {
                     Log.i(Config.TAG, "Async command execution completed successfully.")
                     video.uploadingProgress = 0
-                    video.outputPath = "${externalStorageDir.absolutePath}/${video.id}"
+                    video.outputPath = videoFolder.absolutePath
                     continuation.resume(video)
                 }
                 RETURN_CODE_CANCEL -> {
@@ -69,15 +69,14 @@ class VideoTranscodeRepositoryImpl(
     }
 
     override suspend fun extractAudio(video: Video): Video? = suspendCoroutine { continuation ->
-        if (!externalStorageDir.exists())
-            externalStorageDir.mkdirs()
+        val videoFolder = getVideoFolderPath(video)
 
-        val audioType = ".mp3"
-        val outputAudioPath = File(externalStorageDir, "${video.id.toString()}$audioType")
-        val command = "-i ${video.inputPath} -q:a 0 -map a $outputAudioPath -y"
+        val outputAudioPath = File(videoFolder, VideoConstants.EXTRACTED_AUDIO)
+        val command = "-i ${video.inputPath} -q:a 0 -map a ${outputAudioPath.absolutePath} -y"
 
         Config.enableStatisticsCallback { newStatistics ->
             video.uploadingProgress = ((newStatistics.time / video.duration.toDouble()) * 100).toInt()
+            if (video.uploadingProgress > 100) video.uploadingProgress = 0
             videoProgressLiveData.postValue(video)
         }
 
@@ -85,13 +84,8 @@ class VideoTranscodeRepositoryImpl(
             when (returnCode) {
                 RETURN_CODE_SUCCESS -> {
                     Log.i(Config.TAG, "Async command execution completed successfully.")
-//                    isAudioReady = true
-//                    if (isVideoReady) {
-//                        video.videoStatus = VideoStatus.NORMAL_VIDEO
-//                        isVideoReady = false
-//                        isAudioReady = false
-//                    }
-                    video.outputPath = "${externalStorageDir.absolutePath}/${video.id}"
+                    video.uploadingProgress = 0
+                    video.outputPath = videoFolder.absolutePath
                     continuation.resume(video)
                 }
                 RETURN_CODE_CANCEL -> {
@@ -113,5 +107,34 @@ class VideoTranscodeRepositoryImpl(
 
     override fun getVideoProgressLiveData(): MutableLiveData<Video?> {
         return videoProgressLiveData
+    }
+
+    override suspend fun extractPreview(video: Video) {
+        val videoFolder = getVideoFolderPath(video)
+
+        val retriever = MediaMetadataRetriever()
+        retriever.setDataSource(video.inputPath)
+        val frame = retriever.getFrameAtTime(0)
+        retriever.release()
+
+        val outputVideoPath = File(videoFolder, VideoConstants.VIDEO_PREVIEW)
+        try {
+            withContext(Dispatchers.IO) {
+                FileOutputStream(outputVideoPath).use { out ->
+                    frame?.compress(Bitmap.CompressFormat.JPEG, 100, out)
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun getVideoFolderPath(video: Video): File {
+        val videoFolder = File(externalStorageDir, video.id.toString())
+
+        if (!videoFolder.exists())
+            videoFolder.mkdirs()
+
+        return videoFolder
     }
 }

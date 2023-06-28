@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.learnwithsubs.R
+import com.learnwithsubs.feature_video_list.VideoConstants
 import com.learnwithsubs.feature_video_list.models.Video
 import com.learnwithsubs.feature_video_view.models.DictionaryModel
 import com.learnwithsubs.feature_video_view.models.DictionarySynonyms
@@ -14,6 +15,7 @@ import com.learnwithsubs.feature_video_view.models.TranslationModel
 import com.learnwithsubs.feature_video_view.usecase.VideoViewUseCases
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 class VideoViewViewModel @Inject constructor(
@@ -46,7 +48,7 @@ class VideoViewViewModel @Inject constructor(
     fun openVideo(video: Video) {
         subtitleList = videoViewUseCases.getVideoSubtitlesUseCase.invoke(currentVideo.value)
 
-        videoPath.value = "${video.outputPath}.mp4"
+        videoPath.value = File(video.outputPath, VideoConstants.COPIED_VIDEO).absolutePath
         videoName.value = video.name
         maxVideoTime = video.duration
         maxTimeString = formatTime(time = maxVideoTime)

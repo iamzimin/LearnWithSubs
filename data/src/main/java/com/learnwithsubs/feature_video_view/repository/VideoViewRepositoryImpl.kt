@@ -2,6 +2,7 @@ package com.learnwithsubs.feature_video_view.repository
 
 import android.content.Context
 import android.widget.Toast
+import com.learnwithsubs.feature_video_list.VideoConstants
 import com.learnwithsubs.feature_video_list.models.Video
 import com.learnwithsubs.feature_video_view.storage.VideoViewDao
 import com.learnwithsubs.feature_video_view.models.Subtitle
@@ -14,12 +15,11 @@ class VideoViewRepositoryImpl(
 ) : VideoViewRepository {
     override fun getVideoSubtitles(video: Video?): List<Subtitle> {
         if (video == null) {
-            Toast.makeText(context.applicationContext, "Video = null", Toast.LENGTH_SHORT)
-                .show() //TODO
+            Toast.makeText(context.applicationContext, "Video = null", Toast.LENGTH_SHORT).show() //TODO
             return emptyList()
         }
 
-        val subtitlesPath = File("${video.outputPath}.srt")
+        val subtitlesPath = File(video.outputPath, VideoConstants.GENERATED_SUBTITLES)
 
         var subs = ""
         if (subtitlesPath.exists()) {

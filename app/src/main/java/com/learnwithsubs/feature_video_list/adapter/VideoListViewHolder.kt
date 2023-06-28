@@ -2,14 +2,19 @@ package com.learnwithsubs.feature_video_list.adapter
 
 import android.content.Intent
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.RoundedCornersTransformation
 import com.learnwithsubs.R
 import com.learnwithsubs.databinding.VideoTileBinding
 import com.learnwithsubs.databinding.VideoUploadingTileBinding
+import com.learnwithsubs.feature_video_list.VideoConstants
 import com.learnwithsubs.feature_video_list.models.Video
 import com.learnwithsubs.feature_video_list.models.VideoLoadingType
 import com.learnwithsubs.feature_video_view.VideoViewActivity
+import java.io.File
 import java.util.concurrent.TimeUnit
 
 // Родительский класс для всех видео ViewHolder
@@ -42,7 +47,10 @@ class NormalVideoViewHolder(
         binding.videoName.text = video.name
         binding.duration.text = "${duration}: ${formatDuration(video.duration)}"
         binding.savedWords.text = "${savedWords}: ${video.saveWords}"
-        //binding.videoPreview.setImageResource(video.preview)
+        binding.videoPreview.load(File(video.outputPath, VideoConstants.VIDEO_PREVIEW).absoluteFile) {
+            transformations(RoundedCornersTransformation(10f))
+            error(R.drawable.rectangle)
+        }
         binding.videoProgress.progress = ((video.watchProgress / video.duration.toDouble()) * 100).toInt()
 
         itemView.setOnClickListener (object : View.OnClickListener {
@@ -78,8 +86,6 @@ class LoadingVideoViewHolder(
         binding.videoName.text = video.name
         binding.duration.text = "${duration}: ${formatDuration(video.duration)}"
 
-        binding.progressVideoLoadingText.text =
-            if (video.uploadingProgress == 0) "" else video.uploadingProgress.toString()
         val status = "${itemView.context.getString(R.string.video_loading_status)}: "
         when (video.loadingType) {
             VideoLoadingType.WAITING ->
@@ -95,8 +101,15 @@ class LoadingVideoViewHolder(
             VideoLoadingType.DONE ->
                 binding.loadingStatus.text = status + itemView.context.getString(R.string.video_loading_status_done)
         }
+        binding.progressVideoLoadingText.text = if (video.uploadingProgress == 0) "" else video.uploadingProgress.toString()
+        if (video.loadingType == VideoLoadingType.GENERATING_SUBTITLES) {
+            binding.progressVideoLoading.isIndeterminate = true
+        }
+        else {
+            binding.progressVideoLoading.isIndeterminate = false
+            binding.progressVideoLoading.progress = video.uploadingProgress
+        }
 
-        //binding.videoPreview.setImageResource(video.preview)
         itemView.setOnClickListener (object : View.OnClickListener {
             override fun onClick(p0: View?) {
                 if (adapter.isNormalMode)

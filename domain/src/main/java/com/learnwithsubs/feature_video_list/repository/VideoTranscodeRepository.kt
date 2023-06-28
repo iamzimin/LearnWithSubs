@@ -9,4 +9,5 @@ interface VideoTranscodeRepository {
     suspend fun transcodeVideo(video: Video): Video?
     suspend fun extractAudio(video: Video): Video?
     fun getVideoProgressLiveData(): MutableLiveData<Video?>
+    suspend fun extractPreview(video: Video)
 }

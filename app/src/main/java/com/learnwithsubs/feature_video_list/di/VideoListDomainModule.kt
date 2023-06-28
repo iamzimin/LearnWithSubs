@@ -6,6 +6,7 @@ import com.learnwithsubs.feature_video_list.repository.VideoListRepository
 import com.learnwithsubs.feature_video_list.repository.VideoTranscodeRepository
 import com.learnwithsubs.feature_video_list.usecase.DeleteVideoUseCase
 import com.learnwithsubs.feature_video_list.usecase.ExtractAudioUseCase
+import com.learnwithsubs.feature_video_list.usecase.ExtractVideoPreviewUseCase
 import com.learnwithsubs.feature_video_list.usecase.GetLastVideoUseCase
 import com.learnwithsubs.feature_video_list.usecase.GetVideoListUseCase
 import com.learnwithsubs.feature_video_list.usecase.LoadVideoUseCase
@@ -33,7 +34,8 @@ class VideoListDomainModule {
             getLastVideoUseCase = GetLastVideoUseCase(videoListRepository),
             transcodeVideoUseCase = TranscodeVideoUseCase(transcodeRepository),
             extractAudioUseCase = ExtractAudioUseCase(transcodeRepository),
-            sendAudioToServerUseCase = SendAudioToServerUseCase(serverInteractionRepository)
+            sendAudioToServerUseCase = SendAudioToServerUseCase(serverInteractionRepository),
+            extractVideoPreviewUseCase = ExtractVideoPreviewUseCase(transcodeRepository)
         )
     }
 

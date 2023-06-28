@@ -2,6 +2,7 @@ package com.learnwithsubs.feature_video_list.usecase
 
 import android.content.Context
 import android.widget.Toast
+import com.learnwithsubs.feature_video_list.VideoConstants
 import com.learnwithsubs.feature_video_list.models.Video
 import com.learnwithsubs.feature_video_list.repository.ServerInteractionRepository
 import okhttp3.MediaType.Companion.toMediaType
@@ -15,7 +16,7 @@ class SendAudioToServerUseCase(
 ) {
     suspend fun invoke(video: Video?) {
         if (video != null) { // TODO
-            val file =  File("${video.outputPath}.mp3")
+            val file =  File(video.outputPath, VideoConstants.EXTRACTED_AUDIO)
             val requestFile = file.asRequestBody("audio/mp3".toMediaType())
             val audioPart = MultipartBody.Part.createFormData("audio", file.name, requestFile)
 
@@ -832,7 +833,7 @@ And now it's not a lie""".trimIndent())
         if (response == null) { // TODO
         }
         try {
-            val subSTR = File("${video.outputPath}.srt")
+            val subSTR = File(video.outputPath, VideoConstants.GENERATED_SUBTITLES)
             if (subSTR.exists())
                 subSTR.delete()
             subSTR.createNewFile()
