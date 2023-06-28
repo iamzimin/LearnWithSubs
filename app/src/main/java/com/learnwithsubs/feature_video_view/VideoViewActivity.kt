@@ -16,6 +16,7 @@ import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageButton
@@ -75,6 +76,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
         // Get view by id
         videoView = findViewById(R.id.videoView)
         val videoControls = findViewById<ConstraintLayout>(R.id.video_controls)
+        val videoViewConstraintLayout = findViewById<ConstraintLayout>(R.id.video_view_constraint_layout)
 
         val exitVideoView = findViewById<ImageButton>(R.id.exit_video_view)
         val videoName = findViewById<TextView>(R.id.video_name)
@@ -96,6 +98,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
         val mediaController = CustomMediaController(this)
         mediaController.setAnchorView(videoView)
         videoView.setMediaController(mediaController)
+        setVideoViewConfiguration(config = resources.configuration)
 
         //Video Play
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
@@ -228,7 +231,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
 
         // Button show - Subtitles position
         var timer: CountDownTimer? = null
-        videoView.setOnClickListener {
+        videoViewConstraintLayout.setOnClickListener {
             vm.isButtonsShowedLiveData.value = vm.isButtonsShowedLiveData.value != true
         }
         vm.isButtonsShowedLiveData.observe(this) { isButtonsShowed ->
@@ -346,6 +349,20 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
         }
     }
 
+    private fun setVideoViewConfiguration(config: Configuration) {
+        if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            val layoutParams = videoView.layoutParams
+            layoutParams.width = ViewGroup.LayoutParams.WRAP_CONTENT
+            layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+            videoView.layoutParams = layoutParams
+        } else if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            val layoutParams = videoView.layoutParams
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            videoView.layoutParams = layoutParams
+        }
+    }
+
     private fun configSystemUI() {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         window.decorView.systemUiVisibility = (
@@ -372,8 +389,8 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         currentPosition = videoView.currentPosition
+        setVideoViewConfiguration(config = newConfig)
     }
-
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
