@@ -118,7 +118,11 @@ class VideoListPicker(private val fragment: Fragment, private val requestCode: I
     }
 
     private fun getVideoBitrate(videoPath: String): Int {
-        val info = FFprobe.getMediaInformation(videoPath)
-        return info.bitrate.toInt()
+        return try { // TODO
+            val info = FFprobe.getMediaInformation(videoPath)
+            info.bitrate.toInt()
+        } catch (e: Exception) {
+            2000000000
+        }
     }
 }

@@ -197,7 +197,8 @@ class VideoListFragment : Fragment() {
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
                 textView.clearFocus()
                 val video = vm.videoList.value?.find { video -> video.id == vm.editableVideo?.id }
-                if (video == null) {  //TODO add toast
+                if (video == null) {
+                    Toast.makeText(context, getString(R.string.the_video_does_not_exist), Toast.LENGTH_SHORT).show()
                     adapter.clearSelect()
                     renameMenu.dismiss()
                     return@setOnEditorActionListener true

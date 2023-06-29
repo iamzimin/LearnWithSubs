@@ -101,13 +101,14 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
     override suspend fun extractPreview(video: Video) {
         val videoFolder = getVideoFolderPath(video)
 
-        val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(video.inputPath)
-        val frame = retriever.getFrameAtTime(0)
-        retriever.release()
+        try {
+            val retriever = MediaMetadataRetriever()
+            retriever.setDataSource(video.inputPath)
+            val frame = retriever.getFrameAtTime(0)
+            retriever.release()
 
-        val outputVideoPath = File(videoFolder, VideoConstants.VIDEO_PREVIEW)
-        try { //TODO
+            val outputVideoPath = File(videoFolder, VideoConstants.VIDEO_PREVIEW)
+
             withContext(Dispatchers.IO) {
                 FileOutputStream(outputVideoPath).use { out ->
                     frame?.compress(Bitmap.CompressFormat.JPEG, 100, out)

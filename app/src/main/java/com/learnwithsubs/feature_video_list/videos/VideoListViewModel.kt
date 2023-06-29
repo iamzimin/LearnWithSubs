@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.learnwithsubs.feature_video_list.VideoConstants
 import com.learnwithsubs.feature_video_list.models.Video
 import com.learnwithsubs.feature_video_list.models.VideoErrorType
 import com.learnwithsubs.feature_video_list.models.VideoLoadingType
@@ -18,6 +19,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.util.LinkedList
 import javax.inject.Inject
 
@@ -160,7 +162,7 @@ class VideoListViewModel @Inject constructor(
 
     private fun deleteSelectedVideo(selectedVideos: List<Video>?) {
         viewModelScope.launch {
-            selectedVideos?.forEach { videoListUseCases.deleteVideoUseCase.invoke(it)}
+            selectedVideos?.forEach { deleteVideo(it)}
         }
     }
 
@@ -168,6 +170,9 @@ class VideoListViewModel @Inject constructor(
         viewModelScope.launch {
             videoListUseCases.deleteVideoUseCase.invoke(video)
         }
+        val subSTR = File(video.outputPath)
+        if (subSTR.exists())
+            subSTR.deleteRecursively()
     }
 
     private fun renameVideo(video: Video) {

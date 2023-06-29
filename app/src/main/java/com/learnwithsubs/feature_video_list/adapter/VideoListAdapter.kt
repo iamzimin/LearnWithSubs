@@ -24,12 +24,17 @@ class VideoListAdapter(
 
 
     fun updateData(videoList: ArrayList<Video>) {
-
         this@VideoListAdapter.videoList = videoList
-        videoSelected.forEach { selectedVideo ->
+
+        videoSelected.forEach { selectedVideo -> // TODO если videoToUpdate - null, нужно удалять selectedVideo из videoSelected, тк оно было удалено
             val videoToUpdate = videoList.find { it.id == selectedVideo.id }
             videoToUpdate?.isSelected = selectedVideo.isSelected
         }
+        videoSelected.clear()
+        videoList.forEach { video ->
+            if (video.isSelected) videoSelected.add(video)
+        }
+//        isNormalMode = videoSelected.isEmpty()
         notifyDataSetChanged() //TODO передавать в качестве агрументов id обновлённого видоса
     }
     /*
