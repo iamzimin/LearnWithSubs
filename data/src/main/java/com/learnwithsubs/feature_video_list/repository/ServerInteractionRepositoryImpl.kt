@@ -9,7 +9,6 @@ import retrofit2.Retrofit
 class ServerInteractionRepositoryImpl(
     private val retrofit: Retrofit
 ): ServerInteractionRepository {
-
     override suspend fun sendAudioToServer(audio: MultipartBody.Part): Response<String> {
         val apiService = retrofit.create(ServerInteractionRepository::class.java)
         return apiService.sendAudioToServer(audio)

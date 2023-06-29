@@ -8,5 +8,5 @@ data class VideoListUseCases(
     val transcodeVideoUseCase: TranscodeVideoUseCase,
     val extractAudioUseCase: ExtractAudioUseCase,
     val extractVideoPreviewUseCase: ExtractVideoPreviewUseCase,
-    val sendAudioToServerUseCase: SendAudioToServerUseCase,
+    val getSubtitlesFromServerUseCase: GetSubtitlesFromServerUseCase,
 )

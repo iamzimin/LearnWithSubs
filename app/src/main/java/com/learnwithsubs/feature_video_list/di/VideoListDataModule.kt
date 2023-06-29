@@ -34,18 +34,18 @@ class VideoListDataModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit {
+    fun provideSubtitleGenerateRetrofit(): Retrofit {
         val gson: Gson = GsonBuilder()
             .setLenient()
             .create()
 
-        val okHttpClient: OkHttpClient = OkHttpClient.Builder() // TODO
-            .connectTimeout(1000, TimeUnit.SECONDS)
-            .readTimeout(1000, TimeUnit.SECONDS).build()
+        val okHttpClient: OkHttpClient = OkHttpClient.Builder()
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(0, TimeUnit.SECONDS).build()
 
         return Retrofit.Builder()
             //.baseUrl("http://10.0.2.2:8000/")
-            .baseUrl("http://192.168.0.106:8000/")
+            .baseUrl("http://192.168.0.107:8000/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
@@ -59,8 +59,8 @@ class VideoListDataModule {
 
     @Provides
     @Singleton
-    fun provideVideoTranscodeRepository(context: Context): VideoTranscodeRepository {
-        return VideoTranscodeRepositoryImpl(context = context)
+    fun provideVideoTranscodeRepository(): VideoTranscodeRepository {
+        return VideoTranscodeRepositoryImpl()
     }
 
     @Provides

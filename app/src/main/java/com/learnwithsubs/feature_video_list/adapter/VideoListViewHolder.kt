@@ -25,10 +25,10 @@ abstract class VideoViewHolder(
     protected val savedWords: String = itemView.context.getString(R.string.video_saved_words)
     protected val videoIsUploading: String = itemView.context.getString(R.string.video_is_uploading)
 
-    protected fun formatDuration(duration: Int): String {
-        val hours = TimeUnit.MILLISECONDS.toHours(duration.toLong())
-        val minutes = TimeUnit.MILLISECONDS.toMinutes(duration.toLong()) % 60
-        val seconds = TimeUnit.MILLISECONDS.toSeconds(duration.toLong()) % 60
+    protected fun formatDuration(duration: Long): String {
+        val hours = TimeUnit.MILLISECONDS.toHours(duration)
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(duration) % 60L
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(duration) % 60L
 
         return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }

@@ -56,6 +56,11 @@
     <string name="participle">Participle</string>
     <string name="predicative">Predicative</string>
 
+    <string name="audio_extraction_error">Audio extraction error</string>
+    <string name="video_decoding_error">Video decoding error</string>
+    <string name="audio_upload_error">Audio upload error</string>
+    <string name="subtitle_generation_error">Subtitle generation error</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

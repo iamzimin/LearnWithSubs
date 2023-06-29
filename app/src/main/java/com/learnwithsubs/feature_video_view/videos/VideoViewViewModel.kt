@@ -26,7 +26,7 @@ class VideoViewViewModel @Inject constructor(
     var videoPath = MutableLiveData<String>()
     var videoName = MutableLiveData<String>()
 
-    private var maxVideoTime: Int = 0
+    private var maxVideoTime: Long = 0L
     private var maxTimeString: String = ""
     private var currentVideoWatchTime: Int = 0
     var videoTime = MutableLiveData<String>()
@@ -67,9 +67,9 @@ class VideoViewViewModel @Inject constructor(
 
     fun updateCurrentTime(currTime: Int) {
         currentVideoWatchTime = currTime
-        val time = formatTime(time = currTime) + " / $maxTimeString"
+        val time = formatTime(time = currTime.toLong()) + " / $maxTimeString"
         videoTime.value = time
-        videoSeekBarProgress.value = (((currTime / maxVideoTime.toDouble())) * 100).toInt()
+        videoSeekBarProgress.value = (((currTime.toLong() / maxVideoTime.toDouble())) * 100).toInt()
     }
 
     fun getCurrentSubtitles(time: Long): String {
@@ -80,10 +80,10 @@ class VideoViewViewModel @Inject constructor(
     }
 
 
-    private fun formatTime(time: Int): String {
-        val currHours = time / 1000 / 3600
-        val currMinutes = time / 1000 / 60 % 60
-        val currSeconds = time / 1000 % 60
+    private fun formatTime(time: Long): String {
+        val currHours = time / 1000L / 3600L
+        val currMinutes = time / 1000L / 60L % 60L
+        val currSeconds = time / 1000L % 60L
 
         return if (currHours > 0)
             String.format("%02d:%02d:%02d", currHours, currMinutes, currSeconds)

@@ -1,11 +1,9 @@
 package com.learnwithsubs.feature_video_list.repository
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.os.Environment
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.arthenica.mobileffmpeg.Config
 import com.arthenica.mobileffmpeg.Config.RETURN_CODE_CANCEL
@@ -13,6 +11,7 @@ import com.arthenica.mobileffmpeg.Config.RETURN_CODE_SUCCESS
 import com.arthenica.mobileffmpeg.FFmpeg
 import com.learnwithsubs.feature_video_list.VideoConstants
 import com.learnwithsubs.feature_video_list.models.Video
+import com.learnwithsubs.feature_video_list.models.VideoErrorType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -22,9 +21,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 
-class VideoTranscodeRepositoryImpl(
-    private val context: Context
-) : VideoTranscodeRepository {
+class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
     private val videoProgressLiveData: MutableLiveData<Video?> = MutableLiveData()
 
     //val internalStorageDir = File(context.filesDir, "LearnWithSubs")
@@ -56,12 +53,8 @@ class VideoTranscodeRepositoryImpl(
                 }
                 else -> {
                     Log.i(Config.TAG, "Async command execution failed with returnCode=$returnCode.")
-                    Toast.makeText(
-                        context.applicationContext,
-                        "Async command execution failed with returnCode=$returnCode.",
-                        Toast.LENGTH_SHORT
-                    ).show() //TODO edit toast
-                    continuation.resume(null)
+                    video.errorType = VideoErrorType.DECODING_VIDEO
+                    continuation.resume(video)
                 }
             }
         }
@@ -94,12 +87,8 @@ class VideoTranscodeRepositoryImpl(
                 }
                 else -> {
                     Log.i(Config.TAG, "Async command execution failed with returnCode=$returnCode.")
-                    Toast.makeText(
-                        context.applicationContext,
-                        "Async command execution failed with returnCode=$returnCode.",
-                        Toast.LENGTH_SHORT
-                    ).show() //TODO edit toast
-                    continuation.resume(null)
+                    video.errorType = VideoErrorType.EXTRACTING_AUDIO
+                    continuation.resume(video)
                 }
             }
         }
@@ -118,7 +107,7 @@ class VideoTranscodeRepositoryImpl(
         retriever.release()
 
         val outputVideoPath = File(videoFolder, VideoConstants.VIDEO_PREVIEW)
-        try {
+        try { //TODO
             withContext(Dispatchers.IO) {
                 FileOutputStream(outputVideoPath).use { out ->
                     frame?.compress(Bitmap.CompressFormat.JPEG, 100, out)

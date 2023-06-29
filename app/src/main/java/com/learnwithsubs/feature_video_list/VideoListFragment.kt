@@ -18,6 +18,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -29,6 +30,7 @@ import com.learnwithsubs.databinding.VideoListFragmentBinding
 import com.learnwithsubs.feature_video_list.util.OrderType
 import com.learnwithsubs.feature_video_list.util.VideoOrder
 import com.learnwithsubs.feature_video_list.adapter.VideoListAdapter
+import com.learnwithsubs.feature_video_list.models.VideoErrorType
 import com.learnwithsubs.feature_video_list.videos.VideoListViewModel
 import com.learnwithsubs.feature_video_list.videos.VideoListViewModelFactory
 import com.learnwithsubs.feature_video_list.videos.VideosEvent
@@ -88,6 +90,17 @@ class VideoListFragment : Fragment() {
                 textView.clearFocus()
                 true
             } else false
+        }
+
+        vm.errorTypeLiveData.observe(videoListActivity) { video ->
+            val errorType = video.errorType ?: return@observe
+            when (errorType) {
+                VideoErrorType.EXTRACTING_AUDIO ->      Toast.makeText(this@VideoListFragment.context, getString(R.string.audio_extraction_error), Toast.LENGTH_SHORT).show()
+                VideoErrorType.DECODING_VIDEO ->        Toast.makeText(this@VideoListFragment.context, getString(R.string.video_decoding_error), Toast.LENGTH_SHORT).show()
+                VideoErrorType.GENERATING_SUBTITLES ->  Toast.makeText(this@VideoListFragment.context, getString(R.string.subtitle_generation_error), Toast.LENGTH_SHORT).show()
+                VideoErrorType.UPLOADING_AUDIO ->       Toast.makeText(this@VideoListFragment.context, getString(R.string.audio_upload_error), Toast.LENGTH_SHORT).show()
+            }
+            vm.onEvent(event = VideosEvent.DeleteVideo(video = video))
         }
 
         vm.videoList.observe(videoListActivity) { video ->

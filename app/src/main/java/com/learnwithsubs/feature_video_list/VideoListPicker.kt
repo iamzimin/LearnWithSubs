@@ -51,7 +51,6 @@ class VideoListPicker(private val fragment: Fragment, private val requestCode: I
                 videoStatus = VideoStatus.LOADING_VIDEO,
                 loadingType = VideoLoadingType.WAITING,
                 name = videoName,
-                preview = 0,
                 inputPath = path,
                 duration = videoDuration,
                 bitrate = bitrate,
@@ -106,16 +105,16 @@ class VideoListPicker(private val fragment: Fragment, private val requestCode: I
         return file.absolutePath
     }
 
-    private fun getVideoDuration(videoUri: Uri, context: Context): Int {
+    private fun getVideoDuration(videoUri: Uri, context: Context): Long {
         val retriever = MediaMetadataRetriever()
         retriever.setDataSource(context, Uri.parse(videoUri.toString())) //TODO если файл сломан -> ошибка
 
         val durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-        val duration = durationString?.toIntOrNull() ?: 0L
+        val duration = durationString?.toLongOrNull() ?: 0L
 
         retriever.release()
 
-        return duration.toInt()
+        return duration
     }
 
     private fun getVideoBitrate(videoPath: String): Int {

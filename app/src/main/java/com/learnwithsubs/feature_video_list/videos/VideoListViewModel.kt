@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.learnwithsubs.feature_video_list.models.Video
+import com.learnwithsubs.feature_video_list.models.VideoErrorType
 import com.learnwithsubs.feature_video_list.models.VideoLoadingType
 import com.learnwithsubs.feature_video_list.models.VideoStatus
 import com.learnwithsubs.feature_video_list.repository.VideoTranscodeRepository
@@ -33,6 +34,7 @@ class VideoListViewModel @Inject constructor(
 
     val videoToUpdate = MutableLiveData<Video>()
     val videoProgressLiveData: MutableLiveData<Video?> = videoTranscodeRepository.getVideoProgressLiveData()
+    val errorTypeLiveData = MutableLiveData<Video>()
 
     private val videoSemaphore = Semaphore(1)
     private val processQueue = LinkedList<Video?>()
@@ -54,6 +56,7 @@ class VideoListViewModel @Inject constructor(
             }
             is VideosEvent.SetOrderMode -> setOrderMode(orderMode = event.orderMode)
             is VideosEvent.DeSelect -> deSelectVideo(isNeedSelect = event.isNeedSelect)
+            is VideosEvent.DeleteVideo -> deleteVideo(video = event.video)
             is VideosEvent.DeleteSelectedVideos -> deleteSelectedVideo(selectedVideos = event.videos)
             is VideosEvent.LoadVideo -> addVideo(event.video)
             is VideosEvent.UpdateVideo -> editVideo(event.video)
@@ -77,20 +80,24 @@ class VideoListViewModel @Inject constructor(
     }
 
     private fun addVideo(video: Video) {
-        viewModelScope.launch {
+       viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 videoListUseCases.loadVideoUseCase.invoke(video)
                 val lastVideo: Video? = videoListUseCases.getLastVideoUseCase.invoke()
                 processQueue.add(lastVideo)
 
                 videoSemaphore.acquire()
-                try { //TODO обработать возможный null
+                try {
                     val poolList = processQueue.poll() ?: return@withContext
 
                     // Обработка извлечение аудио
                     poolList.loadingType = VideoLoadingType.EXTRACTING_AUDIO
                     videoListUseCases.loadVideoUseCase.invoke(poolList)
-                    val extractedAudio: Video? = videoListUseCases.extractAudioUseCase.invoke(poolList)
+                    val extractedAudio: Video = videoListUseCases.extractAudioUseCase.invoke(poolList) ?: return@withContext // Return, если null (пользователь отменил загрузку)
+                    if (extractedAudio.errorType != null) { // Если ошибка не пуста, то отправка ошибки + остановка обработки
+                        errorTypeLiveData.postValue(extractedAudio)
+                        return@withContext
+                    }
 
                     // Декодирование видео
                     val transcodeVideo = async {
@@ -100,29 +107,51 @@ class VideoListViewModel @Inject constructor(
                     }
 
                     // Загрузка аудио
-                    val sendAudio = async {
-                       return@async videoListUseCases.sendAudioToServerUseCase.invoke(extractedAudio)
+                    val subtitlesFromServer = async {
+                       return@async videoListUseCases.getSubtitlesFromServerUseCase.invoke(extractedAudio)
                     }
 
-                    val recodedVideo = transcodeVideo.await()
+                    // Ожидание декодирования видео
+                    val recodedVideo = transcodeVideo.await() ?: return@withContext // Return, если null (пользователь отменил загрузку)
+                    if (recodedVideo.errorType != null) { // Если ошибка не пуста, то отправка ошибки + остановка обработки
+                        errorTypeLiveData.postValue(recodedVideo)
+                        return@withContext
+                    }
+
                     // После выполненеия декодирования ставится стстус генерации субтитров, если они ещё не готовы
-                    if (sendAudio.isActive) {
+                    if (subtitlesFromServer.isActive) {
                         poolList.loadingType = VideoLoadingType.GENERATING_SUBTITLES
                         videoListUseCases.loadVideoUseCase.invoke(poolList)
                     }
-                    sendAudio.await()
+                    val videoSubtitles = subtitlesFromServer.await()
+                    if (videoSubtitles.errorType != null) {
+                        errorTypeLiveData.postValue(videoSubtitles)
+                        return@withContext
+                    }
 
-                    recodedVideo?.let { videoListUseCases.extractVideoPreviewUseCase.invoke(it) }
+                    // Генерация превью
+                    videoListUseCases.extractVideoPreviewUseCase.invoke(recodedVideo)
 
                     // Успешное завершение
-                    recodedVideo?.videoStatus = VideoStatus.NORMAL_VIDEO
-                    recodedVideo?.let { videoListUseCases.loadVideoUseCase.invoke(it) }
+                    recodedVideo.videoStatus = VideoStatus.NORMAL_VIDEO
+                    videoListUseCases.loadVideoUseCase.invoke(recodedVideo)
                 } finally {
                     videoSemaphore.release()
                 }
             }
         }
     }
+
+    // Функиця проверки+возврата типа ошибки у видео. Если ошибки нет - null
+//    private fun checkVideoError(video: Video): VideoErrorType? {
+//        return when(video.errorType) {
+//            VideoErrorType.EXTRACTING_AUDIO -> VideoErrorType.EXTRACTING_AUDIO
+//            VideoErrorType.DECODING_VIDEO -> VideoErrorType.DECODING_VIDEO
+//            VideoErrorType.GENERATING_SUBTITLES -> VideoErrorType.GENERATING_SUBTITLES
+//            VideoErrorType.LOADING_AUDIO -> VideoErrorType.LOADING_AUDIO
+//            null -> null
+//        }
+//    }
 
     private fun deSelectVideo(isNeedSelect: Boolean) {
         val copiedVideoList = videoList.value?.map { video -> video.copy(isSelected = isNeedSelect) }
@@ -132,6 +161,12 @@ class VideoListViewModel @Inject constructor(
     private fun deleteSelectedVideo(selectedVideos: List<Video>?) {
         viewModelScope.launch {
             selectedVideos?.forEach { videoListUseCases.deleteVideoUseCase.invoke(it)}
+        }
+    }
+
+    private fun deleteVideo(video: Video) {
+        viewModelScope.launch {
+            videoListUseCases.deleteVideoUseCase.invoke(video)
         }
     }
 

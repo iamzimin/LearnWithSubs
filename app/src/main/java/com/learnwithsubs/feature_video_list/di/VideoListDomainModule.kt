@@ -1,6 +1,5 @@
 package com.learnwithsubs.feature_video_list.di
 
-import android.content.Context
 import com.learnwithsubs.feature_video_list.repository.ServerInteractionRepository
 import com.learnwithsubs.feature_video_list.repository.VideoListRepository
 import com.learnwithsubs.feature_video_list.repository.VideoTranscodeRepository
@@ -10,7 +9,7 @@ import com.learnwithsubs.feature_video_list.usecase.ExtractVideoPreviewUseCase
 import com.learnwithsubs.feature_video_list.usecase.GetLastVideoUseCase
 import com.learnwithsubs.feature_video_list.usecase.GetVideoListUseCase
 import com.learnwithsubs.feature_video_list.usecase.LoadVideoUseCase
-import com.learnwithsubs.feature_video_list.usecase.SendAudioToServerUseCase
+import com.learnwithsubs.feature_video_list.usecase.GetSubtitlesFromServerUseCase
 import com.learnwithsubs.feature_video_list.usecase.TranscodeVideoUseCase
 import com.learnwithsubs.feature_video_list.usecase.VideoListUseCases
 import dagger.Module
@@ -34,7 +33,7 @@ class VideoListDomainModule {
             getLastVideoUseCase = GetLastVideoUseCase(videoListRepository),
             transcodeVideoUseCase = TranscodeVideoUseCase(transcodeRepository),
             extractAudioUseCase = ExtractAudioUseCase(transcodeRepository),
-            sendAudioToServerUseCase = SendAudioToServerUseCase(serverInteractionRepository),
+            getSubtitlesFromServerUseCase = GetSubtitlesFromServerUseCase(serverInteractionRepository),
             extractVideoPreviewUseCase = ExtractVideoPreviewUseCase(transcodeRepository)
         )
     }
