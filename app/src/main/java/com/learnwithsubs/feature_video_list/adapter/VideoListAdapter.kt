@@ -17,7 +17,7 @@ class VideoListAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var videoList: ArrayList<Video> = videoListInit
-    var videoSelected = ArrayList<Video>() // TODO очистить массив когда пользователь начинает искать видео if (adapter.videoList.isNotEmpty()) adapter.videoSelected.clear()
+    var videoSelected = ArrayList<Video>()
     var isNormalMode = true
 
 
@@ -26,15 +26,16 @@ class VideoListAdapter(
     fun updateData(videoList: ArrayList<Video>) {
         this@VideoListAdapter.videoList = videoList
 
-        videoSelected.forEach { selectedVideo -> // TODO если videoToUpdate - null, нужно удалять selectedVideo из videoSelected, тк оно было удалено
+        videoSelected.forEach { selectedVideo ->
             val videoToUpdate = videoList.find { it.id == selectedVideo.id }
             videoToUpdate?.isSelected = selectedVideo.isSelected
         }
         videoSelected.clear()
-        videoList.forEach { video ->
-            if (video.isSelected) videoSelected.add(video)
+        this@VideoListAdapter.videoList.forEach{
+            if (it.isSelected)
+                videoSelected.add(it)
         }
-//        isNormalMode = videoSelected.isEmpty()
+        isNormalMode = videoSelected.isEmpty()
         notifyDataSetChanged() //TODO передавать в качестве агрументов id обновлённого видоса
     }
     /*

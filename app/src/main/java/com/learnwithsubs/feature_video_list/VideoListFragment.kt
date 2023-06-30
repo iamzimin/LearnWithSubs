@@ -128,7 +128,7 @@ class VideoListFragment : Fragment() {
         val dialog = Dialog(videoListActivity)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.video_list_menu_dialog)
-        val isNeedSelect = adapter.videoSelected.size == adapter.videoList.size
+        val isSelectAll = adapter.videoSelected.size == adapter.videoList.size
 
         val sort = dialog.findViewById<CardView>(R.id.sort_by_card)
         val select = dialog.findViewById<CardView>(R.id.de_select_all_card)
@@ -136,10 +136,11 @@ class VideoListFragment : Fragment() {
         val delete = dialog.findViewById<CardView>(R.id.delete_card)
 
         val selectText = dialog.findViewById<TextView>(R.id.de_select_all_text)
-        selectText.text = if (isNeedSelect) videoListActivity.applicationContext.getString(R.string.deselect_all) else videoListActivity.applicationContext.getString(
+        selectText.text = if (isSelectAll) videoListActivity.applicationContext.getString(R.string.deselect_all) else videoListActivity.applicationContext.getString(
             R.string.select_all
         )
         rename.visibility = if (adapter.videoSelected.size == 1) View.VISIBLE else View.GONE
+        select.visibility = if (adapter.videoList.isEmpty()) View.GONE else View.VISIBLE
 
         sort.setOnClickListener {
             openSortByMenu()
@@ -148,13 +149,13 @@ class VideoListFragment : Fragment() {
 
         select.setOnClickListener(object : View.OnClickListener {
             override fun onClick(p0: View?) {
-                if (isNeedSelect) {
+                if (isSelectAll) {
                     adapter.clearSelect()
-                    vm.onEvent(event = VideosEvent.DeSelect(isNeedSelect = false))
+                    vm.onEvent(event = VideosEvent.DeSelect(isNeedSelectAll = false))
                 }
                 else {
                     adapter.isNormalMode = false
-                    vm.onEvent(event = VideosEvent.DeSelect(isNeedSelect = true))
+                    vm.onEvent(event = VideosEvent.DeSelect(isNeedSelectAll = true))
                     adapter.videoSelected = ArrayList(adapter.videoList)
                 }
                 dialog.dismiss()

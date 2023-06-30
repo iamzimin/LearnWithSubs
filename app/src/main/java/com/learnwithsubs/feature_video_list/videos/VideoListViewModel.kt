@@ -5,9 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.learnwithsubs.feature_video_list.VideoConstants
 import com.learnwithsubs.feature_video_list.models.Video
-import com.learnwithsubs.feature_video_list.models.VideoErrorType
 import com.learnwithsubs.feature_video_list.models.VideoLoadingType
 import com.learnwithsubs.feature_video_list.models.VideoStatus
 import com.learnwithsubs.feature_video_list.repository.VideoTranscodeRepository
@@ -57,7 +55,7 @@ class VideoListViewModel @Inject constructor(
                 updateVideoList(videoOrder = sortMode.value, filter = filter)
             }
             is VideosEvent.SetOrderMode -> setOrderMode(orderMode = event.orderMode)
-            is VideosEvent.DeSelect -> deSelectVideo(isNeedSelect = event.isNeedSelect)
+            is VideosEvent.DeSelect -> deSelectVideo(isNeedSelect = event.isNeedSelectAll)
             is VideosEvent.DeleteVideo -> deleteVideo(video = event.video)
             is VideosEvent.DeleteSelectedVideos -> deleteSelectedVideo(selectedVideos = event.videos)
             is VideosEvent.LoadVideo -> addVideo(event.video)

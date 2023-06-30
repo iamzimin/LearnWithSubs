@@ -8,7 +8,7 @@ sealed class VideosEvent {
     data class SetOrderMode(val orderMode: VideoOrder): VideosEvent()
     data class Filter(val filter: String?): VideosEvent()
     data class UpdateVideoList(val videoOrder: VideoOrder?, val filter: String?): VideosEvent()
-    data class DeSelect(val isNeedSelect: Boolean): VideosEvent()
+    data class DeSelect(val isNeedSelectAll: Boolean): VideosEvent()
     data class DeleteVideo(val video: Video): VideosEvent()
     data class DeleteSelectedVideos(val videos: List<Video>?): VideosEvent()
     data class LoadVideo(val video: Video): VideosEvent()
