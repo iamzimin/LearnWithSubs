@@ -68,7 +68,7 @@ class VideoListAdapter(
     }
     fun selectAll() {
         videoSelected = ArrayList(videoList)
-        isNormalMode = true
+        isNormalMode = false
     }
     fun getVideoListSize(): Int {
         return videoList.size
