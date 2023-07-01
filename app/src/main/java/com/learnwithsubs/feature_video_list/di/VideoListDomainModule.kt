@@ -10,6 +10,7 @@ import com.learnwithsubs.feature_video_list.usecase.GetLastVideoUseCase
 import com.learnwithsubs.feature_video_list.usecase.GetVideoListUseCase
 import com.learnwithsubs.feature_video_list.usecase.LoadVideoUseCase
 import com.learnwithsubs.feature_video_list.usecase.GetSubtitlesFromServerUseCase
+import com.learnwithsubs.feature_video_list.usecase.SortVideoListUseCase
 import com.learnwithsubs.feature_video_list.usecase.TranscodeVideoUseCase
 import com.learnwithsubs.feature_video_list.usecase.VideoListUseCases
 import dagger.Module
@@ -34,7 +35,8 @@ class VideoListDomainModule {
             transcodeVideoUseCase = TranscodeVideoUseCase(transcodeRepository),
             extractAudioUseCase = ExtractAudioUseCase(transcodeRepository),
             getSubtitlesFromServerUseCase = GetSubtitlesFromServerUseCase(serverInteractionRepository),
-            extractVideoPreviewUseCase = ExtractVideoPreviewUseCase(transcodeRepository)
+            extractVideoPreviewUseCase = ExtractVideoPreviewUseCase(transcodeRepository),
+            sortVideoListUseCase = SortVideoListUseCase()
         )
     }
 

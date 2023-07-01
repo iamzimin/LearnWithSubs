@@ -33,7 +33,7 @@ class VideoListViewModel @Inject constructor(
     var editableVideo: Video? = null
 
     val videoProgressLiveData: MutableLiveData<Video?> = videoTranscodeRepository.getVideoProgressLiveData()
-    val errorTypeLiveData = MutableLiveData<Video>()
+    val errorTypeLiveData = MutableLiveData<Video?>()
 
     private val videoSemaphore = Semaphore(1)
     private val processQueue = LinkedList<Video?>()
@@ -43,15 +43,15 @@ class VideoListViewModel @Inject constructor(
     }
 
     init {
-        updateVideoList(videoOrder = sortMode.value, filter = filter)
+        updateVideoList()
     }
 
     fun onEvent(event: VideosEvent) {
         when (event) {
-            is VideosEvent.UpdateVideoList -> updateVideoList(videoOrder = sortMode.value, filter = filter)
+            is VideosEvent.UpdateVideoList -> updateVideoList()
             is VideosEvent.Filter -> {
                 setFilterMode(filter = event.filter)
-                updateVideoList(videoOrder = sortMode.value, filter = filter)
+                updateVideoList()
             }
             is VideosEvent.SetOrderMode -> setOrderMode(orderMode = event.orderMode)
             is VideosEvent.DeSelect -> deSelectVideo(isNeedSelect = event.isNeedSelectAll)
@@ -62,15 +62,15 @@ class VideoListViewModel @Inject constructor(
         }
     }
 
-    private fun updateVideoList(videoOrder: VideoOrder?, filter: String?) {
-        videoList.addSource(
-            videoListUseCases.getVideoListUseCase.invoke(
-                videoOrder = videoOrder ?: DEFAULT_SORT_MODE,
-                filter = filter
-            ).asLiveData()
-        ) { list ->
-            videoList.value = ArrayList(list)
+    private fun updateVideoList() {
+        videoList.addSource(videoListUseCases.getVideoListUseCase.invoke().asLiveData()) { list ->
+            videoList.value = getSortedVideoList(videoList = ArrayList(list))
         }
+    }
+
+    fun getSortedVideoList(videoList: List<Video>): List<Video>? {
+        val sort = sortMode.value ?: DEFAULT_SORT_MODE
+        return videoListUseCases.sortVideoListUseCase(videoList = ArrayList(videoList), sortMode = sort, filter = filter)
     }
 
     private fun editVideo(video: Video) {

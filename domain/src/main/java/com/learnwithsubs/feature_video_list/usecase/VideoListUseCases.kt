@@ -2,6 +2,7 @@ package com.learnwithsubs.feature_video_list.usecase
 
 data class VideoListUseCases(
     val getVideoListUseCase: GetVideoListUseCase,
+    val sortVideoListUseCase: SortVideoListUseCase,
     val deleteVideoUseCase: DeleteVideoUseCase,
     val loadVideoUseCase: LoadVideoUseCase,
     val getLastVideoUseCase: GetLastVideoUseCase,

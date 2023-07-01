@@ -92,7 +92,9 @@ class VideoListFragment : Fragment() {
             } else false
         }
 
+        vm.errorTypeLiveData.value = null
         vm.errorTypeLiveData.observe(videoListActivity) { video ->
+            if (video == null) return@observe
             val errorType = video.errorType ?: return@observe
             when (errorType) {
                 VideoErrorType.EXTRACTING_AUDIO ->      Toast.makeText(this@VideoListFragment.context, getString(R.string.audio_extraction_error), Toast.LENGTH_SHORT).show()
@@ -103,9 +105,10 @@ class VideoListFragment : Fragment() {
             vm.onEvent(event = VideosEvent.DeleteVideo(video = video))
         }
 
-        vm.videoList.observe(videoListActivity) { video ->
-            if (video != null)
-                adapter.updateData(ArrayList(video))
+        vm.videoList.observe(videoListActivity) { videoList ->
+            videoList ?: return@observe
+            val sorted = vm.getSortedVideoList(videoList = videoList) ?: return@observe
+            adapter.updateData(ArrayList(sorted))
         }
 
         vm.videoProgressLiveData.observe(videoListActivity) { videoProgress ->
