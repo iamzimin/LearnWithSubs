@@ -108,10 +108,6 @@ class VideoListFragment : Fragment() {
                 adapter.updateData(ArrayList(video))
         }
 
-        vm.videoToUpdate.observe(videoListActivity) { video ->
-            adapter.updateVideo(video)
-        }
-
         vm.videoProgressLiveData.observe(videoListActivity) { videoProgress ->
             if (videoProgress != null) {
                 adapter.updateVideo(videoProgress)
@@ -128,7 +124,7 @@ class VideoListFragment : Fragment() {
         val dialog = Dialog(videoListActivity)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.video_list_menu_dialog)
-        val isSelectAll = adapter.videoSelected.size == adapter.videoList.size
+        val isSelectAll = adapter.getVideoSelectedSize() == adapter.getVideoListSize()
 
         val sort = dialog.findViewById<CardView>(R.id.sort_by_card)
         val select = dialog.findViewById<CardView>(R.id.de_select_all_card)
@@ -139,8 +135,8 @@ class VideoListFragment : Fragment() {
         selectText.text = if (isSelectAll) videoListActivity.applicationContext.getString(R.string.deselect_all) else videoListActivity.applicationContext.getString(
             R.string.select_all
         )
-        rename.visibility = if (adapter.videoSelected.size == 1) View.VISIBLE else View.GONE
-        select.visibility = if (adapter.videoList.isEmpty()) View.GONE else View.VISIBLE
+        rename.visibility = if (adapter.getVideoSelectedSize() == 1) View.VISIBLE else View.GONE
+        select.visibility = if (adapter.getVideoListSize() == 0) View.GONE else View.VISIBLE
 
         sort.setOnClickListener {
             openSortByMenu()
@@ -150,13 +146,12 @@ class VideoListFragment : Fragment() {
         select.setOnClickListener(object : View.OnClickListener {
             override fun onClick(p0: View?) {
                 if (isSelectAll) {
-                    adapter.clearSelect()
+                    adapter.selectClear()
                     vm.onEvent(event = VideosEvent.DeSelect(isNeedSelectAll = false))
                 }
                 else {
-                    adapter.isNormalMode = false
                     vm.onEvent(event = VideosEvent.DeSelect(isNeedSelectAll = true))
-                    adapter.videoSelected = ArrayList(adapter.videoList)
+                    adapter.selectAll()
                 }
                 dialog.dismiss()
             }
@@ -164,8 +159,7 @@ class VideoListFragment : Fragment() {
 
         rename.setOnClickListener(object : View.OnClickListener {
             override fun onClick(p0: View?) {
-                if (adapter.videoSelected.size == 1)
-                    vm.editableVideo = adapter.videoSelected[0]
+                vm.editableVideo = adapter.getEditableVideo()
                 openRenameMenu()
                 dialog.dismiss()
             }
@@ -174,7 +168,7 @@ class VideoListFragment : Fragment() {
         delete.setOnClickListener {
             //vm.deleteSelectedVideo() /!/
             vm.onEvent(event = VideosEvent.DeleteSelectedVideos(videos = vm.videoList.value?.filter { it.isSelected }))
-            adapter.clearSelect()
+            adapter.selectClear()
             dialog.dismiss()
         }
 
@@ -197,17 +191,17 @@ class VideoListFragment : Fragment() {
         editText.setOnEditorActionListener { textView, actionId, keyEvent ->
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
                 textView.clearFocus()
-                val video = vm.videoList.value?.find { video -> video.id == vm.editableVideo?.id }
+                val video = vm.videoList.value?.find { video -> video.id == vm.editableVideo?.id }?.copy()
                 if (video == null) {
                     Toast.makeText(context, getString(R.string.the_video_does_not_exist), Toast.LENGTH_SHORT).show()
-                    adapter.clearSelect()
+                    adapter.selectClear()
                     renameMenu.dismiss()
                     return@setOnEditorActionListener true
                 }
                 video.name = textView.text.toString()
                 video.isSelected = false
-                vm.onEvent(event = VideosEvent.RenameVideo(video = video))
-                adapter.clearSelect()
+                vm.onEvent(event = VideosEvent.UpdateVideo(video = video))
+                adapter.selectClear()
                 renameMenu.dismiss()
                 true
             } else false

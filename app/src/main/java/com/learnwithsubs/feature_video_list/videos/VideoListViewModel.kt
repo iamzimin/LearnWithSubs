@@ -32,7 +32,6 @@ class VideoListViewModel @Inject constructor(
     var filter: String? = null
     var editableVideo: Video? = null
 
-    val videoToUpdate = MutableLiveData<Video>()
     val videoProgressLiveData: MutableLiveData<Video?> = videoTranscodeRepository.getVideoProgressLiveData()
     val errorTypeLiveData = MutableLiveData<Video>()
 
@@ -60,7 +59,6 @@ class VideoListViewModel @Inject constructor(
             is VideosEvent.DeleteSelectedVideos -> deleteSelectedVideo(selectedVideos = event.videos)
             is VideosEvent.LoadVideo -> addVideo(event.video)
             is VideosEvent.UpdateVideo -> editVideo(event.video)
-            is VideosEvent.RenameVideo -> renameVideo(event.video)
         }
     }
 
@@ -171,12 +169,6 @@ class VideoListViewModel @Inject constructor(
         val subSTR = File(video.outputPath)
         if (subSTR.exists())
             subSTR.deleteRecursively()
-    }
-
-    private fun renameVideo(video: Video) {
-        viewModelScope.launch {
-            videoListUseCases.loadVideoUseCase.invoke(video = video)
-        }
     }
 
     private fun setOrderMode(orderMode: VideoOrder) {

@@ -12,5 +12,4 @@ sealed class VideosEvent {
     data class DeleteVideo(val video: Video): VideosEvent()
     data class DeleteSelectedVideos(val videos: List<Video>?): VideosEvent()
     data class LoadVideo(val video: Video): VideosEvent()
-    data class RenameVideo(val video: Video): VideosEvent()
 }

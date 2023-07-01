@@ -55,7 +55,7 @@ class NormalVideoViewHolder(
 
         itemView.setOnClickListener (object : View.OnClickListener {
             override fun onClick(p0: View?) {
-                if (adapter.isNormalMode) {
+                if (adapter.getIsNormalMode()) {
                     val intent = Intent(itemView.context, VideoViewActivity::class.java)
                     intent.putExtra("videoData", video)
                     itemView.context.startActivity(intent)
@@ -112,7 +112,7 @@ class LoadingVideoViewHolder(
 
         itemView.setOnClickListener (object : View.OnClickListener {
             override fun onClick(p0: View?) {
-                if (adapter.isNormalMode)
+                if (adapter.getIsNormalMode())
                     Toast.makeText(itemView.context.applicationContext, videoIsUploading, Toast.LENGTH_SHORT).show()
                 else {
                     val position = adapterPosition

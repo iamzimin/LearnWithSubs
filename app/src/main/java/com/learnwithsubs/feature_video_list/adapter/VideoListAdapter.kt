@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.learnwithsubs.R
@@ -16,71 +17,74 @@ class VideoListAdapter(
     videoListInit: ArrayList<Video>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var videoList: ArrayList<Video> = videoListInit
-    var videoSelected = ArrayList<Video>()
-    var isNormalMode = true
-
-
+    private var videoList: ArrayList<Video> = videoListInit
+    private var videoSelected = ArrayList<Video>()
+    private var isNormalMode = true
 
 
     fun updateData(videoList: ArrayList<Video>) {
-        this@VideoListAdapter.videoList = videoList
-
-        videoSelected.forEach { selectedVideo ->
-            val videoToUpdate = videoList.find { it.id == selectedVideo.id }
-            videoToUpdate?.isSelected = selectedVideo.isSelected
-        }
-        videoSelected.clear()
-        this@VideoListAdapter.videoList.forEach{
-            if (it.isSelected)
-                videoSelected.add(it)
-        }
-        isNormalMode = videoSelected.isEmpty()
-        notifyDataSetChanged() //TODO передавать в качестве агрументов id обновлённого видоса
+        val selectedList = getSelected(newList = videoList)
+        val diffResult = DiffUtil.calculateDiff(VideoDiffCallback(this.videoList, selectedList))
+        this.videoList = selectedList
+        diffResult.dispatchUpdatesTo(this)
     }
-    /*
-        fun updateData(videoList: ArrayList<Video>) {
-        this@VideoListAdapter.videoList.clear()
-        this@VideoListAdapter.videoList.addAll(videoList)
-
-        videoSelected.clear()
-        videoSelected.addAll(videoList.filter { it.isSelected })
-
-        isNormalMode = videoList.isEmpty()
-        notifyDataSetChanged()
-    }
-     */
 
     fun updateVideo(videoToUpdate: Video) {
-        var position: Int? = null
-        for (i in 0 until this@VideoListAdapter.videoList.size) {
-            val video = this@VideoListAdapter.videoList[i]
-            if (video.id == videoToUpdate.id) {
-                this@VideoListAdapter.videoList[i] = videoToUpdate
-                position = i
-                break
-            }
-        }
-        if (position != null)
+        val position = this@VideoListAdapter.videoList.indexOfFirst { it.id == videoToUpdate.id }
+        if (position != -1) {
+            this@VideoListAdapter.videoList[position] = videoToUpdate
             notifyItemChanged(position)
+        }
     }
 
     fun updateSelection(position: Int) {
-        val video = videoList[position]
-        video.isSelected = !video.isSelected
-        if (video.isSelected)
-            videoSelected.add(video)
-        else
-            videoSelected.remove(videoSelected.find { it.id == video.id })
-        isNormalMode = videoSelected.isEmpty()
+        videoList.getOrNull(position)?.let { video ->
+            video.isSelected = !video.isSelected
+            if (video.isSelected)
+                videoSelected.add(video)
+            else
+                videoSelected.remove(videoSelected.find { it.id == video.id })
+            isNormalMode = videoSelected.isEmpty()
 
-        notifyItemChanged(position)
+            notifyItemChanged(position)
+        }
     }
 
-    fun clearSelect() {
+
+    private fun getSelected(newList: ArrayList<Video>): ArrayList<Video> {
+        for (video in newList) {
+            val found = videoSelected.find { it.id == video.id }
+            if (found != null) video.isSelected = found.isSelected
+        }
+        videoSelected.clear()
+        videoSelected.addAll(newList.filter { it.isSelected })
+        isNormalMode = videoSelected.isEmpty()
+        return newList
+    }
+
+    fun selectClear() {
         videoSelected.clear()
         isNormalMode = true
     }
+    fun selectAll() {
+        videoSelected = ArrayList(videoList)
+        isNormalMode = true
+    }
+    fun getVideoListSize(): Int {
+        return videoList.size
+    }
+    fun getVideoSelectedSize(): Int {
+        return videoSelected.size
+    }
+    fun getEditableVideo(): Video? {
+        return if (videoSelected.size == 1) videoSelected[0]
+        else null
+    }
+    fun getIsNormalMode(): Boolean {
+        return isNormalMode
+    }
+
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -144,4 +148,23 @@ class VideoListAdapter(
             outRect.top = spaceSize
         }
     }
+
+    class VideoDiffCallback(private val oldList: List<Video>, private val newList: List<Video>) : DiffUtil.Callback() {
+        override fun getOldListSize(): Int {
+            return oldList.size
+        }
+
+        override fun getNewListSize(): Int {
+            return newList.size
+        }
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].id == newList[newItemPosition].id
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition] == newList[newItemPosition]
+        }
+    }
+
 }
