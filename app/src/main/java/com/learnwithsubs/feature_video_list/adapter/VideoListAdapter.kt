@@ -1,6 +1,8 @@
 package com.learnwithsubs.feature_video_list.adapter
 
+import android.content.Context
 import android.graphics.Rect
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -126,14 +128,20 @@ class VideoListAdapter(
                 loadingHolder.bind(videoList[position])
             }
         }
-        if (video.isSelected) {
-            val color = ContextCompat.getColor(context, R.color.background_video_selected_tile_dark) // TODO цвета берутся не с attr
-            (holder.itemView as MaterialCardView).setCardBackgroundColor(color)
-        }
-        else {
-            val color = ContextCompat.getColor(context, R.color.background_video_tile_dark)
-            (holder.itemView as MaterialCardView).setCardBackgroundColor(color)
-        }
+        if (video.isSelected)
+            (holder.itemView as MaterialCardView).setCardBackgroundColor(
+                context.getColorFromAttr(R.attr.background_video_selected_tile_dark)
+            )
+        else
+            (holder.itemView as MaterialCardView).setCardBackgroundColor(
+                context.getColorFromAttr(R.attr.background_video_tile_dark)
+            )
+    }
+
+    private fun Context.getColorFromAttr(attrId: Int): Int {
+        val typedValue = TypedValue()
+        theme.resolveAttribute(attrId, typedValue, true)
+        return typedValue.data
     }
 
     override fun getItemViewType(position: Int): Int {

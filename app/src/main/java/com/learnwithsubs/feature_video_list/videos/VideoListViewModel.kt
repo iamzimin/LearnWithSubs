@@ -78,7 +78,11 @@ class VideoListViewModel @Inject constructor(
     }
 
     private fun addVideo(video: Video) {
-       viewModelScope.launch {
+        if (video.errorType != null) {
+            errorTypeLiveData.postValue(video)
+            return
+        }
+        viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 videoListUseCases.loadVideoUseCase.invoke(video)
                 val lastVideo: Video? = videoListUseCases.getLastVideoUseCase.invoke()

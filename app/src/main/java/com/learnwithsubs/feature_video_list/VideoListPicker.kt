@@ -11,7 +11,9 @@ import android.provider.MediaStore
 import android.provider.OpenableColumns
 import androidx.fragment.app.Fragment
 import com.arthenica.mobileffmpeg.FFprobe
+import com.learnwithsubs.R
 import com.learnwithsubs.feature_video_list.models.Video
+import com.learnwithsubs.feature_video_list.models.VideoErrorType
 import com.learnwithsubs.feature_video_list.models.VideoLoadingType
 import com.learnwithsubs.feature_video_list.models.VideoStatus
 import com.learnwithsubs.feature_video_list.videos.VideoListViewModel
@@ -40,16 +42,25 @@ class VideoListPicker(private val fragment: Fragment, private val requestCode: I
     ) {
         if (requestCode == this.requestCode && resultCode == Activity.RESULT_OK) {
             val selectedVideoUri: Uri = data?.data ?: return
-            val path: String = getVideoPath(context = context, videoUri = selectedVideoUri) ?: return
+            var errorType: VideoErrorType? = null
 
+            var path: String? = getVideoPath(context = context, videoUri = selectedVideoUri)
             val videoName: String = getVideoNameFromUri(selectedVideoUri, context)
-            val videoDuration = getVideoDuration(selectedVideoUri, context)
-            val bitrate = getVideoBitrate(videoPath = path)
+            var videoDuration: Long? = getVideoDuration(selectedVideoUri, context)
+            var bitrate: Int? = getVideoBitrate(videoPath = path)
             val currentTime = Date().time
+
+            if (path == null || videoDuration == null || bitrate == null) {
+                path = ""
+                videoDuration = 0
+                bitrate = 0
+                errorType = VideoErrorType.PROCESSING_VIDEO
+            }
 
             val video = Video(
                 videoStatus = VideoStatus.LOADING_VIDEO,
                 loadingType = VideoLoadingType.WAITING,
+                errorType = errorType,
                 name = videoName,
                 inputPath = path,
                 duration = videoDuration,
@@ -77,9 +88,9 @@ class VideoListPicker(private val fragment: Fragment, private val requestCode: I
                 }
             }
         }
-        catch (_: Exception) { return "Video" }
+        catch (_: Exception) { return context.getString(R.string.video) }
         
-        return displayName ?: "Video"
+        return displayName ?: context.getString(R.string.video)
     }
 
     private fun getVideoPath(context: Context, videoUri: Uri): String? {
@@ -105,24 +116,30 @@ class VideoListPicker(private val fragment: Fragment, private val requestCode: I
         return file.absolutePath
     }
 
-    private fun getVideoDuration(videoUri: Uri, context: Context): Long {
+    private fun getVideoDuration(videoUri: Uri, context: Context): Long? {
         val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(context, Uri.parse(videoUri.toString())) //TODO если файл сломан -> ошибка
+        val duration: Long?
+        try {
+            retriever.setDataSource(context, Uri.parse(videoUri.toString()))
 
-        val durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-        val duration = durationString?.toLongOrNull() ?: 0L
+            val durationString = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+            duration = durationString?.toLongOrNull() ?: 0L
 
-        retriever.release()
+            retriever.release()
+        } catch (e: Exception) {
+            return null
+        }
 
         return duration
     }
 
-    private fun getVideoBitrate(videoPath: String): Int {
-        return try { // TODO
+    private fun getVideoBitrate(videoPath: String?): Int? {
+        videoPath ?: return null
+        return try {
             val info = FFprobe.getMediaInformation(videoPath)
             info.bitrate.toInt()
         } catch (e: Exception) {
-            2000000000
+            return null
         }
     }
 }

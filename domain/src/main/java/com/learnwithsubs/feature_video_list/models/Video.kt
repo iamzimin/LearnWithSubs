@@ -11,7 +11,7 @@ data class Video(
     @PrimaryKey val id: Int? = null,
     var videoStatus: VideoStatus,
     var loadingType: VideoLoadingType,
-    var errorType: VideoErrorType? = null,
+    var errorType: VideoErrorType?,
     var isSelected: Boolean = false,
     var name: String,
     val duration: Long,
@@ -41,8 +41,9 @@ enum class VideoLoadingType(val value: Int) {
 }
 
 enum class VideoErrorType(val value: Int) {
-    EXTRACTING_AUDIO(1),
-    DECODING_VIDEO(2),
-    UPLOADING_AUDIO(3),
-    GENERATING_SUBTITLES(4),
+    PROCESSING_VIDEO(1),
+    EXTRACTING_AUDIO(2),
+    DECODING_VIDEO(3),
+    UPLOADING_AUDIO(4),
+    GENERATING_SUBTITLES(5),
 }

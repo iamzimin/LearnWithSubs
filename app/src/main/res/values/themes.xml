@@ -23,6 +23,7 @@
 
         <!--Video Tile-->
         <item name="background_video_tile_dark">@color/background_video_tile_dark</item>
+        <item name="background_video_selected_tile_dark">@color/background_video_selected_tile_dark</item>
         <item name="select_video_outline_dark">@color/select_video_outline_dark</item>
 
         <!--Unavailable Video Tile-->

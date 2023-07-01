@@ -7,6 +7,7 @@
 
     <!--Video Tile-->
     <attr name="background_video_tile_dark"/>
+    <attr name="background_video_selected_tile_dark"/>
     <attr name="select_video_outline_dark"/>
 
     <!--Unavailable Video Tile-->
