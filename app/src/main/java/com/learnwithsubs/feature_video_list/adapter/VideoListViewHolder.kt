@@ -47,11 +47,17 @@ class NormalVideoViewHolder(
         binding.videoName.text = video.name
         binding.duration.text = "${duration}: ${formatDuration(video.duration)}"
         binding.savedWords.text = "${savedWords}: ${video.saveWords}"
+        binding.videoSelectCheckBox.isChecked = video.isSelected
         binding.videoPreview.load(File(video.outputPath, VideoConstants.VIDEO_PREVIEW).absoluteFile) {
             transformations(RoundedCornersTransformation(10f))
             error(R.drawable.rectangle)
         }
         binding.videoProgress.progress = ((video.watchProgress / video.duration.toDouble()) * 100).toInt()
+
+        if (adapter.getIsNormalMode())
+            binding.videoSelectCheckBox.visibility = View.GONE
+        else
+            binding.videoSelectCheckBox.visibility = View.VISIBLE
 
         itemView.setOnClickListener (object : View.OnClickListener {
             override fun onClick(p0: View?) {
@@ -62,14 +68,18 @@ class NormalVideoViewHolder(
                 }
                 else {
                     val position = adapterPosition
-                    adapter.updateSelection(position)
+                    binding.videoSelectCheckBox.isChecked = !binding.videoSelectCheckBox.isChecked
+                    adapter.updateSelection(position = position, isSelected = binding.videoSelectCheckBox.isChecked)
                 }
             }
         })
 
         itemView.setOnLongClickListener {
             val position = adapterPosition
-            adapter.updateSelection(position)
+            if (adapter.getIsNormalMode())
+                adapter.changeMode(mode = false)
+            binding.videoSelectCheckBox.isChecked = !binding.videoSelectCheckBox.isChecked
+            adapter.updateSelection(position = position, isSelected = binding.videoSelectCheckBox.isChecked)
             true
         }
     }
@@ -84,6 +94,7 @@ class LoadingVideoViewHolder(
 
     override fun bind(video: Video) {
         binding.videoName.text = video.name
+        binding.videoSelectCheckBox.isChecked = video.isSelected
         binding.duration.text = "${duration}: ${formatDuration(video.duration)}"
 
         val status = "${itemView.context.getString(R.string.video_loading_status)}: "
@@ -110,13 +121,19 @@ class LoadingVideoViewHolder(
             binding.progressVideoLoading.progress = video.uploadingProgress
         }
 
+        if (adapter.getIsNormalMode())
+            binding.videoSelectCheckBox.visibility = View.GONE
+        else
+            binding.videoSelectCheckBox.visibility = View.VISIBLE
+
         itemView.setOnClickListener (object : View.OnClickListener {
             override fun onClick(p0: View?) {
                 if (adapter.getIsNormalMode())
                     Toast.makeText(itemView.context.applicationContext, videoIsUploading, Toast.LENGTH_SHORT).show()
                 else {
                     val position = adapterPosition
-                    adapter.updateSelection(position)
+                    binding.videoSelectCheckBox.isChecked = !binding.videoSelectCheckBox.isChecked
+                    adapter.updateSelection(position = position, isSelected = binding.videoSelectCheckBox.isChecked)
                 }
             }
 
@@ -124,7 +141,10 @@ class LoadingVideoViewHolder(
 
         itemView.setOnLongClickListener {
             val position = adapterPosition
-            adapter.updateSelection(position)
+            if (adapter.getIsNormalMode())
+                adapter.changeMode(mode = false)
+            binding.videoSelectCheckBox.isChecked = !binding.videoSelectCheckBox.isChecked
+            adapter.updateSelection(position = position, isSelected = binding.videoSelectCheckBox.isChecked)
             true
         }
     }

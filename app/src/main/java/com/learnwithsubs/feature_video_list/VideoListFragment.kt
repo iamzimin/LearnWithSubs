@@ -70,6 +70,7 @@ class VideoListFragment : Fragment(), OnModeChange {
         adapter.setOnModeChangeListener(this@VideoListFragment)
         val uploadVideoButton = view.findViewById<CardView>(R.id.button_video_upload)
         val menuButton = view.findViewById<ImageButton>(R.id.menu_button)
+        val closeSelectionMode = view.findViewById<ImageButton>(R.id.close_selection_mode)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.video_list)
         (recyclerView?.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
@@ -81,6 +82,9 @@ class VideoListFragment : Fragment(), OnModeChange {
 
         menuButton.setOnClickListener {
             openMenu()
+        }
+        closeSelectionMode.setOnClickListener{
+            adapter.clearSelection()
         }
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -133,7 +137,7 @@ class VideoListFragment : Fragment(), OnModeChange {
         val dialog = Dialog(videoListActivity)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.video_list_menu_dialog)
-        val isSelectAll = adapter.getVideoSelectedSize() == adapter.getVideoListSize()
+        val isSelectAll = adapter.getSelectedVideoSize() == adapter.getVideoListSize()
 
         val sort = dialog.findViewById<CardView>(R.id.sort_by_card)
         val select = dialog.findViewById<CardView>(R.id.de_select_all_card)
@@ -148,7 +152,7 @@ class VideoListFragment : Fragment(), OnModeChange {
         // Получение видео которое выделено
         vm.editableVideo = adapter.getEditableVideo()
         // Если выбрано 1 видео и оно имеет статус "загружено" - отображается кнопка возможности переименовать видео
-        if (adapter.getVideoSelectedSize() == 1 && (vm.editableVideo?.loadingType ?: false) == VideoLoadingType.DONE)
+        if (adapter.getSelectedVideoSize() == 1 && (vm.editableVideo?.loadingType ?: false) == VideoLoadingType.DONE)
             rename.visibility = View.VISIBLE
         else
             rename.visibility = View.GONE
@@ -162,10 +166,14 @@ class VideoListFragment : Fragment(), OnModeChange {
 
         select.setOnClickListener(object : View.OnClickListener {
             override fun onClick(p0: View?) {
+//                if (isSelectAll)
+//                    vm.deSelectVideo(selectAllMode = false)
+//                else
+//                    vm.deSelectVideo(selectAllMode = true)
                 if (isSelectAll)
-                    vm.deSelectVideo(selectAllMode = false)
+                    adapter.deselectAll()
                 else
-                    vm.deSelectVideo(selectAllMode = true)
+                    adapter.selectAll()
                 dialog.dismiss()
             }
         })
@@ -178,7 +186,7 @@ class VideoListFragment : Fragment(), OnModeChange {
         })
 
         delete.setOnClickListener {
-            vm.deleteSelectedVideo(selectedVideos = vm.videoList.value?.filter { it.isSelected }) // TODO
+            vm.deleteSelectedVideo(selectedVideos = adapter.getSelectedVideo())
             dialog.dismiss()
         }
 

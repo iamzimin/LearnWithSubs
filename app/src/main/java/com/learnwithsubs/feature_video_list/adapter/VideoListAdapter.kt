@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.card.MaterialCardView
 import com.learnwithsubs.R
 import com.learnwithsubs.feature_video_list.models.Video
 import com.learnwithsubs.feature_video_list.models.VideoStatus
@@ -37,40 +36,65 @@ class VideoListAdapter(
     fun updateVideo(videoToUpdate: Video) {
         val position = videoList.indexOfFirst { it.id == videoToUpdate.id }
         if (position != -1) {
+            val video = videoSelected.any { it.id == videoToUpdate.id }
+            videoToUpdate.isSelected = video
             videoList[position] = videoToUpdate
             notifyItemChanged(position)
         }
     }
 
-    fun updateSelection(position: Int) {
+    fun updateSelection(position: Int, isSelected: Boolean) {
         videoList.getOrNull(position)?.let { video ->
-            video.isSelected = !video.isSelected
+            video.isSelected = isSelected
             if (video.isSelected)
                 videoSelected.add(video)
             else
-                videoSelected.remove(videoSelected.find { it.id == video.id })
-            changeMode(mode = videoSelected.isEmpty())
-
-            notifyItemChanged(position)
+                videoSelected.remove(video)
         }
     }
 
+    fun selectAll() {
+        videoList.forEach { it.isSelected = true }
+        videoSelected = ArrayList(videoList.toList())
+        changeMode(mode = false)
+    }
+    fun deselectAll() {
+        videoList.forEach { it.isSelected = false }
+        videoSelected.clear()
+        notifyDataSetChanged()
+    }
+    fun clearSelection() {
+        videoList.forEach { it.isSelected = false }
+        videoSelected.clear()
+        changeMode(mode = true)
+    }
+    fun changeMode(mode: Boolean) {
+        isNormalMode = mode
+        notifyDataSetChanged()
+        onModeChangeListener?.onModeChange(isNormalMode = mode)
+    }
 
     private fun updateSelection(newList: List<Video>) {
         videoSelected.clear()
         videoSelected.addAll(newList.filter { it.isSelected })
-        changeMode(mode = videoSelected.isEmpty())
+        /*
+        videoSelected.forEach { video ->
+            val vid = newList.find { it.id == video.id }
+            if (vid == null) videoSelected.remove(video)
+        }
+         */
+        //changeMode(mode = videoSelected.isEmpty())
     }
-    private fun changeMode(mode: Boolean) {
-        isNormalMode = mode
-        onModeChangeListener?.onModeChange(isNormalMode = mode)
-    }
+
 
     fun getVideoListSize(): Int {
         return videoList.size
     }
-    fun getVideoSelectedSize(): Int {
+    fun getSelectedVideoSize(): Int {
         return videoSelected.size
+    }
+    fun getSelectedVideo(): List<Video> {
+        return videoSelected
     }
     fun getEditableVideo(): Video? {
         return if (videoSelected.size == 1) videoSelected[0].copy()
@@ -122,14 +146,14 @@ class VideoListAdapter(
                 loadingHolder.bind(videoList[position])
             }
         }
-        if (video.isSelected)
-            (holder.itemView as MaterialCardView).setCardBackgroundColor(
-                context.getColorFromAttr(R.attr.background_video_selected_tile_dark)
-            )
-        else
-            (holder.itemView as MaterialCardView).setCardBackgroundColor(
-                context.getColorFromAttr(R.attr.background_video_tile_dark)
-            )
+//        if (video.isSelected)
+//            (holder.itemView as MaterialCardView).setCardBackgroundColor(
+//                context.getColorFromAttr(R.attr.background_video_selected_tile_dark)
+//            )
+//        else
+//            (holder.itemView as MaterialCardView).setCardBackgroundColor(
+//                context.getColorFromAttr(R.attr.background_video_tile_dark)
+//            )
     }
 
     private fun Context.getColorFromAttr(attrId: Int): Int {
