@@ -46,24 +46,6 @@ class VideoListViewModel @Inject constructor(
         updateVideoList()
     }
 
-    /*
-    fun onEvent(event: VideosEvent) {
-        when (event) {
-            is VideosEvent.UpdateVideoList -> updateVideoList()
-            is VideosEvent.Filter -> {
-                setFilterMode(filter = event.filter)
-                updateVideoList()
-            }
-            is VideosEvent.SetOrderMode -> setOrderMode(orderMode = event.orderMode)
-            is VideosEvent.DeSelect -> deSelectVideo(selectAllMode = event.selectAllMode)
-            is VideosEvent.DeleteVideo -> deleteVideo(video = event.video)
-            is VideosEvent.DeleteSelectedVideos -> deleteSelectedVideo(selectedVideos = event.videos)
-            is VideosEvent.LoadVideo -> addVideo(event.video)
-            is VideosEvent.UpdateVideo -> editVideo(event.video)
-        }
-    }
-     */
-
     fun updateVideoList() {
         videoList.addSource(videoListUseCases.getVideoListUseCase.invoke().asLiveData()) { list ->
             videoList.value = getSortedVideoList(videoList = ArrayList(list))

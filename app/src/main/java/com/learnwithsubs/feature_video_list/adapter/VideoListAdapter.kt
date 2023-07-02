@@ -21,19 +21,23 @@ class VideoListAdapter(
     private var videoList: ArrayList<Video> = videoListInit
     private var videoSelected = ArrayList<Video>()
     private var isNormalMode = true
+    private var onModeChangeListener: OnModeChange? = null
 
+    fun setOnModeChangeListener(listener: OnModeChange) {
+        onModeChangeListener = listener
+    }
 
-    fun updateData(videoList: ArrayList<Video>) {
-        videoSelected = updateSelection(newList = videoList)
-        val diffResult = DiffUtil.calculateDiff(VideoDiffCallback(this.videoList, videoList))
-        this.videoList = videoList
-        diffResult.dispatchUpdatesTo(this)
+    fun updateData(newVideoList: ArrayList<Video>) {
+        updateSelection(newList = newVideoList)
+        val diffResult = DiffUtil.calculateDiff(VideoDiffCallback(videoList, newVideoList))
+        videoList = newVideoList
+        diffResult.dispatchUpdatesTo(this@VideoListAdapter)
     }
 
     fun updateVideo(videoToUpdate: Video) {
-        val position = this@VideoListAdapter.videoList.indexOfFirst { it.id == videoToUpdate.id }
+        val position = videoList.indexOfFirst { it.id == videoToUpdate.id }
         if (position != -1) {
-            this@VideoListAdapter.videoList[position] = videoToUpdate
+            videoList[position] = videoToUpdate
             notifyItemChanged(position)
         }
     }
@@ -45,18 +49,21 @@ class VideoListAdapter(
                 videoSelected.add(video)
             else
                 videoSelected.remove(videoSelected.find { it.id == video.id })
-            isNormalMode = videoSelected.isEmpty()
+            changeMode(mode = videoSelected.isEmpty())
 
             notifyItemChanged(position)
         }
     }
 
 
-    private fun updateSelection(newList: List<Video>): ArrayList<Video> {
+    private fun updateSelection(newList: List<Video>) {
         videoSelected.clear()
         videoSelected.addAll(newList.filter { it.isSelected })
-        isNormalMode = videoSelected.isEmpty()
-        return videoSelected
+        changeMode(mode = videoSelected.isEmpty())
+    }
+    private fun changeMode(mode: Boolean) {
+        isNormalMode = mode
+        onModeChangeListener?.onModeChange(isNormalMode = mode)
     }
 
     fun getVideoListSize(): Int {
@@ -79,18 +86,18 @@ class VideoListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             VideoStatus.NORMAL_VIDEO.value -> NormalVideoViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.video_tile, parent, false), this
+                LayoutInflater.from(parent.context).inflate(R.layout.video_tile, parent, false), this@VideoListAdapter
             )
 
             VideoStatus.LOADING_VIDEO.value -> LoadingVideoViewHolder(
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.video_uploading_tile, parent, false), this
+                    .inflate(R.layout.video_uploading_tile, parent, false), this@VideoListAdapter
             )
 
             else -> {
                 LoadingVideoViewHolder(
                     LayoutInflater.from(parent.context)
-                        .inflate(R.layout.video_uploading_tile, parent, false), this
+                        .inflate(R.layout.video_uploading_tile, parent, false), this@VideoListAdapter
                 )
             }
         }

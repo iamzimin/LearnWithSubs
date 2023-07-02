@@ -17,6 +17,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -27,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.learnwithsubs.R
 import com.learnwithsubs.databinding.VideoListFragmentBinding
+import com.learnwithsubs.feature_video_list.adapter.OnModeChange
 import com.learnwithsubs.feature_video_list.util.OrderType
 import com.learnwithsubs.feature_video_list.util.VideoOrder
 import com.learnwithsubs.feature_video_list.adapter.VideoListAdapter
@@ -36,7 +38,7 @@ import com.learnwithsubs.feature_video_list.videos.VideoListViewModel
 import com.learnwithsubs.feature_video_list.videos.VideoListViewModelFactory
 
 
-class VideoListFragment : Fragment() {
+class VideoListFragment : Fragment(), OnModeChange {
     private val PICK_VIDEO_REQUEST = 1
     private lateinit var videoListPicker: VideoListPicker
 
@@ -45,7 +47,9 @@ class VideoListFragment : Fragment() {
     private lateinit var vm: VideoListViewModel
     private lateinit var binding: VideoListFragmentBinding
 
-    val adapter = VideoListAdapter(videoListInit = ArrayList())
+    private val adapter = VideoListAdapter(videoListInit = ArrayList())
+    private lateinit var searchEditText: EditText
+    private lateinit var searchImageView: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,7 +65,9 @@ class VideoListFragment : Fragment() {
 
         videoListPicker = VideoListPicker(this, PICK_VIDEO_REQUEST)
 
-        val searchEditText = view.findViewById<EditText>(R.id.search_edit_text)
+        searchEditText = view.findViewById<EditText>(R.id.search_edit_text)
+        searchImageView = view.findViewById<ImageView>(R.id.search_image_view)
+        adapter.setOnModeChangeListener(this@VideoListFragment)
         val uploadVideoButton = view.findViewById<CardView>(R.id.button_video_upload)
         val menuButton = view.findViewById<ImageButton>(R.id.menu_button)
 
@@ -79,7 +85,6 @@ class VideoListFragment : Fragment() {
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                //vm.onEvent(event = VideosEvent.Filter(filter = s.toString()))
                 vm.setFilterMode(filter = s.toString())
                 vm.updateVideoList()
             }
@@ -104,7 +109,6 @@ class VideoListFragment : Fragment() {
                 VideoErrorType.GENERATING_SUBTITLES ->  Toast.makeText(this@VideoListFragment.context, getString(R.string.subtitle_generation_error), Toast.LENGTH_SHORT).show()
                 VideoErrorType.UPLOADING_AUDIO ->       Toast.makeText(this@VideoListFragment.context, getString(R.string.audio_upload_error), Toast.LENGTH_SHORT).show()
             }
-            //vm.onEvent(event = VideosEvent.DeleteVideo(video = video))
             vm.deleteVideo(video = video)
         }
 
@@ -158,8 +162,6 @@ class VideoListFragment : Fragment() {
 
         select.setOnClickListener(object : View.OnClickListener {
             override fun onClick(p0: View?) {
-                //vm.onEvent(event = VideosEvent.DeSelect(selectAllMode = false))
-                // vm.onEvent(event = VideosEvent.DeSelect(selectAllMode = true))
                 if (isSelectAll)
                     vm.deSelectVideo(selectAllMode = false)
                 else
@@ -176,7 +178,6 @@ class VideoListFragment : Fragment() {
         })
 
         delete.setOnClickListener {
-            //vm.onEvent(event = VideosEvent.DeleteSelectedVideos(videos = vm.videoList.value?.filter { it.isSelected }))
             vm.deleteSelectedVideo(selectedVideos = vm.videoList.value?.filter { it.isSelected }) // TODO
             dialog.dismiss()
         }
@@ -214,11 +215,9 @@ class VideoListFragment : Fragment() {
                         name = textView.text.toString()
                         isSelected = false
                     }
-                    //vm.onEvent(event = VideosEvent.UpdateVideo(video = video))
                     vm.editVideo(video = video)
                 }
 
-                //vm.onEvent(event = VideosEvent.DeSelect(selectAllMode = false))
                 vm.deSelectVideo(selectAllMode = false)
                 renameMenu.dismiss()
                 true
@@ -272,7 +271,6 @@ class VideoListFragment : Fragment() {
             setButtonColors(ascending = true)
             vm.setOrderType(newOrderType = OrderType.Ascending)
             val currentVideoOrder = vm.getVideoOrder()
-            //vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = currentOrderType))
             vm.setVideoOrder(currentVideoOrder)
         }
 
@@ -280,32 +278,26 @@ class VideoListFragment : Fragment() {
             setButtonColors(ascending = false)
             vm.setOrderType(newOrderType = OrderType.Descending)
             val currentVideoOrder = vm.getVideoOrder()
-            //vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = currentOrderType))
             vm.setVideoOrder(currentVideoOrder)
         }
 
         nameCardView.setOnClickListener {
             val currentOrderType = vm.getOrderType()
-            //vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = VideoOrder.Name(orderType = currentOrderType)))
             vm.setVideoOrder(VideoOrder.Name(currentOrderType))
         }
         dateCardView.setOnClickListener {
             val currentOrderType = vm.getOrderType()
-            //vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = VideoOrder.Date(orderType = currentOrderType)))
             vm.setVideoOrder(VideoOrder.Date(currentOrderType))
         }
         durationCardView.setOnClickListener {
             val currentOrderType = vm.getOrderType()
-            //vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = VideoOrder.Duration(orderType = currentOrderType)))
             vm.setVideoOrder(VideoOrder.Duration(currentOrderType))
         }
 
         clearButton.setOnClickListener {
-            //vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = VideoListViewModel.DEFAULT_SORT_MODE))
             vm.setVideoOrder(VideoListViewModel.DEFAULT_SORT_MODE)
         }
         applyButton.setOnClickListener {
-            //vm.onEvent(event = VideosEvent.UpdateVideoList(videoOrder = vm.sortMode.value, filter = vm.filter))
             vm.updateVideoList()
             sortByDialog.dismiss()
         }
@@ -337,5 +329,13 @@ class VideoListFragment : Fragment() {
         binding.videoList.adapter = adapter
         val itemDecoration = VideoListAdapter.RecyclerViewItemDecoration(16)
         binding.videoList.addItemDecoration(itemDecoration)
+    }
+
+    override fun onModeChange(isNormalMode: Boolean) {
+        if (!::searchEditText.isInitialized || !::searchImageView.isInitialized) return
+        searchEditText.isEnabled = isNormalMode
+        searchEditText.isClickable = isNormalMode
+        searchEditText.alpha = if (isNormalMode) 1f else 0.4f
+        searchImageView.alpha = if (isNormalMode) 1f else 0.4f
     }
 }
