@@ -31,9 +31,9 @@ import com.learnwithsubs.feature_video_list.util.OrderType
 import com.learnwithsubs.feature_video_list.util.VideoOrder
 import com.learnwithsubs.feature_video_list.adapter.VideoListAdapter
 import com.learnwithsubs.feature_video_list.models.VideoErrorType
+import com.learnwithsubs.feature_video_list.models.VideoLoadingType
 import com.learnwithsubs.feature_video_list.videos.VideoListViewModel
 import com.learnwithsubs.feature_video_list.videos.VideoListViewModelFactory
-import com.learnwithsubs.feature_video_list.videos.VideosEvent
 
 
 class VideoListFragment : Fragment() {
@@ -79,8 +79,9 @@ class VideoListFragment : Fragment() {
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                //vm.filterVideo(filter = s.toString()) /!/
-                vm.onEvent(event = VideosEvent.Filter(filter = s.toString()))
+                //vm.onEvent(event = VideosEvent.Filter(filter = s.toString()))
+                vm.setFilterMode(filter = s.toString())
+                vm.updateVideoList()
             }
             override fun afterTextChanged(s: Editable?) {}
         })
@@ -103,19 +104,19 @@ class VideoListFragment : Fragment() {
                 VideoErrorType.GENERATING_SUBTITLES ->  Toast.makeText(this@VideoListFragment.context, getString(R.string.subtitle_generation_error), Toast.LENGTH_SHORT).show()
                 VideoErrorType.UPLOADING_AUDIO ->       Toast.makeText(this@VideoListFragment.context, getString(R.string.audio_upload_error), Toast.LENGTH_SHORT).show()
             }
-            vm.onEvent(event = VideosEvent.DeleteVideo(video = video))
+            //vm.onEvent(event = VideosEvent.DeleteVideo(video = video))
+            vm.deleteVideo(video = video)
         }
 
         vm.videoList.observe(videoListActivity) { videoList ->
             videoList ?: return@observe
-            val sorted = vm.getSortedVideoList(videoList = videoList) ?: return@observe
-            adapter.updateData(ArrayList(sorted))
+            val sorted = vm.getSortedVideoList(videoList = videoList)
+            adapter.updateData(ArrayList(sorted.toList()))
         }
 
         vm.videoProgressLiveData.observe(videoListActivity) { videoProgress ->
-            if (videoProgress != null) {
-                adapter.updateVideo(videoProgress)
-            }
+            if (videoProgress != null)
+                adapter.updateVideo(videoProgress.copy())
         }
 
         return binding.root
@@ -136,10 +137,18 @@ class VideoListFragment : Fragment() {
         val delete = dialog.findViewById<CardView>(R.id.delete_card)
 
         val selectText = dialog.findViewById<TextView>(R.id.de_select_all_text)
+
         selectText.text = if (isSelectAll) videoListActivity.applicationContext.getString(R.string.deselect_all) else videoListActivity.applicationContext.getString(
             R.string.select_all
         )
-        rename.visibility = if (adapter.getVideoSelectedSize() == 1) View.VISIBLE else View.GONE
+        // Получение видео которое выделено
+        vm.editableVideo = adapter.getEditableVideo()
+        // Если выбрано 1 видео и оно имеет статус "загружено" - отображается кнопка возможности переименовать видео
+        if (adapter.getVideoSelectedSize() == 1 && (vm.editableVideo?.loadingType ?: false) == VideoLoadingType.DONE)
+            rename.visibility = View.VISIBLE
+        else
+            rename.visibility = View.GONE
+        // Если видео нет - кнопка "select" скрывается
         select.visibility = if (adapter.getVideoListSize() == 0) View.GONE else View.VISIBLE
 
         sort.setOnClickListener {
@@ -149,30 +158,26 @@ class VideoListFragment : Fragment() {
 
         select.setOnClickListener(object : View.OnClickListener {
             override fun onClick(p0: View?) {
-                if (isSelectAll) {
-                    adapter.selectClear()
-                    vm.onEvent(event = VideosEvent.DeSelect(isNeedSelectAll = false))
-                }
-                else {
-                    vm.onEvent(event = VideosEvent.DeSelect(isNeedSelectAll = true))
-                    adapter.selectAll()
-                }
+                //vm.onEvent(event = VideosEvent.DeSelect(selectAllMode = false))
+                // vm.onEvent(event = VideosEvent.DeSelect(selectAllMode = true))
+                if (isSelectAll)
+                    vm.deSelectVideo(selectAllMode = false)
+                else
+                    vm.deSelectVideo(selectAllMode = true)
                 dialog.dismiss()
             }
         })
 
         rename.setOnClickListener(object : View.OnClickListener {
             override fun onClick(p0: View?) {
-                vm.editableVideo = adapter.getEditableVideo()
                 openRenameMenu()
                 dialog.dismiss()
             }
         })
 
         delete.setOnClickListener {
-            //vm.deleteSelectedVideo() /!/
-            vm.onEvent(event = VideosEvent.DeleteSelectedVideos(videos = vm.videoList.value?.filter { it.isSelected }))
-            adapter.selectClear()
+            //vm.onEvent(event = VideosEvent.DeleteSelectedVideos(videos = vm.videoList.value?.filter { it.isSelected }))
+            vm.deleteSelectedVideo(selectedVideos = vm.videoList.value?.filter { it.isSelected }) // TODO
             dialog.dismiss()
         }
 
@@ -195,17 +200,26 @@ class VideoListFragment : Fragment() {
         editText.setOnEditorActionListener { textView, actionId, keyEvent ->
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
                 textView.clearFocus()
-                val video = vm.videoList.value?.find { video -> video.id == vm.editableVideo?.id }?.copy()
+                val video = vm.videoList.value?.find { it.id == vm.editableVideo?.id }?.copy()
+
                 if (video == null) {
+                    // Если видео не найдено - его нельзя редактировать
                     Toast.makeText(context, getString(R.string.the_video_does_not_exist), Toast.LENGTH_SHORT).show()
-                    adapter.selectClear()
-                    renameMenu.dismiss()
-                    return@setOnEditorActionListener true
+                } else if (video.loadingType != VideoLoadingType.DONE) {
+                    // Если видео не загружено - его нельзя редактировать
+                    Toast.makeText(context, getString(R.string.the_video_is_uploading), Toast.LENGTH_SHORT).show()
+                } else {
+                    // Обновляем и загружаем видео
+                    video.apply {
+                        name = textView.text.toString()
+                        isSelected = false
+                    }
+                    //vm.onEvent(event = VideosEvent.UpdateVideo(video = video))
+                    vm.editVideo(video = video)
                 }
-                video.name = textView.text.toString()
-                video.isSelected = false
-                vm.onEvent(event = VideosEvent.UpdateVideo(video = video))
-                adapter.selectClear()
+
+                //vm.onEvent(event = VideosEvent.DeSelect(selectAllMode = false))
+                vm.deSelectVideo(selectAllMode = false)
                 renameMenu.dismiss()
                 true
             } else false
@@ -247,54 +261,56 @@ class VideoListFragment : Fragment() {
             ) else videoListActivity.applicationContext.getColor(R.color.button_pressed))
         }
 
-        nameCheckBox.isChecked = vm.sortMode.value is VideoOrder.Name
-        dateCheckBox.isChecked = vm.sortMode.value is VideoOrder.Date
-        durationCheckBox.isChecked = vm.sortMode.value is VideoOrder.Duration
+        nameCheckBox.isChecked = vm.getVideoOrder() is VideoOrder.Name
+        dateCheckBox.isChecked = vm.getVideoOrder() is VideoOrder.Date
+        durationCheckBox.isChecked = vm.getVideoOrder() is VideoOrder.Duration
 
-        val sortType = vm.sortMode.value ?: VideoListViewModel.DEFAULT_SORT_MODE
+        val sortType = vm.getVideoOrder()
         setButtonColors(ascending = sortType.orderType is OrderType.Ascending)
 
         ascendingButton.setOnClickListener {
             setButtonColors(ascending = true)
-            val currentOrderType = vm.sortMode.value?.apply { orderType = OrderType.Ascending } ?: VideoListViewModel.DEFAULT_SORT_MODE
-            //vm.setSortMode(currentOrderType) /!/
-            vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = currentOrderType))
+            vm.setOrderType(newOrderType = OrderType.Ascending)
+            val currentVideoOrder = vm.getVideoOrder()
+            //vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = currentOrderType))
+            vm.setVideoOrder(currentVideoOrder)
         }
 
         descendingButton.setOnClickListener {
             setButtonColors(ascending = false)
-            val currentOrderType = vm.sortMode.value?.apply { orderType = OrderType.Descending } ?: VideoListViewModel.DEFAULT_SORT_MODE
-            //vm.setSortMode(currentOrderType) /!/
-            vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = currentOrderType))
+            vm.setOrderType(newOrderType = OrderType.Descending)
+            val currentVideoOrder = vm.getVideoOrder()
+            //vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = currentOrderType))
+            vm.setVideoOrder(currentVideoOrder)
         }
 
         nameCardView.setOnClickListener {
-            val currentOrderType = vm.sortMode.value?.orderType ?: VideoListViewModel.DEFAULT_SORT_MODE.orderType
-            //vm.setSortMode(VideoOrder.Name(currentOrderType)) /!/
-            vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = VideoOrder.Name(orderType = currentOrderType)))
+            val currentOrderType = vm.getOrderType()
+            //vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = VideoOrder.Name(orderType = currentOrderType)))
+            vm.setVideoOrder(VideoOrder.Name(currentOrderType))
         }
         dateCardView.setOnClickListener {
-            val currentOrderType = vm.sortMode.value?.orderType ?: VideoListViewModel.DEFAULT_SORT_MODE.orderType
-            //vm.setSortMode(VideoOrder.Date(currentOrderType)) /!/
-            vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = VideoOrder.Date(orderType = currentOrderType)))
+            val currentOrderType = vm.getOrderType()
+            //vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = VideoOrder.Date(orderType = currentOrderType)))
+            vm.setVideoOrder(VideoOrder.Date(currentOrderType))
         }
         durationCardView.setOnClickListener {
-            val currentOrderType = vm.sortMode.value?.orderType ?: VideoListViewModel.DEFAULT_SORT_MODE.orderType
-            //vm.setSortMode(VideoOrder.Duration(currentOrderType)) /!/
-            vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = VideoOrder.Duration(orderType = currentOrderType)))
+            val currentOrderType = vm.getOrderType()
+            //vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = VideoOrder.Duration(orderType = currentOrderType)))
+            vm.setVideoOrder(VideoOrder.Duration(currentOrderType))
         }
 
         clearButton.setOnClickListener {
-            //vm.setSortMode(VideoListViewModel.DEFAULT_SORT_MODE) /!/
-            vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = VideoListViewModel.DEFAULT_SORT_MODE))
+            //vm.onEvent(event = VideosEvent.SetOrderMode(orderMode = VideoListViewModel.DEFAULT_SORT_MODE))
+            vm.setVideoOrder(VideoListViewModel.DEFAULT_SORT_MODE)
         }
         applyButton.setOnClickListener {
-            //vm.updateVideoList(videoOrder = vm.sortMode.value, filter = vm.filter) /!/
-            vm.onEvent(event = VideosEvent.UpdateVideoList(videoOrder = vm.sortMode.value, filter = vm.filter))
+            //vm.onEvent(event = VideosEvent.UpdateVideoList(videoOrder = vm.sortMode.value, filter = vm.filter))
+            vm.updateVideoList()
             sortByDialog.dismiss()
         }
 
-        vm.sortMode.observe(videoListActivity) { sortMode ->
+        vm.videoOrder.observe(videoListActivity) { sortMode ->
             nameCheckBox.isChecked = sortMode is VideoOrder.Name
             dateCheckBox.isChecked = sortMode is VideoOrder.Date
             durationCheckBox.isChecked = sortMode is VideoOrder.Duration

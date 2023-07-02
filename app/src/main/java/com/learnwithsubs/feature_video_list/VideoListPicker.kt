@@ -68,7 +68,8 @@ class VideoListPicker(private val fragment: Fragment, private val requestCode: I
                 URI = selectedVideoUri.toString(),
                 timestamp = currentTime
             )
-            vm.onEvent(event = VideosEvent.LoadVideo(video = video))
+            //vm.onEvent(event = VideosEvent.LoadVideo(video = video))
+            vm.addVideo(video = video)
         }
     }
 

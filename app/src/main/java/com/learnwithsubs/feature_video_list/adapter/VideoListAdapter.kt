@@ -6,7 +6,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
@@ -25,9 +24,9 @@ class VideoListAdapter(
 
 
     fun updateData(videoList: ArrayList<Video>) {
-        val selectedList = getSelected(newList = videoList)
-        val diffResult = DiffUtil.calculateDiff(VideoDiffCallback(this.videoList, selectedList))
-        this.videoList = selectedList
+        videoSelected = updateSelection(newList = videoList)
+        val diffResult = DiffUtil.calculateDiff(VideoDiffCallback(this.videoList, videoList))
+        this.videoList = videoList
         diffResult.dispatchUpdatesTo(this)
     }
 
@@ -53,25 +52,13 @@ class VideoListAdapter(
     }
 
 
-    private fun getSelected(newList: ArrayList<Video>): ArrayList<Video> {
-        for (video in newList) {
-            val found = videoSelected.find { it.id == video.id }
-            if (found != null) video.isSelected = found.isSelected
-        }
+    private fun updateSelection(newList: List<Video>): ArrayList<Video> {
         videoSelected.clear()
         videoSelected.addAll(newList.filter { it.isSelected })
         isNormalMode = videoSelected.isEmpty()
-        return newList
+        return videoSelected
     }
 
-    fun selectClear() {
-        videoSelected.clear()
-        isNormalMode = true
-    }
-    fun selectAll() {
-        videoSelected = ArrayList(videoList)
-        isNormalMode = false
-    }
     fun getVideoListSize(): Int {
         return videoList.size
     }
@@ -79,7 +66,7 @@ class VideoListAdapter(
         return videoSelected.size
     }
     fun getEditableVideo(): Video? {
-        return if (videoSelected.size == 1) videoSelected[0]
+        return if (videoSelected.size == 1) videoSelected[0].copy()
         else null
     }
     fun getIsNormalMode(): Boolean {
