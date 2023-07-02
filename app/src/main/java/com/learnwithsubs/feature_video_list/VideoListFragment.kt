@@ -47,7 +47,7 @@ class VideoListFragment : Fragment(), OnModeChange {
     private lateinit var vm: VideoListViewModel
     private lateinit var binding: VideoListFragmentBinding
 
-    private val adapter = VideoListAdapter(videoListInit = ArrayList())
+    private val adapter = VideoListAdapter()
     private lateinit var searchEditText: EditText
     private lateinit var searchImageView: ImageView
 
@@ -226,7 +226,7 @@ class VideoListFragment : Fragment(), OnModeChange {
                     vm.editVideo(video = video)
                 }
 
-                vm.deSelectVideo(selectAllMode = false)
+                adapter.clearSelection()
                 renameMenu.dismiss()
                 true
             } else false

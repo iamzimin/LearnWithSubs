@@ -13,11 +13,9 @@ import com.learnwithsubs.feature_video_list.models.Video
 import com.learnwithsubs.feature_video_list.models.VideoStatus
 
 
-class VideoListAdapter(
-    videoListInit: ArrayList<Video>
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var videoList: ArrayList<Video> = videoListInit
+    private var videoList: ArrayList<Video> = ArrayList()
     private var videoSelected = ArrayList<Video>()
     private var isNormalMode = true
     private var onModeChangeListener: OnModeChange? = null
@@ -27,10 +25,20 @@ class VideoListAdapter(
     }
 
     fun updateData(newVideoList: ArrayList<Video>) {
-        updateSelection(newList = newVideoList)
-        val diffResult = DiffUtil.calculateDiff(VideoDiffCallback(videoList, newVideoList))
-        videoList = newVideoList
+        val selected = updateSelected(newVideoList)
+        val diffResult = DiffUtil.calculateDiff(VideoDiffCallback(videoList, selected))
+        videoList = ArrayList(selected)
         diffResult.dispatchUpdatesTo(this@VideoListAdapter)
+    }
+
+    private fun updateSelected(list: List<Video>): List<Video> {
+        list.forEach {  video->
+            val found = videoSelected.find { it.id == video.id }
+            if (found != null) video.isSelected = found.isSelected
+        }
+        videoSelected.clear()
+        videoSelected.addAll(list.filter { it.isSelected })
+        return list
     }
 
     fun updateVideo(videoToUpdate: Video) {
@@ -49,7 +57,7 @@ class VideoListAdapter(
             if (video.isSelected)
                 videoSelected.add(video)
             else
-                videoSelected.remove(video)
+                videoSelected.remove(videoSelected.find { it.id == video.id })
         }
     }
 
@@ -74,17 +82,6 @@ class VideoListAdapter(
         onModeChangeListener?.onModeChange(isNormalMode = mode)
     }
 
-    private fun updateSelection(newList: List<Video>) {
-        videoSelected.clear()
-        videoSelected.addAll(newList.filter { it.isSelected })
-        /*
-        videoSelected.forEach { video ->
-            val vid = newList.find { it.id == video.id }
-            if (vid == null) videoSelected.remove(video)
-        }
-         */
-        //changeMode(mode = videoSelected.isEmpty())
-    }
 
 
     fun getVideoListSize(): Int {

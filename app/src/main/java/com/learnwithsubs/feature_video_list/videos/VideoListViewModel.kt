@@ -133,10 +133,10 @@ class VideoListViewModel @Inject constructor(
         }
     }
 
-    fun deSelectVideo(selectAllMode: Boolean) {
-        val copiedVideoList = videoList.value?.map { video -> video.copy(isSelected = selectAllMode) }
-        videoList.value = copiedVideoList?.toMutableList()
-    }
+//    fun deSelectVideo(selectAllMode: Boolean) {
+//        val copiedVideoList = videoList.value?.map { video -> video.copy(isSelected = selectAllMode) }
+//        videoList.value = copiedVideoList?.toMutableList()
+//    }
 
     fun deleteSelectedVideo(selectedVideos: List<Video>?) {
         viewModelScope.launch {
