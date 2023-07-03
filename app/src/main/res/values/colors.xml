@@ -46,4 +46,7 @@
     <color name="pop_up_menu_background">#4D4D67</color>
     <color name="pop_up_menu_line">#2F2E3E</color>
 
+    <!--Bottom Menu-->
+    <color name="bottom_navigation_default">#ACABB2</color>
+
 </resources>

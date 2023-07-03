@@ -32,7 +32,7 @@ class VideoListActivity : AppCompatActivity() {
         fragmentManager = supportFragmentManager
         supportActionBar?.hide()
 
-        val navigation = findViewById<BottomNavigationView>(R.id.navigation)
+        val navigation = findViewById<BottomNavigationView>(R.id.fragment_navigation)
         navigation.selectedItemId = R.id.video_bottom_menu
 
         (applicationContext as App).videoListAppComponent.inject(this)
@@ -46,7 +46,7 @@ class VideoListActivity : AppCompatActivity() {
 
         val navHostFragment: NavHostFragment? = fragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment?
         if (navHostFragment != null) { NavigationUI.setupWithNavController(
-            findViewById<View>(R.id.navigation) as BottomNavigationView,
+            findViewById<View>(R.id.fragment_navigation) as BottomNavigationView,
             navHostFragment.navController)
         }
     }

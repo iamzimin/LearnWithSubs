@@ -21,4 +21,7 @@
     <attr name="pop_up_menu_background"/>
     <attr name="pop_up_menu_line"/>
 
+    <!--Bottom Menu-->
+    <attr name="bottom_navigation_default"/>
+
 </resources>

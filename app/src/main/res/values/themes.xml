@@ -36,5 +36,9 @@
         <!--Pop-up Menu-->
         <item name="pop_up_menu_background">@color/pop_up_menu_background</item>
         <item name="pop_up_menu_line">@color/pop_up_menu_line</item>
+
+        <!--Bottom Menu-->
+        <item name="bottom_navigation_default">@color/bottom_navigation_default</item>
+
     </style>
 </resources>

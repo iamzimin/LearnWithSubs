@@ -18,14 +18,18 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.learnwithsubs.R
 import com.learnwithsubs.databinding.VideoListFragmentBinding
 import com.learnwithsubs.feature_video_list.adapter.OnModeChange
@@ -50,11 +54,15 @@ class VideoListFragment : Fragment(), OnModeChange {
     private val adapter = VideoListAdapter()
     private lateinit var searchEditText: EditText
     private lateinit var searchImageView: ImageView
+    private lateinit var bottomNav: BottomNavigationView
+    private lateinit var editListLayout: LinearLayout
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         videoListActivity = requireActivity() as VideoListActivity
         binding = VideoListFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -65,6 +73,8 @@ class VideoListFragment : Fragment(), OnModeChange {
 
         videoListPicker = VideoListPicker(this, PICK_VIDEO_REQUEST)
 
+        bottomNav = videoListActivity.findViewById<BottomNavigationView>(R.id.fragment_navigation)
+        editListLayout = videoListActivity.findViewById<LinearLayout>(R.id.edit_list_layout)
         searchEditText = view.findViewById<EditText>(R.id.search_edit_text)
         searchImageView = view.findViewById<ImageView>(R.id.search_image_view)
         adapter.setOnModeChangeListener(this@VideoListFragment)
@@ -345,5 +355,15 @@ class VideoListFragment : Fragment(), OnModeChange {
         searchEditText.isClickable = isNormalMode
         searchEditText.alpha = if (isNormalMode) 1f else 0.4f
         searchImageView.alpha = if (isNormalMode) 1f else 0.4f
+
+        updateBottomMenu(isNormalMode)
     }
+    private fun updateBottomMenu(isNormalMode: Boolean) {
+        bottomNav.visibility = if (isNormalMode) View.VISIBLE else View.GONE
+        editListLayout.visibility = if (!isNormalMode) View.VISIBLE else View.GONE
+
+
+
+    }
+
 }
