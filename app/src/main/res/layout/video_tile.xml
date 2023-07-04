@@ -2,23 +2,10 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="70dp"
 
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
-
-    app:cardCornerRadius="20dp"
-    app:cardBackgroundColor="?attr/background_video_tile_dark"
-
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.5">
+    style="@style/CardViewVideo"
+    app:cardBackgroundColor="?attr/background_video_tile_dark">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,81 +14,52 @@
 
         <ImageView
             android:id="@+id/video_preview"
-            android:layout_width="80dp"
-            android:layout_height="45dp"
-            android:layout_marginHorizontal="15dp"
-            android:scaleType="centerCrop"
-            android:layout_gravity="center"/>
+            style="@style/CardViewVideoImagePreview"
+            android:scaleType="centerCrop"/>
 
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:paddingEnd="25dp"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/video_preview"
-            app:layout_constraintTop_toTopOf="parent">
+            android:paddingEnd="20dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/video_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:text="Video"
+                style="@style/CardViewVideoName"
                 android:textColor="?attr/text_color"
-                android:textSize="@dimen/video_name_in_video_tile"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.078" />
+                android:text="Video"/>
 
-            <TextView
-                android:id="@+id/duration"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Duration: 1:23:45"
-                android:textColor="?attr/text_color"
-                android:textSize="@dimen/video_description_in_video_tile"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.527" />
-
-            <TextView
-                android:id="@+id/saved_words"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:text="Saved words: 123"
-                android:textColor="?attr/text_color"
-                android:textSize="@dimen/video_description_in_video_tile"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/duration"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.527" />
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/duration"
+                    style="@style/CardViewVideoStatistics"
+                    android:textColor="?attr/text_color"
+                    android:text="Duration: 1:23:45" />
+                <TextView
+                    android:id="@+id/saved_words"
+                    style="@style/CardViewVideoStatistics"
+                    android:textColor="?attr/text_color"
+                    android:layout_marginStart="12dp"
+                    android:text="Saved words: 1423" />
+            </LinearLayout>
 
             <ProgressBar
                 android:id="@+id/video_progress"
                 style="?android:attr/progressBarStyleHorizontal"
+                android:progressTint="?attr/main_color"
                 android:layout_width="match_parent"
-                android:layout_height="22dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.938" />
+                android:layout_height="wrap_content" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
         <CheckBox
             android:id="@+id/video_select_check_box"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            style="@style/CardViewVideoCheckBox"
+            app:buttonTint="?attr/main_color"/>
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

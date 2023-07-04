@@ -29,12 +29,12 @@ class GetSubtitlesFromServerUseCase(
                 return video.apply { errorType = VideoErrorType.GENERATING_SUBTITLES }
             }
         } catch (e: Exception) {
-//            // TEMP
-//            handleSubtitlesResponse(video, """1
-//00:00:00,000 --> 00:00:10,000
-//Hello word""".trimIndent())
-//            return video
-            return video.apply { errorType = VideoErrorType.GENERATING_SUBTITLES }
+            // TEMP
+            handleSubtitlesResponse(video, """1
+00:00:00,000 --> 00:00:10,000
+Hello word""".trimIndent())
+            return video
+            //return video.apply { errorType = VideoErrorType.GENERATING_SUBTITLES }
         }
 
 

@@ -7,23 +7,23 @@
     android:id="@+id/constraint_container"
     tools:context=".feature_video_list.VideoListFragment">
 
-    <ImageButton
-        android:id="@+id/close_selection_mode"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="58dp"
-        android:layout_height="43dp"
+<!--    <ImageButton-->
+<!--        android:id="@+id/close_selection_mode"-->
+<!--        style="@style/Widget.AppCompat.Button.Borderless"-->
+<!--        android:layout_width="58dp"-->
+<!--        android:layout_height="43dp"-->
 
-        android:padding="0dp"
-        android:scaleType="centerInside"
+<!--        android:padding="0dp"-->
+<!--        android:scaleType="centerInside"-->
 
-        app:layout_constraintBottom_toTopOf="@+id/search_bar"
-        app:layout_constraintEnd_toStartOf="@+id/video"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/menu_horizontal"
-        app:tint="?attr/text_color" />
+<!--        app:layout_constraintBottom_toTopOf="@+id/search_bar"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/video"-->
+<!--        app:layout_constraintHorizontal_bias="0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.0"-->
+<!--        app:srcCompat="@drawable/menu_horizontal"-->
+<!--        app:tint="?attr/text_color" />-->
 
     <TextView
         android:id="@+id/video"
@@ -38,15 +38,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/menu_button"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="58dp"
-        android:layout_height="43dp"
 
-        android:layout_marginTop="0dp"
+<!--    <ImageButton-->
+<!--        android:id="@+id/close_selection_mode"-->
+<!--        style="@style/Widget.AppCompat.Button.Borderless"-->
+<!--        android:visibility="gone"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="45dp"-->
+
+<!--        android:layout_marginEnd="5dp"-->
+<!--        android:padding="5dp"-->
+<!--        android:scaleType="centerInside"-->
+
+<!--        app:layout_constraintBottom_toTopOf="@+id/search_bar"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="1"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/video"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.375"-->
+<!--        app:srcCompat="@drawable/close_bold"-->
+<!--        app:tint="?attr/text_color" />-->
+
+    <ImageButton
+        android:id="@+id/sort_by"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="50dp"
+        android:layout_height="45dp"
+
         android:layout_marginEnd="5dp"
-        android:padding="0dp"
+        android:padding="5dp"
         android:scaleType="centerInside"
 
         app:layout_constraintBottom_toTopOf="@+id/search_bar"
@@ -54,10 +74,9 @@
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toEndOf="@+id/video"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/menu_horizontal"
+        app:layout_constraintVertical_bias="0.375"
+        app:srcCompat="@drawable/sort_by"
         app:tint="?attr/text_color" />
-
 
     <include
         android:id="@+id/search_bar"
@@ -85,25 +104,39 @@
         app:layout_constraintTop_toBottomOf="@+id/search_bar"
         app:layout_constraintVertical_bias="0.005" />
 
-    <include
-        android:id="@+id/button_video_card_view"
-        layout="@layout/add_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/load_video_card"
+        style="@style/CardViewAdd"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                style="@style/CardViewAddBackground"
+                android:src="?attr/video_upload_green_card"/>
+            <ImageView
+                style="@style/CardViewAddImage"
+                android:src="@drawable/upload" />
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-
-    <ImageView
-        android:id="@+id/upload_image"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/button_video_card_view"
-        app:layout_constraintEnd_toEndOf="@+id/button_video_card_view"
-        app:layout_constraintStart_toStartOf="@+id/button_video_card_view"
-        app:layout_constraintTop_toTopOf="@+id/button_video_card_view"
-        app:srcCompat="@drawable/upload" />
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/close_selection_mode"
+        android:visibility="gone"
+        style="@style/CardViewAdd"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                style="@style/CardViewAddBackground"
+                android:src="?attr/video_close_selection_mode_card"/>
+            <ImageView
+                style="@style/CardViewAddImage"
+                android:src="@drawable/close_bold" />
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

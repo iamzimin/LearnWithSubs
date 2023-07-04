@@ -2,7 +2,6 @@ package com.learnwithsubs.feature_video_list.adapter
 
 import android.content.Intent
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -77,7 +76,7 @@ class NormalVideoViewHolder(
         itemView.setOnLongClickListener {
             val position = adapterPosition
             if (adapter.getIsNormalMode())
-                adapter.changeMode(mode = false)
+                adapter.changeMode(isNormalMode = false)
             binding.videoSelectCheckBox.isChecked = !binding.videoSelectCheckBox.isChecked
             adapter.updateSelection(position = position, isSelected = binding.videoSelectCheckBox.isChecked)
             true
@@ -142,7 +141,7 @@ class LoadingVideoViewHolder(
         itemView.setOnLongClickListener {
             val position = adapterPosition
             if (adapter.getIsNormalMode())
-                adapter.changeMode(mode = false)
+                adapter.changeMode(isNormalMode = false)
             binding.videoSelectCheckBox.isChecked = !binding.videoSelectCheckBox.isChecked
             adapter.updateSelection(position = position, isSelected = binding.videoSelectCheckBox.isChecked)
             true

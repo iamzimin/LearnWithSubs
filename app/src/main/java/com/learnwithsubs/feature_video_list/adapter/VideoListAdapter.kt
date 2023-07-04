@@ -18,10 +18,10 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var videoList: ArrayList<Video> = ArrayList()
     private var videoSelected = ArrayList<Video>()
     private var isNormalMode = true
-    private var onModeChangeListener: OnModeChange? = null
+    private var onSelectChangeListener: OnSelectChange? = null
 
-    fun setOnModeChangeListener(listener: OnModeChange) {
-        onModeChangeListener = listener
+    fun setOnModeChangeListener(listener: OnSelectChange) {
+        onSelectChangeListener = listener
     }
 
     fun updateData(newVideoList: ArrayList<Video>) {
@@ -59,12 +59,14 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             else
                 videoSelected.remove(videoSelected.find { it.id == video.id })
         }
+        onSelectChangeListener?.onSelectAll(isSelectAll = videoList.size == videoSelected.size)
+        onSelectChangeListener?.onSingleSelected(isSingleSelected = videoSelected.size == 1)
     }
 
     fun selectAll() {
         videoList.forEach { it.isSelected = true }
         videoSelected = ArrayList(videoList.toList())
-        changeMode(mode = false)
+        changeMode(isNormalMode = false)
     }
     fun deselectAll() {
         videoList.forEach { it.isSelected = false }
@@ -74,12 +76,13 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     fun clearSelection() {
         videoList.forEach { it.isSelected = false }
         videoSelected.clear()
-        changeMode(mode = true)
+        changeMode(isNormalMode = true)
     }
-    fun changeMode(mode: Boolean) {
-        isNormalMode = mode
+    fun changeMode(isNormalMode: Boolean) {
+        this.isNormalMode = isNormalMode
         notifyDataSetChanged()
-        onModeChangeListener?.onModeChange(isNormalMode = mode)
+        onSelectChangeListener?.onModeChange(isNormalMode = isNormalMode)
+        onSelectChangeListener?.onSelectAll(isSelectAll = videoList.size == videoSelected.size)
     }
 
 

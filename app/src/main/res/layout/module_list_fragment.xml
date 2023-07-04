@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/menu_button"
+        android:id="@+id/sort_by"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="58dp"
         android:layout_height="43dp"
@@ -55,25 +55,21 @@
         app:layout_constraintTop_toBottomOf="@+id/video"
         app:layout_constraintVertical_bias="0.020" />
 
-    <include
-        android:id="@+id/button_video_card_view"
-        layout="@layout/add_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/load_video_card"
+        style="@style/CardViewAdd"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-
-    <ImageView
-        android:id="@+id/upload_image"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/button_video_card_view"
-        app:layout_constraintEnd_toEndOf="@+id/button_video_card_view"
-        app:layout_constraintStart_toStartOf="@+id/button_video_card_view"
-        app:layout_constraintTop_toTopOf="@+id/button_video_card_view"
-        app:srcCompat="@drawable/user" />
+        app:layout_constraintEnd_toEndOf="parent">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                style="@style/CardViewAddBackground"
+                android:src="?attr/video_upload_green_card"/>
+            <ImageView
+                style="@style/CardViewAddImage"
+                android:src="@drawable/user" />
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

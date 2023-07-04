@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="CardViewClickableFocusable" parent="Widget.MaterialComponents.CardView">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="cardElevation">0dp</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
 
     <!--video list menu-->
     <style name="CardViewVideoListMenu" parent="Widget.MaterialComponents.CardView">
@@ -9,35 +15,32 @@
     </style>
 
     <!--video list menu sort by-->
-    <style name="CardViewSortByStyle" parent="Widget.MaterialComponents.CardView">
+    <style name="CardViewSortByStyle" parent="CardViewClickableFocusable">
         <item name="cardBackgroundColor">@android:color/transparent</item>
         <item name="cardElevation">0dp</item>
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
-        <item name="android:duplicateParentState">true</item>
     </style>
     <style name="CheckBoxSortByStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:clickable">false</item>
         <item name="android:focusable">false</item>
-        <item name="android:colorControlActivated">@color/red</item>
+        <item name="android:background">@null</item>
     </style>
     <style name="ButtonSortByStyle" parent="Widget.MaterialComponents.Button">
-        <item name="android:backgroundTint">@color/button_normal</item>
+        <item name="android:backgroundTint">?attr/button_normal_dark</item>
+        <item name="android:textColor">?attr/text_color</item>
     </style>
 
-    <style name="CardViewInEditListMenu" parent="Widget.MaterialComponents.CardView">
+    <!--video list edit list menu-->
+    <style name="CardViewInEditListMenu" parent="CardViewClickableFocusable">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
         <item name="cardElevation">0dp</item>
         <item name="android:layout_marginHorizontal">5dp</item>
         <item name="cardBackgroundColor">@android:color/transparent</item>
         <item name="android:layout_gravity">center</item>
     </style>
     <style name="TileInEditListMenu">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
         <item name="android:layout_gravity">center</item>
@@ -49,11 +52,68 @@
         <item name="android:tint">?attr/bottom_navigation_default</item>
     </style>
     <style name="TextInEditListMenu">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
         <item name="android:tint">?attr/bottom_navigation_default</item>
+    </style>
+
+    <!--video list add button-->
+    <style name="CardViewAdd" parent="CardViewClickableFocusable">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="cardCornerRadius">1000dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
+    </style>
+    <style name="CardViewAddBackground">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">50dp</item>
+    </style>
+    <style name="CardViewAddImage">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginEnd">20dp</item>
+    </style>
+
+    <!--video list add button-->
+    <style name="CardViewVideo" parent="CardViewClickableFocusable">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">70dp</item>
+        <item name="cardCornerRadius">20dp</item>
+    </style>
+    <style name="CardViewVideoImagePreview">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_marginHorizontal">15dp</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+    <style name="CardViewVideoName">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">@dimen/video_name_in_video_tile</item>
+    </style>
+    <style name="CardViewVideoStatistics">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:layout_marginVertical">2dp</item>
+        <item name="android:textSize">@dimen/video_description_in_video_tile</item>
+    </style>
+    <style name="CardViewVideoCheckBox">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:clickable">false</item>
+        <item name="android:focusable">false</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@null</item>
     </style>
 
 </resources>
