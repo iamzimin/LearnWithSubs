@@ -133,7 +133,6 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val video = videoList[position]
-        val context = holder.itemView.context
 
         when (video.videoStatus) {
             VideoStatus.NORMAL_VIDEO -> {
@@ -146,14 +145,6 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 loadingHolder.bind(videoList[position])
             }
         }
-//        if (video.isSelected)
-//            (holder.itemView as MaterialCardView).setCardBackgroundColor(
-//                context.getColorFromAttr(R.attr.background_video_selected_tile_dark)
-//            )
-//        else
-//            (holder.itemView as MaterialCardView).setCardBackgroundColor(
-//                context.getColorFromAttr(R.attr.background_video_tile_dark)
-//            )
     }
 
     private fun Context.getColorFromAttr(attrId: Int): Int {

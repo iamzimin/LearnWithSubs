@@ -32,6 +32,61 @@
         android:visibility="gone"
         android:orientation="horizontal">
 
+<!--        <com.google.android.material.card.MaterialCardView-->
+<!--            android:id="@+id/add_preview_menu"-->
+<!--            style="@style/CardViewInEditListMenu">-->
+<!--            <LinearLayout-->
+<!--                style="@style/TileInEditListMenu">-->
+<!--                <ImageView-->
+<!--                    style="@style/ImageInEditListMenu"-->
+<!--                    android:src="@drawable/replay_5" />-->
+<!--                <TextView-->
+<!--                    style="@style/TextInEditListMenu"-->
+<!--                    android:text="@string/add_preview"/>-->
+<!--            </LinearLayout>-->
+<!--        </com.google.android.material.card.MaterialCardView>-->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/add_subtitles_menu"
+            style="@style/CardViewInEditListMenu">
+            <LinearLayout
+                style="@style/TileInEditListMenu">
+                <ImageView
+                    style="@style/ImageInEditListMenu"
+                    android:padding="2dp"
+                    android:src="@drawable/srt_file" />
+                <TextView
+                    android:id="@+id/add_subtitles_menu_text"
+                    style="@style/TextInEditListMenu"
+                    android:text="@string/add_subtitles"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/rename_menu"
+            style="@style/CardViewInEditListMenu">
+            <LinearLayout
+                style="@style/TileInEditListMenu">
+                <ImageView
+                    style="@style/ImageInEditListMenu"
+                    android:src="@drawable/edit"
+                    android:padding="1dp" />
+                <TextView
+                    style="@style/TextInEditListMenu"
+                    android:text="@string/rename"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/delete_menu"
+            style="@style/CardViewInEditListMenu">
+            <LinearLayout
+                style="@style/TileInEditListMenu">
+                <ImageView
+                    style="@style/ImageInEditListMenu"
+                    android:src="@drawable/trash" />
+                <TextView
+                    style="@style/TextInEditListMenu"
+                    android:text="@string/delete"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/de_select_all_menu"
             style="@style/CardViewInEditListMenu">
@@ -46,36 +101,6 @@
                     android:text="@string/select_all"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/rename_menu"
-            style="@style/CardViewInEditListMenu">
-            <LinearLayout
-                style="@style/TileInEditListMenu">
-                <ImageView
-                    style="@style/ImageInEditListMenu"
-                    android:src="@drawable/replay_5" />
-                <TextView
-                    style="@style/TextInEditListMenu"
-                    android:text="@string/rename"/>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/delete_menu"
-            style="@style/CardViewInEditListMenu">
-            <LinearLayout
-                style="@style/TileInEditListMenu">
-                <ImageView
-                    style="@style/ImageInEditListMenu"
-                    android:src="@drawable/trash" />
-                <TextView
-                    style="@style/TextInEditListMenu"
-                    android:text="@string/delete"/>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-
 
     </LinearLayout>
 

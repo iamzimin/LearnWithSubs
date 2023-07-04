@@ -19,7 +19,7 @@ import java.io.File
 import javax.inject.Inject
 
 class VideoViewViewModel @Inject constructor(
-    val videoViewUseCases: VideoViewUseCases
+    private val videoViewUseCases: VideoViewUseCases
 ) : ViewModel() {
     var currentVideo: MutableLiveData<Video> = MutableLiveData<Video>()
 

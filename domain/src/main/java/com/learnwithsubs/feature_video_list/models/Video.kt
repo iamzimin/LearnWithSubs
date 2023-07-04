@@ -13,6 +13,7 @@ data class Video(
     var loadingType: VideoLoadingType,
     var errorType: VideoErrorType?,
     var isSelected: Boolean = false,
+    var isOwnSubtitles: Boolean = false,
     var name: String,
     val duration: Long,
     val bitrate: Int,
@@ -27,8 +28,7 @@ data class Video(
 
 enum class VideoStatus(val value: Int) {
     NORMAL_VIDEO(1),
-    //SELECTED_VIDEO(2),
-    LOADING_VIDEO(3)
+    LOADING_VIDEO(2)
 }
 
 enum class VideoLoadingType(val value: Int) {

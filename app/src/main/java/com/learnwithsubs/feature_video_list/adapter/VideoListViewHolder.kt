@@ -75,10 +75,10 @@ class NormalVideoViewHolder(
 
         itemView.setOnLongClickListener {
             val position = adapterPosition
-            if (adapter.getIsNormalMode())
-                adapter.changeMode(isNormalMode = false)
             binding.videoSelectCheckBox.isChecked = !binding.videoSelectCheckBox.isChecked
             adapter.updateSelection(position = position, isSelected = binding.videoSelectCheckBox.isChecked)
+            if (adapter.getIsNormalMode())
+                adapter.changeMode(isNormalMode = false)
             true
         }
     }
@@ -140,10 +140,10 @@ class LoadingVideoViewHolder(
 
         itemView.setOnLongClickListener {
             val position = adapterPosition
-            if (adapter.getIsNormalMode())
-                adapter.changeMode(isNormalMode = false)
             binding.videoSelectCheckBox.isChecked = !binding.videoSelectCheckBox.isChecked
             adapter.updateSelection(position = position, isSelected = binding.videoSelectCheckBox.isChecked)
+            if (adapter.getIsNormalMode())
+                adapter.changeMode(isNormalMode = false)
             true
         }
     }

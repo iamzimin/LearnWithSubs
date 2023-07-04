@@ -40,8 +40,12 @@ import com.learnwithsubs.feature_video_list.videos.VideoListViewModelFactory
 
 
 class VideoListFragment : Fragment(), OnSelectChange {
-    private val PICK_VIDEO_REQUEST = 1
-    private lateinit var videoListPicker: VideoListPicker
+    companion object {
+        const val PICK_VIDEO_REQUEST = 1
+        const val PICK_SUBTITLES_REQUEST = 2
+    }
+    private lateinit var videoListVideoPicker: VideoListVideoPicker
+    private lateinit var videoListSubtitlePicker: VideoListSubtitlePicker
 
     private lateinit var videoListActivity: VideoListActivity
     private lateinit var vmFactory: VideoListViewModelFactory
@@ -62,6 +66,8 @@ class VideoListFragment : Fragment(), OnSelectChange {
     private lateinit var deSelectAllMenuText: TextView
     private lateinit var renameMenu: CardView
     private lateinit var deleteMenu: CardView
+    private lateinit var addSubtitlesMenu: CardView
+    private lateinit var addSubtitlesMenuText: TextView
 
 
 
@@ -77,7 +83,8 @@ class VideoListFragment : Fragment(), OnSelectChange {
         vmFactory = videoListActivity.vmFactory
         vm = ViewModelProvider(videoListActivity, vmFactory)[VideoListViewModel::class.java]
 
-        videoListPicker = VideoListPicker(this, PICK_VIDEO_REQUEST)
+        videoListVideoPicker = VideoListVideoPicker(this, PICK_VIDEO_REQUEST)
+        videoListSubtitlePicker = VideoListSubtitlePicker(this, PICK_SUBTITLES_REQUEST)
 
         bottomNav = videoListActivity.findViewById<BottomNavigationView>(R.id.fragment_navigation)
         editListLayout = videoListActivity.findViewById<LinearLayout>(R.id.edit_list_layout)
@@ -95,10 +102,12 @@ class VideoListFragment : Fragment(), OnSelectChange {
         deSelectAllMenuText = videoListActivity.findViewById<TextView>(R.id.de_select_all_menu_text)
         renameMenu = videoListActivity.findViewById<CardView>(R.id.rename_menu)
         deleteMenu = videoListActivity.findViewById<CardView>(R.id.delete_menu)
+        addSubtitlesMenu = videoListActivity.findViewById<CardView>(R.id.add_subtitles_menu)
+        addSubtitlesMenuText = videoListActivity.findViewById<TextView>(R.id.add_subtitles_menu_text)
 
 
         uploadVideoCard.setOnClickListener {
-            videoListPicker.pickVideo()
+            videoListVideoPicker.pickVideo()
         }
 
         sortByButton.setOnClickListener {
@@ -140,6 +149,14 @@ class VideoListFragment : Fragment(), OnSelectChange {
             vm.deleteSelectedVideo(selectedVideos = adapter.getSelectedVideo())
             adapter.changeMode(isNormalMode = true)
         }
+        addSubtitlesMenu.setOnClickListener {
+            vm.editableVideo = adapter.getEditableVideo()
+            val video = vm.editableVideo ?: return@setOnClickListener
+            if (!video.isOwnSubtitles)
+                videoListSubtitlePicker.pickSubtitles()
+            else
+                vm.backOldSubtitles(video = video)
+        }
 
         vm.errorTypeLiveData.value = null
         vm.errorTypeLiveData.observe(videoListActivity) { video ->
@@ -169,75 +186,6 @@ class VideoListFragment : Fragment(), OnSelectChange {
         return binding.root
     }
 
-
-
-/*
-    private fun openMenu() {
-        val dialog = Dialog(videoListActivity)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.video_list_menu_dialog)
-        val isSelectAll = adapter.getSelectedVideoSize() == adapter.getVideoListSize()
-
-        val sort = dialog.findViewById<CardView>(R.id.sort_by_card)
-        val select = dialog.findViewById<CardView>(R.id.de_select_all_card)
-        val rename = dialog.findViewById<CardView>(R.id.rename_card)
-        val delete = dialog.findViewById<CardView>(R.id.delete_card)
-
-        val selectText = dialog.findViewById<TextView>(R.id.de_select_all_text)
-
-        selectText.text = if (isSelectAll) videoListActivity.applicationContext.getString(R.string.deselect_all) else videoListActivity.applicationContext.getString(
-            R.string.select_all
-        )
-        // Получение видео которое выделено
-        vm.editableVideo = adapter.getEditableVideo()
-        // Если выбрано 1 видео и оно имеет статус "загружено" - отображается кнопка возможности переименовать видео
-        if (adapter.getSelectedVideoSize() == 1 && (vm.editableVideo?.loadingType ?: false) == VideoLoadingType.DONE)
-            rename.visibility = View.VISIBLE
-        else
-            rename.visibility = View.GONE
-        // Если видео нет - кнопка "select" скрывается
-        select.visibility = if (adapter.getVideoListSize() == 0) View.GONE else View.VISIBLE
-
-        sort.setOnClickListener {
-            openSortByMenu()
-            dialog.dismiss()
-        }
-
-        select.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(p0: View?) {
-                /*
-                if (isSelectAll)
-                    vm.deSelectVideo(selectAllMode = false)
-                else
-                    vm.deSelectVideo(selectAllMode = true) */
-                if (isSelectAll)
-                    adapter.deselectAll()
-                else
-                    adapter.selectAll()
-                dialog.dismiss()
-            }
-        })
-
-        rename.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(p0: View?) {
-                openRenameMenu()
-                dialog.dismiss()
-            }
-        })
-
-        delete.setOnClickListener {
-            vm.deleteSelectedVideo(selectedVideos = adapter.getSelectedVideo())
-            dialog.dismiss()
-        }
-
-        dialog.show()
-        if (dialog.window != null) {
-            dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialog.window?.setGravity(Gravity.BOTTOM)
-        }
-    }
- */
 
     private fun openRenameMenu() {
         val renameMenu = Dialog(videoListActivity)
@@ -369,7 +317,9 @@ class VideoListFragment : Fragment(), OnSelectChange {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        videoListPicker.loadVideoOnResult(requestCode, resultCode, data, vm, videoListActivity)
+        videoListVideoPicker.loadVideoOnResult(requestCode, resultCode, data, vm, videoListActivity)
+        videoListSubtitlePicker.loadVideoOnResult(requestCode, resultCode, data, vm, vm.editableVideo)
+        adapter.changeMode(isNormalMode = true)
     }
 
     private fun setupRecyclerView() {
@@ -381,10 +331,25 @@ class VideoListFragment : Fragment(), OnSelectChange {
         adapter.setOnModeChangeListener(this@VideoListFragment)
     }
 
+    private fun changeCardVisibility(cardView: CardView, isVisible: Boolean) {
+        cardView.alpha = if (isVisible) 1f else 0.4f
+        cardView.isClickable = isVisible
+        cardView.isFocusable = isVisible
+    }
+
+    private fun setTextInSubtitleMenu() {
+        val editVideo = adapter.getEditableVideo()
+        if (editVideo != null)
+            addSubtitlesMenuText.text = if (editVideo.isOwnSubtitles) getString(R.string.return_subtitles) else getString(R.string.add_subtitles)
+    }
+
     override fun onModeChange(isNormalMode: Boolean) {
         if (!::searchEditText.isInitialized && !::searchLayout.isInitialized && !::bottomNav.isInitialized && !::editListLayout.isInitialized && !::uploadVideoCard.isInitialized) return
+
         val visibleInNormalMode = if (isNormalMode) View.VISIBLE else View.GONE
         val visibleInSelectionMode = if (!isNormalMode) View.VISIBLE else View.GONE
+
+        if (!isNormalMode) setTextInSubtitleMenu()
 
         searchEditText.isEnabled = isNormalMode
         searchEditText.isClickable = isNormalMode
@@ -407,22 +372,19 @@ class VideoListFragment : Fragment(), OnSelectChange {
 
         // Если не выделено ни одного видео кнопка удаление скрывается
         if (adapter.getSelectedVideoSize() == 0) {
-            deleteMenu.alpha = 0.4f
-            deleteMenu.isClickable = false
-            deleteMenu.isFocusable = false
+            changeCardVisibility(cardView = deleteMenu, isVisible = false)
+            setTextInSubtitleMenu()
         } else {
-            deleteMenu.alpha = 1f
-            deleteMenu.isClickable = true
-            deleteMenu.isFocusable = true
+            changeCardVisibility(cardView = deleteMenu, isVisible = true)
         }
     }
 
     // Если выделено только 1 видео
     override fun onSingleSelected(isSingleSelected: Boolean) {
         if (!::renameMenu.isInitialized) return
-        renameMenu.alpha = if (isSingleSelected) 1f else 0.4f
-        renameMenu.isClickable = isSingleSelected
-        renameMenu.isFocusable = isSingleSelected
+        changeCardVisibility(cardView = renameMenu, isVisible = isSingleSelected)
+        changeCardVisibility(cardView = addSubtitlesMenu, isVisible = isSingleSelected)
+        setTextInSubtitleMenu()
     }
 
 }

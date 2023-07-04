@@ -1,12 +1,11 @@
 package com.learnwithsubs.feature_video_list.repository
 
-import android.content.Context
-import android.os.Environment
-import android.util.Log
-import com.learnwithsubs.feature_video_list.storage.VideoListDao
+import com.learnwithsubs.feature_video_list.VideoConstants
 import com.learnwithsubs.feature_video_list.models.Video
-import com.learnwithsubs.feature_video_list.repository.VideoListRepository
+import com.learnwithsubs.feature_video_list.storage.VideoListDao
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class VideoListRepositoryImpl(
@@ -30,5 +29,33 @@ class VideoListRepositoryImpl(
 
     override suspend fun getLastVideo(): Video? {
         return dao.getLastVideo()
+    }
+
+    override suspend fun loadNewSubtitles(video: Video, subtitles: String) {
+
+        val subSTR = File(video.outputPath, VideoConstants.OWN_SUBTITLES)
+        if (subSTR.exists())
+            subSTR.delete()
+
+        withContext(Dispatchers.IO) {
+            subSTR.createNewFile()
+            val writer = subSTR.bufferedWriter()
+            writer.write(subtitles)
+            writer.close()
+        }
+
+        video.apply {
+            isOwnSubtitles = true
+            isSelected = false
+        }
+        insertVideo(video = video)
+    }
+
+    override suspend fun backOldSubtitles(video: Video) {
+        video.apply {
+            isOwnSubtitles = false
+            isSelected = false
+        }
+        insertVideo(video = video)
     }
 }

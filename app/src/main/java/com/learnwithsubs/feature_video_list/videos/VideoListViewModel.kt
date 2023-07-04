@@ -153,6 +153,17 @@ class VideoListViewModel @Inject constructor(
             subSTR.deleteRecursively()
     }
 
+    fun loadNewSubtitles(video: Video, subtitles: String) {
+        viewModelScope.launch {
+            videoListUseCases.loadNewSubtitlesUseCase.invoke(video = video, subtitles = subtitles)
+        }
+    }
+    fun backOldSubtitles(video: Video) {
+        viewModelScope.launch {
+            videoListUseCases.backOldSubtitlesUseCase.invoke(video = video)
+        }
+    }
+
 
     fun setVideoOrder(orderMode: VideoOrder) {
         videoOrder.value = orderMode

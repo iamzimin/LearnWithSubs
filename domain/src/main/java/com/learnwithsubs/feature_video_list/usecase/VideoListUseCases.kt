@@ -10,4 +10,6 @@ data class VideoListUseCases(
     val extractAudioUseCase: ExtractAudioUseCase,
     val extractVideoPreviewUseCase: ExtractVideoPreviewUseCase,
     val getSubtitlesFromServerUseCase: GetSubtitlesFromServerUseCase,
+    val loadNewSubtitlesUseCase: LoadNewSubtitlesUseCase,
+    val backOldSubtitlesUseCase: BackOldSubtitlesUseCase,
 )

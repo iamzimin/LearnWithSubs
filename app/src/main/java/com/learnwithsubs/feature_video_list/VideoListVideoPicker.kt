@@ -6,7 +6,6 @@ import android.content.Intent
 import android.database.Cursor
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import androidx.fragment.app.Fragment
@@ -17,7 +16,6 @@ import com.learnwithsubs.feature_video_list.models.VideoErrorType
 import com.learnwithsubs.feature_video_list.models.VideoLoadingType
 import com.learnwithsubs.feature_video_list.models.VideoStatus
 import com.learnwithsubs.feature_video_list.videos.VideoListViewModel
-import com.learnwithsubs.feature_video_list.videos.VideosEvent
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -25,7 +23,7 @@ import java.io.OutputStream
 import java.util.Date
 
 
-class VideoListPicker(private val fragment: Fragment, private val requestCode: Int) {
+class VideoListVideoPicker(private val fragment: Fragment, private val requestCode: Int) {
 
     fun pickVideo() {
         val intent = Intent(Intent.ACTION_PICK)

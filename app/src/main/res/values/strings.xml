@@ -33,6 +33,9 @@
     <string name="deselect_all">Deselect all</string>
     <string name="delete">Delete</string>
     <string name="rename">Rename</string>
+    <string name="add_subtitles">Add subtitles</string>
+    <string name="return_subtitles">Return subtitles</string>
+    <string name="add_preview">Add preview</string>
 
 
     <string name="name">Name</string>

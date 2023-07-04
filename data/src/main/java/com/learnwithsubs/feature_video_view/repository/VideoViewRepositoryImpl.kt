@@ -19,7 +19,9 @@ class VideoViewRepositoryImpl(
             return emptyList()
         }
 
-        val subtitlesPath = File(video.outputPath, VideoConstants.GENERATED_SUBTITLES)
+        val subtitlesPath = if (video.isOwnSubtitles)
+             File(video.outputPath, VideoConstants.OWN_SUBTITLES)
+        else File(video.outputPath, VideoConstants.GENERATED_SUBTITLES)
 
         var subs = ""
         if (subtitlesPath.exists()) {
@@ -40,7 +42,7 @@ class VideoViewRepositoryImpl(
     }
 
     private fun convertSubtitles(subtitles: String): List<Subtitle> {
-        val subtitleLines = subtitles.split("\n\n")
+        val subtitleLines = subtitles.trim().split("\n\n")
         var subtitleList = emptyList<Subtitle>()
         try {
             subtitleList = subtitleLines.map { subtitleLine ->
