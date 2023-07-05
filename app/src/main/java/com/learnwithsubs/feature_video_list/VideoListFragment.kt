@@ -138,8 +138,8 @@ class VideoListFragment : Fragment(), OnSelectChange {
                 adapter.deselectAll()
             else
                 adapter.selectAll()
-            onSelectAll(isSelectAll = !isSelectAll)
-            onSingleSelected(isSingleSelected = false)
+//            onSelectAll(isSelectAll = !isSelectAll)
+//            onSingleSelected(isSingleSelected = false)
         }
         renameMenu.setOnClickListener {
             vm.editableVideo = adapter.getEditableVideo()
@@ -362,29 +362,44 @@ class VideoListFragment : Fragment(), OnSelectChange {
         uploadVideoCard.visibility = visibleInNormalMode
     }
 
-    override fun onSelectAll(isSelectAll: Boolean) {
-        if (!::deSelectAllMenuText.isInitialized && !::deleteMenu.isInitialized) return
-        // Если выделены все видео - текст убрать выделение. И наоборот
-        deSelectAllMenuText.text = if (isSelectAll)
-            videoListActivity.applicationContext.getString(R.string.deselect_all)
-        else
-            videoListActivity.applicationContext.getString(R.string.select_all)
 
-        // Если не выделено ни одного видео кнопка удаление скрывается
-        if (adapter.getSelectedVideoSize() == 0) {
-            changeCardVisibility(cardView = deleteMenu, isVisible = false)
-            setTextInSubtitleMenu()
-        } else {
-            changeCardVisibility(cardView = deleteMenu, isVisible = true)
-        }
+    // Если выделено всё
+    override fun onSelectAll() {
+        if (!::deSelectAllMenuText.isInitialized && !::deleteMenu.isInitialized) return
+        deSelectAllMenuText.text = videoListActivity.applicationContext.getString(R.string.deselect_all)
+        changeCardVisibility(cardView = deleteMenu, isVisible = true)
+    }
+
+    // Если было выделено всё, а стало на 1 и более меньше
+    override fun onDeselectAll() {
+        deSelectAllMenuText.text = videoListActivity.applicationContext.getString(R.string.select_all)
+    }
+
+    // Если не выделено ничего
+    override fun onZeroSelect() {
+        if (!::deSelectAllMenuText.isInitialized && !::deleteMenu.isInitialized) return
+        deSelectAllMenuText.text = videoListActivity.applicationContext.getString(R.string.select_all)
+
+        changeCardVisibility(cardView = deleteMenu, isVisible = false)
+        changeCardVisibility(cardView = renameMenu, isVisible = false)
+        changeCardVisibility(cardView = addSubtitlesMenu, isVisible = false)
     }
 
     // Если выделено только 1 видео
-    override fun onSingleSelected(isSingleSelected: Boolean) {
+    override fun onSingleSelected() {
         if (!::renameMenu.isInitialized) return
-        changeCardVisibility(cardView = renameMenu, isVisible = isSingleSelected)
-        changeCardVisibility(cardView = addSubtitlesMenu, isVisible = isSingleSelected)
         setTextInSubtitleMenu()
+        changeCardVisibility(cardView = deleteMenu, isVisible = true)
+        changeCardVisibility(cardView = addSubtitlesMenu, isVisible = true)
+        changeCardVisibility(cardView = renameMenu, isVisible = true)
+    }
+
+    // Если выделено было выделено 1 видео, а стало любое другое число
+    override fun onNotSingleSelected() {
+        if (!::renameMenu.isInitialized) return
+        setTextInSubtitleMenu()
+        changeCardVisibility(cardView = addSubtitlesMenu, isVisible = false)
+        changeCardVisibility(cardView = renameMenu, isVisible = false)
     }
 
 }

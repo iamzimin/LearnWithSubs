@@ -18,7 +18,11 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var videoList: ArrayList<Video> = ArrayList()
     private var videoSelected = ArrayList<Video>()
     private var isNormalMode = true
+
     private var onSelectChangeListener: OnSelectChange? = null
+    private var prevIsNormalMode = false
+    private var prevIsSelectOne = false
+    private var prevIsWasSelectAll = false
 
     fun setOnModeChangeListener(listener: OnSelectChange) {
         onSelectChangeListener = listener
@@ -38,6 +42,7 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
         videoSelected.clear()
         videoSelected.addAll(list.filter { it.isSelected })
+        callbacks(list)
         return list
     }
 
@@ -59,8 +64,7 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             else
                 videoSelected.remove(videoSelected.find { it.id == video.id })
         }
-        onSelectChangeListener?.onSelectAll(isSelectAll = videoList.size == videoSelected.size)
-        onSelectChangeListener?.onSingleSelected(isSingleSelected = videoSelected.size == 1)
+        callbacks(this.videoList)
     }
 
     fun selectAll() {
@@ -72,6 +76,7 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         videoList.forEach { it.isSelected = false }
         videoSelected.clear()
         notifyDataSetChanged()
+        callbacks(this.videoList)
     }
     fun clearSelection() {
         videoList.forEach { it.isSelected = false }
@@ -81,8 +86,34 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     fun changeMode(isNormalMode: Boolean) {
         this.isNormalMode = isNormalMode
         notifyDataSetChanged()
-        onSelectChangeListener?.onModeChange(isNormalMode = isNormalMode)
-        onSelectChangeListener?.onSelectAll(isSelectAll = videoList.size == videoSelected.size)
+        callbacks(this.videoList)
+    }
+
+    private fun callbacks(videoList: List<Video>) {
+        if (videoList.isEmpty() && videoSelected.isEmpty())  {
+            isNormalMode = true
+        }
+
+        if (prevIsNormalMode != isNormalMode)
+            onSelectChangeListener?.onModeChange(isNormalMode = isNormalMode)
+        prevIsNormalMode = isNormalMode
+
+        if (isNormalMode) return
+
+        if (videoSelected.size == 0)
+            onSelectChangeListener?.onZeroSelect()
+        else if (videoList.size == videoSelected.size)
+            onSelectChangeListener?.onSelectAll()
+        else if (prevIsWasSelectAll)
+            onSelectChangeListener?.onDeselectAll()
+        prevIsWasSelectAll = videoList.size == videoSelected.size
+
+        if (videoSelected.size == 1)
+            onSelectChangeListener?.onSingleSelected()
+        else if (prevIsSelectOne)
+            onSelectChangeListener?.onNotSingleSelected()
+        prevIsSelectOne = videoSelected.size == 1
+
     }
 
 
