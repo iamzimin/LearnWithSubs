@@ -8,6 +8,7 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.provider.MediaStore
 import android.provider.OpenableColumns
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.arthenica.mobileffmpeg.FFprobe
 import com.learnwithsubs.R
@@ -47,8 +48,8 @@ class VideoListSubtitlePicker(private val fragment: Fragment, private val reques
                 vm.loadNewSubtitles(video = video, subtitles = fileContent)
 
                 inputStream?.close()
-            } catch (e: IOException) {
-                e.printStackTrace()
+            } catch (e: Exception) {
+                Toast.makeText(fragment.context, R.string.subtitle_extraction_error, Toast.LENGTH_SHORT).show()
             }
         }
     }
