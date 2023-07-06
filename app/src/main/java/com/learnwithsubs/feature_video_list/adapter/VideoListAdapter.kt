@@ -33,6 +33,7 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         videoList = ArrayList(newVideoList)
         diffResult.dispatchUpdatesTo(this@VideoListAdapter)
         if (newVideoList.isEmpty()) clearSelection()
+        callbacks(newVideoList)
     }
 
     fun updateVideo(videoToUpdate: Video) {
@@ -112,7 +113,7 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return videoSelected
     }
     fun getEditableVideo(): Video? {
-        return if (videoSelected.size == 1) videoSelected[0].copy()
+        return if (videoSelected.size == 1) videoList.find { it.id == videoSelected[0].id } //videoSelected[0].copy()
         else null
     }
     fun getIsNormalMode(): Boolean {
