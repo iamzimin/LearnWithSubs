@@ -35,12 +35,13 @@ class DictionaryAdapter(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.translate_partspeech_tile, parent, false))
 
-            else -> { //TODO
+            else -> {
                 DictionaryPartSpeechHolder(
                     LayoutInflater.from(parent.context).inflate(
                         R.layout.translate_partspeech_tile, parent, false))
             }
         }
+
     }
 
     override fun getItemCount(): Int {

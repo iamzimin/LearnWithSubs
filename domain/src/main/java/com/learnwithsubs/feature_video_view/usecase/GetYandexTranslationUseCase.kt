@@ -30,14 +30,17 @@ class GetYandexTranslationUseCase(
         val dateTime = if (currentTime.isSuccessful) {
             val bdy = currentTime.body()
             if (bdy != null) {
-                LocalDateTime.of(bdy.year, bdy.month, bdy.day, bdy.hour, bdy.minute, bdy.seconds).toEpochSecond(ZoneOffset.UTC)
+                LocalDateTime.of(bdy.year, bdy.month, bdy.day, bdy.hour, bdy.minute, bdy.seconds)
+                    .toEpochSecond(ZoneOffset.UTC)
             } else Long.MAX_VALUE
         } else Long.MAX_VALUE
 
         var yandexIAmToken = yandexTokenRepository.getYandexIAmToken()
         if (dateTime - yandexTokenRepository.getLastUpdateTimeYandexIAmToken() >= TIMER_INTERVAL) {
-            val yandexIAmBodyRequest = YandexIAmBodyRequest(yandexPassportOauthToken = TranslationKeyAPI.YANDEX_OAUTH)
-            val iAmTokenResponse = yandexTokenRepository.getYandexIAmToken(body = yandexIAmBodyRequest).awaitResponse()
+            val yandexIAmBodyRequest =
+                YandexIAmBodyRequest(yandexPassportOauthToken = TranslationKeyAPI.YANDEX_OAUTH)
+            val iAmTokenResponse =
+                yandexTokenRepository.getYandexIAmToken(body = yandexIAmBodyRequest).awaitResponse()
             if (iAmTokenResponse.isSuccessful) {
                 val responseBody = iAmTokenResponse.body()
                 if (responseBody != null) {
@@ -48,7 +51,7 @@ class GetYandexTranslationUseCase(
             }
         }
 
-        if (yandexIAmToken == null) // TODO if null
+        if (yandexIAmToken == null)
             return null
 
         val yandexResponse = translatorRepository.getTranslation(

@@ -41,14 +41,6 @@ class VideoViewDataModule {
     @Singleton
     @Named("YandexDictionary")
     fun provideYandexDictionaryRetrofit(): Retrofit {
-        /*
-        val gson: Gson = GsonBuilder()
-            .setLenient()
-            .create()
-        val okHttpClient: OkHttpClient = OkHttpClient.Builder() // TODO
-            .connectTimeout(1000, TimeUnit.SECONDS)
-            .readTimeout(1000, TimeUnit.SECONDS).build()
-         */
         val BASE_URL = "https://dictionary.yandex.net/api/v1/"
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -101,8 +93,8 @@ class VideoViewDataModule {
 
     @Provides
     @Singleton
-    fun provideVideoRepository(db: VideoDatabase, context: Context): VideoViewRepository {
-        return VideoViewRepositoryImpl(db.videoViewDao, context)
+    fun provideVideoRepository(db: VideoDatabase): VideoViewRepository {
+        return VideoViewRepositoryImpl(db.videoViewDao)
     }
 
     @Provides

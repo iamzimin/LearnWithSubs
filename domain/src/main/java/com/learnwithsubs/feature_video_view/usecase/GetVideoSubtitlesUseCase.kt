@@ -7,7 +7,7 @@ import com.learnwithsubs.feature_video_view.repository.VideoViewRepository
 class GetVideoSubtitlesUseCase(
     private val repository: VideoViewRepository
 ) {
-    fun invoke(video: Video?): List<Subtitle> {
+    fun invoke(video: Video): List<Subtitle>? {
         return repository.getVideoSubtitles(video = video)
     }
 }

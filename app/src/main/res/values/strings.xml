@@ -68,10 +68,15 @@
     <string name="the_video_does_not_exist">The video does not exist</string>
     <string name="the_video_is_uploading">The video is uploading</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="subtitle_extraction_error">Subtitle extraction error</string>
+
+    <string name="yandex_service_is_not_available">The yandex service is not available</string>
+
+    <string name="wrong_subtitle_format">Wrong subtitle format</string>
+
+    <string name="submenu">Submenu</string>
 
 
 </resources>

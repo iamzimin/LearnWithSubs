@@ -21,10 +21,11 @@ import javax.inject.Inject
 class VideoViewViewModel @Inject constructor(
     private val videoViewUseCases: VideoViewUseCases
 ) : ViewModel() {
-    var currentVideo: MutableLiveData<Video> = MutableLiveData<Video>()
+    var currentVideo: Video? = null
 
-    var videoPath = MutableLiveData<String>()
-    var videoName = MutableLiveData<String>()
+    val videoPath = MutableLiveData<String>()
+    val videoName = MutableLiveData<String>()
+    val subtitleError = MutableLiveData<String>()
 
     private var maxVideoTime: Long = 0L
     private var maxTimeString: String = ""
@@ -46,7 +47,11 @@ class VideoViewViewModel @Inject constructor(
 
 
     fun openVideo(video: Video) {
-        subtitleList = videoViewUseCases.getVideoSubtitlesUseCase.invoke(currentVideo.value)
+        val subList = videoViewUseCases.getVideoSubtitlesUseCase.invoke(video)
+        if (subList == null)
+            subtitleError.value = ""
+
+        subtitleList = subList ?: emptyList()
 
         videoPath.value = File(video.outputPath, VideoConstants.COPIED_VIDEO).absolutePath
         videoName.value = video.name

@@ -69,7 +69,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
         // Set VM
         (applicationContext as App).videoViewAppComponent.inject(this)
         vm = ViewModelProvider(this, vmFactory)[VideoViewViewModel::class.java]
-        vm.currentVideo.value = intent.getParcelableExtra("videoData")
+        vm.currentVideo = intent.getParcelableExtra("videoData")
         getLanguageFromSettings()
 
 
@@ -109,14 +109,14 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), STORAGE_PERMISSION_REQUEST_CODE)
         }
         else
-            vm.currentVideo.value?.let { vm.openVideo(video = it) }
+            vm.currentVideo?.let { vm.openVideo(video = it) }
 
         subtitleTextView.setCustomSelectionActionModeCallback(object : ActionMode.Callback {
             override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
                 menu.clear()
                 menu.add(R.string.translate)
 
-                val subMenu = menu.addSubMenu("") // TODO
+                val subMenu = menu.addSubMenu(R.string.submenu)
                 subMenu.add(Menu.NONE, android.R.id.selectAll, 1, R.string.select_all)
                 subMenu.add(Menu.NONE, android.R.id.copy, 2, R.string.copy)
                 subMenu.add(Menu.NONE, android.R.id.shareText, 3, R.string.share)
@@ -153,7 +153,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
             videoView.setVideoURI(videoPath)
             videoView.requestFocus()
             videoView.start()
-            val watchProgress = vm.currentVideo.value?.watchProgress ?: 0
+            val watchProgress = vm.currentVideo?.watchProgress ?: 0
             videoView.seekTo(watchProgress)
         }
 
@@ -163,9 +163,14 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
             videoName.text = name
         }
 
+        // Subtitle error
+        vm.subtitleError.observe(this@VideoViewActivity) { error ->
+            Toast.makeText(this.applicationContext, R.string.wrong_subtitle_format, Toast.LENGTH_SHORT).show()
+        }
+
 
         // Video time update
-        val timeUpdate = Handler(Looper.getMainLooper()) // TODO может не правильно в mvvm (возможна онибка с некорректным отображением времени)
+        val timeUpdate = Handler(Looper.getMainLooper())
         timeUpdate.post(object : Runnable {
             override fun run() {
                 vm.updateCurrentTime(videoView.currentPosition)
@@ -178,7 +183,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
 
 
         // Video subtitle update
-        val subtitleUpdate = Handler(Looper.getMainLooper()) // TODO может не правильно в mvvm (возможна онибка с некорректным отображением времени)
+        val subtitleUpdate = Handler(Looper.getMainLooper())
         subtitleUpdate.post(object : Runnable {
             override fun run() {
                 if (videoView.isPlaying) {
@@ -292,7 +297,9 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
             } else vm.getWordsFromTranslator(word = vm.textToTranslate, learnLanguage = vm.learnLanguage)
         }
         vm.translatorTranslationLiveData.observe(this@VideoViewActivity) { transl ->
-            translateDialogBinding.outputWord.setText(transl)
+            transl ?: Toast.makeText(this.applicationContext, R.string.yandex_service_is_not_available, Toast.LENGTH_SHORT).show()
+            val test = transl ?: return@observe
+            translateDialogBinding.outputWord.setText(test)
             translateDialogBinding.outputWord.clearFocus()
         }
     }
@@ -378,12 +385,12 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
 
     override fun onStop() {
         super.onStop()
-        vm.currentVideo.value?.let { vm.saveVideo(it) }
+        vm.currentVideo?.let { vm.saveVideo(it) }
     }
 
     override fun onRestart() {
         super.onRestart()
-        vm.currentVideo.value?.let { vm.openVideo(video = it) }
+        vm.currentVideo?.let { vm.openVideo(video = it) }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -397,7 +404,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
         when (requestCode) {
             STORAGE_PERMISSION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    vm.currentVideo.value?.let { vm.openVideo(video = it) }
+                    vm.currentVideo?.let { vm.openVideo(video = it) }
                 else {
                     val videoIsUploading: String = applicationContext.getString(R.string.storage_access_required)
                     Toast.makeText(applicationContext, videoIsUploading, Toast.LENGTH_SHORT).show()
