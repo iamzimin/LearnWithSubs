@@ -32,7 +32,7 @@ abstract class VideoViewHolder(
         return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 
-    abstract fun bind(video: Video)
+    abstract fun bind(video: Video, isSelected: Boolean)
 }
 
 // ViewHolder для обычного видео
@@ -42,11 +42,11 @@ class NormalVideoViewHolder(
 ) : VideoViewHolder(itemView) {
     private val binding = VideoTileBinding.bind(itemView)
 
-    override fun bind(video: Video) {
+    override fun bind(video: Video, isSelected: Boolean) {
         binding.videoName.text = video.name
         binding.duration.text = "${duration}: ${formatDuration(video.duration)}"
         binding.savedWords.text = "${savedWords}: ${video.saveWords}"
-        binding.videoSelectCheckBox.isChecked = video.isSelected
+        binding.videoSelectCheckBox.isChecked = isSelected
         binding.videoPreview.load(File(video.outputPath, VideoConstants.VIDEO_PREVIEW).absoluteFile) {
             transformations(RoundedCornersTransformation(10f))
             error(R.drawable.rectangle)
@@ -91,9 +91,9 @@ class LoadingVideoViewHolder(
 ) : VideoViewHolder(itemView) {
     private val binding = VideoUploadingTileBinding.bind(itemView)
 
-    override fun bind(video: Video) {
+    override fun bind(video: Video, isSelected: Boolean) {
         binding.videoName.text = video.name
-        binding.videoSelectCheckBox.isChecked = video.isSelected
+        binding.videoSelectCheckBox.isChecked = isSelected
         binding.duration.text = "${duration}: ${formatDuration(video.duration)}"
 
         val status = "${itemView.context.getString(R.string.video_loading_status)}: "

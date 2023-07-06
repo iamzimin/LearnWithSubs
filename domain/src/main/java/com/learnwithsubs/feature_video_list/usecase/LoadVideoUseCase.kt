@@ -8,6 +8,6 @@ class LoadVideoUseCase(
 ) {
 
     suspend operator fun invoke(video: Video) {
-        return videoListRepository.insertVideo(video.apply { isSelected = false })
+        return videoListRepository.insertVideo(video)
     }
 }

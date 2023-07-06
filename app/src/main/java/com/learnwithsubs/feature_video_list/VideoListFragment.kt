@@ -138,8 +138,6 @@ class VideoListFragment : Fragment(), OnSelectChange {
                 adapter.deselectAll()
             else
                 adapter.selectAll()
-//            onSelectAll(isSelectAll = !isSelectAll)
-//            onSingleSelected(isSingleSelected = false)
         }
         renameMenu.setOnClickListener {
             vm.editableVideo = adapter.getEditableVideo()
@@ -156,6 +154,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
                 videoListSubtitlePicker.pickSubtitles()
             else
                 vm.backOldSubtitles(video = video)
+            adapter.changeMode(isNormalMode = true)
         }
 
         vm.errorTypeLiveData.value = null
@@ -210,7 +209,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
                     // Обновляем и загружаем видео
                     video.apply {
                         name = textView.text.toString()
-                        isSelected = false
+                        //isSelected = false
                     }
                     vm.editVideo(video = video)
                 }
@@ -319,7 +318,6 @@ class VideoListFragment : Fragment(), OnSelectChange {
         super.onActivityResult(requestCode, resultCode, data)
         videoListVideoPicker.loadVideoOnResult(requestCode, resultCode, data, vm, videoListActivity)
         videoListSubtitlePicker.loadVideoOnResult(requestCode, resultCode, data, vm, vm.editableVideo)
-        adapter.changeMode(isNormalMode = true)
     }
 
     private fun setupRecyclerView() {

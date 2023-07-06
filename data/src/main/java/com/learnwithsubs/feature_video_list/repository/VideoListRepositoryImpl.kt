@@ -46,7 +46,6 @@ class VideoListRepositoryImpl(
 
         video.apply {
             isOwnSubtitles = true
-            isSelected = false
         }
         insertVideo(video = video)
     }
@@ -54,7 +53,6 @@ class VideoListRepositoryImpl(
     override suspend fun backOldSubtitles(video: Video) {
         video.apply {
             isOwnSubtitles = false
-            isSelected = false
         }
         insertVideo(video = video)
     }

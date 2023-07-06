@@ -12,7 +12,6 @@ data class Video(
     var videoStatus: VideoStatus,
     var loadingType: VideoLoadingType,
     var errorType: VideoErrorType?,
-    var isSelected: Boolean = false,
     var isOwnSubtitles: Boolean = false,
     var name: String,
     val duration: Long,

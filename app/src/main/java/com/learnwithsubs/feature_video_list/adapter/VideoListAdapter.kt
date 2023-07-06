@@ -29,28 +29,14 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun updateData(newVideoList: ArrayList<Video>) {
-        val selected = updateSelected(newVideoList)
-        val diffResult = DiffUtil.calculateDiff(VideoDiffCallback(videoList, selected))
-        videoList = ArrayList(selected)
+        val diffResult = DiffUtil.calculateDiff(VideoDiffCallback(videoList, newVideoList))
+        videoList = ArrayList(newVideoList)
         diffResult.dispatchUpdatesTo(this@VideoListAdapter)
-    }
-
-    private fun updateSelected(list: List<Video>): List<Video> {
-        list.forEach {  video->
-            val found = videoSelected.find { it.id == video.id }
-            if (found != null) video.isSelected = found.isSelected
-        }
-        videoSelected.clear()
-        videoSelected.addAll(list.filter { it.isSelected })
-        callbacks(list)
-        return list
     }
 
     fun updateVideo(videoToUpdate: Video) {
         val position = videoList.indexOfFirst { it.id == videoToUpdate.id }
         if (position != -1) {
-            val video = videoSelected.any { it.id == videoToUpdate.id }
-            videoToUpdate.isSelected = video
             videoList[position] = videoToUpdate
             notifyItemChanged(position)
         }
@@ -58,8 +44,7 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun updateSelection(position: Int, isSelected: Boolean) {
         videoList.getOrNull(position)?.let { video ->
-            video.isSelected = isSelected
-            if (video.isSelected)
+            if (isSelected)
                 videoSelected.add(video)
             else
                 videoSelected.remove(videoSelected.find { it.id == video.id })
@@ -68,23 +53,21 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun selectAll() {
-        videoList.forEach { it.isSelected = true }
         videoSelected = ArrayList(videoList.toList())
         changeMode(isNormalMode = false)
     }
     fun deselectAll() {
-        videoList.forEach { it.isSelected = false }
         videoSelected.clear()
         notifyDataSetChanged()
         callbacks(this.videoList)
     }
     fun clearSelection() {
-        videoList.forEach { it.isSelected = false }
         videoSelected.clear()
         changeMode(isNormalMode = true)
     }
     fun changeMode(isNormalMode: Boolean) {
         this.isNormalMode = isNormalMode
+        if (isNormalMode) videoSelected.clear()
         notifyDataSetChanged()
         callbacks(this.videoList)
     }
@@ -168,12 +151,14 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         when (video.videoStatus) {
             VideoStatus.NORMAL_VIDEO -> {
                 val normalHolder = holder as NormalVideoViewHolder
-                normalHolder.bind(videoList[position])
+                val isSelected = videoSelected.any { it.id == videoList[position].id }
+                normalHolder.bind(videoList[position], isSelected)
             }
 
             VideoStatus.LOADING_VIDEO -> {
                 val loadingHolder = holder as LoadingVideoViewHolder
-                loadingHolder.bind(videoList[position])
+                val isSelected = videoSelected.any { it.id == videoList[position].id }
+                loadingHolder.bind(videoList[position], isSelected)
             }
         }
     }
