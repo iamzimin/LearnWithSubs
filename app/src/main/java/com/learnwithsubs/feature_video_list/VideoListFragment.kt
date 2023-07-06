@@ -119,6 +119,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (!adapter.getIsNormalMode()) return
                 vm.setFilterMode(filter = s.toString())
                 vm.updateVideoList()
             }
@@ -207,10 +208,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
                     Toast.makeText(context, getString(R.string.the_video_is_uploading), Toast.LENGTH_SHORT).show()
                 } else {
                     // Обновляем и загружаем видео
-                    video.apply {
-                        name = textView.text.toString()
-                        //isSelected = false
-                    }
+                    video.name = textView.text.toString()
                     vm.editVideo(video = video)
                 }
 
@@ -388,8 +386,13 @@ class VideoListFragment : Fragment(), OnSelectChange {
         if (!::renameMenu.isInitialized) return
         setTextInSubtitleMenu()
         changeCardVisibility(cardView = deleteMenu, isVisible = true)
-        changeCardVisibility(cardView = addSubtitlesMenu, isVisible = true)
-        changeCardVisibility(cardView = renameMenu, isVisible = true)
+        if ((adapter.getEditableVideo()?.loadingType ?: false) == VideoLoadingType.DONE) {
+            changeCardVisibility(cardView = addSubtitlesMenu, isVisible = true)
+            changeCardVisibility(cardView = renameMenu, isVisible = true)
+        } else {
+            changeCardVisibility(cardView = addSubtitlesMenu, isVisible = false)
+            changeCardVisibility(cardView = renameMenu, isVisible = false)
+        }
     }
 
     // Если выделено было выделено 1 видео, а стало любое другое число

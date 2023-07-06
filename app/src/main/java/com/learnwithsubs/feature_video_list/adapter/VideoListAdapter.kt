@@ -32,6 +32,7 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val diffResult = DiffUtil.calculateDiff(VideoDiffCallback(videoList, newVideoList))
         videoList = ArrayList(newVideoList)
         diffResult.dispatchUpdatesTo(this@VideoListAdapter)
+        if (newVideoList.isEmpty()) clearSelection()
     }
 
     fun updateVideo(videoToUpdate: Video) {
