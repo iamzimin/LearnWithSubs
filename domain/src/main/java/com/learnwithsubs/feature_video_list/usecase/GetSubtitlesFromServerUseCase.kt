@@ -44,9 +44,11 @@ Hello word""".trimIndent())
         val subSTR = File(video.outputPath, VideoConstants.GENERATED_SUBTITLES)
         if (subSTR.exists())
             subSTR.delete()
-        subSTR.createNewFile()
-        val writer = subSTR.bufferedWriter()
-        writer.write(response)
-        writer.close()
+        try {
+            subSTR.createNewFile()
+            val writer = subSTR.bufferedWriter()
+            writer.write(response)
+            writer.close()
+        } catch (_: Exception) {}
     }
 }

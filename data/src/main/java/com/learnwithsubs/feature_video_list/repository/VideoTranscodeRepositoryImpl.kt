@@ -23,6 +23,8 @@ import kotlin.coroutines.suspendCoroutine
 
 class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
     private val videoProgressLiveData: MutableLiveData<Video?> = MutableLiveData()
+    private var transcodeVideoExecutionId: Long? = null
+    private var extractAudioExecutionId: Long? = null
 
     //val internalStorageDir = File(context.filesDir, "LearnWithSubs")
     private val externalStorageDir = File(Environment.getExternalStorageDirectory().toString(), "LearnWithSubs")
@@ -39,7 +41,7 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
             videoProgressLiveData.postValue(video)
         }
 
-        FFmpeg.executeAsync(command) { executionId, returnCode ->
+        transcodeVideoExecutionId = FFmpeg.executeAsync(command) { executionId, returnCode ->
             when (returnCode) {
                 RETURN_CODE_SUCCESS -> {
                     Log.i(Config.TAG, "Async command execution completed successfully.")
@@ -57,8 +59,14 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
                     continuation.resume(video)
                 }
             }
+            transcodeVideoExecutionId = null
         }
 
+    }
+
+    override fun cancelTranscodeVideo() {
+        val id = transcodeVideoExecutionId ?: return
+        FFmpeg.cancel(id)
     }
 
     override suspend fun extractAudio(video: Video): Video? = suspendCoroutine { continuation ->
@@ -73,7 +81,7 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
             videoProgressLiveData.postValue(video)
         }
 
-        FFmpeg.executeAsync(command) { executionId, returnCode ->
+        extractAudioExecutionId = FFmpeg.executeAsync(command) { executionId, returnCode ->
             when (returnCode) {
                 RETURN_CODE_SUCCESS -> {
                     Log.i(Config.TAG, "Async command execution completed successfully.")
@@ -91,7 +99,13 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
                     continuation.resume(video)
                 }
             }
+            extractAudioExecutionId = null
         }
+    }
+
+    override fun cancelExtractAudio() {
+        val id = extractAudioExecutionId ?: return
+        FFmpeg.cancel(id)
     }
 
     override fun getVideoProgressLiveData(): MutableLiveData<Video?> {

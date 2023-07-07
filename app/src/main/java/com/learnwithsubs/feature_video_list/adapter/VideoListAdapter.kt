@@ -42,7 +42,12 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         while (iterator.hasNext()) {
             val video = iterator.next()
             val found = newVideoList.find { it.id == video.id }
-            if (found == null) iterator.remove()
+            if (found != null) {
+                val qe = videoSelected.indexOfFirst { it.id == video.id }
+                if (qe != -1) videoSelected[qe] = found
+            } else {
+                iterator.remove()
+            }
         }
     }
 
@@ -116,6 +121,7 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return videoSelected.size
     }
     fun getSelectedVideo(): List<Video> {
+        //val qwe = videoList.map { it.id }.toTypedArray()
         return videoSelected
     }
     fun getEditableVideo(): Video? {

@@ -37,6 +37,7 @@ class VideoListViewModel @Inject constructor(
 
     private val videoSemaphore = Semaphore(1)
     private val processQueue = LinkedList<Video?>()
+    private lateinit var poolList: Video
 
     companion object {
         val DEFAULT_SORT_MODE: VideoOrder = VideoOrder.Date(OrderType.Descending)
@@ -74,7 +75,7 @@ class VideoListViewModel @Inject constructor(
 
                 videoSemaphore.acquire()
                 try {
-                    val poolList = processQueue.poll() ?: return@withContext
+                    poolList = processQueue.poll() ?: return@withContext
 
                     // Обработка извлечение аудио
                     poolList.loadingType = VideoLoadingType.EXTRACTING_AUDIO
@@ -133,11 +134,6 @@ class VideoListViewModel @Inject constructor(
         }
     }
 
-//    fun deSelectVideo(selectAllMode: Boolean) {
-//        val copiedVideoList = videoList.value?.map { video -> video.copy(isSelected = selectAllMode) }
-//        videoList.value = copiedVideoList?.toMutableList()
-//    }
-
     fun deleteSelectedVideo(selectedVideos: List<Video>?) {
         viewModelScope.launch {
             selectedVideos?.forEach { deleteVideo(it)}
@@ -147,6 +143,12 @@ class VideoListViewModel @Inject constructor(
     fun deleteVideo(video: Video) {
         viewModelScope.launch {
             videoListUseCases.deleteVideoUseCase.invoke(video)
+        }
+        if (::poolList.isInitialized && poolList.id == video.id) {
+            videoTranscodeRepository.cancelTranscodeVideo()
+            videoTranscodeRepository.cancelExtractAudio()
+        } else {
+            processQueue.remove(processQueue.find { it?.id == video.id })
         }
         val subSTR = File(video.outputPath)
         if (subSTR.exists())

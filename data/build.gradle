@@ -48,6 +48,7 @@ dependencies {
 
     //FFmpeg
     implementation 'com.arthenica:mobile-ffmpeg-full:4.4'
+    //implementation 'com.arthenica:ffmpeg-kit-full:5.1'
 
     //ViewModel - LiveData
     def lifecycle_version = "2.6.1"
