@@ -77,6 +77,7 @@ dependencies {
 
     //FFmpeg
     //implementation 'com.arthenica:mobile-ffmpeg-full:4.4'
+    implementation 'com.arthenica:ffmpeg-kit-full:5.1'
 
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
