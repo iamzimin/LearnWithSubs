@@ -32,8 +32,18 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val diffResult = DiffUtil.calculateDiff(VideoDiffCallback(videoList, newVideoList))
         videoList = ArrayList(newVideoList)
         diffResult.dispatchUpdatesTo(this@VideoListAdapter)
-        if (newVideoList.isEmpty()) clearSelection()
+        updateSelected(newVideoList)
         callbacks(newVideoList)
+    }
+
+    private fun updateSelected(newVideoList: List<Video>) {
+        if (newVideoList.isEmpty()) changeMode(isNormalMode = true)
+        val iterator = videoSelected.iterator()
+        while (iterator.hasNext()) {
+            val video = iterator.next()
+            val found = newVideoList.find { it.id == video.id }
+            if (found == null) iterator.remove()
+        }
     }
 
     fun updateVideo(videoToUpdate: Video) {
@@ -62,10 +72,6 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         videoSelected.clear()
         notifyDataSetChanged()
         callbacks(this.videoList)
-    }
-    fun clearSelection() {
-        videoSelected.clear()
-        changeMode(isNormalMode = true)
     }
     fun changeMode(isNormalMode: Boolean) {
         this.isNormalMode = isNormalMode

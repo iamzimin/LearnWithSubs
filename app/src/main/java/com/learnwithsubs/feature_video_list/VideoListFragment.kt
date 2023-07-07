@@ -114,7 +114,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
             openSortByMenu()
         }
         closeSelectionButton.setOnClickListener{
-            adapter.clearSelection()
+            adapter.changeMode(isNormalMode = true) //adapter.clearSelection()
         }
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -212,7 +212,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
                     vm.editVideo(video = video)
                 }
 
-                adapter.clearSelection()
+                adapter.changeMode(isNormalMode = true) //adapter.clearSelection()
                 renameMenu.dismiss()
                 true
             } else false
