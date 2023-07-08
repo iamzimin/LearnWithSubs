@@ -20,9 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
-import android.widget.ImageButton
 import android.widget.SeekBar
-import android.widget.TextView
 import android.widget.Toast
 import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
@@ -34,6 +32,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.learnwithsubs.R
 import com.learnwithsubs.app.App
 import com.learnwithsubs.databinding.TranslateDialogBinding
+import com.learnwithsubs.databinding.VideoViewBinding
+import com.learnwithsubs.databinding.VideoViewInterfaceBinding
 import com.learnwithsubs.feature_video_view.adapter.DictionaryAdapter
 import com.learnwithsubs.feature_video_view.adapter.OnDictionaryClick
 import com.learnwithsubs.feature_video_view.model.Language
@@ -52,7 +52,9 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
     lateinit var vmFactory: VideoViewViewModelFactory
     private lateinit var vm: VideoViewViewModel
 
-    private lateinit var translateDialogBinding: TranslateDialogBinding
+    private lateinit var translateDialogBind: TranslateDialogBinding
+    private lateinit var videoViewBind: VideoViewBinding
+    private lateinit var videoViewIBind: VideoViewInterfaceBinding
     private lateinit var videoView: VideoView
     private var currentPosition = 0
 
@@ -76,8 +78,12 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
         super.onCreate(savedInstanceState)
         configSystemUI()
         setContentView(R.layout.video_view)
+        val videoViewLayout = findViewById<ConstraintLayout>(R.id.video_view_constraint_layout)
 
-        translateDialogBinding = TranslateDialogBinding.inflate(layoutInflater)
+        translateDialogBind = TranslateDialogBinding.inflate(layoutInflater)
+        videoViewBind = VideoViewBinding.inflate(layoutInflater, videoViewLayout, true)
+        videoViewIBind = VideoViewInterfaceBinding.inflate(layoutInflater, videoViewBind.videoViewInterface, true)
+        videoView = videoViewBind.videoView
         renameMenu = Dialog(this@VideoViewActivity)
         setupTranslateDialog()
 
@@ -87,27 +93,8 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
         vm.currentVideo = intent.getParcelableExtra("videoData")
         getLanguageFromSettings()
 
-
-        // Get view by id
-        videoView = findViewById(R.id.videoView)
-        val videoControls = findViewById<ConstraintLayout>(R.id.video_controls)
-        val videoViewConstraintLayout = findViewById<ConstraintLayout>(R.id.video_view_constraint_layout)
-
-        val exitVideoView = findViewById<ImageButton>(R.id.exit_video_view)
-        val videoName = findViewById<TextView>(R.id.video_name)
-        val videoMenuButton = findViewById<ImageButton>(R.id.video_menu_button)
-
-        val playVideoButton = findViewById<ImageButton>(R.id.play_video_button)
-        val pauseVideoButton = findViewById<ImageButton>(R.id.pause_video_button)
-        val forwardVideoButton = findViewById<ImageButton>(R.id.forward_5_video_button)
-        val rewindVideoButton = findViewById<ImageButton>(R.id.rewind_5_video_button)
-
-        val subtitleTextView = findViewById<TextView>(R.id.subtitle)
-        subtitleTextView.setBackgroundResource(android.R.color.black)
-        val layoutParams = subtitleTextView.layoutParams as ConstraintLayout.LayoutParams
-
-        val videoTime = findViewById<TextView>(R.id.video_time)
-        val videoPlaySeekBar = findViewById<SeekBar>(R.id.video_play_status)
+        videoViewBind.subtitle.setBackgroundResource(android.R.color.black)
+        val subtitleLP = videoViewBind.subtitle.layoutParams as ConstraintLayout.LayoutParams
 
         // Set VideoView
         val mediaController = CustomMediaController(this)
@@ -118,11 +105,11 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
         ttsFrom = TextToSpeech(this, this)
         ttsTo = TextToSpeech(this, this)
 
-        translateDialogBinding.audioInputWord.setOnClickListener {
-            ttsFrom.speak(translateDialogBinding.inputWord.text, TextToSpeech.QUEUE_FLUSH, null, "")
+        translateDialogBind.audioInputWord.setOnClickListener {
+            ttsFrom.speak(translateDialogBind.inputWord.text, TextToSpeech.QUEUE_FLUSH, null, "")
         }
-        translateDialogBinding.audioOutputWord.setOnClickListener {
-            ttsTo.speak(translateDialogBinding.outputWord.text, TextToSpeech.QUEUE_FLUSH, null, "")
+        translateDialogBind.audioOutputWord.setOnClickListener {
+            ttsTo.speak(translateDialogBind.outputWord.text, TextToSpeech.QUEUE_FLUSH, null, "")
         }
 
         //Video Play
@@ -136,7 +123,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
         else
             vm.currentVideo?.let { vm.openVideo(video = it, isPlaying = true) }
 
-        subtitleTextView.setCustomSelectionActionModeCallback(object : ActionMode.Callback {
+        videoViewBind.subtitle.setCustomSelectionActionModeCallback(object : ActionMode.Callback {
             override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
                 menu.clear()
                 menu.add(R.string.translate)
@@ -155,9 +142,9 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
             override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
                 when (item.title.toString()) {
                     getString(R.string.translate) -> {
-                        val selectedText = subtitleTextView.text.substring(subtitleTextView.selectionStart, subtitleTextView.selectionEnd)
+                        val sub = videoViewBind.subtitle
+                        val selectedText = sub.text.substring(sub.selectionStart, sub.selectionEnd)
                         textToTranslate = selectedText
-                        //Toast.makeText(this@VideoViewActivity, selectedText, Toast.LENGTH_SHORT).show()
                         openTranslateDialog()
                         return true
                     }
@@ -185,7 +172,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
 
         // Video name
         vm.videoName.observe(this) { name ->
-            videoName.text = name
+            videoViewIBind.videoName.text = name
         }
 
         // Subtitle error
@@ -203,7 +190,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
             }
         })
         vm.videoTime.observe(this) { time ->
-            videoTime.text = time
+            videoViewIBind.videoTime.text = time
         }
 
 
@@ -222,7 +209,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
                         sub.length,
                         Spannable.SPAN_INCLUSIVE_INCLUSIVE
                     )*/
-                    subtitleTextView.text = sub
+                    videoViewBind.subtitle.text = sub
                 }
                 subtitleUpdate.postDelayed(this, 300)
             }
@@ -231,9 +218,9 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
 
         // Seek bar
         vm.videoSeekBarProgress.observe(this) { progress ->
-            videoPlaySeekBar.progress = progress
+            videoViewIBind.videoPlaySeekBar.progress = progress
         }
-        videoPlaySeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        videoViewIBind.videoPlaySeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     val newPosition = (videoView.duration * progress) / 100
@@ -248,56 +235,56 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
 
         // Button show - Subtitles position
         var timer: CountDownTimer? = null
-        videoViewConstraintLayout.setOnClickListener {
+        videoViewBind.videoViewConstraintLayout.setOnClickListener {
             vm.isButtonsShowedLiveData.value = vm.isButtonsShowedLiveData.value != true
         }
         vm.isButtonsShowedLiveData.observe(this) { isButtonsShowed ->
-            videoControls.visibility = if (isButtonsShowed) View.VISIBLE else View.GONE
+            videoViewIBind.videoControls.visibility = if (isButtonsShowed) View.VISIBLE else View.GONE
             if (isButtonsShowed) {
                 timer = object : CountDownTimer(5000, 1000) {
                     override fun onTick(millisUntilFinished: Long) {}
                     override fun onFinish() {
                         if (!videoView.isPlaying) return
-                        videoControls.visibility = View.GONE
+                        videoViewIBind.videoControls.visibility = View.GONE
                         vm.isButtonsShowedLiveData.value = false
                     }
                 }.start()
-                layoutParams.setMargins(layoutParams.leftMargin, layoutParams.topMargin, layoutParams.rightMargin, 180)
-                subtitleTextView.layoutParams = layoutParams
+                subtitleLP.setMargins(subtitleLP.leftMargin, subtitleLP.topMargin, subtitleLP.rightMargin, 180)
+                videoViewBind.subtitle.layoutParams = subtitleLP
             }
             else {
                 timer?.cancel()
-                layoutParams.setMargins(layoutParams.leftMargin, layoutParams.topMargin, layoutParams.rightMargin, 40)
-                subtitleTextView.layoutParams = layoutParams
+                subtitleLP.setMargins(subtitleLP.leftMargin, subtitleLP.topMargin, subtitleLP.rightMargin, 40)
+                videoViewBind.subtitle.layoutParams = subtitleLP
             }
         }
 
 
         // Button forward
         videoView.setOnPreparedListener { vid ->
-            forwardVideoButton.setOnClickListener {
+            videoViewIBind.forward5VideoButton.setOnClickListener {
                 timer?.start()
                 val new = vid.currentPosition + 5000
                 vid.seekTo(new)
             }
-            rewindVideoButton.setOnClickListener {
+            videoViewIBind.rewind5VideoButton.setOnClickListener {
                 timer?.start()
                 val new = vid.currentPosition - 5000
                 vid.seekTo(new)
             }
         }
 
-        videoMenuButton.setOnClickListener {
+        videoViewIBind.videoMenuButton.setOnClickListener {
             timer?.cancel()
             vm.videoPlaying.value = false
         }
 
         // Video play/pause
-        pauseVideoButton.setOnClickListener {
+        videoViewIBind.pauseVideoButton.setOnClickListener {
             vm.videoPlaying.value = vm.videoPlaying.value != true
             timer?.start()
         }
-        playVideoButton.setOnClickListener {
+        videoViewIBind.playVideoButton.setOnClickListener {
             vm.videoPlaying.value = vm.videoPlaying.value != true
             timer?.start()
         }
@@ -305,16 +292,16 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
             videoView.apply {
                 if (isPlaying) start() else pause()
             }
-            playVideoButton.apply {
+            videoViewIBind.playVideoButton.apply {
                 visibility = if (isPlaying) View.GONE else View.VISIBLE
             }
-            pauseVideoButton.apply {
+            videoViewIBind.pauseVideoButton.apply {
                 visibility = if (!isPlaying) View.GONE else View.VISIBLE
             }
         }
 
         // Exit
-        exitVideoView.setOnClickListener {
+        videoViewIBind.exitVideoView.setOnClickListener {
             finish()
         }
 
@@ -322,8 +309,8 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
         // Translate
         vm.dictionaryWordsLiveData.observe(this@VideoViewActivity) { dict ->
             if (dict != null) {
-                translateDialogBinding.outputWord.setText(dict.translation)
-                translateDialogBinding.outputWord.clearFocus()
+                translateDialogBind.outputWord.setText(dict.translation)
+                translateDialogBind.outputWord.clearFocus()
                 val updatedPartSpeech = vm.changePartSpeech(context = this@VideoViewActivity.applicationContext, list = dict.synonyms)
                 dictionaryAdapter.updateData(wordsList = updatedPartSpeech)
             } else {
@@ -334,8 +321,8 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
         vm.translatorTranslationLiveData.observe(this@VideoViewActivity) { transl ->
             transl ?: Toast.makeText(this.applicationContext, R.string.yandex_service_is_not_available, Toast.LENGTH_SHORT).show()
             val test = transl ?: return@observe
-            translateDialogBinding.outputWord.setText(test)
-            translateDialogBinding.outputWord.clearFocus()
+            translateDialogBind.outputWord.setText(test)
+            translateDialogBind.outputWord.clearFocus()
         }
     }
 
@@ -348,12 +335,12 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
             word = textToTranslate
         )
 
-        translateDialogBinding.inputWord.setText(textToTranslate)
-        translateDialogBinding.inputWord.clearFocus()
+        translateDialogBind.inputWord.setText(textToTranslate)
+        translateDialogBind.inputWord.clearFocus()
 
         renameMenu.setOnDismissListener {
-            translateDialogBinding.inputWord.setText("")
-            translateDialogBinding.outputWord.setText("")
+            translateDialogBind.inputWord.setText("")
+            translateDialogBind.outputWord.setText("")
             dictionaryAdapter.updateData(wordsList = ArrayList())
         }
         renameMenu.show()
@@ -363,8 +350,8 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
         val nativeLanguageRes = R.string.english  // TODO взять язык из настроек
         val learnLanguageRes = R.string.russian // TODO взять язык из настроек
 
-        translateDialogBinding.inputLanguage.text = getString(nativeLanguageRes)
-        translateDialogBinding.outputLanguage.text = getString(learnLanguageRes)
+        translateDialogBind.inputLanguage.text = getString(nativeLanguageRes)
+        translateDialogBind.outputLanguage.text = getString(learnLanguageRes)
 
         val config = Configuration(resources.configuration)
         config.setLocale(Locale("en"))
@@ -383,13 +370,13 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
 
         dictionaryAdapter.setOnItemClickListener(this@VideoViewActivity)
 
-        renameMenu.setContentView(translateDialogBinding.root)
-        translateDialogBinding.dictionaryRecycler.layoutManager = LinearLayoutManager(this)
-        translateDialogBinding.dictionaryRecycler.adapter = dictionaryAdapter
-        translateDialogBinding.translatorType.text = "Yandex Translator" // TODO select the type of translator from the settings
+        renameMenu.setContentView(translateDialogBind.root)
+        translateDialogBind.dictionaryRecycler.layoutManager = LinearLayoutManager(this)
+        translateDialogBind.dictionaryRecycler.adapter = dictionaryAdapter
+        translateDialogBind.translatorType.text = "Yandex Translator" // TODO select the type of translator from the settings
 
         val itemDecoration = DictionaryAdapter.RecyclerViewItemDecoration(10)
-        translateDialogBinding.dictionaryRecycler.addItemDecoration(itemDecoration)
+        translateDialogBind.dictionaryRecycler.addItemDecoration(itemDecoration)
 
         if (renameMenu.window != null) {
             renameMenu.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -456,8 +443,8 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
     }
 
     override fun onItemClick(similarWord: String, similarWordTranslate: String) {
-        translateDialogBinding.inputWord.setText(similarWord)
-        translateDialogBinding.outputWord.setText(similarWordTranslate)
+        translateDialogBind.inputWord.setText(similarWord)
+        translateDialogBind.outputWord.setText(similarWordTranslate)
     }
 
 }

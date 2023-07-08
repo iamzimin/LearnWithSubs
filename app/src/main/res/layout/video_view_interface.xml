@@ -147,7 +147,7 @@
         tools:layout_editor_absoluteX="0dp">
 
         <SeekBar
-            android:id="@+id/video_play_status"
+            android:id="@+id/video_play_seek_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:thumbTint="?attr/main_color"
@@ -163,11 +163,11 @@
             android:layout_marginBottom="10dp"
             android:text="0:02 / 13:45"
             android:textColor="?attr/text_color"
-            app:layout_constraintBottom_toTopOf="@+id/video_play_status"
+            app:layout_constraintBottom_toTopOf="@+id/video_play_seek_bar"
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/video_play_status"
+            app:layout_constraintStart_toStartOf="@+id/video_play_seek_bar"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
