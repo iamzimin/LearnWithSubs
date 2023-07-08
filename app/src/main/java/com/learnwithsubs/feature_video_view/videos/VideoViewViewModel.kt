@@ -39,14 +39,11 @@ class VideoViewViewModel @Inject constructor(
 
     private var subtitleList: List<Subtitle> = emptyList()
 
-    var nativeLanguage = ""
-    var learnLanguage = ""
-    var textToTranslate = ""
     val dictionaryWordsLiveData =  MutableLiveData<DictionaryWord?>()
     val translatorTranslationLiveData = MutableLiveData<String?>()
 
 
-    fun openVideo(video: Video) {
+    fun openVideo(video: Video, isPlaying: Boolean) {
         val subList = videoViewUseCases.getVideoSubtitlesUseCase.invoke(video)
         if (subList == null)
             subtitleError.value = ""
@@ -57,7 +54,7 @@ class VideoViewViewModel @Inject constructor(
         videoName.value = video.name
         maxVideoTime = video.duration
         maxTimeString = formatTime(time = maxVideoTime)
-        videoPlaying.value = true
+        videoPlaying.value = isPlaying
         isButtonsShowedLiveData.value = true
     }
 
@@ -100,9 +97,9 @@ class VideoViewViewModel @Inject constructor(
         val dictionaryModel = DictionaryModel(
             word = word,
             inputLanguage = inputLang,
-            inputLanguage_ISO639_1 = inputLang.substring(0, 2).lowercase(),
+            inputLanguage_ISO639_1 = languageToISO6391(inputLang),
             outputLanguage = outputLang,
-            outputLanguage_ISO639_1 = outputLang.substring(0, 2).lowercase()
+            outputLanguage_ISO639_1 = languageToISO6391(outputLang)
         )
         viewModelScope.launch {
             val translate = videoViewUseCases.getWordsFromYandexDictionaryUseCase.invoke(model = dictionaryModel)
@@ -114,12 +111,16 @@ class VideoViewViewModel @Inject constructor(
         val translationModel = TranslationModel(
             word = word,
             learnLanguage = learnLanguage,
-            learnLanguage_ISO639_1 = learnLanguage.substring(0, 2).lowercase()
+            learnLanguage_ISO639_1 = languageToISO6391(learnLanguage)
         )
         viewModelScope.launch {
             val translate = videoViewUseCases.getYandexTranslationUseCase.invoke(model = translationModel)
             translatorTranslationLiveData.postValue(translate)
         }
+    }
+
+    fun languageToISO6391(language: String): String {
+        return language.substring(0, 2).lowercase()
     }
 
     fun changePartSpeech(context: Context, list: ArrayList<DictionarySynonyms>):  ArrayList<DictionarySynonyms> {

@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
+import android.speech.tts.TextToSpeech
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
@@ -35,13 +36,14 @@ import com.learnwithsubs.app.App
 import com.learnwithsubs.databinding.TranslateDialogBinding
 import com.learnwithsubs.feature_video_view.adapter.DictionaryAdapter
 import com.learnwithsubs.feature_video_view.adapter.OnDictionaryClick
+import com.learnwithsubs.feature_video_view.model.Language
 import com.learnwithsubs.feature_video_view.videos.VideoViewViewModel
 import com.learnwithsubs.feature_video_view.videos.VideoViewViewModelFactory
 import java.util.Locale
 import javax.inject.Inject
 
 
-class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
+class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.OnInitListener {
     companion object {
         private const val STORAGE_PERMISSION_REQUEST_CODE = 1
     }
@@ -56,6 +58,19 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
 
     private lateinit var renameMenu: Dialog
     private val dictionaryAdapter = DictionaryAdapter(wordsInit = ArrayList())
+    private lateinit var ttsFrom: TextToSpeech
+    private lateinit var ttsTo: TextToSpeech
+
+    private var nativeLanguage = Language()
+    private var learnLanguage =  Language()
+    private var textToTranslate = ""
+
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            ttsFrom.language = nativeLanguage.ISO_691_1?.let { Locale(it) }
+            ttsTo.language = learnLanguage.ISO_691_1?.let { Locale(it) }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,6 +115,16 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
         videoView.setMediaController(mediaController)
         setVideoViewConfiguration(config = resources.configuration)
 
+        ttsFrom = TextToSpeech(this, this)
+        ttsTo = TextToSpeech(this, this)
+
+        translateDialogBinding.audioInputWord.setOnClickListener {
+            ttsFrom.speak(translateDialogBinding.inputWord.text, TextToSpeech.QUEUE_FLUSH, null, "")
+        }
+        translateDialogBinding.audioOutputWord.setOnClickListener {
+            ttsTo.speak(translateDialogBinding.outputWord.text, TextToSpeech.QUEUE_FLUSH, null, "")
+        }
+
         //Video Play
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_VIDEO) != PackageManager.PERMISSION_GRANTED) {
@@ -109,7 +134,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), STORAGE_PERMISSION_REQUEST_CODE)
         }
         else
-            vm.currentVideo?.let { vm.openVideo(video = it) }
+            vm.currentVideo?.let { vm.openVideo(video = it, isPlaying = true) }
 
         subtitleTextView.setCustomSelectionActionModeCallback(object : ActionMode.Callback {
             override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
@@ -131,7 +156,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
                 when (item.title.toString()) {
                     getString(R.string.translate) -> {
                         val selectedText = subtitleTextView.text.substring(subtitleTextView.selectionStart, subtitleTextView.selectionEnd)
-                        vm.textToTranslate = selectedText
+                        textToTranslate = selectedText
                         //Toast.makeText(this@VideoViewActivity, selectedText, Toast.LENGTH_SHORT).show()
                         openTranslateDialog()
                         return true
@@ -221,19 +246,6 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
         })
 
 
-        // Button forward
-        videoView.setOnPreparedListener { vid ->
-            forwardVideoButton.setOnClickListener {
-                val new = vid.currentPosition + 5000
-                vid.seekTo(new)
-            }
-            rewindVideoButton.setOnClickListener {
-                val new = vid.currentPosition - 5000
-                vid.seekTo(new)
-            }
-        }
-
-
         // Button show - Subtitles position
         var timer: CountDownTimer? = null
         videoViewConstraintLayout.setOnClickListener {
@@ -258,6 +270,26 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
                 layoutParams.setMargins(layoutParams.leftMargin, layoutParams.topMargin, layoutParams.rightMargin, 40)
                 subtitleTextView.layoutParams = layoutParams
             }
+        }
+
+
+        // Button forward
+        videoView.setOnPreparedListener { vid ->
+            forwardVideoButton.setOnClickListener {
+                timer?.start()
+                val new = vid.currentPosition + 5000
+                vid.seekTo(new)
+            }
+            rewindVideoButton.setOnClickListener {
+                timer?.start()
+                val new = vid.currentPosition - 5000
+                vid.seekTo(new)
+            }
+        }
+
+        videoMenuButton.setOnClickListener {
+            timer?.cancel()
+            vm.videoPlaying.value = false
         }
 
         // Video play/pause
@@ -294,7 +326,10 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
                 translateDialogBinding.outputWord.clearFocus()
                 val updatedPartSpeech = vm.changePartSpeech(context = this@VideoViewActivity.applicationContext, list = dict.synonyms)
                 dictionaryAdapter.updateData(wordsList = updatedPartSpeech)
-            } else vm.getWordsFromTranslator(word = vm.textToTranslate, learnLanguage = vm.learnLanguage)
+            } else {
+                val learnLang = learnLanguage.language ?: return@observe
+                vm.getWordsFromTranslator(word = textToTranslate, learnLanguage = learnLang)
+            }
         }
         vm.translatorTranslationLiveData.observe(this@VideoViewActivity) { transl ->
             transl ?: Toast.makeText(this.applicationContext, R.string.yandex_service_is_not_available, Toast.LENGTH_SHORT).show()
@@ -305,13 +340,15 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
     }
 
     private fun openTranslateDialog() {
+        val nativeLang = nativeLanguage.language ?: return
+        val learnLang = learnLanguage.language ?: return
         vm.getWordsFromDictionary(
-            inputLang = vm.nativeLanguage,
-            outputLang = vm.learnLanguage,
-            word = vm.textToTranslate
+            inputLang = nativeLang,
+            outputLang = learnLang,
+            word = textToTranslate
         )
 
-        translateDialogBinding.inputWord.setText(vm.textToTranslate)
+        translateDialogBinding.inputWord.setText(textToTranslate)
         translateDialogBinding.inputWord.clearFocus()
 
         renameMenu.setOnDismissListener {
@@ -323,18 +360,21 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
     }
 
     private fun getLanguageFromSettings() {
-        val nativeLanguage = R.string.english  // TODO взять язык из настроек
-        val learnLanguage = R.string.russian // TODO взять язык из настроек
+        val nativeLanguageRes = R.string.english  // TODO взять язык из настроек
+        val learnLanguageRes = R.string.russian // TODO взять язык из настроек
 
-        translateDialogBinding.inputLanguage.text = getString(nativeLanguage)
-        translateDialogBinding.outputLanguage.text = getString(learnLanguage)
+        translateDialogBinding.inputLanguage.text = getString(nativeLanguageRes)
+        translateDialogBinding.outputLanguage.text = getString(learnLanguageRes)
 
         val config = Configuration(resources.configuration)
         config.setLocale(Locale("en"))
         val englishResources = createConfigurationContext(config).resources
 
-        vm.nativeLanguage = englishResources.getString(nativeLanguage)
-        vm.learnLanguage = englishResources.getString(learnLanguage)
+        val nativeLanguage = englishResources.getString(nativeLanguageRes)
+        val learnLanguage = englishResources.getString(learnLanguageRes)
+
+        this.nativeLanguage = Language(language = nativeLanguage, ISO_691_1 = vm.languageToISO6391(nativeLanguage))
+        this.learnLanguage = Language(language = learnLanguage, ISO_691_1 = vm.languageToISO6391(learnLanguage))
     }
 
     private fun setupTranslateDialog() {
@@ -390,7 +430,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
 
     override fun onRestart() {
         super.onRestart()
-        vm.currentVideo?.let { vm.openVideo(video = it) }
+        vm.currentVideo?.let { vm.openVideo(video = it, isPlaying = false) }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -404,7 +444,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick {
         when (requestCode) {
             STORAGE_PERMISSION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    vm.currentVideo?.let { vm.openVideo(video = it) }
+                    vm.currentVideo?.let { vm.openVideo(video = it, isPlaying = true) }
                 else {
                     val videoIsUploading: String = applicationContext.getString(R.string.storage_access_required)
                     Toast.makeText(applicationContext, videoIsUploading, Toast.LENGTH_SHORT).show()
