@@ -14,6 +14,8 @@ import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.learnwithsubs.R
 import com.learnwithsubs.app.App
+import com.learnwithsubs.databinding.VideoListBinding
+import com.learnwithsubs.databinding.VideoListFragmentBinding
 import com.learnwithsubs.feature_video_list.videos.VideoListViewModel
 import com.learnwithsubs.feature_video_list.videos.VideoListViewModelFactory
 import javax.inject.Inject
@@ -24,16 +26,15 @@ class VideoListActivity : AppCompatActivity() {
     lateinit var vmFactory: VideoListViewModelFactory
     private lateinit var vm: VideoListViewModel
 
-    private lateinit var fragmentManager: FragmentManager
+    lateinit var videoListBinding: VideoListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.video_list)
-        fragmentManager = supportFragmentManager
+        videoListBinding = VideoListBinding.inflate(layoutInflater)
+        setContentView(videoListBinding.root)
         supportActionBar?.hide()
 
-        val navigation = findViewById<BottomNavigationView>(R.id.fragment_navigation)
-        navigation.selectedItemId = R.id.video_bottom_menu
+        videoListBinding.fragmentNavigation.selectedItemId = R.id.video_bottom_menu
 
         (applicationContext as App).videoListAppComponent.inject(this)
         vm = ViewModelProvider(this, vmFactory)[VideoListViewModel::class.java]
@@ -44,10 +45,11 @@ class VideoListActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), PERMISSION_REQUEST_CODE)
         }
 
-        val navHostFragment: NavHostFragment? = fragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment?
-        if (navHostFragment != null) { NavigationUI.setupWithNavController(
-            findViewById<View>(R.id.fragment_navigation) as BottomNavigationView,
-            navHostFragment.navController)
+        val navHostFragment: NavHostFragment? =
+            supportFragmentManager.findFragmentById(videoListBinding.fragmentContainer.id) as NavHostFragment?
+        if (navHostFragment != null) {
+            NavigationUI.setupWithNavController(
+                videoListBinding.fragmentNavigation, navHostFragment.navController)
         }
     }
 }

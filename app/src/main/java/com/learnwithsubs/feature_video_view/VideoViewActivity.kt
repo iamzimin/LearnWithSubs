@@ -82,7 +82,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
 
         translateDialogBind = TranslateDialogBinding.inflate(layoutInflater)
         videoViewBind = VideoViewBinding.inflate(layoutInflater, videoViewLayout, true)
-        videoViewIBind = VideoViewInterfaceBinding.inflate(layoutInflater, videoViewBind.videoViewInterface, true)
+        videoViewIBind = videoViewBind.videoViewInterface
         videoView = videoViewBind.videoView
         renameMenu = Dialog(this@VideoViewActivity)
         setupTranslateDialog()

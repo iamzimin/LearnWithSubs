@@ -13,23 +13,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.learnwithsubs.R
+import com.learnwithsubs.databinding.SearchViewBinding
+import com.learnwithsubs.databinding.VideoListBinding
 import com.learnwithsubs.databinding.VideoListFragmentBinding
+import com.learnwithsubs.databinding.VideoListMenuRenameDialogBinding
+import com.learnwithsubs.databinding.VideoListMenuSortByDialogBinding
 import com.learnwithsubs.feature_video_list.adapter.OnSelectChange
 import com.learnwithsubs.feature_video_list.util.OrderType
 import com.learnwithsubs.feature_video_list.util.VideoOrder
@@ -48,37 +43,28 @@ class VideoListFragment : Fragment(), OnSelectChange {
     private lateinit var videoListVideoPicker: VideoListVideoPicker
     private lateinit var videoListSubtitlePicker: VideoListSubtitlePicker
 
+    private lateinit var videoListFragmentBinding: VideoListFragmentBinding
+    private lateinit var searchViewBinding: SearchViewBinding
+    private lateinit var renameDialogBinding: VideoListMenuRenameDialogBinding
+    private lateinit var videoListBinding: VideoListBinding
+    private lateinit var sortByDialogBinding: VideoListMenuSortByDialogBinding
+
     private lateinit var videoListActivity: VideoListActivity
     private lateinit var vmFactory: VideoListViewModelFactory
     private lateinit var vm: VideoListViewModel
-    private lateinit var binding: VideoListFragmentBinding
 
     private val adapter = VideoListAdapter()
-    private lateinit var searchEditText: EditText
-    private lateinit var searchLayout: LinearLayout
-    private lateinit var uploadVideoCard: CardView
-    private lateinit var sortByButton: ImageButton
-    private lateinit var closeSelectionButton: CardView
-
-    private lateinit var bottomNav: BottomNavigationView
-    private lateinit var editListLayout: LinearLayout
-
-    private lateinit var deSelectAllMenu: CardView
-    private lateinit var deSelectAllMenuText: TextView
-    private lateinit var renameMenu: CardView
-    private lateinit var deleteMenu: CardView
-    private lateinit var addSubtitlesMenu: CardView
-    private lateinit var addSubtitlesMenuText: TextView
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         videoListActivity = requireActivity() as VideoListActivity
-        binding = VideoListFragmentBinding.inflate(inflater, container, false)
-        val view = binding.root
+        videoListFragmentBinding = VideoListFragmentBinding.inflate(inflater, container, false)
+        sortByDialogBinding = VideoListMenuSortByDialogBinding.inflate(videoListActivity.layoutInflater)
+        renameDialogBinding = VideoListMenuRenameDialogBinding.inflate(videoListActivity.layoutInflater)
+        videoListBinding = videoListActivity.videoListBinding
+        searchViewBinding = videoListFragmentBinding.searchBar
         setupRecyclerView()
 
         vmFactory = videoListActivity.vmFactory
@@ -87,37 +73,20 @@ class VideoListFragment : Fragment(), OnSelectChange {
         videoListVideoPicker = VideoListVideoPicker(this, PICK_VIDEO_REQUEST)
         videoListSubtitlePicker = VideoListSubtitlePicker(this, PICK_SUBTITLES_REQUEST)
 
-        bottomNav = videoListActivity.findViewById<BottomNavigationView>(R.id.fragment_navigation)
-        editListLayout = videoListActivity.findViewById<LinearLayout>(R.id.edit_list_layout)
-        searchEditText = view.findViewById<EditText>(R.id.search_edit_text)
-        searchLayout = view.findViewById<LinearLayout>(R.id.search_bar)
 
-        uploadVideoCard = view.findViewById<CardView>(R.id.load_video_card)
-        sortByButton = view.findViewById<ImageButton>(R.id.sort_by)
-        closeSelectionButton = view.findViewById<CardView>(R.id.close_selection_mode)
+        (videoListFragmentBinding.videoList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.video_list)
-        (recyclerView?.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-
-        deSelectAllMenu = videoListActivity.findViewById<CardView>(R.id.de_select_all_menu)
-        deSelectAllMenuText = videoListActivity.findViewById<TextView>(R.id.de_select_all_menu_text)
-        renameMenu = videoListActivity.findViewById<CardView>(R.id.rename_menu)
-        deleteMenu = videoListActivity.findViewById<CardView>(R.id.delete_menu)
-        addSubtitlesMenu = videoListActivity.findViewById<CardView>(R.id.add_subtitles_menu)
-        addSubtitlesMenuText = videoListActivity.findViewById<TextView>(R.id.add_subtitles_menu_text)
-
-
-        uploadVideoCard.setOnClickListener {
+        videoListFragmentBinding.loadVideoCard.setOnClickListener {
             videoListVideoPicker.pickVideo()
         }
 
-        sortByButton.setOnClickListener {
+        videoListFragmentBinding.sortBy.setOnClickListener {
             openSortByMenu()
         }
-        closeSelectionButton.setOnClickListener{
+        videoListFragmentBinding.closeSelectionMode.setOnClickListener{
             adapter.changeMode(isNormalMode = true) //adapter.clearSelection()
         }
-        searchEditText.addTextChangedListener(object : TextWatcher {
+        searchViewBinding.searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (!adapter.getIsNormalMode()) return
@@ -127,29 +96,29 @@ class VideoListFragment : Fragment(), OnSelectChange {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        searchEditText.setOnEditorActionListener { textView, actionId, keyEvent ->
+        searchViewBinding.searchEditText.setOnEditorActionListener { textView, actionId, keyEvent ->
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
                 textView.clearFocus()
                 true
             } else false
         }
 
-        deSelectAllMenu.setOnClickListener {
+        videoListBinding.deSelectAllMenu.setOnClickListener {
             val isSelectAll = adapter.getSelectedVideoSize() == adapter.getVideoListSize()
             if (isSelectAll)
                 adapter.deselectAll()
             else
                 adapter.selectAll()
         }
-        renameMenu.setOnClickListener {
+        videoListBinding.renameMenu.setOnClickListener {
             vm.editableVideo = adapter.getEditableVideo()
             openRenameMenu()
         }
-        deleteMenu.setOnClickListener {
+        videoListBinding.deleteMenu.setOnClickListener {
             vm.deleteSelectedVideo(selectedVideos = adapter.getSelectedVideo())
             adapter.changeMode(isNormalMode = true)
         }
-        addSubtitlesMenu.setOnClickListener {
+        videoListBinding.addSubtitlesMenu.setOnClickListener {
             vm.editableVideo = adapter.getEditableVideo()
             val video = vm.editableVideo ?: return@setOnClickListener
             if (!video.isOwnSubtitles)
@@ -184,19 +153,21 @@ class VideoListFragment : Fragment(), OnSelectChange {
                 adapter.updateVideo(videoProgress.copy())
         }
 
-        return binding.root
+        return videoListFragmentBinding.root
     }
 
 
     private fun openRenameMenu() {
         val renameMenu = Dialog(videoListActivity)
         renameMenu.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        renameMenu.setContentView(R.layout.video_list_menu_rename_dialog)
+        val dialogView = renameDialogBinding.root
+        val parentView = dialogView.parent as? ViewGroup
+        parentView?.removeView(dialogView)
+        renameMenu.setContentView(dialogView)
 
-        val editText = renameMenu.findViewById<EditText>(R.id.video_name_edittext)
-        editText.setText(vm.editableVideo?.name)
+        renameDialogBinding.videoNameEdittext.setText(vm.editableVideo?.name)
 
-        editText.setOnEditorActionListener { textView, actionId, keyEvent ->
+        renameDialogBinding.videoNameEdittext.setOnEditorActionListener { textView, actionId, keyEvent ->
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
                 textView.clearFocus()
                 val video = vm.videoList.value?.find { it.id == vm.editableVideo?.id }?.copy()
@@ -220,96 +191,82 @@ class VideoListFragment : Fragment(), OnSelectChange {
         }
 
         renameMenu.show()
-        if (renameMenu.window != null) {
-            renameMenu.window?.attributes?.windowAnimations = 0
-            renameMenu.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            renameMenu.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        }
+        renameMenu.window?.attributes?.windowAnimations = 0
+        renameMenu.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        renameMenu.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
     private fun openSortByMenu() {
         val sortByDialog = Dialog(videoListActivity)
         sortByDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        sortByDialog.setContentView(R.layout.video_list_menu_sort_by_dialog)
-
-        val ascendingButton = sortByDialog.findViewById<Button>(R.id.ascending)
-        val descendingButton = sortByDialog.findViewById<Button>(R.id.descending)
-
-        val clearButton = sortByDialog.findViewById<Button>(R.id.clear_button)
-        val applyButton = sortByDialog.findViewById<Button>(R.id.apply_button)
-
-        val nameCardView = sortByDialog.findViewById<CardView>(R.id.cardView_name)
-        val dateCardView = sortByDialog.findViewById<CardView>(R.id.cardView_date)
-        val durationCardView = sortByDialog.findViewById<CardView>(R.id.cardView_duration)
-
-        val nameCheckBox = sortByDialog.findViewById<CheckBox>(R.id.name_check_box)
-        val dateCheckBox = sortByDialog.findViewById<CheckBox>(R.id.date_check_box)
-        val durationCheckBox = sortByDialog.findViewById<CheckBox>(R.id.duration_check_box)
+        val dialogView = sortByDialogBinding.root
+        val parentView = dialogView.parent as? ViewGroup
+        parentView?.removeView(dialogView)
+        sortByDialog.setContentView(dialogView)
 
         fun setButtonColors(ascending: Boolean) {
-            ascendingButton.setBackgroundColor(if (ascending) videoListActivity.applicationContext.getColor(
+            sortByDialogBinding.ascending.setBackgroundColor(if (ascending) videoListActivity.applicationContext.getColor(
                 R.color.button_pressed
             ) else videoListActivity.applicationContext.getColor(R.color.button_normal))
-            descendingButton.setBackgroundColor(if (ascending) videoListActivity.applicationContext.getColor(
+            sortByDialogBinding.descending.setBackgroundColor(if (ascending) videoListActivity.applicationContext.getColor(
                 R.color.button_normal
             ) else videoListActivity.applicationContext.getColor(R.color.button_pressed))
         }
 
-        nameCheckBox.isChecked = vm.getVideoOrder() is VideoOrder.Name
-        dateCheckBox.isChecked = vm.getVideoOrder() is VideoOrder.Date
-        durationCheckBox.isChecked = vm.getVideoOrder() is VideoOrder.Duration
+        sortByDialogBinding.nameCheckBox.isChecked = vm.getVideoOrder() is VideoOrder.Name
+        sortByDialogBinding.dateCheckBox.isChecked = vm.getVideoOrder() is VideoOrder.Date
+        sortByDialogBinding.durationCheckBox.isChecked = vm.getVideoOrder() is VideoOrder.Duration
 
         val sortType = vm.getVideoOrder()
         setButtonColors(ascending = sortType.orderType is OrderType.Ascending)
 
-        ascendingButton.setOnClickListener {
+        sortByDialogBinding.ascending.setOnClickListener {
             setButtonColors(ascending = true)
             vm.setOrderType(newOrderType = OrderType.Ascending)
             val currentVideoOrder = vm.getVideoOrder()
             vm.setVideoOrder(currentVideoOrder)
         }
 
-        descendingButton.setOnClickListener {
+        sortByDialogBinding.descending.setOnClickListener {
             setButtonColors(ascending = false)
             vm.setOrderType(newOrderType = OrderType.Descending)
             val currentVideoOrder = vm.getVideoOrder()
             vm.setVideoOrder(currentVideoOrder)
         }
 
-        nameCardView.setOnClickListener {
+        sortByDialogBinding.cardViewName.setOnClickListener {
             val currentOrderType = vm.getOrderType()
             vm.setVideoOrder(VideoOrder.Name(currentOrderType))
         }
-        dateCardView.setOnClickListener {
+        sortByDialogBinding.cardViewDate.setOnClickListener {
             val currentOrderType = vm.getOrderType()
             vm.setVideoOrder(VideoOrder.Date(currentOrderType))
         }
-        durationCardView.setOnClickListener {
+        sortByDialogBinding.cardViewDuration.setOnClickListener {
             val currentOrderType = vm.getOrderType()
             vm.setVideoOrder(VideoOrder.Duration(currentOrderType))
         }
 
-        clearButton.setOnClickListener {
+        sortByDialogBinding.clearButton.setOnClickListener {
             vm.setVideoOrder(VideoListViewModel.DEFAULT_SORT_MODE)
         }
-        applyButton.setOnClickListener {
+        sortByDialogBinding.applyButton.setOnClickListener {
             vm.updateVideoList()
             sortByDialog.dismiss()
         }
 
         vm.videoOrder.observe(videoListActivity) { sortMode ->
-            nameCheckBox.isChecked = sortMode is VideoOrder.Name
-            dateCheckBox.isChecked = sortMode is VideoOrder.Date
-            durationCheckBox.isChecked = sortMode is VideoOrder.Duration
+            sortByDialogBinding.nameCheckBox.isChecked = sortMode is VideoOrder.Name
+            sortByDialogBinding.dateCheckBox.isChecked = sortMode is VideoOrder.Date
+            sortByDialogBinding.durationCheckBox.isChecked = sortMode is VideoOrder.Duration
         }
 
         sortByDialog.show()
-        if (sortByDialog.window != null) {
-            sortByDialog.window?.attributes?.windowAnimations = 0
-            sortByDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            sortByDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            sortByDialog.window?.setGravity(Gravity.BOTTOM)
-        }
+        val marginInDp = resources.getDimensionPixelSize(R.dimen.dialog_menu_margins)
+        sortByDialog.window?.attributes?.windowAnimations = 0
+        sortByDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        sortByDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        sortByDialog.window?.setGravity(Gravity.BOTTOM)
     }
 
 
@@ -321,10 +278,10 @@ class VideoListFragment : Fragment(), OnSelectChange {
 
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(videoListActivity)
-        binding.videoList.layoutManager = layoutManager
-        binding.videoList.adapter = adapter
+        videoListFragmentBinding.videoList.layoutManager = layoutManager
+        videoListFragmentBinding.videoList.adapter = adapter
         val itemDecoration = VideoListAdapter.RecyclerViewItemDecoration(16)
-        binding.videoList.addItemDecoration(itemDecoration)
+        videoListFragmentBinding.videoList.addItemDecoration(itemDecoration)
         adapter.setOnModeChangeListener(this@VideoListFragment)
     }
 
@@ -337,71 +294,66 @@ class VideoListFragment : Fragment(), OnSelectChange {
     private fun setTextInSubtitleMenu() {
         val editVideo = adapter.getEditableVideo()
         if (editVideo != null)
-            addSubtitlesMenuText.text = if (editVideo.isOwnSubtitles) getString(R.string.return_subtitles) else getString(R.string.add_subtitles)
+            videoListBinding.addSubtitlesMenuText.text = if (editVideo.isOwnSubtitles) getString(R.string.return_subtitles) else getString(R.string.add_subtitles)
     }
 
     override fun onModeChange(isNormalMode: Boolean) {
-        if (!::searchEditText.isInitialized && !::searchLayout.isInitialized && !::bottomNav.isInitialized && !::editListLayout.isInitialized && !::uploadVideoCard.isInitialized) return
-
         val visibleInNormalMode = if (isNormalMode) View.VISIBLE else View.GONE
         val visibleInSelectionMode = if (!isNormalMode) View.VISIBLE else View.GONE
 
         if (!isNormalMode) setTextInSubtitleMenu()
 
-        searchEditText.isEnabled = isNormalMode
-        searchEditText.isClickable = isNormalMode
-        searchLayout.alpha = if (isNormalMode) 1f else 0.4f
+        searchViewBinding.searchEditText.isEnabled = isNormalMode
+        searchViewBinding.searchEditText.isClickable = isNormalMode
+        searchViewBinding.searchImageView.alpha = if (isNormalMode) 1f else 0.4f
+        searchViewBinding.searchEditText.alpha = if (isNormalMode) 1f else 0.4f
 
-        closeSelectionButton.visibility = visibleInSelectionMode
+        videoListFragmentBinding.closeSelectionMode.visibility = visibleInSelectionMode
 
-        bottomNav.visibility = visibleInNormalMode
-        editListLayout.visibility = visibleInSelectionMode
-        uploadVideoCard.visibility = visibleInNormalMode
+        videoListBinding.fragmentNavigation.visibility = visibleInNormalMode
+        videoListBinding.editListLayout.visibility = visibleInSelectionMode
+        videoListFragmentBinding.loadVideoCard.visibility = visibleInNormalMode
     }
 
 
     // Если выделено всё
     override fun onSelectAll() {
-        if (!::deSelectAllMenuText.isInitialized && !::deleteMenu.isInitialized) return
-        deSelectAllMenuText.text = videoListActivity.applicationContext.getString(R.string.deselect_all)
-        changeCardVisibility(cardView = deleteMenu, isVisible = true)
+        videoListBinding.deSelectAllMenuText.text = videoListActivity.applicationContext.getString(R.string.deselect_all)
+        changeCardVisibility(cardView = videoListBinding.deleteMenu, isVisible = true)
     }
 
     // Если было выделено всё, а стало на 1 и более меньше
     override fun onDeselectAll() {
-        deSelectAllMenuText.text = videoListActivity.applicationContext.getString(R.string.select_all)
+        videoListBinding.deSelectAllMenuText.text = videoListActivity.applicationContext.getString(R.string.select_all)
     }
 
     // Если не выделено ничего
     override fun onZeroSelect() {
-        if (!::deSelectAllMenuText.isInitialized && !::deleteMenu.isInitialized) return
-        deSelectAllMenuText.text = videoListActivity.applicationContext.getString(R.string.select_all)
+        videoListBinding.deSelectAllMenuText.text = videoListActivity.applicationContext.getString(R.string.select_all)
 
-        changeCardVisibility(cardView = deleteMenu, isVisible = false)
-        changeCardVisibility(cardView = renameMenu, isVisible = false)
-        changeCardVisibility(cardView = addSubtitlesMenu, isVisible = false)
+        changeCardVisibility(cardView = videoListBinding.deleteMenu, isVisible = false)
+        changeCardVisibility(cardView = videoListBinding.renameMenu, isVisible = false)
+        changeCardVisibility(cardView = videoListBinding.addSubtitlesMenu, isVisible = false)
     }
 
     // Если выделено только 1 видео
     override fun onSingleSelected() {
-        if (!::renameMenu.isInitialized) return
         setTextInSubtitleMenu()
-        changeCardVisibility(cardView = deleteMenu, isVisible = true)
+        changeCardVisibility(cardView = videoListBinding.deleteMenu, isVisible = true)
         if ((adapter.getEditableVideo()?.loadingType ?: false) == VideoLoadingType.DONE) {
-            changeCardVisibility(cardView = addSubtitlesMenu, isVisible = true)
-            changeCardVisibility(cardView = renameMenu, isVisible = true)
+            changeCardVisibility(cardView = videoListBinding.addSubtitlesMenu, isVisible = true)
+            changeCardVisibility(cardView = videoListBinding.renameMenu, isVisible = true)
         } else {
-            changeCardVisibility(cardView = addSubtitlesMenu, isVisible = false)
-            changeCardVisibility(cardView = renameMenu, isVisible = false)
+            changeCardVisibility(cardView = videoListBinding.addSubtitlesMenu, isVisible = false)
+            changeCardVisibility(cardView = videoListBinding.renameMenu, isVisible = false)
         }
     }
 
     // Если выделено было выделено 1 видео, а стало любое другое число
     override fun onNotSingleSelected() {
-        if (!::renameMenu.isInitialized) return
         setTextInSubtitleMenu()
-        changeCardVisibility(cardView = addSubtitlesMenu, isVisible = false)
-        changeCardVisibility(cardView = renameMenu, isVisible = false)
+        changeCardVisibility(cardView = videoListBinding.addSubtitlesMenu, isVisible = false)
+        changeCardVisibility(cardView = videoListBinding.renameMenu, isVisible = false)
     }
 
 }
