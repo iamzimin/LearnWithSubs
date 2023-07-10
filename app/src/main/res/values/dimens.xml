@@ -7,4 +7,6 @@
     <dimen name="language_in_translate_dialog">18sp</dimen>
     <dimen name="word_to_translate_in_translate_dialog">17sp</dimen>
     <dimen name="dialog_menu_margins">15sp</dimen>
+    <dimen name="subtitle_indentation_with_interface">70sp</dimen>
+    <dimen name="subtitle_indentation_without_interface">20sp</dimen>
 </resources>

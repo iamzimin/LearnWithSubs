@@ -249,12 +249,13 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
                         vm.isButtonsShowedLiveData.value = false
                     }
                 }.start()
-                subtitleLP.setMargins(subtitleLP.leftMargin, subtitleLP.topMargin, subtitleLP.rightMargin, 180)
+                subtitleLP.setMargins(subtitleLP.leftMargin, subtitleLP.topMargin, subtitleLP.rightMargin,
+                    resources.getDimensionPixelSize(R.dimen.subtitle_indentation_with_interface))
                 videoViewBind.subtitle.layoutParams = subtitleLP
-            }
-            else {
+            } else {
                 timer?.cancel()
-                subtitleLP.setMargins(subtitleLP.leftMargin, subtitleLP.topMargin, subtitleLP.rightMargin, 40)
+                subtitleLP.setMargins(subtitleLP.leftMargin, subtitleLP.topMargin, subtitleLP.rightMargin,
+                    resources.getDimensionPixelSize(R.dimen.subtitle_indentation_without_interface))
                 videoViewBind.subtitle.layoutParams = subtitleLP
             }
         }

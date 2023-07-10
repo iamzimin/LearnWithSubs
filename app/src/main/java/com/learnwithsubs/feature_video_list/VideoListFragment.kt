@@ -262,7 +262,6 @@ class VideoListFragment : Fragment(), OnSelectChange {
         }
 
         sortByDialog.show()
-        val marginInDp = resources.getDimensionPixelSize(R.dimen.dialog_menu_margins)
         sortByDialog.window?.attributes?.windowAnimations = 0
         sortByDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         sortByDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -305,8 +304,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
 
         searchViewBinding.searchEditText.isEnabled = isNormalMode
         searchViewBinding.searchEditText.isClickable = isNormalMode
-        searchViewBinding.searchImageView.alpha = if (isNormalMode) 1f else 0.4f
-        searchViewBinding.searchEditText.alpha = if (isNormalMode) 1f else 0.4f
+        searchViewBinding.root.alpha = if (isNormalMode) 1f else 0.6f
 
         videoListFragmentBinding.closeSelectionMode.visibility = visibleInSelectionMode
 
