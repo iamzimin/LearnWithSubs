@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/constraint_container"
+    tools:context=".feature_video_list.VideoListFragment"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="6dp">
+
+        <TextView
+            android:id="@+id/video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="@string/word_list"
+            android:textColor="?attr/text_color"
+            android:textSize="@dimen/section_name" />
+
+        <ImageButton
+            android:id="@+id/sort_by"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="50dp"
+            android:layout_height="45dp"
+            android:layout_gravity="end"
+            android:layout_alignParentEnd="true"
+
+            android:padding="5dp"
+            android:scaleType="centerInside"
+
+            app:srcCompat="@drawable/sort_by"
+            app:tint="?attr/text_color" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp" >
+
+        <include
+            android:id="@+id/search_bar"
+            layout="@layout/search_view"/>
+
+    </LinearLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/word_list"
+            style="@style/RecyclerInEditListMenu"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/add_word_card"
+            style="@style/CardViewAdd"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    style="@style/CardViewAddBackground"
+                    android:src="?attr/video_upload_green_card" />
+
+                <ImageView
+                    style="@style/CardViewAddImage"
+                    android:src="@drawable/add" />
+            </RelativeLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/close_selection_mode"
+            android:visibility="gone"
+            style="@style/CardViewAdd"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    style="@style/CardViewAddBackground"
+                    android:src="?attr/video_close_selection_mode_card"/>
+                <ImageView
+                    style="@style/CardViewAddImage"
+                    android:src="@drawable/close_bold" />
+            </RelativeLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+    </RelativeLayout>
+
+
+
+
+</LinearLayout>

@@ -138,18 +138,18 @@ class VideoListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             VideoStatus.NORMAL_VIDEO.value -> NormalVideoViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.video_tile, parent, false), this@VideoListAdapter
+                LayoutInflater.from(parent.context).inflate(R.layout.tile_video, parent, false), this@VideoListAdapter
             )
 
             VideoStatus.LOADING_VIDEO.value -> LoadingVideoViewHolder(
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.video_uploading_tile, parent, false), this@VideoListAdapter
+                    .inflate(R.layout.tile_video_uploading, parent, false), this@VideoListAdapter
             )
 
             else -> {
                 LoadingVideoViewHolder(
                     LayoutInflater.from(parent.context)
-                        .inflate(R.layout.video_uploading_tile, parent, false), this@VideoListAdapter
+                        .inflate(R.layout.tile_video_uploading, parent, false), this@VideoListAdapter
                 )
             }
         }

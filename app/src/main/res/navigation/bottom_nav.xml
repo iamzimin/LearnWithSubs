@@ -7,27 +7,27 @@
 
     <fragment android:id="@+id/module_bottom_menu"
         android:name="com.learnwithsubs.ModuleListFragment"
-        tools:layout="@layout/module_list_fragment"
+        tools:layout="@layout/fragment_module_list"
         android:label="@string/module"/>
 
     <fragment android:id="@+id/words_bottom_menu"
         android:name="com.learnwithsubs.ModuleListFragment"
-        tools:layout="@layout/module_list_fragment"
-        android:label="@string/list"/>
+        tools:layout="@layout/fragment_module_list"
+        android:label="@string/word_list"/>
 
     <fragment android:id="@+id/video_bottom_menu"
         android:name="com.learnwithsubs.feature_video_list.VideoListFragment"
-        tools:layout="@layout/video_list_fragment"
+        tools:layout="@layout/fragment_video_list"
         android:label="@string/video"/>
 
     <fragment android:id="@+id/favourite_bottom_menu"
         android:name="com.learnwithsubs.ModuleListFragment"
-        tools:layout="@layout/module_list_fragment"
+        tools:layout="@layout/fragment_module_list"
         android:label="@string/favourite"/>
 
     <fragment android:id="@+id/account_bottom_menu"
         android:name="com.learnwithsubs.ModuleListFragment"
-        tools:layout="@layout/module_list_fragment"
+        tools:layout="@layout/fragment_module_list"
         android:label="@string/account"/>
 
 </navigation>

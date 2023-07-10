@@ -29,16 +29,16 @@ class DictionaryAdapter(
         return when (viewType) {
             DictionaryType.WORD.value -> DictionaryNormalHolder(
                 LayoutInflater.from(parent.context).inflate(
-                    R.layout.translate_word_tile, parent, false), onItemClickListener)
+                    R.layout.tile_translate_word, parent, false), onItemClickListener)
 
             DictionaryType.PART_SPEECH.value -> DictionaryPartSpeechHolder(
                 LayoutInflater.from(parent.context).inflate(
-                    R.layout.translate_partspeech_tile, parent, false))
+                    R.layout.tile_translate_partspeech, parent, false))
 
             else -> {
                 DictionaryPartSpeechHolder(
                     LayoutInflater.from(parent.context).inflate(
-                        R.layout.translate_partspeech_tile, parent, false))
+                        R.layout.tile_translate_partspeech, parent, false))
             }
         }
 

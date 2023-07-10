@@ -20,11 +20,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.learnwithsubs.R
+import com.learnwithsubs.databinding.ActivityVideoListBinding
+import com.learnwithsubs.databinding.DialogVideoListMenuRenameBinding
+import com.learnwithsubs.databinding.DialogVideoListMenuSortByBinding
+import com.learnwithsubs.databinding.FragmentVideoListBinding
 import com.learnwithsubs.databinding.SearchViewBinding
-import com.learnwithsubs.databinding.VideoListBinding
-import com.learnwithsubs.databinding.VideoListFragmentBinding
-import com.learnwithsubs.databinding.VideoListMenuRenameDialogBinding
-import com.learnwithsubs.databinding.VideoListMenuSortByDialogBinding
 import com.learnwithsubs.feature_video_list.adapter.OnSelectChange
 import com.learnwithsubs.feature_video_list.util.OrderType
 import com.learnwithsubs.feature_video_list.util.VideoOrder
@@ -43,11 +43,11 @@ class VideoListFragment : Fragment(), OnSelectChange {
     private lateinit var videoListVideoPicker: VideoListVideoPicker
     private lateinit var videoListSubtitlePicker: VideoListSubtitlePicker
 
-    private lateinit var videoListFragmentBinding: VideoListFragmentBinding
+    private lateinit var videoListFragmentBinding: FragmentVideoListBinding
     private lateinit var searchViewBinding: SearchViewBinding
-    private lateinit var renameDialogBinding: VideoListMenuRenameDialogBinding
-    private lateinit var videoListBinding: VideoListBinding
-    private lateinit var sortByDialogBinding: VideoListMenuSortByDialogBinding
+    private lateinit var renameDialogBinding: DialogVideoListMenuRenameBinding
+    private lateinit var videoListBinding: ActivityVideoListBinding
+    private lateinit var sortByDialogBinding: DialogVideoListMenuSortByBinding
 
     private lateinit var videoListActivity: VideoListActivity
     private lateinit var vmFactory: VideoListViewModelFactory
@@ -60,9 +60,9 @@ class VideoListFragment : Fragment(), OnSelectChange {
         savedInstanceState: Bundle?
     ): View {
         videoListActivity = requireActivity() as VideoListActivity
-        videoListFragmentBinding = VideoListFragmentBinding.inflate(inflater, container, false)
-        sortByDialogBinding = VideoListMenuSortByDialogBinding.inflate(videoListActivity.layoutInflater)
-        renameDialogBinding = VideoListMenuRenameDialogBinding.inflate(videoListActivity.layoutInflater)
+        videoListFragmentBinding = FragmentVideoListBinding.inflate(inflater, container, false)
+        sortByDialogBinding = DialogVideoListMenuSortByBinding.inflate(videoListActivity.layoutInflater)
+        renameDialogBinding = DialogVideoListMenuRenameBinding.inflate(videoListActivity.layoutInflater)
         videoListBinding = videoListActivity.videoListBinding
         searchViewBinding = videoListFragmentBinding.searchBar
         setupRecyclerView()

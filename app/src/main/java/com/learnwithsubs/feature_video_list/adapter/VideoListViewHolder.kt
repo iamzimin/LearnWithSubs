@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.learnwithsubs.R
-import com.learnwithsubs.databinding.VideoTileBinding
-import com.learnwithsubs.databinding.VideoUploadingTileBinding
+import com.learnwithsubs.databinding.TileVideoBinding
+import com.learnwithsubs.databinding.TileVideoUploadingBinding
 import com.learnwithsubs.feature_video_list.VideoConstants
 import com.learnwithsubs.feature_video_list.models.Video
 import com.learnwithsubs.feature_video_list.models.VideoLoadingType
@@ -40,7 +40,7 @@ class NormalVideoViewHolder(
     itemView: View,
     private val adapter: VideoListAdapter
 ) : VideoViewHolder(itemView) {
-    private val binding = VideoTileBinding.bind(itemView)
+    private val binding = TileVideoBinding.bind(itemView)
 
     override fun bind(video: Video, isSelected: Boolean) {
         binding.videoName.text = video.name
@@ -89,7 +89,7 @@ class LoadingVideoViewHolder(
     itemView: View,
     private val adapter: VideoListAdapter
 ) : VideoViewHolder(itemView) {
-    private val binding = VideoUploadingTileBinding.bind(itemView)
+    private val binding = TileVideoUploadingBinding.bind(itemView)
 
     override fun bind(video: Video, isSelected: Boolean) {
         binding.videoName.text = video.name

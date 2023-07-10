@@ -56,7 +56,7 @@
         app:layout_constraintVertical_bias="0.020" />
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/load_video_card"
+        android:id="@+id/add_word_card"
         style="@style/CardViewAdd"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">

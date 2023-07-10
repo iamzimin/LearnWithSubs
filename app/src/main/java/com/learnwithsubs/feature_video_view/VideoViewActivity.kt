@@ -31,8 +31,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.learnwithsubs.R
 import com.learnwithsubs.app.App
-import com.learnwithsubs.databinding.TranslateDialogBinding
-import com.learnwithsubs.databinding.VideoViewBinding
+import com.learnwithsubs.databinding.ActivityVideoViewBinding
+import com.learnwithsubs.databinding.DialogTranslateBinding
 import com.learnwithsubs.databinding.VideoViewInterfaceBinding
 import com.learnwithsubs.feature_video_view.adapter.DictionaryAdapter
 import com.learnwithsubs.feature_video_view.adapter.OnDictionaryClick
@@ -52,8 +52,8 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
     lateinit var vmFactory: VideoViewViewModelFactory
     private lateinit var vm: VideoViewViewModel
 
-    private lateinit var translateDialogBind: TranslateDialogBinding
-    private lateinit var videoViewBind: VideoViewBinding
+    private lateinit var translateDialogBind: DialogTranslateBinding
+    private lateinit var videoViewBind: ActivityVideoViewBinding
     private lateinit var videoViewIBind: VideoViewInterfaceBinding
     private lateinit var videoView: VideoView
     private var currentPosition = 0
@@ -77,11 +77,11 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         configSystemUI()
-        setContentView(R.layout.video_view)
+        setContentView(R.layout.activity_video_view)
         val videoViewLayout = findViewById<ConstraintLayout>(R.id.video_view_constraint_layout)
 
-        translateDialogBind = TranslateDialogBinding.inflate(layoutInflater)
-        videoViewBind = VideoViewBinding.inflate(layoutInflater, videoViewLayout, true)
+        translateDialogBind = DialogTranslateBinding.inflate(layoutInflater)
+        videoViewBind = ActivityVideoViewBinding.inflate(layoutInflater, videoViewLayout, true)
         videoViewIBind = videoViewBind.videoViewInterface
         videoView = videoViewBind.videoView
         renameMenu = Dialog(this@VideoViewActivity)
@@ -367,7 +367,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
 
     private fun setupTranslateDialog() {
         renameMenu.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        renameMenu.setContentView(R.layout.translate_dialog)
+        renameMenu.setContentView(R.layout.dialog_translate)
 
         dictionaryAdapter.setOnItemClickListener(this@VideoViewActivity)
 

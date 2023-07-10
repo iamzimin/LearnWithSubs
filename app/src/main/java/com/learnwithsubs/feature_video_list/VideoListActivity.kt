@@ -8,14 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.learnwithsubs.R
 import com.learnwithsubs.app.App
-import com.learnwithsubs.databinding.VideoListBinding
-import com.learnwithsubs.databinding.VideoListFragmentBinding
+import com.learnwithsubs.databinding.ActivityVideoListBinding
+import com.learnwithsubs.databinding.FragmentVideoListBinding
 import com.learnwithsubs.feature_video_list.videos.VideoListViewModel
 import com.learnwithsubs.feature_video_list.videos.VideoListViewModelFactory
 import javax.inject.Inject
@@ -26,11 +27,11 @@ class VideoListActivity : AppCompatActivity() {
     lateinit var vmFactory: VideoListViewModelFactory
     private lateinit var vm: VideoListViewModel
 
-    lateinit var videoListBinding: VideoListBinding
+    lateinit var videoListBinding: ActivityVideoListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        videoListBinding = VideoListBinding.inflate(layoutInflater)
+        videoListBinding = ActivityVideoListBinding.inflate(layoutInflater)
         setContentView(videoListBinding.root)
         supportActionBar?.hide()
 
