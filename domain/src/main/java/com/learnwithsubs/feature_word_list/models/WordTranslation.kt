@@ -12,4 +12,6 @@ data class WordTranslation(
     @PrimaryKey override val id: Int? = null,
     val word: String,
     val translation: String,
+    val nativeLanguage: String,
+    val learnLanguage: String,
 ): Parcelable, Identifiable

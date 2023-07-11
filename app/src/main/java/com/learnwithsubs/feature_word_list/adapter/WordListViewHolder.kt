@@ -20,35 +20,33 @@ class WordWithTranslationViewHolder(
     private val binding = TileWordWithTranslationBinding.bind(itemView)
 
     override fun bind(word: WordTranslation, isSelected: Boolean) {
+        binding.word.setText(word.word)
+        binding.translation.setText(word.translation)
 
 
+        if (adapter.getIsSelectionMode())
+            binding.selectCheckBox.visibility = View.VISIBLE
+        else
+            binding.selectCheckBox.visibility = View.GONE
 
-//        if (adapter.getIsSelectionMode())
-//            binding.selectCheckBox.visibility = View.VISIBLE
-//        else
-//            binding.selectCheckBox.visibility = View.GONE
-//
-//        itemView.setOnClickListener (object : View.OnClickListener {
-//            override fun onClick(p0: View?) {
-//                if (adapter.getIsSelectionMode()) {
-//                    val position = adapterPosition
-//                    binding.selectCheckBox.isChecked = !binding.selectCheckBox.isChecked
-//                    adapter.updateSelection(position = position, isSelected = binding.selectCheckBox.isChecked)
-//                }
-//                else {
-//
-//                }
-//            }
-//        })
-//
-//        itemView.setOnLongClickListener {
-//            val position = adapterPosition
-//            binding.selectCheckBox.isChecked = !binding.selectCheckBox.isChecked
-//            adapter.updateSelection(position = position, isSelected = binding.selectCheckBox.isChecked)
-//            if (!adapter.getIsSelectionMode())
-//                adapter.changeMode(isSelectionMode = true)
-//            true
-//        }
+        itemView.setOnClickListener (object : View.OnClickListener {
+            override fun onClick(p0: View?) {
+                if (adapter.getIsSelectionMode()) {
+                    val position = adapterPosition
+                    binding.selectCheckBox.isChecked = !binding.selectCheckBox.isChecked
+                    adapter.updateSelection(position = position, isSelected = binding.selectCheckBox.isChecked)
+                }
+            }
+        })
+
+        itemView.setOnLongClickListener {
+            val position = adapterPosition
+            binding.selectCheckBox.isChecked = !binding.selectCheckBox.isChecked
+            adapter.updateSelection(position = position, isSelected = binding.selectCheckBox.isChecked)
+            if (!adapter.getIsSelectionMode())
+                adapter.changeMode(isSelectionMode = true)
+            true
+        }
 
     }
 }
