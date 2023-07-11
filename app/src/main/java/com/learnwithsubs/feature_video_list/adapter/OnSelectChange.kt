@@ -1,7 +1,7 @@
 package com.learnwithsubs.feature_video_list.adapter
 
 interface OnSelectChange {
-    fun onModeChange(isNormalMode: Boolean)
+    fun onModeChange(isSelectionMode: Boolean)
     fun onSelectAll()
     fun onDeselectAll()
     fun onZeroSelect()

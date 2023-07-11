@@ -3,12 +3,13 @@ package com.learnwithsubs.feature_video_list.models
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.learnwithsubs.models.Identifiable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @Entity
 data class Video(
-    @PrimaryKey val id: Int? = null,
+    @PrimaryKey override val id: Int? = null,
     var videoStatus: VideoStatus,
     var loadingType: VideoLoadingType,
     var errorType: VideoErrorType?,
@@ -23,7 +24,7 @@ data class Video(
     val inputPath: String = "",
     var outputPath: String = "",
     val timestamp: Long,
-) : Parcelable
+) : Parcelable, Identifiable
 
 enum class VideoStatus(val value: Int) {
     NORMAL_VIDEO(1),

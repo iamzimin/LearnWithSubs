@@ -84,12 +84,12 @@ class VideoListFragment : Fragment(), OnSelectChange {
             openSortByMenu()
         }
         videoListFragmentBinding.closeSelectionMode.setOnClickListener{
-            adapter.changeMode(isNormalMode = true) //adapter.clearSelection()
+            adapter.changeMode(isSelectionMode = false) //adapter.clearSelection()
         }
         searchViewBinding.searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (!adapter.getIsNormalMode()) return
+                if (!adapter.getIsSelectionMode()) return
                 vm.setFilterMode(filter = s.toString())
                 vm.updateVideoList()
             }
@@ -104,28 +104,28 @@ class VideoListFragment : Fragment(), OnSelectChange {
         }
 
         videoListBinding.deSelectAllMenu.setOnClickListener {
-            val isSelectAll = adapter.getSelectedVideoSize() == adapter.getVideoListSize()
+            val isSelectAll = adapter.getSelectedItemsSize() == adapter.getItemListSize()
             if (isSelectAll)
                 adapter.deselectAll()
             else
                 adapter.selectAll()
         }
         videoListBinding.renameMenu.setOnClickListener {
-            vm.editableVideo = adapter.getEditableVideo()
+            vm.editableVideo = adapter.getEditableItem()
             openRenameMenu()
         }
         videoListBinding.deleteMenu.setOnClickListener {
             vm.deleteSelectedVideo(selectedVideos = adapter.getSelectedVideo())
-            adapter.changeMode(isNormalMode = true)
+            adapter.changeMode(isSelectionMode = false)
         }
         videoListBinding.addSubtitlesMenu.setOnClickListener {
-            vm.editableVideo = adapter.getEditableVideo()
+            vm.editableVideo = adapter.getEditableItem()
             val video = vm.editableVideo ?: return@setOnClickListener
             if (!video.isOwnSubtitles)
                 videoListSubtitlePicker.pickSubtitles()
             else
                 vm.backOldSubtitles(video = video)
-            adapter.changeMode(isNormalMode = true)
+            adapter.changeMode(isSelectionMode = false)
         }
 
         vm.errorTypeLiveData.value = null
@@ -150,7 +150,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
 
         vm.videoProgressLiveData.observe(videoListActivity) { videoProgress ->
             if (videoProgress != null)
-                adapter.updateVideo(videoProgress.copy())
+                adapter.updateItem(videoProgress.copy())
         }
 
         return videoListFragmentBinding.root
@@ -184,7 +184,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
                     vm.editVideo(video = video)
                 }
 
-                adapter.changeMode(isNormalMode = true) //adapter.clearSelection()
+                adapter.changeMode(isSelectionMode = false) //adapter.clearSelection()
                 renameMenu.dismiss()
                 true
             } else false
@@ -291,20 +291,20 @@ class VideoListFragment : Fragment(), OnSelectChange {
     }
 
     private fun setTextInSubtitleMenu() {
-        val editVideo = adapter.getEditableVideo()
+        val editVideo = adapter.getEditableItem()
         if (editVideo != null)
             videoListBinding.addSubtitlesMenuText.text = if (editVideo.isOwnSubtitles) getString(R.string.return_subtitles) else getString(R.string.add_subtitles)
     }
 
-    override fun onModeChange(isNormalMode: Boolean) {
-        val visibleInNormalMode = if (isNormalMode) View.VISIBLE else View.GONE
-        val visibleInSelectionMode = if (!isNormalMode) View.VISIBLE else View.GONE
+    override fun onModeChange(isSelectionMode: Boolean) {
+        val visibleInNormalMode = if (!isSelectionMode) View.VISIBLE else View.GONE
+        val visibleInSelectionMode = if (isSelectionMode) View.VISIBLE else View.GONE
 
-        if (!isNormalMode) setTextInSubtitleMenu()
+        if (isSelectionMode) setTextInSubtitleMenu()
 
-        searchViewBinding.searchEditText.isEnabled = isNormalMode
-        searchViewBinding.searchEditText.isClickable = isNormalMode
-        searchViewBinding.root.alpha = if (isNormalMode) 1f else 0.6f
+        searchViewBinding.searchEditText.isEnabled = !isSelectionMode
+        searchViewBinding.searchEditText.isClickable = !isSelectionMode
+        searchViewBinding.root.alpha = if (!isSelectionMode) 1f else 0.6f
 
         videoListFragmentBinding.closeSelectionMode.visibility = visibleInSelectionMode
 
@@ -338,7 +338,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
     override fun onSingleSelected() {
         setTextInSubtitleMenu()
         changeCardVisibility(cardView = videoListBinding.deleteMenu, isVisible = true)
-        if ((adapter.getEditableVideo()?.loadingType ?: false) == VideoLoadingType.DONE) {
+        if ((adapter.getEditableItem()?.loadingType ?: false) == VideoLoadingType.DONE) {
             changeCardVisibility(cardView = videoListBinding.addSubtitlesMenu, isVisible = true)
             changeCardVisibility(cardView = videoListBinding.renameMenu, isVisible = true)
         } else {

@@ -58,11 +58,11 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/word_list"
+            android:id="@+id/video_list"
             style="@style/RecyclerInEditListMenu"/>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/add_word_card"
+            android:id="@+id/load_video_card"
             style="@style/CardViewAdd"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true">

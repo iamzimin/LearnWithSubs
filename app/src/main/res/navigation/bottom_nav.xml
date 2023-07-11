@@ -11,8 +11,8 @@
         android:label="@string/module"/>
 
     <fragment android:id="@+id/words_bottom_menu"
-        android:name="com.learnwithsubs.ModuleListFragment"
-        tools:layout="@layout/fragment_module_list"
+        android:name="com.learnwithsubs.feature_word_list.WordListFragment"
+        tools:layout="@layout/fragment_word_list"
         android:label="@string/word_list"/>
 
     <fragment android:id="@+id/video_bottom_menu"

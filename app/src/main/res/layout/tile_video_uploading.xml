@@ -71,7 +71,7 @@
         </LinearLayout>
 
         <CheckBox
-            android:id="@+id/video_select_check_box"
+            android:id="@+id/select_check_box"
             style="@style/CardViewVideoCheckBox"
             app:buttonTint="?attr/main_color"/>
 
