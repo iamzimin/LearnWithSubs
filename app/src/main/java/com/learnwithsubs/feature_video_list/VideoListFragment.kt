@@ -13,20 +13,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.learnwithsubs.OnSelectChange
 import com.learnwithsubs.R
 import com.learnwithsubs.databinding.ActivityVideoListBinding
 import com.learnwithsubs.databinding.DialogVideoListMenuRenameBinding
 import com.learnwithsubs.databinding.DialogVideoListMenuSortByBinding
 import com.learnwithsubs.databinding.FragmentVideoListBinding
 import com.learnwithsubs.databinding.SearchViewBinding
-import com.learnwithsubs.feature_video_list.adapter.OnSelectChange
-import com.learnwithsubs.feature_video_list.util.OrderType
+import com.learnwithsubs.general.util.OrderType
 import com.learnwithsubs.feature_video_list.util.VideoOrder
 import com.learnwithsubs.feature_video_list.adapter.VideoListAdapter
 import com.learnwithsubs.feature_video_list.models.VideoErrorType
@@ -166,33 +167,40 @@ class VideoListFragment : Fragment(), OnSelectChange {
         parentView?.removeView(dialogView)
         renameMenu.setContentView(dialogView)
 
+        fun save(textView: TextView) {
+            textView.clearFocus()
+            val video = vm.videoList.value?.find { it.id == vm.editableVideo?.id }?.copy()
+
+            if (video == null) {
+                // Если видео не найдено - его нельзя редактировать
+                Toast.makeText(context, getString(R.string.the_video_does_not_exist), Toast.LENGTH_SHORT).show()
+            } else if (video.loadingType != VideoLoadingType.DONE) {
+                // Если видео не загружено - его нельзя редактировать
+                Toast.makeText(context, getString(R.string.the_video_is_uploading), Toast.LENGTH_SHORT).show()
+            } else {
+                // Обновляем и загружаем видео
+                video.name = textView.text.toString()
+                vm.editVideo(video = video)
+            }
+
+            adapter.changeMode(isSelectionMode = false)
+            renameMenu.dismiss()
+            vm.editableVideo = null
+        }
+
         renameDialogBinding.videoNameEdittext.setText(vm.editableVideo?.name)
 
         renameDialogBinding.videoNameEdittext.setOnEditorActionListener { textView, actionId, keyEvent ->
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
-                textView.clearFocus()
-                val video = vm.videoList.value?.find { it.id == vm.editableVideo?.id }?.copy()
-
-                if (video == null) {
-                    // Если видео не найдено - его нельзя редактировать
-                    Toast.makeText(context, getString(R.string.the_video_does_not_exist), Toast.LENGTH_SHORT).show()
-                } else if (video.loadingType != VideoLoadingType.DONE) {
-                    // Если видео не загружено - его нельзя редактировать
-                    Toast.makeText(context, getString(R.string.the_video_is_uploading), Toast.LENGTH_SHORT).show()
-                } else {
-                    // Обновляем и загружаем видео
-                    video.name = textView.text.toString()
-                    vm.editVideo(video = video)
-                }
-
-                adapter.changeMode(isSelectionMode = false) //adapter.clearSelection()
-                renameMenu.dismiss()
+                save(textView)
                 true
             } else false
         }
+        renameDialogBinding.save.setOnClickListener {
+            save(renameDialogBinding.videoNameEdittext)
+        }
 
         renameMenu.show()
-        renameMenu.window?.attributes?.windowAnimations = 0
         renameMenu.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         renameMenu.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
@@ -263,7 +271,6 @@ class VideoListFragment : Fragment(), OnSelectChange {
         }
 
         sortByDialog.show()
-        sortByDialog.window?.attributes?.windowAnimations = 0
         sortByDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         sortByDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         sortByDialog.window?.setGravity(Gravity.BOTTOM)

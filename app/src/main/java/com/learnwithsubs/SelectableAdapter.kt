@@ -2,8 +2,7 @@ package com.learnwithsubs
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.learnwithsubs.feature_video_list.adapter.OnSelectChange
-import com.learnwithsubs.models.Identifiable
+import com.learnwithsubs.general.models.Identifiable
 
 abstract class SelectableAdapter<T : Identifiable> : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

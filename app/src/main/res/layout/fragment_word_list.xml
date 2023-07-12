@@ -111,7 +111,7 @@
         android:orientation="horizontal">
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/rename_menu"
+            android:id="@+id/edit_menu"
             style="@style/CardViewInEditListMenu">
             <LinearLayout
                 style="@style/TileInEditListMenu">

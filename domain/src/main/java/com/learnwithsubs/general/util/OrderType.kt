@@ -1,4 +1,4 @@
-package com.learnwithsubs.feature_video_list.util
+package com.learnwithsubs.general.util
 
 sealed class OrderType {
     object Ascending: OrderType()

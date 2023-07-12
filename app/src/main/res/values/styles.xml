@@ -125,9 +125,16 @@
     <style name="MenuBackground">
         <item name="android:background">@drawable/rounded</item>
         <item name="android:backgroundTint">?attr/pop_up_menu_background</item>
-        <item name="android:paddingBottom">20dp</item>
         <item name="android:layout_marginBottom">@dimen/dialog_menu_margins</item>
         <item name="android:layout_marginHorizontal">@dimen/dialog_menu_margins</item>
+    </style>
+
+    <style name="SaveButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:backgroundTint">?attr/video_upload_green_card</item>
+        <item name="android:text">@string/save</item>
+        <item name="android:textColor">?attr/text_color</item>
     </style>
 
 </resources>

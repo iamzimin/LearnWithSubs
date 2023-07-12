@@ -4,4 +4,5 @@ data class WordListUseCases(
     val getWordListUseCase: GetWordListUseCase,
     val loadWordUseCase: LoadWordUseCase,
     val deleteWordUseCase: DeleteWordUseCase,
+    val sortWordListUseCases: SortWordListUseCase,
 )

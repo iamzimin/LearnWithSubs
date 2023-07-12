@@ -39,6 +39,7 @@
 
 
     <string name="name">Name</string>
+    <string name="alphabet">Alphabet</string>
     <string name="date">Date</string>
     <string name="duration">Duration</string>
     <string name="ascending">Ascending</string>
@@ -48,6 +49,7 @@
 
     <string name="enter_name">Enter name</string>
     <string name="rename_video">Rename Video</string>
+    <string name="edit">Edit</string>
 
     <string name="russian">Russian</string>
     <string name="english">English</string>

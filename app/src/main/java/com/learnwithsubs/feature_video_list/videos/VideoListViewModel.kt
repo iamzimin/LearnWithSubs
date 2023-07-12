@@ -10,7 +10,7 @@ import com.learnwithsubs.feature_video_list.models.VideoLoadingType
 import com.learnwithsubs.feature_video_list.models.VideoStatus
 import com.learnwithsubs.feature_video_list.repository.VideoTranscodeRepository
 import com.learnwithsubs.feature_video_list.usecase.VideoListUseCases
-import com.learnwithsubs.feature_video_list.util.OrderType
+import com.learnwithsubs.general.util.OrderType
 import com.learnwithsubs.feature_video_list.util.VideoOrder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async

@@ -40,6 +40,7 @@ import com.learnwithsubs.feature_video_view.model.Language
 import com.learnwithsubs.feature_video_view.videos.VideoViewViewModel
 import com.learnwithsubs.feature_video_view.videos.VideoViewViewModelFactory
 import com.learnwithsubs.feature_word_list.models.WordTranslation
+import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
@@ -118,7 +119,9 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
                 WordTranslation(
                     word = translateDialogBind.inputWord.text.toString(),
                     translation = translateDialogBind.outputWord.text.toString(),
-                    nativeLanguage = "123", learnLanguage = "456"
+                    nativeLanguage = "123", learnLanguage = "456",
+                    timestamp = Date().time,
+                    videoName = vm.currentVideo?.name
                 )
             )
         }
