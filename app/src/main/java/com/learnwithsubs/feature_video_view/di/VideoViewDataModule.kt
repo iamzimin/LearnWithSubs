@@ -17,6 +17,7 @@ import com.learnwithsubs.feature_video_view.repository.YandexTokenRepositoryImpl
 import com.learnwithsubs.feature_video_view.repository.YandexTranslatorRepositoryImpl
 import com.learnwithsubs.feature_video_view.storage.YandexTranslatorStorageRepository
 import com.learnwithsubs.feature_video_view.storage.sharedprefs.SharedPrefsYandexTranslatorStorageRepository
+import com.learnwithsubs.feature_word_list.storage.WordDatabase
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -34,6 +35,15 @@ class VideoViewDataModule {
             context,
             VideoDatabase::class.java,
             VideoDatabase.DATABASE_NAME
+        ).build()
+    }
+    @Provides
+    @Singleton
+    fun provideWordDatabase(context: Context) : WordDatabase {
+        return Room.databaseBuilder(
+            context,
+            WordDatabase::class.java,
+            WordDatabase.DATABASE_NAME
         ).build()
     }
 
@@ -93,8 +103,8 @@ class VideoViewDataModule {
 
     @Provides
     @Singleton
-    fun provideVideoRepository(db: VideoDatabase): VideoViewRepository {
-        return VideoViewRepositoryImpl(db.videoViewDao)
+    fun provideVideoRepository(videoDB: VideoDatabase, wordDB: WordDatabase): VideoViewRepository {
+        return VideoViewRepositoryImpl(videoDB.videoListDao, wordDB.wordListDao)
     }
 
     @Provides

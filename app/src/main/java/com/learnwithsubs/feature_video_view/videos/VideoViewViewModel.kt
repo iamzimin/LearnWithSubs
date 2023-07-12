@@ -13,6 +13,7 @@ import com.learnwithsubs.feature_video_view.models.DictionaryWord
 import com.learnwithsubs.feature_video_view.models.Subtitle
 import com.learnwithsubs.feature_video_view.models.TranslationModel
 import com.learnwithsubs.feature_video_view.usecase.VideoViewUseCases
+import com.learnwithsubs.feature_word_list.models.WordTranslation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -63,6 +64,12 @@ class VideoViewViewModel @Inject constructor(
         video.watchProgress = currentVideoWatchTime
         viewModelScope.launch(Dispatchers.IO) {
             videoViewUseCases.updateVideoUseCase.invoke(video = video)
+        }
+    }
+
+    fun saveWord(word: WordTranslation) {
+        viewModelScope.launch {
+            videoViewUseCases.saveWordUseCase.invoke(word = word)
         }
     }
 

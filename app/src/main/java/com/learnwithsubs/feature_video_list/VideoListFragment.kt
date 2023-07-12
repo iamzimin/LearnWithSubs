@@ -40,6 +40,11 @@ class VideoListFragment : Fragment(), OnSelectChange {
         const val PICK_VIDEO_REQUEST = 1
         const val PICK_SUBTITLES_REQUEST = 2
     }
+
+    private lateinit var vmFactory: VideoListViewModelFactory
+    private lateinit var vm: VideoListViewModel
+    private lateinit var videoListActivity: VideoListActivity
+
     private lateinit var videoListVideoPicker: VideoListVideoPicker
     private lateinit var videoListSubtitlePicker: VideoListSubtitlePicker
 
@@ -48,10 +53,6 @@ class VideoListFragment : Fragment(), OnSelectChange {
     private lateinit var renameDialogBinding: DialogVideoListMenuRenameBinding
     private lateinit var videoListBinding: ActivityVideoListBinding
     private lateinit var sortByDialogBinding: DialogVideoListMenuSortByBinding
-
-    private lateinit var videoListActivity: VideoListActivity
-    private lateinit var vmFactory: VideoListViewModelFactory
-    private lateinit var vm: VideoListViewModel
 
     private val adapter = VideoListAdapter()
 
@@ -103,22 +104,22 @@ class VideoListFragment : Fragment(), OnSelectChange {
             } else false
         }
 
-        videoListBinding.deSelectAllMenu.setOnClickListener {
+        videoListFragmentBinding.deSelectAllMenu.setOnClickListener {
             val isSelectAll = adapter.getSelectedItemsSize() == adapter.getItemListSize()
             if (isSelectAll)
                 adapter.deselectAll()
             else
                 adapter.selectAll()
         }
-        videoListBinding.renameMenu.setOnClickListener {
+        videoListFragmentBinding.renameMenu.setOnClickListener {
             vm.editableVideo = adapter.getEditableItem()
             openRenameMenu()
         }
-        videoListBinding.deleteMenu.setOnClickListener {
-            vm.deleteSelectedVideo(selectedVideos = adapter.getSelectedVideo())
+        videoListFragmentBinding.deleteMenu.setOnClickListener {
+            vm.deleteSelectedVideo(selectedVideos = adapter.getSelectedItems())
             adapter.changeMode(isSelectionMode = false)
         }
-        videoListBinding.addSubtitlesMenu.setOnClickListener {
+        videoListFragmentBinding.addSubtitlesMenu.setOnClickListener {
             vm.editableVideo = adapter.getEditableItem()
             val video = vm.editableVideo ?: return@setOnClickListener
             if (!video.isOwnSubtitles)
@@ -293,7 +294,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
     private fun setTextInSubtitleMenu() {
         val editVideo = adapter.getEditableItem()
         if (editVideo != null)
-            videoListBinding.addSubtitlesMenuText.text = if (editVideo.isOwnSubtitles) getString(R.string.return_subtitles) else getString(R.string.add_subtitles)
+            videoListFragmentBinding.addSubtitlesMenuText.text = if (editVideo.isOwnSubtitles) getString(R.string.return_subtitles) else getString(R.string.add_subtitles)
     }
 
     override fun onModeChange(isSelectionMode: Boolean) {
@@ -309,49 +310,49 @@ class VideoListFragment : Fragment(), OnSelectChange {
         videoListFragmentBinding.closeSelectionMode.visibility = visibleInSelectionMode
 
         videoListBinding.fragmentNavigation.visibility = visibleInNormalMode
-        videoListBinding.editListLayout.visibility = visibleInSelectionMode
+        videoListFragmentBinding.editListLayout.visibility = visibleInSelectionMode
         videoListFragmentBinding.loadVideoCard.visibility = visibleInNormalMode
     }
 
 
     // Если выделено всё
     override fun onSelectAll() {
-        videoListBinding.deSelectAllMenuText.text = videoListActivity.applicationContext.getString(R.string.deselect_all)
-        changeCardVisibility(cardView = videoListBinding.deleteMenu, isVisible = true)
+        videoListFragmentBinding.deSelectAllMenuText.text = videoListActivity.applicationContext.getString(R.string.deselect_all)
+        changeCardVisibility(cardView = videoListFragmentBinding.deleteMenu, isVisible = true)
     }
 
     // Если было выделено всё, а стало на 1 и более меньше
     override fun onDeselectAll() {
-        videoListBinding.deSelectAllMenuText.text = videoListActivity.applicationContext.getString(R.string.select_all)
+        videoListFragmentBinding.deSelectAllMenuText.text = videoListActivity.applicationContext.getString(R.string.select_all)
     }
 
     // Если не выделено ничего
     override fun onZeroSelect() {
-        videoListBinding.deSelectAllMenuText.text = videoListActivity.applicationContext.getString(R.string.select_all)
+        videoListFragmentBinding.deSelectAllMenuText.text = videoListActivity.applicationContext.getString(R.string.select_all)
 
-        changeCardVisibility(cardView = videoListBinding.deleteMenu, isVisible = false)
-        changeCardVisibility(cardView = videoListBinding.renameMenu, isVisible = false)
-        changeCardVisibility(cardView = videoListBinding.addSubtitlesMenu, isVisible = false)
+        changeCardVisibility(cardView = videoListFragmentBinding.deleteMenu, isVisible = false)
+        changeCardVisibility(cardView = videoListFragmentBinding.renameMenu, isVisible = false)
+        changeCardVisibility(cardView = videoListFragmentBinding.addSubtitlesMenu, isVisible = false)
     }
 
     // Если выделено только 1 видео
     override fun onSingleSelected() {
         setTextInSubtitleMenu()
-        changeCardVisibility(cardView = videoListBinding.deleteMenu, isVisible = true)
+        changeCardVisibility(cardView = videoListFragmentBinding.deleteMenu, isVisible = true)
         if ((adapter.getEditableItem()?.loadingType ?: false) == VideoLoadingType.DONE) {
-            changeCardVisibility(cardView = videoListBinding.addSubtitlesMenu, isVisible = true)
-            changeCardVisibility(cardView = videoListBinding.renameMenu, isVisible = true)
+            changeCardVisibility(cardView = videoListFragmentBinding.addSubtitlesMenu, isVisible = true)
+            changeCardVisibility(cardView = videoListFragmentBinding.renameMenu, isVisible = true)
         } else {
-            changeCardVisibility(cardView = videoListBinding.addSubtitlesMenu, isVisible = false)
-            changeCardVisibility(cardView = videoListBinding.renameMenu, isVisible = false)
+            changeCardVisibility(cardView = videoListFragmentBinding.addSubtitlesMenu, isVisible = false)
+            changeCardVisibility(cardView = videoListFragmentBinding.renameMenu, isVisible = false)
         }
     }
 
     // Если выделено было выделено 1 видео, а стало любое другое число
     override fun onNotSingleSelected() {
         setTextInSubtitleMenu()
-        changeCardVisibility(cardView = videoListBinding.addSubtitlesMenu, isVisible = false)
-        changeCardVisibility(cardView = videoListBinding.renameMenu, isVisible = false)
+        changeCardVisibility(cardView = videoListFragmentBinding.addSubtitlesMenu, isVisible = false)
+        changeCardVisibility(cardView = videoListFragmentBinding.renameMenu, isVisible = false)
     }
 
 }

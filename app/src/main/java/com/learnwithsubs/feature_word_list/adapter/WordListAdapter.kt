@@ -11,17 +11,6 @@ import com.learnwithsubs.feature_word_list.models.WordTranslation
 
 class WordListAdapter: SelectableAdapter<WordTranslation>() {
 
-    init {
-        val arrL = ArrayList<WordTranslation>()
-        val item1 = WordTranslation(id = 0, word = "aaaalo", translation = "аааало", nativeLanguage = "ru", learnLanguage = "en")
-        val item2 = WordTranslation(id = 0, word = "hello", translation = "привет", nativeLanguage = "ru", learnLanguage = "en")
-        val item3 = WordTranslation(id = 0, word = "world", translation = "мир", nativeLanguage = "ru", learnLanguage = "en")
-        arrL.add(item1)
-        arrL.add(item2)
-        arrL.add(item3)
-        itemList = arrL
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return WordWithTranslationViewHolder(
             LayoutInflater.from(parent.context)

@@ -39,6 +39,7 @@ import com.learnwithsubs.feature_video_view.adapter.OnDictionaryClick
 import com.learnwithsubs.feature_video_view.model.Language
 import com.learnwithsubs.feature_video_view.videos.VideoViewViewModel
 import com.learnwithsubs.feature_video_view.videos.VideoViewViewModelFactory
+import com.learnwithsubs.feature_word_list.models.WordTranslation
 import java.util.Locale
 import javax.inject.Inject
 
@@ -110,6 +111,16 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
         }
         translateDialogBind.audioOutputWord.setOnClickListener {
             ttsTo.speak(translateDialogBind.outputWord.text, TextToSpeech.QUEUE_FLUSH, null, "")
+        }
+
+        translateDialogBind.saveWord.setOnClickListener {
+            vm.saveWord( //TODO
+                WordTranslation(
+                    word = translateDialogBind.inputWord.text.toString(),
+                    translation = translateDialogBind.outputWord.text.toString(),
+                    nativeLanguage = "123", learnLanguage = "456"
+                )
+            )
         }
 
         //Video Play

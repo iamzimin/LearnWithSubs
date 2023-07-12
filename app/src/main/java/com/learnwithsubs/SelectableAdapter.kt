@@ -76,7 +76,9 @@ abstract class SelectableAdapter<T : Identifiable> : RecyclerView.Adapter<Recycl
 
     fun changeMode(isSelectionMode: Boolean) {
         this.isSelectionMode = isSelectionMode
-        if (!isSelectionMode) selectedItems.clear()
+        if (!isSelectionMode) {
+            selectedItems.clear()
+        }
         notifyDataSetChanged()
         callbacks(this.itemList)
     }
@@ -116,7 +118,7 @@ abstract class SelectableAdapter<T : Identifiable> : RecyclerView.Adapter<Recycl
     fun getSelectedItemsSize(): Int {
         return selectedItems.size
     }
-    fun getSelectedVideo(): List<T> {
+    fun getSelectedItems(): List<T> {
         return selectedItems
     }
     fun getEditableItem(): T? {

@@ -20,14 +20,18 @@ class WordWithTranslationViewHolder(
     private val binding = TileWordWithTranslationBinding.bind(itemView)
 
     override fun bind(word: WordTranslation, isSelected: Boolean) {
-        binding.word.setText(word.word)
-        binding.translation.setText(word.translation)
+        binding.word.text = word.word
+        binding.translation.text = word.translation
+        binding.selectCheckBox.isChecked = isSelected
 
 
-        if (adapter.getIsSelectionMode())
+        if (adapter.getIsSelectionMode()) {
             binding.selectCheckBox.visibility = View.VISIBLE
-        else
+            binding.audioOutputWord.visibility = View.GONE
+        } else {
             binding.selectCheckBox.visibility = View.GONE
+            binding.audioOutputWord.visibility = View.VISIBLE
+        }
 
         itemView.setOnClickListener (object : View.OnClickListener {
             override fun onClick(p0: View?) {

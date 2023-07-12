@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.learnwithsubs.feature_video_list.models.Video
+import com.learnwithsubs.feature_word_list.models.WordTranslation
 
 @Dao
 interface VideoViewDao {

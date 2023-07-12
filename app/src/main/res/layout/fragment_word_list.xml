@@ -55,7 +55,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/word_list"
@@ -102,6 +103,56 @@
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/edit_list_layout"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/rename_menu"
+            style="@style/CardViewInEditListMenu">
+            <LinearLayout
+                style="@style/TileInEditListMenu">
+                <ImageView
+                    style="@style/ImageInEditListMenu"
+                    android:src="@drawable/edit"
+                    android:padding="1dp" />
+                <TextView
+                    style="@style/TextInEditListMenu"
+                    android:text="@string/rename"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/delete_menu"
+            style="@style/CardViewInEditListMenu">
+            <LinearLayout
+                style="@style/TileInEditListMenu">
+                <ImageView
+                    style="@style/ImageInEditListMenu"
+                    android:src="@drawable/trash" />
+                <TextView
+                    style="@style/TextInEditListMenu"
+                    android:text="@string/delete"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/de_select_all_menu"
+            style="@style/CardViewInEditListMenu">
+            <LinearLayout
+                style="@style/TileInEditListMenu">
+                <ImageView
+                    style="@style/ImageInEditListMenu"
+                    android:src="@drawable/check_all" />
+                <TextView
+                    android:id="@+id/de_select_all_menu_text"
+                    style="@style/TextInEditListMenu"
+                    android:text="@string/select_all"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
 
 
 

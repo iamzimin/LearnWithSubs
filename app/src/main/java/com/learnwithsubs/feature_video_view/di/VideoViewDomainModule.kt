@@ -10,6 +10,7 @@ import com.learnwithsubs.feature_video_view.service.ServerTimeService
 import com.learnwithsubs.feature_video_view.usecase.GetYandexTranslationUseCase
 import com.learnwithsubs.feature_video_view.usecase.GetVideoSubtitlesUseCase
 import com.learnwithsubs.feature_video_view.usecase.GetWordsFromYandexDictionaryUseCase
+import com.learnwithsubs.feature_video_view.usecase.SaveWordUseCase
 import com.learnwithsubs.feature_video_view.usecase.UpdateVideoUseCase
 import com.learnwithsubs.feature_video_view.usecase.VideoViewUseCases
 import dagger.Module
@@ -33,6 +34,7 @@ class VideoViewDomainModule {
             updateVideoUseCase = UpdateVideoUseCase(videoViewRepository),
             getWordsFromYandexDictionaryUseCase = GetWordsFromYandexDictionaryUseCase(yandexDictionaryRepository),
             getYandexTranslationUseCase = GetYandexTranslationUseCase(yandexTranslatorRepository, yandexTokenRepository, serverTimeService),
+            saveWordUseCase = SaveWordUseCase(videoViewRepository)
         )
     }
 }
