@@ -119,7 +119,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
                 WordTranslation(
                     word = translateDialogBind.inputWord.text.toString(),
                     translation = translateDialogBind.outputWord.text.toString(),
-                    nativeLanguage = "123", learnLanguage = "456",
+                    nativeLanguage = "ru", learnLanguage = "en",
                     timestamp = Date().time,
                     videoName = vm.currentVideo?.name
                 )

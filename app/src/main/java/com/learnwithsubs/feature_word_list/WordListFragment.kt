@@ -209,8 +209,8 @@ class WordListFragment : Fragment(), OnSelectChange {
                 val newWord = WordTranslation(
                     word = dialogWordListMenuEditBinding.word.text.toString(),
                     translation = dialogWordListMenuEditBinding.translation.text.toString(),
-                    nativeLanguage = "123",
-                    learnLanguage = "456",
+                    nativeLanguage = "ru",
+                    learnLanguage = "en",
                     timestamp = Date().time
                 )
                 vm.editWord(newWord)

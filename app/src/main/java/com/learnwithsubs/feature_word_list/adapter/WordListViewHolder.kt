@@ -1,9 +1,11 @@
 package com.learnwithsubs.feature_word_list.adapter
 
+import android.speech.tts.TextToSpeech
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.learnwithsubs.databinding.TileWordWithTranslationBinding
 import com.learnwithsubs.feature_word_list.models.WordTranslation
+import java.util.Locale
 
 // Родительский класс для всех видео ViewHolder
 abstract class WordListViewHolder(
@@ -16,13 +18,15 @@ abstract class WordListViewHolder(
 class WordWithTranslationViewHolder(
     itemView: View,
     private val adapter: WordListAdapter
-) : WordListViewHolder(itemView) {
+) : WordListViewHolder(itemView), TextToSpeech.OnInitListener {
     private val binding = TileWordWithTranslationBinding.bind(itemView)
+    private val tts: TextToSpeech = TextToSpeech(itemView.context, this)
 
     override fun bind(word: WordTranslation, isSelected: Boolean) {
         binding.word.text = word.word
         binding.translation.text = word.translation
         binding.selectCheckBox.isChecked = isSelected
+        tts.language = Locale(word.learnLanguage)
 
 
         if (adapter.getIsSelectionMode()) {
@@ -52,5 +56,11 @@ class WordWithTranslationViewHolder(
             true
         }
 
+        binding.audioOutputWord.setOnClickListener {
+            tts.speak(binding.word.text, TextToSpeech.QUEUE_FLUSH, null, "")
+        }
+
     }
+
+    override fun onInit(status: Int) {}
 }
