@@ -16,5 +16,7 @@ data class WordTranslation(
     val nativeLanguage: String,
     val learnLanguage: String,
     val timestamp: Long,
+    val videoID: Int? = null,
     val videoName: String? = null,
+    var isHeader: Boolean = false
 ): Parcelable, Identifiable

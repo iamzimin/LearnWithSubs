@@ -120,8 +120,8 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
                     word = translateDialogBind.inputWord.text.toString(),
                     translation = translateDialogBind.outputWord.text.toString(),
                     nativeLanguage = "ru", learnLanguage = "en",
+                    videoID = vm.currentVideo?.id, videoName = vm.currentVideo?.name,
                     timestamp = Date().time,
-                    videoName = vm.currentVideo?.name
                 )
             )
         }

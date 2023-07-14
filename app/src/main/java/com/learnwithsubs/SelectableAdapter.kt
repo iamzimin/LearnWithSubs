@@ -19,7 +19,7 @@ abstract class SelectableAdapter<T : Identifiable> : RecyclerView.Adapter<Recycl
         onSelectChangeListener = listener
     }
 
-    fun updateData(newItemList: ArrayList<T>) {
+    open fun updateData(newItemList: List<T>) {
         val diffResult = DiffUtil.calculateDiff(GenericDiffCallback(itemList, newItemList))
         itemList = ArrayList(newItemList)
         diffResult.dispatchUpdatesTo(this@SelectableAdapter)

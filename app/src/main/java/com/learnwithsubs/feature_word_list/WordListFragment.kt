@@ -63,8 +63,8 @@ class WordListFragment : Fragment(), OnSelectChange {
 
         vm.wordList.observe(videoListActivity) { wordList ->
             wordList ?: return@observe
-            val sorted = vm.getSortedVideoList(wordList = wordList)
-            adapter.updateData(ArrayList(sorted.toList()))
+            //val sorted = vm.getSortedVideoList(wordList = wordList)
+            adapter.updateData(ArrayList(wordList.toList())) //TODO вызывается несколько раз при переходе на фрагмент
         }
 
         fragmentWordListBinding.closeSelectionMode.setOnClickListener{
