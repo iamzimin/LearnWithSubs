@@ -2,35 +2,43 @@ package com.learnwithsubs.feature_word_list.adapter
 
 import android.speech.tts.TextToSpeech
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.learnwithsubs.databinding.ParentItemsBinding
 import com.learnwithsubs.databinding.TileWordTitleBinding
 import com.learnwithsubs.databinding.TileWordWithTranslationBinding
 import com.learnwithsubs.feature_word_list.model.WordTranslationWithTitle
 import com.learnwithsubs.feature_word_list.models.WordTranslation
+import okhttp3.internal.notify
 import java.util.Locale
 
 // Родительский класс для всех видео ViewHolder
-abstract class WordListViewHolder(
+abstract class WordListTitleViewHolder(
     itemView: View
 ) : RecyclerView.ViewHolder(itemView) {
-    abstract fun bind(word: WordTranslation, isSelected: Boolean)
+    abstract fun bind(word: WordTranslationWithTitle)
 }
 
 // ViewHolder для обычного видео
-class WordWithTranslationViewHolder(
+class WordTitleViewHolder(
     itemView: View,
-    private val adapter: WordListAdapter
-) : WordListViewHolder(itemView), TextToSpeech.OnInitListener {
-    private val binding = TileWordWithTranslationBinding.bind(itemView)
-    private val tts: TextToSpeech = TextToSpeech(itemView.context, this)
+    private val adapter: WordListTitleAdapter
+) : WordListTitleViewHolder(itemView) {
+    private val binding = ParentItemsBinding.bind(itemView)
 
-    override fun bind(word: WordTranslation, isSelected: Boolean) {
-        binding.word.text = word.word
-        binding.translation.text = word.translation
-        binding.selectCheckBox.isChecked = isSelected
-        tts.language = Locale(word.learnLanguage)
+    override fun bind(word: WordTranslationWithTitle) {
+        binding.title.text = word.title
+        val subAdapterItems = WordListAdapter(ArrayList(word.listWords))
+        binding.recyclerWords.layoutManager = LinearLayoutManager(itemView.context)
+        binding.recyclerWords.adapter = subAdapterItems
 
+        itemView.setOnClickListener (object : View.OnClickListener {
+            override fun onClick(p0: View?) {
+                itemView.visibility = View.VISIBLE //TODO
+            }
+        })
 
+        /*
         if (adapter.getIsSelectionMode()) {
             binding.selectCheckBox.visibility = View.VISIBLE
             binding.audioOutputWord.visibility = View.GONE
@@ -57,12 +65,7 @@ class WordWithTranslationViewHolder(
                 adapter.changeMode(isSelectionMode = true)
             true
         }
-
-        binding.audioOutputWord.setOnClickListener {
-            tts.speak(binding.word.text, TextToSpeech.QUEUE_FLUSH, null, "")
-        }
+         */
 
     }
-
-    override fun onInit(status: Int) {}
 }

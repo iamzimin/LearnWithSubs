@@ -18,5 +18,4 @@ data class WordTranslation(
     val timestamp: Long,
     val videoID: Int? = null,
     val videoName: String? = null,
-    var isHeader: Boolean = false
 ): Parcelable, Identifiable

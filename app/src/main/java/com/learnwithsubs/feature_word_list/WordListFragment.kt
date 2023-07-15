@@ -25,6 +25,7 @@ import com.learnwithsubs.feature_video_list.VideoListActivity
 import com.learnwithsubs.OnSelectChange
 import com.learnwithsubs.databinding.DialogWordListMenuSortByBinding
 import com.learnwithsubs.feature_word_list.adapter.WordListAdapter
+import com.learnwithsubs.feature_word_list.adapter.WordListTitleAdapter
 import com.learnwithsubs.feature_word_list.models.WordTranslation
 import com.learnwithsubs.feature_word_list.util.WordOrder
 import com.learnwithsubs.general.util.OrderType
@@ -44,7 +45,7 @@ class WordListFragment : Fragment(), OnSelectChange {
     private lateinit var sortByDialogBinding: DialogWordListMenuSortByBinding
 
 
-    private val adapter = WordListAdapter()
+    private val adapter = WordListTitleAdapter(ArrayList())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,23 +68,23 @@ class WordListFragment : Fragment(), OnSelectChange {
             adapter.updateData(ArrayList(wordList.toList())) //TODO вызывается несколько раз при переходе на фрагмент
         }
 
-        fragmentWordListBinding.closeSelectionMode.setOnClickListener{
-            adapter.changeMode(isSelectionMode = false)
-        }
-        fragmentWordListBinding.deSelectAllMenu.setOnClickListener {
-            val isSelectAll = adapter.getSelectedItemsSize() == adapter.getItemListSize()
-            if (isSelectAll)
-                adapter.deselectAll()
-            else
-                adapter.selectAll()
-        }
-        fragmentWordListBinding.deleteMenu.setOnClickListener {
-            vm.deleteWords(selectedWords = adapter.getSelectedItems())
-        }
-        fragmentWordListBinding.editMenu.setOnClickListener {
-            vm.editableWord = adapter.getEditableItem()
-            openEditMenu()
-        }
+//        fragmentWordListBinding.closeSelectionMode.setOnClickListener{
+//            adapter.changeMode(isSelectionMode = false)
+//        }
+//        fragmentWordListBinding.deSelectAllMenu.setOnClickListener {
+//            val isSelectAll = adapter.getSelectedItemsSize() == adapter.getItemListSize()
+//            if (isSelectAll)
+//                adapter.deselectAll()
+//            else
+//                adapter.selectAll()
+//        }
+//        fragmentWordListBinding.deleteMenu.setOnClickListener {
+//            vm.deleteWords(selectedWords = adapter.getSelectedItems())
+//        }
+//        fragmentWordListBinding.editMenu.setOnClickListener {
+//            vm.editableWord = adapter.getEditableItem()
+//            openEditMenu()
+//        }
         fragmentWordListBinding.addWordCard.setOnClickListener {
             vm.editableWord = null
             openEditMenu()
@@ -95,7 +96,7 @@ class WordListFragment : Fragment(), OnSelectChange {
         searchViewBinding.searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (adapter.getIsSelectionMode()) return
+                //if (adapter.getIsSelectionMode()) return
                 vm.setFilterMode(filter = s.toString())
                 vm.updateVideoList()
             }
@@ -185,7 +186,7 @@ class WordListFragment : Fragment(), OnSelectChange {
         fragmentWordListBinding.wordList.adapter = adapter
         val itemDecoration = WordListAdapter.RecyclerViewItemDecoration(16)
         fragmentWordListBinding.wordList.addItemDecoration(itemDecoration)
-        adapter.setOnModeChangeListener(this@WordListFragment)
+        //adapter.setOnModeChangeListener(this@WordListFragment)
     }
 
 
@@ -220,7 +221,7 @@ class WordListFragment : Fragment(), OnSelectChange {
                 vm.editWord(word)
             }
 
-            adapter.changeMode(isSelectionMode = false)
+            //adapter.changeMode(isSelectionMode = false)
             editMenu.dismiss()
             vm.editableWord = null
         }

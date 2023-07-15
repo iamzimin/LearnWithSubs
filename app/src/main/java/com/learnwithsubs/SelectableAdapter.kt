@@ -2,11 +2,13 @@ package com.learnwithsubs
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.learnwithsubs.feature_word_list.models.WordTranslation
 import com.learnwithsubs.general.models.Identifiable
 
-abstract class SelectableAdapter<T : Identifiable> : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+abstract class SelectableAdapter<T : Identifiable>(
+    open var itemList: ArrayList<T>
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    protected var itemList: ArrayList<T> = ArrayList()
     protected var selectedItems = ArrayList<T>()
     private var isSelectionMode = false
 

@@ -9,9 +9,12 @@ import com.learnwithsubs.R
 import com.learnwithsubs.SelectableAdapter
 import com.learnwithsubs.feature_video_list.models.Video
 import com.learnwithsubs.feature_video_list.models.VideoStatus
+import com.learnwithsubs.feature_word_list.models.WordTranslation
 
 
-class VideoListAdapter: SelectableAdapter<Video>() {
+class VideoListAdapter(
+    override var itemList: ArrayList<Video>
+): SelectableAdapter<Video>(itemList) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {

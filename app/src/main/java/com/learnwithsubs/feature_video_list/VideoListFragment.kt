@@ -55,7 +55,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
     private lateinit var videoListBinding: ActivityVideoListBinding
     private lateinit var sortByDialogBinding: DialogVideoListMenuSortByBinding
 
-    private val adapter = VideoListAdapter()
+    private val adapter = VideoListAdapter(ArrayList())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
