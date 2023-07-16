@@ -10,8 +10,14 @@ import com.learnwithsubs.SelectableAdapter
 import com.learnwithsubs.feature_word_list.models.WordTranslation
 
 class WordListAdapter(
-    override var itemList: ArrayList<WordTranslation>
+    override var itemList: ArrayList<WordTranslation>,
+    isSelectMode: Boolean
 ): SelectableAdapter<WordTranslation>(itemList) {
+    private var parentAdapter: WordListTitleAdapter? = null
+
+    init {
+        if (isSelectMode) super.changeMode(isSelectionMode = true)
+    }
 
     /*
     override fun updateData(newItemList: List<WordTranslation>) {
@@ -42,9 +48,19 @@ class WordListAdapter(
      */
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        var parentView: View? = parent.parent as View
+        while (parentView != null && parentView !is RecyclerView) {
+            parentView = parentView.parent as? View
+        }
+        val parentRecyclerView = parentView as RecyclerView
+        parentAdapter = parentRecyclerView.adapter as WordListTitleAdapter
+        val nonNullParentAdapter = parentAdapter ?: throw IllegalArgumentException("Parent adapter is null") //TODO
+
         return WordWithTranslationViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.tile_word_with_translation, parent, false), this@WordListAdapter
+                .inflate(R.layout.tile_word_with_translation, parent, false),
+            //this@WordListAdapter,
+            nonNullParentAdapter
         )
     }
 
@@ -56,7 +72,8 @@ class WordListAdapter(
         val word = itemList[position]
 
         val normalHolder = holder as WordWithTranslationViewHolder
-        val isSelected = selectedItems.any { it.id == word.id }
+        val nonNullParentAdapter = parentAdapter ?: throw IllegalArgumentException("Parent adapter is null") //TODO
+        val isSelected = nonNullParentAdapter.getSelectedItems().any { it.id == word.id }
         normalHolder.bind(word, isSelected)
     }
 

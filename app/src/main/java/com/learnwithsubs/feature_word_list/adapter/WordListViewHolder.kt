@@ -19,7 +19,7 @@ abstract class WordListViewHolder(
 // ViewHolder для обычного видео
 class WordWithTranslationViewHolder(
     itemView: View,
-    private val adapter: WordListAdapter
+    private val parentAdapter: WordListTitleAdapter,
 ) : WordListViewHolder(itemView), TextToSpeech.OnInitListener {
     private val binding = TileWordWithTranslationBinding.bind(itemView)
     private val tts: TextToSpeech = TextToSpeech(itemView.context, this)
@@ -31,7 +31,7 @@ class WordWithTranslationViewHolder(
         tts.language = Locale(word.learnLanguage)
 
 
-        if (adapter.getIsSelectionMode()) {
+        if (parentAdapter.getIsSelectionMode()) {
             binding.selectCheckBox.visibility = View.VISIBLE
             binding.audioOutputWord.visibility = View.GONE
         } else {
@@ -41,20 +41,22 @@ class WordWithTranslationViewHolder(
 
         itemView.setOnClickListener (object : View.OnClickListener {
             override fun onClick(p0: View?) {
-                if (adapter.getIsSelectionMode()) {
+                if (parentAdapter.getIsSelectionMode()) {
                     val position = adapterPosition
                     binding.selectCheckBox.isChecked = !binding.selectCheckBox.isChecked
-                    adapter.updateSelection(position = position, isSelected = binding.selectCheckBox.isChecked)
+                    parentAdapter.updateSelection(position = position, id = word.id, isSelected = binding.selectCheckBox.isChecked)
                 }
             }
         })
 
         itemView.setOnLongClickListener {
+            parentAdapter.changeMode(isSelectionMode = true)
+
             val position = adapterPosition
             binding.selectCheckBox.isChecked = !binding.selectCheckBox.isChecked
-            adapter.updateSelection(position = position, isSelected = binding.selectCheckBox.isChecked)
-            if (!adapter.getIsSelectionMode())
-                adapter.changeMode(isSelectionMode = true)
+            parentAdapter.updateSelection(position = position, id = word.id, isSelected = binding.selectCheckBox.isChecked)
+            if (!parentAdapter.getIsSelectionMode())
+                parentAdapter.changeMode(isSelectionMode = true)
             true
         }
 

@@ -28,13 +28,16 @@ class WordTitleViewHolder(
 
     override fun bind(word: WordTranslationWithTitle) {
         binding.title.text = word.title
-        val subAdapterItems = WordListAdapter(ArrayList(word.listWords))
+        val subAdapterItems = WordListAdapter(ArrayList(word.listWords), adapter.getIsSelectionMode())
         binding.recyclerWords.layoutManager = LinearLayoutManager(itemView.context)
         binding.recyclerWords.adapter = subAdapterItems
 
         itemView.setOnClickListener (object : View.OnClickListener {
             override fun onClick(p0: View?) {
-                itemView.visibility = View.VISIBLE //TODO
+                if (binding.recyclerWords.isShown)
+                    binding.recyclerWords.visibility = View.GONE
+                else
+                    binding.recyclerWords.visibility = View.VISIBLE
             }
         })
 

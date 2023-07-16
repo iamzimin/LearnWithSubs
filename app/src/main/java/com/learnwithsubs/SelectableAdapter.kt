@@ -9,7 +9,7 @@ abstract class SelectableAdapter<T : Identifiable>(
     open var itemList: ArrayList<T>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    protected var selectedItems = ArrayList<T>()
+    protected open var selectedItems = ArrayList<T>()
     private var isSelectionMode = false
 
     private var onSelectChangeListener: OnSelectChange? = null
@@ -21,7 +21,7 @@ abstract class SelectableAdapter<T : Identifiable>(
         onSelectChangeListener = listener
     }
 
-    open fun updateData(newItemList: List<T>) {
+    fun updateData(newItemList: List<T>) {
         val diffResult = DiffUtil.calculateDiff(GenericDiffCallback(itemList, newItemList))
         itemList = ArrayList(newItemList)
         diffResult.dispatchUpdatesTo(this@SelectableAdapter)
@@ -29,7 +29,7 @@ abstract class SelectableAdapter<T : Identifiable>(
         callbacks(newItemList)
     }
 
-    private fun updateSelected(newItemList: List<T>) {
+    protected open fun updateSelected(newItemList: List<T>) {
         if (newItemList.isEmpty()) {
             changeMode(isSelectionMode = false)
         }
