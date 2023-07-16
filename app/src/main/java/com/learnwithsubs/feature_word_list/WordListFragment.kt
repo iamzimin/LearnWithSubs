@@ -11,10 +11,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewParent
 import android.view.Window
+import android.widget.CheckBox
 import androidx.cardview.widget.CardView
+import androidx.core.view.children
+import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.learnwithsubs.R
 import com.learnwithsubs.app.App
@@ -24,16 +29,18 @@ import com.learnwithsubs.databinding.FragmentWordListBinding
 import com.learnwithsubs.databinding.SearchViewBinding
 import com.learnwithsubs.feature_video_list.VideoListActivity
 import com.learnwithsubs.OnSelectChange
+import com.learnwithsubs.OnSelectParentChange
 import com.learnwithsubs.databinding.DialogWordListMenuSortByBinding
 import com.learnwithsubs.feature_word_list.adapter.WordListAdapter
 import com.learnwithsubs.feature_word_list.adapter.WordListTitleAdapter
 import com.learnwithsubs.feature_word_list.models.WordTranslation
 import com.learnwithsubs.feature_word_list.util.WordOrder
 import com.learnwithsubs.general.util.OrderType
+import java.text.FieldPosition
 import java.util.Date
 import javax.inject.Inject
 
-class WordListFragment : Fragment(), OnSelectChange {
+class WordListFragment : Fragment(), OnSelectChange, OnSelectParentChange {
     @Inject
     lateinit var vmFactory: WordListViewModelFactory
     private lateinit var vm: WordListViewModel
@@ -187,7 +194,7 @@ class WordListFragment : Fragment(), OnSelectChange {
         fragmentWordListBinding.wordList.adapter = adapter
         val itemDecoration = WordListAdapter.RecyclerViewItemDecoration(16)
         fragmentWordListBinding.wordList.addItemDecoration(itemDecoration)
-        adapter.setOnModeChangeListener(this@WordListFragment)
+        adapter.setListener(this@WordListFragment, this@WordListFragment)
         (fragmentWordListBinding.wordList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
     }
 
@@ -284,4 +291,30 @@ class WordListFragment : Fragment(), OnSelectChange {
     override fun onNotSingleSelected() {
         changeCardVisibility(cardView = fragmentWordListBinding.editMenu, isVisible = false)
     }
+
+    override fun onSomeSelect() {
+        changeCardVisibility(cardView = fragmentWordListBinding.deleteMenu, isVisible = true)
+    }
+
+    override fun onParentChange(position: Int, isSelected: Boolean) {
+        val view = fragmentWordListBinding.wordList[position] as ViewGroup
+        val parentCheckBox: CheckBox? = findCheckBox(view)
+        parentCheckBox?.isChecked = isSelected
+    }
+
+    private fun findCheckBox(viewGroup: ViewGroup): CheckBox? {
+        for (i in 0 until viewGroup.childCount) {
+            val child = viewGroup.getChildAt(i)
+            if (child is CheckBox) {
+                return child
+            } else if (child is ViewGroup) {
+                val checkBox = findCheckBox(child)
+                if (checkBox != null) {
+                    return checkBox
+                }
+            }
+        }
+        return null
+    }
+
 }

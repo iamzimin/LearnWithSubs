@@ -362,4 +362,9 @@ class VideoListFragment : Fragment(), OnSelectChange {
         changeCardVisibility(cardView = videoListFragmentBinding.renameMenu, isVisible = false)
     }
 
+    // Если выделено более 1 видео
+    override fun onSomeSelect() {
+        changeCardVisibility(cardView = videoListFragmentBinding.deleteMenu, isVisible = true)
+    }
+
 }

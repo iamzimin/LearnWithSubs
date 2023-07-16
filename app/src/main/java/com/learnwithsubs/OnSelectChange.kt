@@ -7,4 +7,5 @@ interface OnSelectChange {
     fun onZeroSelect()
     fun onSingleSelected()
     fun onNotSingleSelected()
+    fun onSomeSelect()
 }

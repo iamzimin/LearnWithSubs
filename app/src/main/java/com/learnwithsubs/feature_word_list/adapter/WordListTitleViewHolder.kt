@@ -29,13 +29,13 @@ class WordTitleViewHolder(
             override fun onClick(p0: View?) {
                 if (adapter.getIsSelectionMode()) {
                     val position = adapterPosition
-                    val isSelected = binding.selectCheckBox.isChecked
-                    if (isSelected)
+                    val isChecked = binding.selectCheckBox.isChecked
+                    if (isChecked)
                         adapter.deselectAllChild(position)
                     else
                         adapter.selectAllChild(position)
                     binding.recyclerWords.adapter = subAdapterItems
-                    binding.selectCheckBox.isChecked = isSelected == false
+                    binding.selectCheckBox.isChecked = isChecked == false
                 } else {
                     binding.recyclerWords.visibility =
                         if (binding.recyclerWords.isShown) View.GONE else View.VISIBLE

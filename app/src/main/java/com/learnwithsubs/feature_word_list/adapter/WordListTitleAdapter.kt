@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.learnwithsubs.OnSelectChange
+import com.learnwithsubs.OnSelectParentChange
 import com.learnwithsubs.R
 import com.learnwithsubs.feature_word_list.model.WordTranslationWithTitle
 import com.learnwithsubs.feature_word_list.models.WordTranslation
@@ -12,17 +13,17 @@ import com.learnwithsubs.feature_word_list.models.WordTranslation
 class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var itemList = ArrayList<WordTranslationWithTitle>()
     private var itemSelectedList  = ArrayList<WordTranslationWithTitle>()
-    //private var itemList: ArrayList<WordTranslation> = ArrayList()
-    //private var selectedItems = ArrayList<WordTranslation>()
     private var isSelectionMode = false
 
     private var onSelectChangeListener: OnSelectChange? = null
+    private var onSelectParentChangeListener: OnSelectParentChange? = null
     private var prevIsSelectionMode = false
     private var prevIsSelectOne = false
     private var prevIsSelectAll = false
 
-    fun setOnModeChangeListener(listener: OnSelectChange) {
-        onSelectChangeListener = listener
+    fun setListener(onSelectChange: OnSelectChange, onSelectParentChange: OnSelectParentChange) {
+        onSelectChangeListener = onSelectChange
+        onSelectParentChangeListener = onSelectParentChange
     }
 
     fun updateData(newItemList: List<WordTranslation>) {
@@ -34,7 +35,6 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
 
         val diffResult = DiffUtil.calculateDiff(GenericDiffCallback(itemList, groupedList))
-        //itemList = ArrayList(newItemList)
         itemList = ArrayList(groupedList)
         diffResult.dispatchUpdatesTo(this@WordListTitleAdapter)
         callbacks(groupedList)
@@ -68,7 +68,10 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     break
                 }
         }
-        parentPos?.let { notifyItemChanged(it) }
+        if (parentPos != null) {
+            val t = itemList[parentPos].listWords.size == itemSelectedList[parentPos].listWords.size
+            onSelectParentChangeListener?.onParentChange(position = parentPos, isSelected = t)
+        }
         callbacks(itemList)
     }
 
@@ -78,24 +81,12 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
     fun selectAllChild(position: Int) {
         val title = itemList.getOrNull(position) ?: return
-        //val copiedTitle = WordTranslationWithTitle(title.id, title.title, ArrayList(title.listWords))
         itemSelectedList[position].listWords = ArrayList(title.listWords)
-        /*
-        for (elem in title.listWords) {
-            if (!selectedItems.any { it.id == elem.id })
-                selectedItems.add(elem)
-        }
-         */
         callbacks(this.itemList)
     }
     fun deselectAllChild(position: Int) {
         val title = itemSelectedList.getOrNull(position) ?: return
         title.listWords.clear()
-        /*
-        for (elem in title.listWords) {
-            selectedItems.remove(selectedItems.find { it.id == elem.id })
-        }
-         */
         callbacks(this.itemList)
     }
 
@@ -132,12 +123,14 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         if (!isSelectionMode) return
 
-        if (selectedItems.size == 0)
+        if (selectedItems.isEmpty())
             onSelectChangeListener?.onZeroSelect()
         else if (itemList.size == selectedItems.size)
             onSelectChangeListener?.onSelectAll()
         else if (prevIsSelectAll)
             onSelectChangeListener?.onDeselectAll()
+        else
+            onSelectChangeListener?.onSomeSelect()
 
         prevIsSelectAll = itemList.size == selectedItems.size
 
