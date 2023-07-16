@@ -19,34 +19,6 @@ class WordListAdapter(
         if (isSelectMode) super.changeMode(isSelectionMode = true)
     }
 
-    /*
-    override fun updateData(newItemList: List<WordTranslation>) {
-        /*
-        val newSortedItemList =
-            newItemList.sortedWith(compareBy<WordTranslation> { it.videoID == null }
-                .thenBy { it.videoID })
-        val updatedList = updateList(sortedList = newSortedItemList)
-         */
-        super.updateData(newItemList)
-    }
-     */
-
-    /*
-    private fun updateList(sortedList: List<WordTranslation>) : List<WordTranslation> {
-        val updatedList = mutableListOf<WordTranslation>()
-        var previousVideoID: Int? = null
-        for (wordTranslation in sortedList) {
-            if (wordTranslation.videoID != previousVideoID) {
-                val header = wordTranslation.copy().apply { isHeader = true }
-                updatedList.add(header)
-                previousVideoID = wordTranslation.videoID
-            }
-            updatedList.add(wordTranslation)
-        }
-        return updatedList
-    }
-     */
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         var parentView: View? = parent.parent as View
         while (parentView != null && parentView !is RecyclerView) {
@@ -59,7 +31,6 @@ class WordListAdapter(
         return WordWithTranslationViewHolder(
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.tile_word_with_translation, parent, false),
-            //this@WordListAdapter,
             nonNullParentAdapter
         )
     }
@@ -73,7 +44,7 @@ class WordListAdapter(
 
         val normalHolder = holder as WordWithTranslationViewHolder
         val nonNullParentAdapter = parentAdapter ?: throw IllegalArgumentException("Parent adapter is null") //TODO
-        val isSelected = nonNullParentAdapter.getSelectedItems().any { it.id == word.id }
+        val isSelected = nonNullParentAdapter.getChildSelectedItems().any { it.id == word.id }
         normalHolder.bind(word, isSelected)
     }
 

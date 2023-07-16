@@ -73,14 +73,14 @@ class WordListFragment : Fragment(), OnSelectChange {
             adapter.changeMode(isSelectionMode = false)
         }
         fragmentWordListBinding.deSelectAllMenu.setOnClickListener {
-            val isSelectAll = adapter.getSelectedItemsSize() == adapter.getItemListSize()
+            val isSelectAll = adapter.getChildSelectedItemsSize() == adapter.getChildItemListSize()
             if (isSelectAll)
                 adapter.deselectAll()
             else
                 adapter.selectAll()
         }
         fragmentWordListBinding.deleteMenu.setOnClickListener {
-            vm.deleteWords(selectedWords = adapter.getSelectedItems())
+            vm.deleteWords(selectedWords = adapter.getChildSelectedItems())
         }
         fragmentWordListBinding.editMenu.setOnClickListener {
             vm.editableWord = adapter.getEditableItem()

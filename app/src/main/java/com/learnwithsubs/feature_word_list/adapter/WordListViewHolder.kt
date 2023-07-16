@@ -9,14 +9,12 @@ import com.learnwithsubs.feature_word_list.model.WordTranslationWithTitle
 import com.learnwithsubs.feature_word_list.models.WordTranslation
 import java.util.Locale
 
-// Родительский класс для всех видео ViewHolder
 abstract class WordListViewHolder(
     itemView: View
 ) : RecyclerView.ViewHolder(itemView) {
     abstract fun bind(word: WordTranslation, isSelected: Boolean)
 }
 
-// ViewHolder для обычного видео
 class WordWithTranslationViewHolder(
     itemView: View,
     private val parentAdapter: WordListTitleAdapter,
