@@ -59,36 +59,23 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return result
     }
 
-    fun updateSelection(position: Int, id: Int?, isSelected: Boolean) {
-        var parentPos: Int? = null
-        for ((index, item) in itemList.withIndex()) {
-                val word = item.listWords.getOrNull(position)
-                if (word != null && word.id == id) {
-                    if (isSelected) {
-                        itemSelectedList[index].listWords.add(word)
-                        selectedWordsList.add(word)
-                    }
-                    else {
-                        itemSelectedList[index].listWords.removeIf {it.id == word.id}
-                        selectedWordsList.removeIf {it.id == word.id}
-                    }
-                    parentPos = index
-                    break
-                }
+    fun updateSelection(parentPosition: Int, position: Int, isSelected: Boolean) {
+        val word = itemList.getOrNull(parentPosition)?.listWords?.getOrNull(position) ?: return
+        if (isSelected) {
+            itemSelectedList[parentPosition].listWords.add(word)
+            selectedWordsList.add(word)
         }
-        if (parentPos != null) {
-            val isChecked = itemList[parentPos].listWords.size == itemSelectedList[parentPos].listWords.size
-            onSelectParentChangeListener?.onParentChange(position = parentPos, isChecked = isChecked)
+        else {
+            itemSelectedList[parentPosition].listWords.removeIf { it.id == word.id }
+            selectedWordsList.removeIf { it.id == word.id }
         }
+        val isChecked = itemList[parentPosition].listWords.size == itemSelectedList[parentPosition].listWords.size
+        onSelectParentChangeListener?.onParentChange(position = parentPosition, isChecked = isChecked)
+
         callbacks()
     }
 
     fun selectAll() {
-        /*
-        val newList = ArrayList<WordTranslationWithTitle>()
-        for (elem in itemList)
-            newList.add(WordTranslationWithTitle(elem.id, elem.title, ArrayList(elem.listWords)))
-         */
         val newList = itemList.map { it.copy(listWords = ArrayList(it.listWords)) }
         itemSelectedList = ArrayList(newList)
         selectedWordsList = ArrayList(wordsList)

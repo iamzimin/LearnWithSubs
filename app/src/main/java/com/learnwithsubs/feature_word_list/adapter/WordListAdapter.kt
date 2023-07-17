@@ -10,20 +10,17 @@ import com.learnwithsubs.SelectableAdapter
 import com.learnwithsubs.feature_word_list.models.WordTranslation
 
 class WordListAdapter(
-    override var itemList: ArrayList<WordTranslation>,
-    isSelectMode: Boolean,
-    private val parentAdapter: WordListTitleAdapter
-): SelectableAdapter<WordTranslation>(itemList) {
+    private var itemList: ArrayList<WordTranslation>,
+    private val parentAdapter: WordListTitleAdapter,
+    private val parentPosition: Int,
+): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-//    init {
-//        if (isSelectMode) super.changeMode(isSelectionMode = true)
-//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return WordWithTranslationViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.tile_word_with_translation, parent, false),
-            parentAdapter
+            LayoutInflater.from(parent.context).inflate(R.layout.tile_word_with_translation, parent, false),
+            parentAdapter,
+            parentPosition
         )
     }
 

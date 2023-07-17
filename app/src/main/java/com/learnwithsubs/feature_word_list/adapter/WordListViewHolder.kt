@@ -18,6 +18,7 @@ abstract class WordListViewHolder(
 class WordWithTranslationViewHolder(
     itemView: View,
     private val parentAdapter: WordListTitleAdapter,
+    private val parentPosition: Int,
 ) : WordListViewHolder(itemView), TextToSpeech.OnInitListener {
     private val binding = TileWordWithTranslationBinding.bind(itemView)
     private val tts: TextToSpeech = TextToSpeech(itemView.context, this)
@@ -42,7 +43,7 @@ class WordWithTranslationViewHolder(
                 if (parentAdapter.getIsSelectionMode()) {
                     val position = adapterPosition
                     binding.selectCheckBox.isChecked = !binding.selectCheckBox.isChecked
-                    parentAdapter.updateSelection(position = position, id = word.id, isSelected = binding.selectCheckBox.isChecked)
+                    parentAdapter.updateSelection(parentPosition = parentPosition ,position = position, isSelected = binding.selectCheckBox.isChecked)
                 }
             }
         })
@@ -52,7 +53,7 @@ class WordWithTranslationViewHolder(
 
             val position = adapterPosition
             binding.selectCheckBox.isChecked = !binding.selectCheckBox.isChecked
-            parentAdapter.updateSelection(position = position, id = word.id, isSelected = binding.selectCheckBox.isChecked)
+            parentAdapter.updateSelection(parentPosition = parentPosition, position = position, isSelected = binding.selectCheckBox.isChecked)
             if (!parentAdapter.getIsSelectionMode())
                 parentAdapter.changeMode(isSelectionMode = true)
             true

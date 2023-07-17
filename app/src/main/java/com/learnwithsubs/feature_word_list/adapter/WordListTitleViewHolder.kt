@@ -19,9 +19,10 @@ class WordTitleViewHolder(
     private val binding = ParentItemsBinding.bind(itemView)
 
     override fun bind(word: WordTranslationWithTitle, isSelected: Boolean) {
+        val parentPos = adapterPosition
         binding.title.text = word.title
         binding.selectCheckBox.isChecked = isSelected
-        val subAdapterItems = WordListAdapter(ArrayList(word.listWords), adapter.getIsSelectionMode(), adapter)
+        val subAdapterItems = WordListAdapter(ArrayList(word.listWords), adapter, parentPos)
         binding.recyclerWords.layoutManager = LinearLayoutManager(itemView.context)
         binding.recyclerWords.adapter = subAdapterItems
 
