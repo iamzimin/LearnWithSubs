@@ -96,7 +96,9 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
     fun selectAllChild(position: Int) {
         val title = itemList.getOrNull(position) ?: return
-        selectedWordsList.addAll(ArrayList(title.listWords))
+        selectedWordsList.addAll(title.listWords.filter { word ->
+            !selectedWordsList.any { it.id == word.id }
+        })
         itemSelectedList[position].listWords = ArrayList(title.listWords)
         callbacks()
     }
