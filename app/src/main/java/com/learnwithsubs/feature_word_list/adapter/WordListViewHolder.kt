@@ -49,13 +49,12 @@ class WordWithTranslationViewHolder(
         })
 
         itemView.setOnLongClickListener {
-            parentAdapter.changeMode(isSelectionMode = true)
-
             val position = adapterPosition
-            binding.selectCheckBox.isChecked = !binding.selectCheckBox.isChecked
-            parentAdapter.updateSelection(parentPosition = parentPosition, position = position, isSelected = binding.selectCheckBox.isChecked)
             if (!parentAdapter.getIsSelectionMode())
                 parentAdapter.changeMode(isSelectionMode = true)
+
+            binding.selectCheckBox.isChecked = !binding.selectCheckBox.isChecked
+            parentAdapter.updateSelection(parentPosition = parentPosition, position = position, isSelected = binding.selectCheckBox.isChecked)
             true
         }
 

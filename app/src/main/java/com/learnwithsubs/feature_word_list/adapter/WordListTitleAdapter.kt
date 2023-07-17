@@ -79,13 +79,12 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val newList = itemList.map { it.copy(listWords = ArrayList(it.listWords)) }
         itemSelectedList = ArrayList(newList)
         selectedWordsList = ArrayList(wordsList)
-        changeMode(isSelectionMode = true)
+        notifyDataSetChanged()
+        callbacks()
     }
     fun selectAllChild(position: Int) {
         val title = itemList.getOrNull(position) ?: return
-        selectedWordsList.addAll(title.listWords.filter { word ->
-            !selectedWordsList.any { it.id == word.id }
-        })
+        selectedWordsList.addAll(title.listWords.filter { word -> !selectedWordsList.any { it.id == word.id } })
         itemSelectedList[position].listWords = ArrayList(title.listWords)
         callbacks()
     }
