@@ -1,5 +1,5 @@
 package com.learnwithsubs
 
 interface OnSelectParentChange {
-    fun onParentChange(position: Int, isSelected: Boolean)
+    fun onParentChange(position: Int, isChecked: Boolean)
 }

@@ -13,6 +13,9 @@ import com.learnwithsubs.feature_word_list.models.WordTranslation
 class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var itemList = ArrayList<WordTranslationWithTitle>()
     private var itemSelectedList  = ArrayList<WordTranslationWithTitle>()
+
+    private var wordsList = ArrayList<WordTranslation>()
+    private var selectedWordsList = ArrayList<WordTranslation>()
     private var isSelectionMode = false
 
     private var onSelectChangeListener: OnSelectChange? = null
@@ -28,16 +31,17 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun updateData(newItemList: List<WordTranslation>) {
         val groupedList = ArrayList(groupWordTranslationsByVideo(newItemList))
-        itemSelectedList.clear()
+        itemSelectedList.clear(); selectedWordsList.clear()
         for (item in groupedList) {
             val newWordTranslationWithTitle = WordTranslationWithTitle(item.id, item.title, ArrayList())
-            itemSelectedList.add(newWordTranslationWithTitle.copy())
+            itemSelectedList.add(newWordTranslationWithTitle)
         }
 
         val diffResult = DiffUtil.calculateDiff(GenericDiffCallback(itemList, groupedList))
         itemList = ArrayList(groupedList)
+        wordsList = ArrayList(newItemList)
         diffResult.dispatchUpdatesTo(this@WordListTitleAdapter)
-        callbacks(groupedList)
+        callbacks()
     }
 
     private fun groupWordTranslationsByVideo(list: List<WordTranslation>): List<WordTranslationWithTitle> {
@@ -60,57 +64,71 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         for ((index, item) in itemList.withIndex()) {
                 val word = item.listWords.getOrNull(position)
                 if (word != null && word.id == id) {
-                    if (isSelected)
+                    if (isSelected) {
                         itemSelectedList[index].listWords.add(word)
-                    else
-                        itemSelectedList[index].listWords.remove(itemSelectedList[index].listWords.find { it.id == word.id })
+                        selectedWordsList.add(word)
+                    }
+                    else {
+                        itemSelectedList[index].listWords.removeIf {it.id == word.id}
+                        selectedWordsList.removeIf {it.id == word.id}
+                    }
                     parentPos = index
                     break
                 }
         }
         if (parentPos != null) {
-            val t = itemList[parentPos].listWords.size == itemSelectedList[parentPos].listWords.size
-            onSelectParentChangeListener?.onParentChange(position = parentPos, isSelected = t)
+            val isChecked = itemList[parentPos].listWords.size == itemSelectedList[parentPos].listWords.size
+            onSelectParentChangeListener?.onParentChange(position = parentPos, isChecked = isChecked)
         }
-        callbacks(itemList)
+        callbacks()
     }
 
     fun selectAll() {
-        itemSelectedList = ArrayList(itemList)
+        /*
+        val newList = ArrayList<WordTranslationWithTitle>()
+        for (elem in itemList)
+            newList.add(WordTranslationWithTitle(elem.id, elem.title, ArrayList(elem.listWords)))
+         */
+        val newList = itemList.map { it.copy(listWords = ArrayList(it.listWords)) }
+        itemSelectedList = ArrayList(newList)
+        selectedWordsList = ArrayList(wordsList)
         changeMode(isSelectionMode = true)
     }
     fun selectAllChild(position: Int) {
         val title = itemList.getOrNull(position) ?: return
+        selectedWordsList.addAll(ArrayList(title.listWords))
         itemSelectedList[position].listWords = ArrayList(title.listWords)
-        callbacks(this.itemList)
+        callbacks()
     }
     fun deselectAllChild(position: Int) {
         val title = itemSelectedList.getOrNull(position) ?: return
+        selectedWordsList.removeIf { word -> title.listWords.any { it.id == word.id } }
         title.listWords.clear()
-        callbacks(this.itemList)
+        callbacks()
     }
 
     fun deselectAll() {
-        for (elem in itemSelectedList)
-            elem.listWords.clear()
+        selectedWordsList.clear()
+        itemSelectedList.forEach { it.listWords.clear() }
         notifyDataSetChanged()
-        callbacks(this.itemList)
+        callbacks()
     }
 
     fun changeMode(isSelectionMode: Boolean) {
         this.isSelectionMode = isSelectionMode
         if (!isSelectionMode) {
+            selectedWordsList.clear()
             for (elem in itemSelectedList)
                 elem.listWords.clear()
         }
         notifyDataSetChanged()
-        callbacks(this.itemList)
+        callbacks()
     }
 
 
-    private fun callbacks(list: List<WordTranslationWithTitle>) {
-        val itemList = convert(list)
-        val selectedItems = convert(itemSelectedList)
+    private fun callbacks() {
+        val itemList = wordsList
+        val selectedItems = selectedWordsList
 
         if (itemList.isEmpty() && selectedItems.isEmpty()) {
             isSelectionMode = false
@@ -143,22 +161,23 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun getChildItemListSize(): Int {
-        return convert(itemList).size
+        return wordsList.size // convert(itemList).size
     }
     fun getChildSelectedItemsSize(): Int {
-        return convert(itemSelectedList).size
+        return selectedWordsList.size //convert(itemSelectedList).size
     }
     fun getChildSelectedItems(): List<WordTranslation> {
-        return convert(itemSelectedList)
+        return selectedWordsList //convert(itemSelectedList)
     }
     fun getEditableItem(): WordTranslation? {
-        val selected = convert(itemSelectedList)
+        val selected = selectedWordsList // convert(itemSelectedList)
         return if (selected.size == 1) selected.find { it.id == selected[0].id } //videoSelected[0].copy()
         else null
     }
     fun getIsSelectionMode(): Boolean {
         return isSelectionMode
     }
+    /*
     private fun convert(toConvert: List<WordTranslationWithTitle>) : List<WordTranslation> {
         val result = ArrayList<WordTranslation>()
         for (item in toConvert) {
@@ -166,6 +185,7 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
         return result
     }
+     */
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

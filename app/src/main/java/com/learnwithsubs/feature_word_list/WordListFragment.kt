@@ -11,15 +11,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewParent
 import android.view.Window
 import android.widget.CheckBox
 import androidx.cardview.widget.CardView
-import androidx.core.view.children
 import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.learnwithsubs.R
 import com.learnwithsubs.app.App
@@ -36,7 +33,6 @@ import com.learnwithsubs.feature_word_list.adapter.WordListTitleAdapter
 import com.learnwithsubs.feature_word_list.models.WordTranslation
 import com.learnwithsubs.feature_word_list.util.WordOrder
 import com.learnwithsubs.general.util.OrderType
-import java.text.FieldPosition
 import java.util.Date
 import javax.inject.Inject
 
@@ -296,10 +292,10 @@ class WordListFragment : Fragment(), OnSelectChange, OnSelectParentChange {
         changeCardVisibility(cardView = fragmentWordListBinding.deleteMenu, isVisible = true)
     }
 
-    override fun onParentChange(position: Int, isSelected: Boolean) {
+    override fun onParentChange(position: Int, isChecked: Boolean) {
         val view = fragmentWordListBinding.wordList[position] as ViewGroup
         val parentCheckBox: CheckBox? = findCheckBox(view)
-        parentCheckBox?.isChecked = isSelected
+        parentCheckBox?.isChecked = isChecked
     }
 
     private fun findCheckBox(viewGroup: ViewGroup): CheckBox? {

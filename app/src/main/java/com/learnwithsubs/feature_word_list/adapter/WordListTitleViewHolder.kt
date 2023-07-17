@@ -21,27 +21,18 @@ class WordTitleViewHolder(
     override fun bind(word: WordTranslationWithTitle, isSelected: Boolean) {
         binding.title.text = word.title
         binding.selectCheckBox.isChecked = isSelected
-        val subAdapterItems = WordListAdapter(ArrayList(word.listWords), adapter.getIsSelectionMode())
+        val subAdapterItems = WordListAdapter(ArrayList(word.listWords), adapter.getIsSelectionMode(), adapter)
         binding.recyclerWords.layoutManager = LinearLayoutManager(itemView.context)
         binding.recyclerWords.adapter = subAdapterItems
 
-        itemView.setOnClickListener (object : View.OnClickListener {
-            override fun onClick(p0: View?) {
-                if (adapter.getIsSelectionMode()) {
-                    val position = adapterPosition
-                    val isChecked = binding.selectCheckBox.isChecked
-                    if (isChecked)
-                        adapter.deselectAllChild(position)
-                    else
-                        adapter.selectAllChild(position)
-                    binding.recyclerWords.adapter = subAdapterItems
-                    binding.selectCheckBox.isChecked = isChecked == false
-                } else {
-                    binding.recyclerWords.visibility =
-                        if (binding.recyclerWords.isShown) View.GONE else View.VISIBLE
-                }
-            }
-        })
+        fun updateSelectionChild(position: Int, isChecked: Boolean) {
+            if (isChecked)
+                adapter.deselectAllChild(position)
+            else
+                adapter.selectAllChild(position)
+            binding.recyclerWords.adapter = subAdapterItems
+            binding.selectCheckBox.isChecked = isChecked == false
+        }
 
         if (adapter.getIsSelectionMode()) {
             binding.selectCheckBox.visibility = View.VISIBLE
@@ -51,26 +42,24 @@ class WordTitleViewHolder(
             binding.expandButton.visibility = View.VISIBLE
         }
 
-        /*
         itemView.setOnClickListener (object : View.OnClickListener {
             override fun onClick(p0: View?) {
+                val position = adapterPosition
                 if (adapter.getIsSelectionMode()) {
-                    val position = adapterPosition
-                    binding.selectCheckBox.isChecked = !binding.selectCheckBox.isChecked
-                    adapter.updateSelection(position = position, isSelected = binding.selectCheckBox.isChecked)
+                    updateSelectionChild(position = position, isChecked = binding.selectCheckBox.isChecked)
+                } else {
+                    binding.recyclerWords.visibility = if (binding.recyclerWords.isShown) View.GONE else View.VISIBLE
                 }
             }
         })
 
         itemView.setOnLongClickListener {
             val position = adapterPosition
-            binding.selectCheckBox.isChecked = !binding.selectCheckBox.isChecked
-            adapter.updateSelection(position = position, isSelected = binding.selectCheckBox.isChecked)
             if (!adapter.getIsSelectionMode())
                 adapter.changeMode(isSelectionMode = true)
+            updateSelectionChild(position = position, isChecked = binding.selectCheckBox.isChecked)
             true
         }
-         */
 
     }
 }
