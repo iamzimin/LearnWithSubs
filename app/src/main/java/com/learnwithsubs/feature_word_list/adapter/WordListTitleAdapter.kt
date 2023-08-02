@@ -3,10 +3,12 @@ package com.learnwithsubs.feature_word_list.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.learnwithsubs.OnSelectChange
 import com.learnwithsubs.OnSelectParentChange
 import com.learnwithsubs.R
+import com.learnwithsubs.databinding.ParentItemBinding
 import com.learnwithsubs.feature_word_list.model.WordTranslationWithTitle
 import com.learnwithsubs.feature_word_list.models.WordTranslation
 
@@ -17,6 +19,7 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var wordsList = ArrayList<WordTranslation>()
     private var selectedWordsList = ArrayList<WordTranslation>()
     private var isSelectionMode = false
+    //val childRecycler = ArrayList<WordListAdapter>()
 
     private var onSelectChangeListener: OnSelectChange? = null
     private var onSelectParentChangeListener: OnSelectParentChange? = null
@@ -24,9 +27,9 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var prevIsSelectOne = false
     private var prevIsSelectAll = false
 
-    fun setListener(onSelectChange: OnSelectChange, onSelectParentChange: OnSelectParentChange) {
-        onSelectChangeListener = onSelectChange
-        onSelectParentChangeListener = onSelectParentChange
+    fun setListener(onSelectChangeListener: OnSelectChange, onSelectParentChangeListener: OnSelectParentChange) {
+        this.onSelectChangeListener = onSelectChangeListener
+        this.onSelectParentChangeListener = onSelectParentChangeListener
     }
 
     fun updateData(newItemList: List<WordTranslation>) {
@@ -64,12 +67,11 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         if (isSelected) {
             itemSelectedList[parentPosition].listWords.add(word)
             selectedWordsList.add(word)
-        }
-        else {
+        } else {
             itemSelectedList[parentPosition].listWords.removeIf { it.id == word.id }
             selectedWordsList.removeIf { it.id == word.id }
         }
-        val isChecked = itemList[parentPosition].listWords.size == itemSelectedList[parentPosition].listWords.size
+        val isChecked = itemList[parentPosition].listWords.size == itemSelectedList[parentPosition].listWords.size //TODO
         onSelectParentChangeListener?.onParentChange(position = parentPosition, isChecked = isChecked)
 
         callbacks()
@@ -165,21 +167,12 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     fun getIsSelectionMode(): Boolean {
         return isSelectionMode
     }
-    /*
-    private fun convert(toConvert: List<WordTranslationWithTitle>) : List<WordTranslation> {
-        val result = ArrayList<WordTranslation>()
-        for (item in toConvert) {
-            result.addAll(item.listWords)
-        }
-        return result
-    }
-     */
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return WordTitleViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.parent_items, parent, false), this@WordListTitleAdapter
+                .inflate(R.layout.parent_item, parent, false), this@WordListTitleAdapter
         )
     }
 

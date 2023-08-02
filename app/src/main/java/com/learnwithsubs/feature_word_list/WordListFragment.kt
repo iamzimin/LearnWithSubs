@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,19 +14,21 @@ import android.view.Window
 import android.widget.CheckBox
 import androidx.cardview.widget.CardView
 import androidx.core.view.get
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.learnwithsubs.OnSelectChange
+import com.learnwithsubs.OnSelectParentChange
 import com.learnwithsubs.R
 import com.learnwithsubs.app.App
 import com.learnwithsubs.databinding.ActivityVideoListBinding
 import com.learnwithsubs.databinding.DialogWordListMenuEditBinding
+import com.learnwithsubs.databinding.DialogWordListMenuSortByBinding
 import com.learnwithsubs.databinding.FragmentWordListBinding
 import com.learnwithsubs.databinding.SearchViewBinding
 import com.learnwithsubs.feature_video_list.VideoListActivity
-import com.learnwithsubs.OnSelectChange
-import com.learnwithsubs.OnSelectParentChange
-import com.learnwithsubs.databinding.DialogWordListMenuSortByBinding
 import com.learnwithsubs.feature_word_list.adapter.WordListAdapter
 import com.learnwithsubs.feature_word_list.adapter.WordListTitleAdapter
 import com.learnwithsubs.feature_word_list.models.WordTranslation
@@ -188,9 +189,10 @@ class WordListFragment : Fragment(), OnSelectChange, OnSelectParentChange {
         val layoutManager = LinearLayoutManager(videoListActivity)
         fragmentWordListBinding.wordList.layoutManager = layoutManager
         fragmentWordListBinding.wordList.adapter = adapter
+        //fragmentWordListBinding.wordList.setHasFixedSize(true)
         val itemDecoration = WordListAdapter.RecyclerViewItemDecoration(16)
         fragmentWordListBinding.wordList.addItemDecoration(itemDecoration)
-        adapter.setListener(this@WordListFragment, this@WordListFragment)
+        adapter.setListener(this, this)
         (fragmentWordListBinding.wordList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
     }
 

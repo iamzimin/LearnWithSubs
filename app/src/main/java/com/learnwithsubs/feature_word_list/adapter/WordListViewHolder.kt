@@ -21,13 +21,13 @@ class WordWithTranslationViewHolder(
     private val parentPosition: Int,
 ) : WordListViewHolder(itemView), TextToSpeech.OnInitListener {
     private val binding = TileWordWithTranslationBinding.bind(itemView)
-    private val tts: TextToSpeech = TextToSpeech(itemView.context, this)
+    //private val tts: TextToSpeech = TextToSpeech(itemView.context, this)
 
     override fun bind(word: WordTranslation, isSelected: Boolean) {
         binding.word.text = word.word
         binding.translation.text = word.translation
         binding.selectCheckBox.isChecked = isSelected
-        tts.language = Locale(word.learnLanguage)
+        //tts.language = Locale(word.learnLanguage)
 
 
         if (parentAdapter.getIsSelectionMode()) {
@@ -59,7 +59,7 @@ class WordWithTranslationViewHolder(
         }
 
         binding.audioOutputWord.setOnClickListener {
-            tts.speak(binding.word.text, TextToSpeech.QUEUE_FLUSH, null, "")
+            //tts.speak(binding.word.text, TextToSpeech.QUEUE_FLUSH, null, "")
         }
 
     }

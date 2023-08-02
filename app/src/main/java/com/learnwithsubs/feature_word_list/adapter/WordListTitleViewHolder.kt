@@ -3,7 +3,7 @@ package com.learnwithsubs.feature_word_list.adapter
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.learnwithsubs.databinding.ParentItemsBinding
+import com.learnwithsubs.databinding.ParentItemBinding
 import com.learnwithsubs.feature_word_list.model.WordTranslationWithTitle
 
 abstract class WordListTitleViewHolder(
@@ -16,7 +16,7 @@ class WordTitleViewHolder(
     itemView: View,
     private val adapter: WordListTitleAdapter
 ) : WordListTitleViewHolder(itemView) {
-    private val binding = ParentItemsBinding.bind(itemView)
+    private val binding = ParentItemBinding.bind(itemView)
 
     override fun bind(word: WordTranslationWithTitle, isSelected: Boolean) {
         val parentPos = adapterPosition
@@ -31,7 +31,7 @@ class WordTitleViewHolder(
                 adapter.deselectAllChild(position)
             else
                 adapter.selectAllChild(position)
-            binding.recyclerWords.adapter = subAdapterItems
+            binding.recyclerWords.adapter = subAdapterItems //TODO
             binding.selectCheckBox.isChecked = isChecked == false
         }
 
