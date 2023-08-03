@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.learnwithsubs.OnSelectChange
-import com.learnwithsubs.OnSelectParentChange
 import com.learnwithsubs.R
 import com.learnwithsubs.app.App
 import com.learnwithsubs.databinding.ActivityVideoListBinding
@@ -37,7 +36,7 @@ import com.learnwithsubs.general.util.OrderType
 import java.util.Date
 import javax.inject.Inject
 
-class WordListFragment : Fragment(), OnSelectChange, OnSelectParentChange {
+class WordListFragment : Fragment(), OnSelectChange {
     @Inject
     lateinit var vmFactory: WordListViewModelFactory
     private lateinit var vm: WordListViewModel
@@ -192,7 +191,7 @@ class WordListFragment : Fragment(), OnSelectChange, OnSelectParentChange {
         //fragmentWordListBinding.wordList.setHasFixedSize(true)
         val itemDecoration = WordListAdapter.RecyclerViewItemDecoration(16)
         fragmentWordListBinding.wordList.addItemDecoration(itemDecoration)
-        adapter.setListener(this, this)
+        adapter.setListener(this)
         (fragmentWordListBinding.wordList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
     }
 
@@ -294,11 +293,11 @@ class WordListFragment : Fragment(), OnSelectChange, OnSelectParentChange {
         changeCardVisibility(cardView = fragmentWordListBinding.deleteMenu, isVisible = true)
     }
 
-    override fun onParentChange(position: Int, isChecked: Boolean) {
-        val view = fragmentWordListBinding.wordList[position] as ViewGroup
-        val parentCheckBox: CheckBox? = findCheckBox(view)
-        parentCheckBox?.isChecked = isChecked
-    }
+//    override fun onParentChange(position: Int, isChecked: Boolean) {
+//        val view = fragmentWordListBinding.wordList[position] as ViewGroup
+//        val parentCheckBox: CheckBox? = findCheckBox(view)
+//        parentCheckBox?.isChecked = isChecked
+//    }
 
     private fun findCheckBox(viewGroup: ViewGroup): CheckBox? {
         for (i in 0 until viewGroup.childCount) {

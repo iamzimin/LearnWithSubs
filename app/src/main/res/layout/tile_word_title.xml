@@ -1,38 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:cardBackgroundColor="?attr/background_video_tile_dark"
-    app:cardCornerRadius="20dp">
-
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="6dp"
-        android:paddingStart="15dp"
-        android:paddingEnd="5dp">
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:paddingEnd="30dp">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/video_name"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="17sp"
-                android:text="12312433444123"/>
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical"
+                    android:text="123123123"/>
+
+                <CheckBox
+                    android:id="@+id/select_check_box"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:background="@null"
+                    app:buttonTint="?attr/main_color"/>
+
+<!--                <ImageButton-->
+<!--                    android:id="@+id/expand_button"-->
+<!--                    style="@style/Widget.AppCompat.Button.Borderless"-->
+<!--                    android:visibility="gone"-->
+<!--                    android:clickable="false"-->
+<!--                    android:focusable="false"-->
+<!--                    android:layout_width="35dp"-->
+<!--                    android:layout_height="35dp"-->
+
+<!--                    android:padding="5dp"-->
+<!--                    android:scaleType="centerInside"-->
+
+<!--                    app:srcCompat="@drawable/expand_down"-->
+<!--                    app:tint="?attr/text_color" />-->
+
+            </LinearLayout>
+
         </LinearLayout>
 
-    </LinearLayout>
 
+    </com.google.android.material.card.MaterialCardView>
 
-
-</com.google.android.material.card.MaterialCardView>
+</LinearLayout>

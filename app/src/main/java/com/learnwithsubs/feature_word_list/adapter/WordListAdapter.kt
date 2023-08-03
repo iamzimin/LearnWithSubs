@@ -24,8 +24,7 @@ class WordListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return WordWithTranslationViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.tile_word_with_translation, parent, false),
-            parentAdapter,
-            parentPosition
+            parentAdapter
         )
     }
 
