@@ -35,15 +35,19 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     private fun sortAndAddTitles(list: List<WordTranslation>): List<WordList> {
-        val sortedList = list.sortedBy { it.videoName }
+        val sortedList = list.sortedBy { it.videoID }.reversed()
         val resultList = mutableListOf<WordList>()
 
-        var prevVideoName: String? = null
-        var id = -1
+        var prevVideoName: Int? = null
         for ((index, elem) in sortedList.withIndex()) {
-            if (elem.videoName != prevVideoName || index == 0) {
-                resultList.add(WordList.Title(id--, elem.videoName ?: "custom"))
-                prevVideoName = elem.videoName
+            if (elem.videoID != prevVideoName || index == 0) {
+                val title = itemList.filterIsInstance<WordList.Title>().find { it.videoID == elem.videoID }
+                if (title != null)
+                    resultList.add(WordList.Title(title.id, elem.videoName ?: "custom", elem.videoID))
+                else
+                    resultList.add(WordList.Title(elem.id?.times(-1), elem.videoName ?: "custom", elem.videoID))
+
+                prevVideoName = elem.videoID
             }
             resultList.add(WordList.Data(elem.id, elem))
         }
@@ -86,10 +90,10 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun selectAll() {
-        val copiedItemList = itemList.map { testData ->
-            when (testData) {
-                is WordList.Title -> WordList.Title(testData.id, testData.title)
-                is WordList.Data -> WordList.Data(testData.id, testData.data)
+        val copiedItemList = itemList.map {
+            when (it) {
+                is WordList.Title -> WordList.Title(it.id, it.title, it.videoID)
+                is WordList.Data -> WordList.Data(it.id, it.data)
             }
         }.toMutableList()
         itemSelectedList = ArrayList(copiedItemList)
