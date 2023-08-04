@@ -5,4 +5,6 @@ data class WordListUseCases(
     val loadWordUseCase: LoadWordUseCase,
     val deleteWordUseCase: DeleteWordUseCase,
     val sortWordListUseCases: SortWordListUseCase,
+    val filterWordListUseCase: FilterWordListUseCase,
+    val getWordsListSortedByVideoIdUseCase: GetWordsListSortedByVideoIdUseCase,
 )

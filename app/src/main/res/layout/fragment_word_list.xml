@@ -10,7 +10,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:orientation="horizontal"
         android:layout_marginTop="6dp">
 
@@ -24,19 +24,19 @@
             android:textColor="?attr/text_color"
             android:textSize="@dimen/section_name" />
 
-        <ImageButton
-            android:id="@+id/sort_by"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="50dp"
-            android:layout_height="45dp"
-            android:layout_gravity="end"
-            android:layout_alignParentEnd="true"
+<!--        <ImageButton-->
+<!--            android:id="@+id/sort_by"-->
+<!--            style="@style/Widget.AppCompat.Button.Borderless"-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="45dp"-->
+<!--            android:layout_gravity="end"-->
+<!--            android:layout_alignParentEnd="true"-->
 
-            android:padding="5dp"
-            android:scaleType="centerInside"
+<!--            android:padding="5dp"-->
+<!--            android:scaleType="centerInside"-->
 
-            app:srcCompat="@drawable/sort_by"
-            app:tint="?attr/text_color" />
+<!--            app:srcCompat="@drawable/sort_by"-->
+<!--            app:tint="?attr/text_color" />-->
 
     </RelativeLayout>
 

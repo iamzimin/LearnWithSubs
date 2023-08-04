@@ -15,6 +15,9 @@ interface WordListDao {
     @Query("SELECT * FROM WordTranslation")
     fun getWords(): Flow<List<WordTranslation>>
 
+    @Query("SELECT * FROM WordTranslation ORDER BY videoID")
+    fun getWordsSortedByVideoID(): Flow<List<WordTranslation>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWord(word: WordTranslation)
 

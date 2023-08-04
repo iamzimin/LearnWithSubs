@@ -69,7 +69,7 @@ class WordListFragment : Fragment(), OnSelectChange {
         vm.wordList.observe(videoListActivity) { wordList ->
             wordList ?: return@observe
             //val sorted = vm.getSortedVideoList(wordList = wordList)
-            adapter.updateData(ArrayList(wordList.toList())) //TODO вызывается несколько раз при переходе на фрагмент
+            adapter.updateData(ArrayList(wordList)) //TODO вызывается несколько раз при переходе на фрагмент
         }
 
         fragmentWordListBinding.closeSelectionMode.setOnClickListener{
@@ -93,9 +93,10 @@ class WordListFragment : Fragment(), OnSelectChange {
             vm.editableWord = null
             openEditMenu()
         }
+        /*
         fragmentWordListBinding.sortBy.setOnClickListener {
             openSortByMenu()
-        }
+        }*/
 
         searchViewBinding.searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -110,6 +111,8 @@ class WordListFragment : Fragment(), OnSelectChange {
         return fragmentWordListBinding.root
     }
 
+
+    /*
     private fun openSortByMenu() {
         val sortByDialog = Dialog(videoListActivity)
         sortByDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -127,11 +130,12 @@ class WordListFragment : Fragment(), OnSelectChange {
             ) else videoListActivity.applicationContext.getColor(R.color.button_pressed))
         }
 
-        sortByDialogBinding.alphabetCheckBox.isChecked = vm.getVideoOrder() is WordOrder.Alphabet
-        sortByDialogBinding.dateCheckBox.isChecked = vm.getVideoOrder() is WordOrder.Date
-        sortByDialogBinding.videoCheckBox.isChecked = vm.getVideoOrder() is WordOrder.Video
-
         val sortType = vm.getVideoOrder()
+
+        sortByDialogBinding.alphabetCheckBox.isChecked = sortType is WordOrder.Alphabet
+        sortByDialogBinding.dateCheckBox.isChecked = sortType is WordOrder.Date
+        sortByDialogBinding.videoCheckBox.isChecked = sortType is WordOrder.Video
+
         setButtonColors(ascending = sortType.orderType is OrderType.Ascending)
 
         sortByDialogBinding.ascending.setOnClickListener {
@@ -179,16 +183,13 @@ class WordListFragment : Fragment(), OnSelectChange {
         sortByDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         sortByDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         sortByDialog.window?.setGravity(Gravity.BOTTOM)
-    }
-
-
+    }*/
 
 
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(videoListActivity)
         fragmentWordListBinding.wordList.layoutManager = layoutManager
         fragmentWordListBinding.wordList.adapter = adapter
-        //fragmentWordListBinding.wordList.setHasFixedSize(true)
         val itemDecoration = WordListAdapter.RecyclerViewItemDecoration(16)
         fragmentWordListBinding.wordList.addItemDecoration(itemDecoration)
         adapter.setListener(this)

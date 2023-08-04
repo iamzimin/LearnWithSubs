@@ -11,6 +11,10 @@ class WordListRepositoryImpl(
         return wordListDao.getWords()
     }
 
+    override fun getWordsSortedByVideoID(): Flow<List<WordTranslation>> {
+        return wordListDao.getWordsSortedByVideoID()
+    }
+
     override suspend fun insertWord(word: WordTranslation) {
         wordListDao.insertWord(word = word)
     }

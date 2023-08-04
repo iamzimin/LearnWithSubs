@@ -2,7 +2,9 @@ package com.learnwithsubs.feature_word_list.di
 
 import com.learnwithsubs.feature_word_list.repository.WordListRepository
 import com.learnwithsubs.feature_word_list.usecase.DeleteWordUseCase
+import com.learnwithsubs.feature_word_list.usecase.FilterWordListUseCase
 import com.learnwithsubs.feature_word_list.usecase.GetWordListUseCase
+import com.learnwithsubs.feature_word_list.usecase.GetWordsListSortedByVideoIdUseCase
 import com.learnwithsubs.feature_word_list.usecase.LoadWordUseCase
 import com.learnwithsubs.feature_word_list.usecase.SortWordListUseCase
 import com.learnwithsubs.feature_word_list.usecase.WordListUseCases
@@ -23,6 +25,8 @@ class WordListDomainModule {
             loadWordUseCase = LoadWordUseCase(wordListRepository),
             deleteWordUseCase = DeleteWordUseCase(wordListRepository),
             sortWordListUseCases = SortWordListUseCase(),
+            filterWordListUseCase = FilterWordListUseCase(),
+            getWordsListSortedByVideoIdUseCase = GetWordsListSortedByVideoIdUseCase(wordListRepository),
         )
     }
 }

@@ -9,14 +9,14 @@ class SortWordListUseCase {
         val sorted = when (sortMode.orderType) {
             is OrderType.Ascending -> {
                 when (sortMode) {
-                    is WordOrder.Video -> wordList.sortedBy { it.videoName?.lowercase() }
-                    is WordOrder.Alphabet -> wordList.sortedBy { it.translation.lowercase() }
+                    is WordOrder.Video -> wordList.sortedBy { it.videoID }
+                    is WordOrder.Alphabet -> wordList.sortedBy { it.translation.lowercase() } // is WordOrder.Alphabet -> wordList.sortedWith(compareBy({ it.videoID }, { it.translation.lowercase() }))
                     is WordOrder.Date -> wordList.sortedBy { it.timestamp }
                 }
             }
             is OrderType.Descending -> {
                 when (sortMode) {
-                    is WordOrder.Video -> wordList.sortedByDescending { it.videoName?.lowercase() }
+                    is WordOrder.Video -> wordList.sortedByDescending { it.videoID }
                     is WordOrder.Alphabet -> wordList.sortedByDescending { it.translation.lowercase() }
                     is WordOrder.Date -> wordList.sortedByDescending { it.timestamp }
                 }
