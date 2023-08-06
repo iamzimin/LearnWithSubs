@@ -7,12 +7,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.learnwithsubs.OnSelectChange
 import com.learnwithsubs.R
 import com.learnwithsubs.feature_word_list.model.WordList
+import com.learnwithsubs.feature_word_list.model.WordTitle
+import com.learnwithsubs.feature_word_list.model.WordManager
 import com.learnwithsubs.feature_word_list.models.WordTranslation
 
 class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var itemList = ArrayList<WordList>()
-    private var selectedTitle = ArrayList<WordList.Title>()
-    private var selectedWord = ArrayList<WordList.Data>()
+
+    private var items = WordManager()
+    private var selectedItems = WordManager()
 
     private var isSelectionMode = false
 
@@ -36,108 +39,83 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     private fun sortAndAddTitles(list: List<WordTranslation>): List<WordList> {
+        val groupedMap = list.groupBy { it.videoID }
+
+        items = WordManager()
+        selectedItems = WordManager()
+        for ((videoID, translations) in groupedMap) {
+            val videoName = translations.firstOrNull()?.videoName ?: "custom"
+            items.addTitle(WordTitle(videoID?.times(-1), videoName, ArrayList(translations)))
+            selectedItems.addTitle(WordTitle(videoID?.times(-1), videoName, ArrayList()))
+        }
+
         val resultList = mutableListOf<WordList>()
-
-        var prevVideoName: Int? = null
-        for ((index, elem) in list.withIndex()) {
-            if (elem.videoID != prevVideoName || index == 0) {
-                val title = itemList.filterIsInstance<WordList.Title>().find { it.videoID == elem.videoID }
-                if (title != null)
-                    resultList.add(WordList.Title(title.id, elem.videoName ?: "custom", elem.videoID))
-                else
-                    resultList.add(WordList.Title(elem.id?.times(-1), elem.videoName ?: "custom", elem.videoID))
-
-                prevVideoName = elem.videoID
+        for (data in items.getList()) {
+            val elem = data.wordList.getOrNull(0)
+            resultList.add(WordList.Title(data.id, elem?.videoName ?: "custom", elem?.videoID))
+            for (word in data.wordList) {
+                resultList.add(WordList.Data(word.id, word))
             }
-            resultList.add(WordList.Data(elem.id, elem))
         }
 
         return resultList
+    }
+    
+    private fun dimensional1To2(goal: Int): Int {
+        var index = 0
+        for ((id, elem) in items.getList().withIndex()) {
+            index += elem.wordList.size + 1
+            if (index > goal)
+                return id
+        }
+        val q = ""
+        return items.getListSize() - 1
+    }
+
+    private fun getParentTileId(Xindex: Int): Int {
+        var index = 0
+        val list = items.getList()
+        for (i in 0 until Xindex) {
+            index += list[i].wordList.size + 1
+        }
+        return index
     }
 
     fun updateSelection(position: Int, isSelected: Boolean) {
         val word = itemList.getOrNull(position) as? WordList.Data ?: return
 
+        val index = dimensional1To2(goal = position)
         if (isSelected)
-            selectedWord.add(word)
+            selectedItems.addWord(elem = word.data, index = index)
         else
-            selectedWord.removeIf { it.id == word.id }
+            selectedItems.removeWord(elem = word.data, index = index)
 
-        val originalCount = itemList.count { item ->
-            if (item is WordList.Data) {
-                item.data.videoID == word.data.videoID
-            } else false
-        }
-        val selectedCount = selectedWord.count { item ->
-            item.data.videoID == word.data.videoID
-        }
-
-        var pos = position - 1
-        while (pos > 0) {
-            when (itemList[pos]) {
-                is WordList.Data -> pos--
-                is WordList.Title -> break
-            }
-        }
-        val title = itemList[pos] as? WordList.Title ?: return
-
-        if (originalCount == selectedCount) selectedTitle.add(title)
-        else selectedTitle.removeIf { it.id == title.id }
+        val pos = getParentTileId(Xindex = index)
         notifyItemChanged(pos)
 
         callbacks()
     }
 
     fun selectAll() {
-        val selectedT: MutableList<WordList.Title> = ArrayList()
-        val selectedW: MutableList<WordList.Data> = ArrayList()
-        itemList.forEach {
-            when (it) {
-                is WordList.Title -> selectedT.add(WordList.Title(it.id, it.title, it.videoID))
-                is WordList.Data -> selectedW.add(WordList.Data(it.id, it.data))
-            }
-        }
-        selectedTitle = ArrayList(selectedT)
-        selectedWord = ArrayList(selectedW)
+        selectedItems.setData(list = items.getList())
         notifyDataSetChanged()
         callbacks()
     }
     fun selectAllChild(position: Int) {
-        val title = itemList[position] as? WordList.Title ?: return
-        selectedTitle.add(title)
+        val index = dimensional1To2(goal = position)
+        val tile = items.getTitle(index)
+        selectedItems.updateTitle(elem = tile, index = index)
 
-        var currentIndex = position + 1
-        while (currentIndex < itemList.size) {
-            when (val testData = itemList[currentIndex]) {
-                is WordList.Data -> {
-                    if (!selectedWord.any { it.id == testData.id })
-                        selectedWord.add(testData)
-                    currentIndex++
-                }
-                is WordList.Title -> break
-            }
-        }
-        notifyItemRangeChanged(position, currentIndex)
+        notifyItemRangeChanged(position, selectedItems.getTitle(index).wordList.size + 1)
         callbacks()
     }
     fun deselectAllChild(position: Int) {
-        val title = itemList[position] as? WordList.Title ?: return
-        selectedTitle.removeIf { it.id == title.id }
+        val index = dimensional1To2(goal = position)
+        selectedItems.removeTitle(index = index)
 
-        var currentIndex = position + 1
-        while (currentIndex < itemList.size) {
-            when (val testData = itemList[currentIndex]) {
-                is WordList.Data -> {
-                    selectedWord.removeIf{ it.id == testData.id}
-                    currentIndex++
-                }
-                is WordList.Title -> break
-            }
-        }
-        notifyItemRangeChanged(position, currentIndex)
+        notifyItemRangeChanged(position, items.getTitle(index).wordList.size + 1)
         callbacks()
     }
-
     fun deselectAll() {
         clearSelectionList()
         notifyDataSetChanged()
@@ -153,15 +131,14 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     private fun clearSelectionList() {
-        selectedWord.clear(); selectedTitle.clear()
+        selectedItems.clearWords()
     }
 
-
     private fun callbacks() {
-        val itemList = itemList
-        val selectedItems = selectedWord
+        val itemList = items.getWordsList()
+        val selectedList = selectedItems.getWordsList()
 
-        if (itemList.isEmpty() && selectedItems.isEmpty()) {
+        if (itemList.isEmpty() && selectedList.isEmpty()) {
             isSelectionMode = false
         }
 
@@ -172,43 +149,42 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         if (!isSelectionMode) return
 
-        if (selectedItems.isEmpty())
+        if (selectedList.isEmpty())
             onSelectChangeListener?.onZeroSelect()
-        else if (itemList.size == selectedItems.size)
+        else if (itemList.size == selectedList.size)
             onSelectChangeListener?.onSelectAll()
         else if (prevIsSelectAll)
             onSelectChangeListener?.onDeselectAll()
         else
             onSelectChangeListener?.onSomeSelect()
 
-        prevIsSelectAll = itemList.size == selectedItems.size
+        prevIsSelectAll = itemList.size == selectedList.size
 
-        if (selectedItems.size == 1)
+        if (selectedList.size == 1)
             onSelectChangeListener?.onSingleSelected()
         else if (prevIsSelectOne)
             onSelectChangeListener?.onNotSingleSelected()
 
-        prevIsSelectOne = selectedItems.size == 1
+        prevIsSelectOne = selectedList.size == 1
     }
 
     fun getChildItemListSize(): Int {
-        return itemList.size
+        return items.getWordsListSize()
     }
     fun getChildSelectedItemsSize(): Int {
-        return selectedWord.size
+        return selectedItems.getWordsListSize()
     }
     fun getChildSelectedItems(): List<WordTranslation> {
         val selected = ArrayList<WordTranslation>()
-        for (elem in selectedWord) {
-            selected.add(elem.data)
+        for (elem in selectedItems.getWordsList()) {
+            selected.add(elem)
         }
         return selected
     }
     fun getEditableItem(): WordTranslation? {
-        val selected = selectedWord
+        val selected = selectedItems.getWordsList()
         return if (selected.size == 1) {
-            val test = selected.find { it.id == selected[0].id }
-            test?.data
+            return selected.find { it.id == selected[0].id }
         } else null
     }
     fun getIsSelectionMode(): Boolean {
@@ -234,13 +210,14 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         when (val elem = itemList[position]) {
             is WordList.Title ->  {
                 val normalHolder = holder as WordTitleViewHolder
-                val isSelected = selectedTitle.any { it.id == elem.id }
+                val id = dimensional1To2(goal = position)
+                val isSelected = items.getTitleSize(id) == selectedItems.getTitleSize(id)
                 val title = itemList[position] as WordList.Title
                 normalHolder.bind(title.title, isSelected)
             }
             is WordList.Data -> {
                 val normalHolder = holder as WordWithTranslationViewHolder
-                val isSelected = selectedWord.any { it.id == elem.id }
+                val isSelected = selectedItems.getWordsList().any { it.id == elem.id }
                 val data = itemList[position] as WordList.Data
                 normalHolder.bind(data.data, isSelected)
             }

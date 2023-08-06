@@ -70,6 +70,8 @@ class VideoViewViewModel @Inject constructor(
     fun saveWord(word: WordTranslation) {
         viewModelScope.launch {
             videoViewUseCases.saveWordUseCase.invoke(word = word)
+            val vid = currentVideo ?: return@launch
+            videoViewUseCases.updateVideoUseCase.invoke(video = vid.apply { saveWords++ })
         }
     }
 
