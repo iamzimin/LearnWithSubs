@@ -44,7 +44,7 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         items = WordManager()
         selectedItems = WordManager()
         for ((videoID, translations) in groupedMap) {
-            val videoName = translations.firstOrNull()?.videoName ?: "custom"
+            val videoName = translations.firstOrNull()?.videoName
             items.addTitle(WordTitle(videoID?.times(-1), videoName, ArrayList(translations)))
             selectedItems.addTitle(WordTitle(videoID?.times(-1), videoName, ArrayList()))
         }
@@ -52,7 +52,7 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val resultList = mutableListOf<WordList>()
         for (data in items.getList()) {
             val elem = data.wordList.getOrNull(0)
-            resultList.add(WordList.Title(data.id, elem?.videoName ?: "custom", elem?.videoID))
+            resultList.add(WordList.Title(data.id, elem?.videoName, elem?.videoID))
             for (word in data.wordList) {
                 resultList.add(WordList.Data(word.id, word))
             }
@@ -68,7 +68,6 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             if (index > goal)
                 return id
         }
-        val q = ""
         return items.getListSize() - 1
     }
 

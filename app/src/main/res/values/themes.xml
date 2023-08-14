@@ -46,5 +46,9 @@
         <!--Bottom Menu-->
         <item name="bottom_navigation_default">@color/bottom_navigation_default</item>
 
+        <!--Word List-->
+        <item name="word_title_background_dark">@color/word_title_background_dark</item>
+
+
     </style>
 </resources>

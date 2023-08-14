@@ -49,4 +49,7 @@
     <!--Bottom Menu-->
     <color name="bottom_navigation_default">#ACABB2</color>
 
+    <!--Word List-->
+    <color name="word_title_background_dark">#141928</color>
+
 </resources>

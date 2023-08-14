@@ -29,4 +29,7 @@
     <!--Bottom Menu-->
     <attr name="bottom_navigation_default"/>
 
+    <!--Word List-->
+    <attr name="word_title_background_dark"/>
+
 </resources>

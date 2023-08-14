@@ -86,7 +86,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
             openSortByMenu()
         }
         videoListFragmentBinding.closeSelectionMode.setOnClickListener{
-            adapter.changeMode(isSelectionMode = false) //adapter.clearSelection()
+            adapter.changeMode(isSelectionMode = false)
         }
         searchViewBinding.searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -131,7 +131,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
         }
 
         vm.errorTypeLiveData.value = null
-        vm.errorTypeLiveData.observe(videoListActivity) { video ->
+        vm.errorTypeLiveData.observe(viewLifecycleOwner) { video ->
             if (video == null) return@observe
             val errorType = video.errorType ?: return@observe
             when (errorType) {
@@ -144,13 +144,13 @@ class VideoListFragment : Fragment(), OnSelectChange {
             vm.deleteVideo(video = video)
         }
 
-        vm.videoList.observe(videoListActivity) { videoList ->
+        vm.videoList.observe(viewLifecycleOwner) { videoList ->
             videoList ?: return@observe
             val sorted = vm.getSortedVideoList(videoList = videoList)
             adapter.updateData(ArrayList(sorted.toList()))
         }
 
-        vm.videoProgressLiveData.observe(videoListActivity) { videoProgress ->
+        vm.videoProgressLiveData.observe(viewLifecycleOwner) { videoProgress ->
             if (videoProgress != null)
                 adapter.updateItem(videoProgress.copy())
         }
@@ -264,7 +264,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
             sortByDialog.dismiss()
         }
 
-        vm.videoOrder.observe(videoListActivity) { sortMode ->
+        vm.videoOrder.observe(viewLifecycleOwner) { sortMode ->
             sortByDialogBinding.nameCheckBox.isChecked = sortMode is VideoOrder.Name
             sortByDialogBinding.dateCheckBox.isChecked = sortMode is VideoOrder.Date
             sortByDialogBinding.durationCheckBox.isChecked = sortMode is VideoOrder.Duration

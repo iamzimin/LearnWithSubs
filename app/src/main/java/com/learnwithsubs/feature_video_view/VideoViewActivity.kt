@@ -335,8 +335,8 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
         }
         vm.translatorTranslationLiveData.observe(this@VideoViewActivity) { transl ->
             transl ?: Toast.makeText(this.applicationContext, R.string.yandex_service_is_not_available, Toast.LENGTH_SHORT).show()
-            val test = transl ?: return@observe
-            translateDialogBind.outputWord.setText(test)
+            val text = transl ?: return@observe
+            translateDialogBind.outputWord.setText(text)
             translateDialogBind.outputWord.clearFocus()
         }
     }

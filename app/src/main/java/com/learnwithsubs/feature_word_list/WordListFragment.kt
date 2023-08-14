@@ -1,6 +1,7 @@
 package com.learnwithsubs.feature_word_list
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -12,9 +13,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.CheckBox
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +32,7 @@ import com.learnwithsubs.databinding.DialogWordListMenuSortByBinding
 import com.learnwithsubs.databinding.FragmentWordListBinding
 import com.learnwithsubs.databinding.SearchViewBinding
 import com.learnwithsubs.feature_video_list.VideoListActivity
+import com.learnwithsubs.feature_video_list.models.Video
 import com.learnwithsubs.feature_word_list.adapter.WordListAdapter
 import com.learnwithsubs.feature_word_list.adapter.WordListTitleAdapter
 import com.learnwithsubs.feature_word_list.models.WordTranslation
@@ -66,10 +71,9 @@ class WordListFragment : Fragment(), OnSelectChange {
         (videoListActivity.applicationContext as App).wordListAppComponent.inject(this)
         vm = ViewModelProvider(this, vmFactory)[WordListViewModel::class.java]
 
-        vm.wordList.observe(videoListActivity) { wordList ->
+        vm.wordList.observe(viewLifecycleOwner) { wordList ->
             wordList ?: return@observe
-            //val sorted = vm.getSortedVideoList(wordList = wordList)
-            adapter.updateData(ArrayList(wordList)) //TODO вызывается несколько раз при переходе на фрагмент
+            adapter.updateData(ArrayList(wordList))
         }
 
         fragmentWordListBinding.closeSelectionMode.setOnClickListener{
@@ -112,85 +116,11 @@ class WordListFragment : Fragment(), OnSelectChange {
     }
 
 
-    /*
-    private fun openSortByMenu() {
-        val sortByDialog = Dialog(videoListActivity)
-        sortByDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        val dialogView = sortByDialogBinding.root
-        val parentView = dialogView.parent as? ViewGroup
-        parentView?.removeView(dialogView)
-        sortByDialog.setContentView(dialogView)
-
-        fun setButtonColors(ascending: Boolean) {
-            sortByDialogBinding.ascending.setBackgroundColor(if (ascending) videoListActivity.applicationContext.getColor(
-                R.color.button_pressed
-            ) else videoListActivity.applicationContext.getColor(R.color.button_normal))
-            sortByDialogBinding.descending.setBackgroundColor(if (ascending) videoListActivity.applicationContext.getColor(
-                R.color.button_normal
-            ) else videoListActivity.applicationContext.getColor(R.color.button_pressed))
-        }
-
-        val sortType = vm.getVideoOrder()
-
-        sortByDialogBinding.alphabetCheckBox.isChecked = sortType is WordOrder.Alphabet
-        sortByDialogBinding.dateCheckBox.isChecked = sortType is WordOrder.Date
-        sortByDialogBinding.videoCheckBox.isChecked = sortType is WordOrder.Video
-
-        setButtonColors(ascending = sortType.orderType is OrderType.Ascending)
-
-        sortByDialogBinding.ascending.setOnClickListener {
-            setButtonColors(ascending = true)
-            vm.setOrderType(newOrderType = OrderType.Ascending)
-            val currentVideoOrder = vm.getVideoOrder()
-            vm.setVideoOrder(currentVideoOrder)
-        }
-
-        sortByDialogBinding.descending.setOnClickListener {
-            setButtonColors(ascending = false)
-            vm.setOrderType(newOrderType = OrderType.Descending)
-            val currentVideoOrder = vm.getVideoOrder()
-            vm.setVideoOrder(currentVideoOrder)
-        }
-
-        sortByDialogBinding.cardViewAlphabet.setOnClickListener {
-            val currentOrderType = vm.getOrderType()
-            vm.setVideoOrder(WordOrder.Alphabet(currentOrderType))
-        }
-        sortByDialogBinding.cardViewDate.setOnClickListener {
-            val currentOrderType = vm.getOrderType()
-            vm.setVideoOrder(WordOrder.Date(currentOrderType))
-        }
-        sortByDialogBinding.cardViewVideo.setOnClickListener {
-            val currentOrderType = vm.getOrderType()
-            vm.setVideoOrder(WordOrder.Video(currentOrderType))
-        }
-
-        sortByDialogBinding.clearButton.setOnClickListener {
-            vm.setVideoOrder(WordListViewModel.DEFAULT_SORT_MODE)
-        }
-        sortByDialogBinding.applyButton.setOnClickListener {
-            vm.updateVideoList()
-            sortByDialog.dismiss()
-        }
-
-        vm.wordOrder.observe(videoListActivity) { sortMode ->
-            sortByDialogBinding.alphabetCheckBox.isChecked = sortMode is WordOrder.Alphabet
-            sortByDialogBinding.dateCheckBox.isChecked = sortMode is WordOrder.Date
-            sortByDialogBinding.videoCheckBox.isChecked = sortMode is WordOrder.Video
-        }
-
-        sortByDialog.show()
-        sortByDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        sortByDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        sortByDialog.window?.setGravity(Gravity.BOTTOM)
-    }*/
-
-
     private fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(videoListActivity)
         fragmentWordListBinding.wordList.layoutManager = layoutManager
         fragmentWordListBinding.wordList.adapter = adapter
-        val itemDecoration = WordListAdapter.RecyclerViewItemDecoration(16)
+        val itemDecoration = WordListAdapter.RecyclerViewItemDecoration(0)
         fragmentWordListBinding.wordList.addItemDecoration(itemDecoration)
         adapter.setListener(this)
         (fragmentWordListBinding.wordList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
@@ -292,27 +222,6 @@ class WordListFragment : Fragment(), OnSelectChange {
 
     override fun onSomeSelect() {
         changeCardVisibility(cardView = fragmentWordListBinding.deleteMenu, isVisible = true)
-    }
-
-//    override fun onParentChange(position: Int, isChecked: Boolean) {
-//        val view = fragmentWordListBinding.wordList[position] as ViewGroup
-//        val parentCheckBox: CheckBox? = findCheckBox(view)
-//        parentCheckBox?.isChecked = isChecked
-//    }
-
-    private fun findCheckBox(viewGroup: ViewGroup): CheckBox? {
-        for (i in 0 until viewGroup.childCount) {
-            val child = viewGroup.getChildAt(i)
-            if (child is CheckBox) {
-                return child
-            } else if (child is ViewGroup) {
-                val checkBox = findCheckBox(child)
-                if (checkBox != null) {
-                    return checkBox
-                }
-            }
-        }
-        return null
     }
 
 }

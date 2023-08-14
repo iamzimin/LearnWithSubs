@@ -12,6 +12,7 @@ import com.learnwithsubs.feature_video_list.repository.VideoTranscodeRepository
 import com.learnwithsubs.feature_video_list.usecase.VideoListUseCases
 import com.learnwithsubs.general.util.OrderType
 import com.learnwithsubs.feature_video_list.util.VideoOrder
+import com.learnwithsubs.feature_word_list.models.WordTranslation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch

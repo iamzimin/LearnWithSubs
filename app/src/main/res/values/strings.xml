@@ -81,5 +81,7 @@
 
     <string name="submenu">Submenu</string>
 
+    <string name="custom">Custom</string>
+
 
 </resources>

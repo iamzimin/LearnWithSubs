@@ -6,58 +6,40 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="?attr/word_title_background_dark"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp">
+                android:layout_marginVertical="7dp"
+                android:layout_marginHorizontal="10dp">
 
                 <TextView
                     android:id="@+id/title"
                     android:layout_width="0dp"
-                    android:layout_height="35dp"
+                    android:layout_height="25dp"
                     android:layout_weight="1"
                     android:layout_gravity="center"
                     android:gravity="center_vertical"
+                    android:maxLines="1"
                     android:text="123123123"/>
 
                 <CheckBox
                     android:id="@+id/select_check_box"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:clickable="false"
                     android:focusable="false"
                     android:background="@null"
                     app:buttonTint="?attr/main_color"/>
 
-<!--                <ImageButton-->
-<!--                    android:id="@+id/expand_button"-->
-<!--                    style="@style/Widget.AppCompat.Button.Borderless"-->
-<!--                    android:visibility="gone"-->
-<!--                    android:clickable="false"-->
-<!--                    android:focusable="false"-->
-<!--                    android:layout_width="35dp"-->
-<!--                    android:layout_height="35dp"-->
-
-<!--                    android:padding="5dp"-->
-<!--                    android:scaleType="centerInside"-->
-
-<!--                    app:srcCompat="@drawable/expand_down"-->
-<!--                    app:tint="?attr/text_color" />-->
-
             </LinearLayout>
 
         </LinearLayout>
 
-
-    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>
