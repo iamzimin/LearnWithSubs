@@ -107,7 +107,8 @@ class WordListFragment : Fragment(), OnSelectChange {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (adapter.getIsSelectionMode()) return
                 vm.setFilterMode(filter = s.toString())
-                vm.updateVideoList()
+                val data = vm.wordList.value ?: return
+                adapter.updateData(ArrayList(vm.filterVideoList(data)))
             }
             override fun afterTextChanged(s: Editable?) {}
         })

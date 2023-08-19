@@ -1,5 +1,6 @@
 package com.learnwithsubs.feature_video_list.videos
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,6 +16,7 @@ import com.learnwithsubs.feature_video_list.util.VideoOrder
 import com.learnwithsubs.feature_word_list.models.WordTranslation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.withContext
@@ -28,7 +30,9 @@ class VideoListViewModel @Inject constructor(
     val videoTranscodeRepository: VideoTranscodeRepository
 ) : ViewModel() {
 
-    val videoList = MediatorLiveData<List<Video>?>()
+    //private val videoListFlow: Flow<List<Video>> = videoListUseCases.getVideoListUseCase.invoke()
+    val videoList = videoListUseCases.getVideoListUseCase.invoke().asLiveData(viewModelScope.coroutineContext)
+
     var videoOrder: MutableLiveData<VideoOrder> = MutableLiveData<VideoOrder>().apply { value = DEFAULT_SORT_MODE }
     private var filter: String? = null
     var editableVideo: Video? = null
@@ -42,16 +46,6 @@ class VideoListViewModel @Inject constructor(
 
     companion object {
         val DEFAULT_SORT_MODE: VideoOrder = VideoOrder.Date(OrderType.Descending)
-    }
-
-    init {
-        updateVideoList()
-    }
-
-    fun updateVideoList() {
-        videoList.addSource(videoListUseCases.getVideoListUseCase.invoke().asLiveData()) { list ->
-            videoList.value = getSortedVideoList(videoList = ArrayList(list))
-        }
     }
 
     fun getSortedVideoList(videoList: List<Video>): List<Video> {

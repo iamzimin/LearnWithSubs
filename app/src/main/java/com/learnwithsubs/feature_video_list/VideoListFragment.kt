@@ -93,7 +93,8 @@ class VideoListFragment : Fragment(), OnSelectChange {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (adapter.getIsSelectionMode()) return
                 vm.setFilterMode(filter = s.toString())
-                vm.updateVideoList()
+                val data = vm.videoList.value ?: return
+                adapter.updateData(ArrayList(vm.getSortedVideoList(data)))
             }
             override fun afterTextChanged(s: Editable?) {}
         })
@@ -146,8 +147,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
 
         vm.videoList.observe(viewLifecycleOwner) { videoList ->
             videoList ?: return@observe
-            val sorted = vm.getSortedVideoList(videoList = videoList)
-            adapter.updateData(ArrayList(sorted.toList()))
+            adapter.updateData(ArrayList(videoList))
         }
 
         vm.videoProgressLiveData.observe(viewLifecycleOwner) { videoProgress ->
@@ -260,8 +260,9 @@ class VideoListFragment : Fragment(), OnSelectChange {
             vm.setVideoOrder(VideoListViewModel.DEFAULT_SORT_MODE)
         }
         sortByDialogBinding.applyButton.setOnClickListener {
-            vm.updateVideoList()
             sortByDialog.dismiss()
+            val data = vm.videoList.value ?: return@setOnClickListener
+            adapter.updateData(ArrayList(vm.getSortedVideoList(data)))
         }
 
         vm.videoOrder.observe(viewLifecycleOwner) { sortMode ->
