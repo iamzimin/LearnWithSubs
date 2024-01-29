@@ -33,7 +33,6 @@ import com.learnwithsubs.databinding.FragmentWordListBinding
 import com.learnwithsubs.databinding.SearchViewBinding
 import com.learnwithsubs.feature_video_list.VideoListActivity
 import com.learnwithsubs.feature_video_list.models.Video
-import com.learnwithsubs.feature_word_list.adapter.WordListAdapter
 import com.learnwithsubs.feature_word_list.adapter.WordListTitleAdapter
 import com.learnwithsubs.feature_word_list.models.WordTranslation
 import com.learnwithsubs.feature_word_list.util.WordOrder
@@ -121,8 +120,8 @@ class WordListFragment : Fragment(), OnSelectChange {
         val layoutManager = LinearLayoutManager(videoListActivity)
         fragmentWordListBinding.wordList.layoutManager = layoutManager
         fragmentWordListBinding.wordList.adapter = adapter
-        val itemDecoration = WordListAdapter.RecyclerViewItemDecoration(0)
-        fragmentWordListBinding.wordList.addItemDecoration(itemDecoration)
+        //val itemDecoration = WordListAdapter.RecyclerViewItemDecoration(0)
+        //fragmentWordListBinding.wordList.addItemDecoration(itemDecoration)
         adapter.setListener(this)
         (fragmentWordListBinding.wordList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
     }

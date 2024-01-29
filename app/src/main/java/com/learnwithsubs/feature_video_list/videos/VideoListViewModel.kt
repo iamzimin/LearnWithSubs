@@ -75,7 +75,7 @@ class VideoListViewModel @Inject constructor(
                     // Обработка извлечение аудио
                     poolList.loadingType = VideoLoadingType.EXTRACTING_AUDIO
                     editVideo(poolList)
-                    // Return, если null (пользователь отменил загрузку)
+                    // TODO Return, если null (пользователь отменил загрузку)
                     val extractedAudio: Video = videoListUseCases.extractAudioUseCase.invoke(poolList) ?: return@withContext
                     // Если ошибка не пуста, то отправка ошибки + остановка обработки
                     if (extractedAudio.errorType != null) {
