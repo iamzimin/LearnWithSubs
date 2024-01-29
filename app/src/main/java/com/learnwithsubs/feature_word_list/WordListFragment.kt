@@ -120,8 +120,6 @@ class WordListFragment : Fragment(), OnSelectChange {
         val layoutManager = LinearLayoutManager(videoListActivity)
         fragmentWordListBinding.wordList.layoutManager = layoutManager
         fragmentWordListBinding.wordList.adapter = adapter
-        //val itemDecoration = WordListAdapter.RecyclerViewItemDecoration(0)
-        //fragmentWordListBinding.wordList.addItemDecoration(itemDecoration)
         adapter.setListener(this)
         (fragmentWordListBinding.wordList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
     }
@@ -147,7 +145,7 @@ class WordListFragment : Fragment(), OnSelectChange {
                 val newWord = WordTranslation(
                     word = dialogWordListMenuEditBinding.word.text.toString(),
                     translation = dialogWordListMenuEditBinding.translation.text.toString(),
-                    nativeLanguage = "ru",
+                    nativeLanguage = "ru", //TODO
                     learnLanguage = "en",
                     timestamp = Date().time
                 )

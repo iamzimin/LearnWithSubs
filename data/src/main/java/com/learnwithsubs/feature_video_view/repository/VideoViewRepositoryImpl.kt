@@ -4,7 +4,6 @@ import com.learnwithsubs.feature_video_list.VideoConstants
 import com.learnwithsubs.feature_video_list.models.Video
 import com.learnwithsubs.feature_video_list.storage.VideoListDao
 import com.learnwithsubs.feature_video_view.models.Subtitle
-import com.learnwithsubs.feature_video_view.storage.VideoViewDao
 import com.learnwithsubs.feature_word_list.models.WordTranslation
 import com.learnwithsubs.feature_word_list.storage.WordListDao
 import java.io.File

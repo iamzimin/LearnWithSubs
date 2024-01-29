@@ -36,7 +36,7 @@ class VideoListDomainModule {
             getLastVideoUseCase = GetLastVideoUseCase(videoListRepository),
             transcodeVideoUseCase = TranscodeVideoUseCase(transcodeRepository),
             extractAudioUseCase = ExtractAudioUseCase(transcodeRepository),
-            getSubtitlesFromServerUseCase = GetSubtitlesFromServerUseCase(serverInteractionRepository),
+            getSubtitlesFromServerUseCase = GetSubtitlesFromServerUseCase(serverInteractionRepository, videoListRepository),
             extractVideoPreviewUseCase = ExtractVideoPreviewUseCase(transcodeRepository),
             sortVideoListUseCase = SortVideoListUseCase(),
             loadNewSubtitlesUseCase = LoadNewSubtitlesUseCase(videoListRepository),

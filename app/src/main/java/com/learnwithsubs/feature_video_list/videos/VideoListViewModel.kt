@@ -1,7 +1,5 @@
 package com.learnwithsubs.feature_video_list.videos
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -13,10 +11,8 @@ import com.learnwithsubs.feature_video_list.repository.VideoTranscodeRepository
 import com.learnwithsubs.feature_video_list.usecase.VideoListUseCases
 import com.learnwithsubs.general.util.OrderType
 import com.learnwithsubs.feature_video_list.util.VideoOrder
-import com.learnwithsubs.feature_word_list.models.WordTranslation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.withContext
@@ -90,7 +86,7 @@ class VideoListViewModel @Inject constructor(
                         return@async videoListUseCases.transcodeVideoUseCase.invoke(poolList)
                     }
 
-                    // Загрузка аудио
+                    // Загрузка аудио и сохранение субтитров
                     val subtitlesFromServer = async {
                        return@async videoListUseCases.getSubtitlesFromServerUseCase.invoke(extractedAudio)
                     }

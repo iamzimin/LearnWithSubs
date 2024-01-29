@@ -9,6 +9,7 @@ interface VideoListRepository {
     suspend fun insertVideo(video: Video)
     suspend fun deleteVideo(video: Video)
     suspend fun getLastVideo(): Video?
+    suspend fun saveSubtitles(video: Video, subtitles: String)
     suspend fun loadNewSubtitles(video: Video, subtitles: String)
     suspend fun backOldSubtitles(video: Video)
 }

@@ -2,11 +2,13 @@ package com.learnwithsubs.feature_video_list.repository
 
 import com.learnwithsubs.feature_video_list.VideoConstants
 import com.learnwithsubs.feature_video_list.models.Video
+import com.learnwithsubs.feature_video_list.models.VideoErrorType
 import com.learnwithsubs.feature_video_list.storage.VideoListDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.lang.Exception
 
 class VideoListRepositoryImpl(
     private val dao: VideoListDao
@@ -31,8 +33,21 @@ class VideoListRepositoryImpl(
         return dao.getLastVideo()
     }
 
-    override suspend fun loadNewSubtitles(video: Video, subtitles: String) {
 
+    override suspend fun saveSubtitles(video: Video, subtitles: String) {
+        val subSTR = File(video.outputPath, VideoConstants.GENERATED_SUBTITLES)
+        if (subSTR.exists())
+            subSTR.delete()
+
+        withContext(Dispatchers.IO) {
+            subSTR.createNewFile()
+            val writer = subSTR.bufferedWriter()
+            writer.write(subtitles)
+            writer.close()
+        }
+    }
+
+    override suspend fun loadNewSubtitles(video: Video, subtitles: String) {
         val subSTR = File(video.outputPath, VideoConstants.OWN_SUBTITLES)
         if (subSTR.exists())
             subSTR.delete()
