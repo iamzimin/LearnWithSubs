@@ -95,4 +95,6 @@ dependencies {
     //Progress Bar
     implementation 'com.google.android.material:material:1.11.0'
 
+    //Translate
+    implementation 'com.google.mlkit:translate:17.0.2'
 }

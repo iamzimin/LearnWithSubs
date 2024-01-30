@@ -1,10 +1,14 @@
 package com.learnwithsubs.feature_video_view.repository
 
+import com.google.android.gms.tasks.Task
+import com.google.mlkit.nl.translate.TranslateLanguage
+import com.google.mlkit.nl.translate.Translation
+import com.google.mlkit.nl.translate.TranslatorOptions
 import com.learnwithsubs.feature_video_view.models.DictionarySynonyms
 import com.learnwithsubs.feature_video_view.models.DictionaryType
 import com.learnwithsubs.feature_video_view.models.DictionaryWord
 import com.learnwithsubs.feature_video_view.service.TranslationService
-import retrofit2.Call
+import kotlinx.coroutines.CompletableDeferred
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
 
@@ -87,8 +91,35 @@ class TranslatorRepositoryImpl(
         return response.body()
     }
 
-    override fun getWordsFromAndroidTranslator(): Call<String> {
-        TODO("Not yet implemented")
+    override suspend fun getWordsFromAndroidTranslator(
+        word: String,
+        fromLang: String,
+        toLang: String
+    ): String? {
+        val options = TranslatorOptions.Builder()
+            .setSourceLanguage(fromLang)
+            .setTargetLanguage(toLang)
+            .build()
+        val translator = Translation.getClient(options)
+        translator.downloadModelIfNeeded() //TODO delete
+        val resultDeferred = CompletableDeferred<String?>()
+
+        translator.translate(word).addOnCompleteListener { task: Task<String> ->
+            if (task.isSuccessful) {
+                val result = task.result
+                resultDeferred.complete(result)
+            } else {
+                task.exception?.printStackTrace()
+                resultDeferred.complete(null)
+            }
+            translator.close()
+        }
+
+        return try {
+            resultDeferred.await()
+        } catch (e: Exception) {
+            null
+        }
     }
 
 }

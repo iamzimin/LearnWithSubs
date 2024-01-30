@@ -61,4 +61,7 @@ dependencies {
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    //Translate
+    implementation 'com.google.mlkit:translate:17.0.2'
 }

@@ -29,6 +29,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.mlkit.nl.translate.TranslateLanguage
 import com.learnwithsubs.R
 import com.learnwithsubs.app.App
 import com.learnwithsubs.databinding.ActivityVideoViewBinding
@@ -36,7 +37,6 @@ import com.learnwithsubs.databinding.DialogTranslateBinding
 import com.learnwithsubs.databinding.VideoViewInterfaceBinding
 import com.learnwithsubs.feature_video_view.adapter.DictionaryAdapter
 import com.learnwithsubs.feature_video_view.adapter.OnDictionaryClick
-import com.learnwithsubs.feature_video_view.model.Language
 import com.learnwithsubs.feature_video_view.videos.VideoViewViewModel
 import com.learnwithsubs.feature_video_view.videos.VideoViewViewModelFactory
 import com.learnwithsubs.feature_word_list.models.WordTranslation
@@ -65,14 +65,14 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
     private lateinit var ttsFrom: TextToSpeech
     private lateinit var ttsTo: TextToSpeech
 
-    private var nativeLanguage = Language()
-    private var learnLanguage =  Language()
+    private var nativeLanguage = TranslateLanguage.RUSSIAN
+    private var learnLanguage = TranslateLanguage.ENGLISH
     private var textToTranslate = ""
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            ttsFrom.language = nativeLanguage.ISO_691_1?.let { Locale(it) }
-            ttsTo.language = learnLanguage.ISO_691_1?.let { Locale(it) }
+            ttsFrom.language = Locale(nativeLanguage)
+            ttsTo.language = Locale(learnLanguage)
         }
     }
 
@@ -323,11 +323,14 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
 
         // Translate
         vm.dictionaryWordsLiveData.observe(this@VideoViewActivity) { dict ->
-            dict ?: return@observe //TODO мб добавить тост
-            translateDialogBind.outputWord.setText(dict.translation)
-            translateDialogBind.outputWord.clearFocus()
-            val updatedPartSpeech = vm.changePartSpeech(context = this@VideoViewActivity.applicationContext, list = dict.synonyms)
-            dictionaryAdapter.updateData(wordsList = updatedPartSpeech)
+            if (dict == null) {
+                vm.getFullTranslation(word = textToTranslate, inputLang = learnLanguage, outputLang = nativeLanguage)
+            } else {
+                translateDialogBind.outputWord.setText(dict.translation)
+                translateDialogBind.outputWord.clearFocus()
+                val updatedPartSpeech = vm.changePartSpeech(context = this@VideoViewActivity.applicationContext, list = dict.synonyms)
+                dictionaryAdapter.updateData(wordsList = updatedPartSpeech)
+            }
 
         }
         vm.translatorTranslationLiveData.observe(this@VideoViewActivity) { transl ->
@@ -339,8 +342,8 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
     }
 
     private fun openTranslateDialog() {
-        val nativeLang = nativeLanguage.language ?: return
-        val learnLang = learnLanguage.language ?: return
+        val nativeLang = nativeLanguage
+        val learnLang = learnLanguage
         vm.getWordsFromDictionary(
             inputLang = learnLang,
             outputLang = nativeLang,
@@ -362,18 +365,18 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
         val nativeLanguageRes = R.string.russian // TODO взять язык из настроек
         val learnLanguageRes = R.string.english  // TODO взять язык из настроек
 
-        translateDialogBind.inputLanguage.text = getString(nativeLanguageRes)
-        translateDialogBind.outputLanguage.text = getString(learnLanguageRes)
+        translateDialogBind.inputLanguage.text = getString(learnLanguageRes)
+        translateDialogBind.outputLanguage.text = getString(nativeLanguageRes)
 
-        val config = Configuration(resources.configuration)
+        /*val config = Configuration(resources.configuration)
         config.setLocale(Locale("en"))
         val englishResources = createConfigurationContext(config).resources
 
         val nativeLanguage = englishResources.getString(nativeLanguageRes)
-        val learnLanguage = englishResources.getString(learnLanguageRes)
+        val learnLanguage = englishResources.getString(learnLanguageRes)*/
 
-        this.nativeLanguage = Language(language = nativeLanguage, ISO_691_1 = vm.languageToISO6391(nativeLanguage))
-        this.learnLanguage = Language(language = learnLanguage, ISO_691_1 = vm.languageToISO6391(learnLanguage))
+        //this.nativeLanguage = TODO взять язык из настроек
+        //this.learnLanguage = TODO взять язык из настроек
     }
 
     private fun setupTranslateDialog() {

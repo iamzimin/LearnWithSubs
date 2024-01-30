@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.learnwithsubs.R
 import com.learnwithsubs.feature_video_list.VideoConstants
 import com.learnwithsubs.feature_video_list.models.Video
-import com.learnwithsubs.feature_video_view.models.DictionaryModel
+import com.learnwithsubs.feature_video_view.models.TranslationModel
 import com.learnwithsubs.feature_video_view.models.DictionarySynonyms
 import com.learnwithsubs.feature_video_view.models.DictionaryWord
 import com.learnwithsubs.feature_video_view.models.Subtitle
@@ -102,39 +102,42 @@ class VideoViewViewModel @Inject constructor(
     }
 
     fun getWordsFromDictionary(word: String, inputLang: String, outputLang: String) {
-        val dictionaryModel = DictionaryModel(
+        val translationModel = TranslationModel(
             word = word,
             inputLanguage = inputLang,
-            inputLanguage_ISO639_1 = languageToISO6391(inputLang),
             outputLanguage = outputLang,
-            outputLanguage_ISO639_1 = languageToISO6391(outputLang)
         )
         viewModelScope.launch {
-            val translate = videoViewUseCases.getWordsFromYandexDictionaryUseCase.invoke(model = dictionaryModel)
-            if (translate == null) {
-                getWordsFromTranslator(word = dictionaryModel.word, inputLang = inputLang, outputLang = outputLang)
-            } else {
-                dictionaryWordsLiveData.postValue(translate)
-            }
+            val translate = videoViewUseCases.getWordsFromYandexDictionaryUseCase.invoke(model = translationModel)
+            dictionaryWordsLiveData.postValue(translate)
         }
     }
 
-    fun getWordsFromTranslator(word: String, inputLang: String, outputLang: String) {
-        val translationModel = DictionaryModel(
+    fun getFullTranslation(word: String, inputLang: String, outputLang: String) {
+        val translationModel = TranslationModel(
             word = word,
             inputLanguage = inputLang,
-            inputLanguage_ISO639_1 = languageToISO6391(inputLang),
             outputLanguage = outputLang,
-            outputLanguage_ISO639_1 = languageToISO6391(outputLang)
         )
+        if (false) { //TODO взять настроек
+            getWordsFromServerTranslator(translationModel = translationModel)
+        } else {
+            getWordsFromAndroidTranslator(translationModel = translationModel)
+        }
+    }
+
+    private fun getWordsFromServerTranslator(translationModel: TranslationModel) {
         viewModelScope.launch {
             val translate = videoViewUseCases.getTranslationFromServerUseCase.invoke(model = translationModel)
             translatorTranslationLiveData.postValue(translate)
         }
     }
 
-    fun languageToISO6391(language: String): String {
-        return language.substring(0, 2).lowercase()
+    private fun getWordsFromAndroidTranslator(translationModel: TranslationModel) {
+        viewModelScope.launch {
+            val translate = videoViewUseCases.getTranslationFromAndroidUseCase.invoke(model = translationModel)
+            translatorTranslationLiveData.postValue(translate)
+        }
     }
 
     fun changePartSpeech(context: Context, list: ArrayList<DictionarySynonyms>):  ArrayList<DictionarySynonyms> {

@@ -2,6 +2,7 @@ package com.learnwithsubs.feature_video_view.di
 
 import com.learnwithsubs.feature_video_view.repository.TranslatorRepository
 import com.learnwithsubs.feature_video_view.repository.VideoViewRepository
+import com.learnwithsubs.feature_video_view.usecase.GetTranslationFromAndroidUseCase
 import com.learnwithsubs.feature_video_view.usecase.GetTranslationFromServerUseCase
 import com.learnwithsubs.feature_video_view.usecase.GetVideoSubtitlesUseCase
 import com.learnwithsubs.feature_video_view.usecase.GetWordsFromYandexDictionaryUseCase
@@ -26,6 +27,7 @@ class VideoViewDomainModule {
             updateVideoUseCase = UpdateVideoUseCase(videoViewRepository),
             getWordsFromYandexDictionaryUseCase = GetWordsFromYandexDictionaryUseCase(translatorRepository),
             getTranslationFromServerUseCase = GetTranslationFromServerUseCase(translatorRepository),
+            getTranslationFromAndroidUseCase = GetTranslationFromAndroidUseCase(translatorRepository),
             saveWordUseCase = SaveWordUseCase(videoViewRepository)
         )
     }

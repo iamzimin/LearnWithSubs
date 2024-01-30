@@ -36,7 +36,7 @@ class ServerInteractionRepositoryImpl(
         } catch (e: Exception) {
             """1
 00:00:00,000 --> 00:00:10,000
-Hello word""".trimIndent()
+Hello world, this is a test message for translation""".trimIndent()
         }
     }
 }

@@ -5,5 +5,6 @@ data class VideoViewUseCases(
     val updateVideoUseCase: UpdateVideoUseCase,
     val getWordsFromYandexDictionaryUseCase: GetWordsFromYandexDictionaryUseCase,
     val getTranslationFromServerUseCase: GetTranslationFromServerUseCase,
+    val getTranslationFromAndroidUseCase: GetTranslationFromAndroidUseCase,
     val saveWordUseCase: SaveWordUseCase,
 )

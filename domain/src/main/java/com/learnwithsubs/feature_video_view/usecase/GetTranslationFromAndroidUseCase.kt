@@ -3,11 +3,11 @@ package com.learnwithsubs.feature_video_view.usecase
 import com.learnwithsubs.feature_video_view.models.TranslationModel
 import com.learnwithsubs.feature_video_view.repository.TranslatorRepository
 
-class GetTranslationFromServerUseCase(
+class GetTranslationFromAndroidUseCase(
     private val translatorRepository: TranslatorRepository
 ) {
     suspend fun invoke(model: TranslationModel): String? {
-        return translatorRepository.getWordsFromServerTranslator(
+        return translatorRepository.getWordsFromAndroidTranslator(
             word = model.word,
             fromLang = model.inputLanguage,
             toLang = model.outputLanguage
