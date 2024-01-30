@@ -34,7 +34,7 @@ class VideoListDataModule {
 
     @Provides
     @Singleton
-    fun provideSubtitleGenerateRetrofit(): Retrofit {
+    fun provideServerRetrofit(): Retrofit {
         val gson: Gson = GsonBuilder()
             .setLenient()
             .create()

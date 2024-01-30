@@ -323,18 +323,15 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
 
         // Translate
         vm.dictionaryWordsLiveData.observe(this@VideoViewActivity) { dict ->
-            if (dict != null) {
-                translateDialogBind.outputWord.setText(dict.translation)
-                translateDialogBind.outputWord.clearFocus()
-                val updatedPartSpeech = vm.changePartSpeech(context = this@VideoViewActivity.applicationContext, list = dict.synonyms)
-                dictionaryAdapter.updateData(wordsList = updatedPartSpeech)
-            } else {
-                val learnLang = learnLanguage.language ?: return@observe
-                vm.getWordsFromTranslator(word = textToTranslate, learnLanguage = learnLang)
-            }
+            dict ?: return@observe //TODO мб добавить тост
+            translateDialogBind.outputWord.setText(dict.translation)
+            translateDialogBind.outputWord.clearFocus()
+            val updatedPartSpeech = vm.changePartSpeech(context = this@VideoViewActivity.applicationContext, list = dict.synonyms)
+            dictionaryAdapter.updateData(wordsList = updatedPartSpeech)
+
         }
         vm.translatorTranslationLiveData.observe(this@VideoViewActivity) { transl ->
-            transl ?: Toast.makeText(this.applicationContext, R.string.yandex_service_is_not_available, Toast.LENGTH_SHORT).show()
+            transl ?: Toast.makeText(this.applicationContext, R.string.server_for_translation_is_not_available, Toast.LENGTH_SHORT).show()
             val text = transl ?: return@observe
             translateDialogBind.outputWord.setText(text)
             translateDialogBind.outputWord.clearFocus()
@@ -345,8 +342,8 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
         val nativeLang = nativeLanguage.language ?: return
         val learnLang = learnLanguage.language ?: return
         vm.getWordsFromDictionary(
-            inputLang = nativeLang,
-            outputLang = learnLang,
+            inputLang = learnLang,
+            outputLang = nativeLang,
             word = textToTranslate
         )
 
@@ -362,8 +359,8 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
     }
 
     private fun getLanguageFromSettings() {
-        val nativeLanguageRes = R.string.english  // TODO взять язык из настроек
-        val learnLanguageRes = R.string.russian // TODO взять язык из настроек
+        val nativeLanguageRes = R.string.russian // TODO взять язык из настроек
+        val learnLanguageRes = R.string.english  // TODO взять язык из настроек
 
         translateDialogBind.inputLanguage.text = getString(nativeLanguageRes)
         translateDialogBind.outputLanguage.text = getString(learnLanguageRes)

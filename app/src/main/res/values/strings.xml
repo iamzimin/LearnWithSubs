@@ -75,6 +75,7 @@
     <string name="subtitle_extraction_error">Subtitle extraction error</string>
 
     <string name="yandex_service_is_not_available">The yandex service is not available</string>
+    <string name="server_for_translation_is_not_available">Server for translation is not available</string>
     <string name="save">Save</string>
 
     <string name="wrong_subtitle_format">Wrong subtitle format</string>

@@ -2,26 +2,20 @@ package com.learnwithsubs.feature_video_view.di
 
 import android.content.Context
 import androidx.room.Room
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.learnwithsubs.feature_video_list.storage.VideoDatabase
-import com.learnwithsubs.feature_video_view.repository.YandexDictionaryRepositoryImpl
 import com.learnwithsubs.feature_video_view.repository.VideoViewRepositoryImpl
-import com.learnwithsubs.feature_video_view.models.server.YandexDictionaryResponse
-import com.learnwithsubs.feature_video_view.models.server.YandexTranslatorResponse
-import com.learnwithsubs.feature_video_view.repository.DictionaryRepository
-import com.learnwithsubs.feature_video_view.service.ServerTimeService
-import com.learnwithsubs.feature_video_view.repository.ServerTimeServiceImpl
 import com.learnwithsubs.feature_video_view.repository.TranslatorRepository
+import com.learnwithsubs.feature_video_view.repository.TranslatorRepositoryImpl
 import com.learnwithsubs.feature_video_view.repository.VideoViewRepository
-import com.learnwithsubs.feature_video_view.repository.YandexTokenRepository
-import com.learnwithsubs.feature_video_view.repository.YandexTokenRepositoryImpl
-import com.learnwithsubs.feature_video_view.repository.YandexTranslatorRepositoryImpl
-import com.learnwithsubs.feature_video_view.storage.YandexTranslatorStorageRepository
-import com.learnwithsubs.feature_video_view.storage.sharedprefs.SharedPrefsYandexTranslatorStorageRepository
 import com.learnwithsubs.feature_word_list.storage.WordDatabase
 import dagger.Module
 import dagger.Provides
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -60,44 +54,21 @@ class VideoViewDataModule {
 
     @Provides
     @Singleton
-    @Named("YandexTranslator")
-    fun provideYandexTranslatorRetrofit(): Retrofit {
-        val BASE_URL = "https://translate.api.cloud.yandex.net/"
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
+    @Named("Server")
+    fun provideServerRetrofit(): Retrofit {
+        val gson: Gson = GsonBuilder()
+            .setLenient()
+            .create()
 
-    @Provides
-    @Singleton
-    @Named("YandexIAmToken")
-    fun provideYandexIAmTokenRetrofit(): Retrofit {
-        val BASE_URL = "https://iam.api.cloud.yandex.net/"
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
+        val okHttpClient: OkHttpClient = OkHttpClient.Builder()
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(0, TimeUnit.SECONDS).build()
 
-    @Provides
-    @Singleton
-    fun provideGoogleDictionaryRetrofit(): Retrofit {
-        val BASE_URL = "https://????/"
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    @Named("ServerTime")
-    fun provideServerTimeRetrofit(): Retrofit {
-        val BASE_URL = "https://timeapi.io/api/"
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            //.baseUrl("http://10.0.2.2:8000/")
+            .baseUrl("http://192.168.0.107:8000/")
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
 
@@ -109,40 +80,10 @@ class VideoViewDataModule {
 
     @Provides
     @Singleton
-    fun provideSharedPrefsYandexTranslatorStorageRepository(context: Context): YandexTranslatorStorageRepository {
-        return SharedPrefsYandexTranslatorStorageRepository(context)
-    }
-
-    @Provides
-    @Singleton
     fun provideYandexDictionaryRepository(
-        @Named("YandexDictionary") retrofit: Retrofit
-    ): DictionaryRepository<YandexDictionaryResponse> {
-        return YandexDictionaryRepositoryImpl(retrofit)
-    }
-
-    @Provides
-    @Singleton
-    fun provideYandexTokenRepository(
-        @Named("YandexIAmToken") retrofitIAmToken: Retrofit,
-        sharedPrefsYandexTranslator: YandexTranslatorStorageRepository
-    ): YandexTokenRepository {
-        return YandexTokenRepositoryImpl(retrofitIAmToken, sharedPrefsYandexTranslator)
-    }
-
-    @Provides
-    @Singleton
-    fun provideYandexTranslatorRepository(
-        @Named("YandexTranslator") retrofitTranslator: Retrofit,
-    ): TranslatorRepository<YandexTranslatorResponse> {
-        return YandexTranslatorRepositoryImpl(retrofitTranslator)
-    }
-
-    @Provides
-    @Singleton
-    fun provideServerTimeService(
-        @Named("ServerTime") serverTime: Retrofit
-    ): ServerTimeService {
-        return ServerTimeServiceImpl(serverTime)
+        @Named("YandexDictionary") yandexRetrofit: Retrofit,
+        @Named("Server") serverRetrofit: Retrofit
+    ): TranslatorRepository {
+        return TranslatorRepositoryImpl(yandexRetrofit, serverRetrofit)
     }
 }

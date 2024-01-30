@@ -11,7 +11,6 @@ import com.learnwithsubs.feature_video_view.models.DictionaryModel
 import com.learnwithsubs.feature_video_view.models.DictionarySynonyms
 import com.learnwithsubs.feature_video_view.models.DictionaryWord
 import com.learnwithsubs.feature_video_view.models.Subtitle
-import com.learnwithsubs.feature_video_view.models.TranslationModel
 import com.learnwithsubs.feature_video_view.usecase.VideoViewUseCases
 import com.learnwithsubs.feature_word_list.models.WordTranslation
 import kotlinx.coroutines.Dispatchers
@@ -112,18 +111,24 @@ class VideoViewViewModel @Inject constructor(
         )
         viewModelScope.launch {
             val translate = videoViewUseCases.getWordsFromYandexDictionaryUseCase.invoke(model = dictionaryModel)
-            dictionaryWordsLiveData.postValue(translate)
+            if (translate == null) {
+                getWordsFromTranslator(word = dictionaryModel.word, inputLang = inputLang, outputLang = outputLang)
+            } else {
+                dictionaryWordsLiveData.postValue(translate)
+            }
         }
     }
 
-    fun getWordsFromTranslator(word: String, learnLanguage: String) {
-        val translationModel = TranslationModel(
+    fun getWordsFromTranslator(word: String, inputLang: String, outputLang: String) {
+        val translationModel = DictionaryModel(
             word = word,
-            learnLanguage = learnLanguage,
-            learnLanguage_ISO639_1 = languageToISO6391(learnLanguage)
+            inputLanguage = inputLang,
+            inputLanguage_ISO639_1 = languageToISO6391(inputLang),
+            outputLanguage = outputLang,
+            outputLanguage_ISO639_1 = languageToISO6391(outputLang)
         )
         viewModelScope.launch {
-            val translate = videoViewUseCases.getYandexTranslationUseCase.invoke(model = translationModel)
+            val translate = videoViewUseCases.getTranslationFromServerUseCase.invoke(model = translationModel)
             translatorTranslationLiveData.postValue(translate)
         }
     }

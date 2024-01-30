@@ -16,7 +16,7 @@ import java.lang.Exception
 class ServerInteractionRepositoryImpl(
     private val retrofit: Retrofit
 ): ServerInteractionRepository {
-    override suspend fun sendAudioToServer(audio: MultipartBody.Part): Response<String> {
+    override suspend fun sendAudioToServer(audio: MultipartBody.Part): Response<String> { //TODO merge getSubtitles
         val apiService = retrofit.create(ServerInteractionRepository::class.java)
         return apiService.sendAudioToServer(audio)
     }
