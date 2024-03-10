@@ -1,12 +1,9 @@
-package com.learnwithsubs.video_view.data.repository
+package com.example.yandex_dictionary_api.data.repository
 
+import com.example.yandex_dictionary_api.domain.repository.TranslatorRepository
 import com.google.android.gms.tasks.Task
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
-import com.learnwithsubs.video_view.domain.models.DictionarySynonyms
-import com.learnwithsubs.video_view.domain.models.DictionaryType
-import com.learnwithsubs.video_view.domain.models.DictionaryWord
-import com.learnwithsubs.video_view.domain.service.TranslationService
 import kotlinx.coroutines.CompletableDeferred
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
@@ -14,12 +11,12 @@ import retrofit2.awaitResponse
 class TranslatorRepositoryImpl(
     private val yandexRetrofit: Retrofit,
     private val serverRetrofit: Retrofit,
-): com.learnwithsubs.video_view.domain.repository.TranslatorRepository {
+): TranslatorRepository {
     override suspend fun getWordsFromYandexDictionary(
         key: String,
         lang: String,
         word: String
-    ): com.learnwithsubs.video_view.domain.models.DictionaryWord? {
+    ): com.example.yandex_dictionary_api.models.DictionaryWord? {
         val apiService = yandexRetrofit.create(com.learnwithsubs.video_view.domain.service.TranslationService::class.java)
         val wordResponse = apiService.getWordsFromDictionary(key = key, lang = lang, word = word).awaitResponse()
 
@@ -30,7 +27,7 @@ class TranslatorRepositoryImpl(
                 return null
 
             val transl = definition[0].tr[0].text
-            val dictionaryWord = com.learnwithsubs.video_view.domain.models.DictionaryWord(
+            val dictionaryWord = com.example.yandex_dictionary_api.models.DictionaryWord(
                 translation = transl,
                 synonyms = ArrayList()
             )
@@ -38,12 +35,12 @@ class TranslatorRepositoryImpl(
             for (defID in definition.indices) {
                 val speechPart = definition[defID]
                 val translations = speechPart.tr
-                val pSpeech = com.learnwithsubs.video_view.domain.models.DictionarySynonyms(
+                val pSpeech = com.example.yandex_dictionary_api.models.DictionarySynonyms(
                     id = 0,
                     word = "",
                     translation = "",
                     partSpeech = speechPart.pos,
-                    type = com.learnwithsubs.video_view.domain.models.DictionaryType.PART_SPEECH
+                    type = com.example.yandex_dictionary_api.models.DictionaryType.PART_SPEECH
                 )
                 dictionaryWord.synonyms.add(pSpeech)
 
@@ -51,7 +48,7 @@ class TranslatorRepositoryImpl(
                     val translation = translations[spID]
                     val syn: ArrayList<String> = ArrayList()
                     val mean: ArrayList<String> = ArrayList()
-                    var dWord: com.learnwithsubs.video_view.domain.models.DictionarySynonyms
+                    var dWord: com.example.yandex_dictionary_api.models.DictionarySynonyms
 
 
                     if (translation.syn != null && translation.mean != null) {
@@ -63,21 +60,21 @@ class TranslatorRepositoryImpl(
                             val meaning = translation.mean!![meanID]
                             mean.add(meaning.text)
                         }
-                        dWord = com.learnwithsubs.video_view.domain.models.DictionarySynonyms(
+                        dWord = com.example.yandex_dictionary_api.models.DictionarySynonyms(
                             id = spID + 1,
                             word = mean.joinToString(", "),
                             translation = syn.joinToString(", "),
                             partSpeech = speechPart.pos,
-                            type = com.learnwithsubs.video_view.domain.models.DictionaryType.WORD
+                            type = com.example.yandex_dictionary_api.models.DictionaryType.WORD
                         )
                     }
                     else {
-                        dWord = com.learnwithsubs.video_view.domain.models.DictionarySynonyms(
+                        dWord = com.example.yandex_dictionary_api.models.DictionarySynonyms(
                             id = spID + 1,
                             word = translation.mean?.get(0)?.text ?: definition[defID].text,
                             translation = translation.text,
                             partSpeech = speechPart.pos,
-                            type = com.learnwithsubs.video_view.domain.models.DictionaryType.WORD
+                            type = com.example.yandex_dictionary_api.models.DictionaryType.WORD
                         )
                     }
                     dictionaryWord.synonyms.add(dWord)

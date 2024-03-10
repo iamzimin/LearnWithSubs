@@ -1,10 +1,10 @@
 package com.learnwithsubs.video_view.domain.usecase
 
 import com.learnwithsubs.video_view.domain.models.TranslationModel
-import com.learnwithsubs.video_view.domain.repository.TranslatorRepository
+import com.example.yandex_dictionary_api.domain.TranslatorRepository
 
 class GetTranslationFromServerUseCase(
-    private val translatorRepository: TranslatorRepository
+    private val translatorRepository: com.example.yandex_dictionary_api.domain.TranslatorRepository
 ) {
     suspend fun invoke(model: TranslationModel): String? {
         return translatorRepository.getWordsFromServerTranslator(

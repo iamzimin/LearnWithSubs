@@ -34,7 +34,7 @@ class VideoViewViewModel @Inject constructor(
 
     private var subtitleList: List<com.learnwithsubs.video_view.domain.models.Subtitle> = emptyList()
 
-    val dictionaryWordsLiveData =  MutableLiveData<com.learnwithsubs.video_view.domain.models.DictionaryWord?>()
+    val dictionaryWordsLiveData =  MutableLiveData<com.example.yandex_dictionary_api.models.DictionaryWord?>()
     val translatorTranslationLiveData = MutableLiveData<String?>()
 
 
@@ -135,7 +135,7 @@ class VideoViewViewModel @Inject constructor(
         }
     }
 
-    fun changePartSpeech(context: Context, list: ArrayList<com.learnwithsubs.video_view.domain.models.DictionarySynonyms>):  ArrayList<com.learnwithsubs.video_view.domain.models.DictionarySynonyms> {
+    fun changePartSpeech(context: Context, list: ArrayList<com.example.yandex_dictionary_api.models.DictionarySynonyms>):  ArrayList<com.example.yandex_dictionary_api.models.DictionarySynonyms> {
         for (elem in list) {
             when (elem.partSpeech) {
                 "noun" -> elem.partSpeech = context.getString(R.string.noun)

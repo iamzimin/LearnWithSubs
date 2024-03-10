@@ -1,6 +1,6 @@
 package com.learnwithsubs.video_view.domain.service
 
-import com.learnwithsubs.video_view.domain.models.server.YandexDictionaryResponse
+import com.example.yandex_dictionary_api.models.YandexDictionaryResponse
 import retrofit2.Call
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -11,7 +11,7 @@ interface TranslationService {
         @Query("key") key: String,
         @Query("lang") lang: String,
         @Query("text") word: String
-    ): Call<YandexDictionaryResponse>
+    ): Call<com.example.yandex_dictionary_api.models.YandexDictionaryResponse>
 
     @POST("/get_translation")
     fun getWordsFromServerTranslator(

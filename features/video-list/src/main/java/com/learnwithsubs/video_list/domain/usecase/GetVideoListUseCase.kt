@@ -1,13 +1,13 @@
 package com.learnwithsubs.video_list.domain.usecase
 
-import com.learnwithsubs.video_list.domain.models.Video
-import com.learnwithsubs.video_list.domain.repository.VideoListRepository
+import com.learnwithsubs.database.domain.models.Video
+import com.learnwithsubs.database.domain.VideoListRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetVideoListUseCase(
-    private val repository: VideoListRepository
+    private val repository: com.learnwithsubs.database.domain.VideoListRepository
 ) {
-    fun invoke() : Flow<List<Video>> {
+    fun invoke() : Flow<List<com.learnwithsubs.database.domain.models.Video>> {
         return repository.getVideos()
     }
 }

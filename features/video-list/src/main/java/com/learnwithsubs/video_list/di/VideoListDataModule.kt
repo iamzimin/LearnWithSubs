@@ -4,13 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.learnwithsubs.video_list.data.repository.ServerInteractionRepositoryImpl
-import com.learnwithsubs.video_list.data.repository.VideoListRepositoryImpl
-import com.learnwithsubs.video_list.data.repository.VideoTranscodeRepositoryImpl
-import com.learnwithsubs.video_list.data.storage.VideoDatabase
-import com.learnwithsubs.video_list.domain.repository.ServerInteractionRepository
-import com.learnwithsubs.video_list.domain.repository.VideoListRepository
-import com.learnwithsubs.video_list.domain.repository.VideoTranscodeRepository
+import com.learnwithsubs.database.domain.VideoListRepository
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -53,7 +47,7 @@ class VideoListDataModule {
 
     @Provides
     @Singleton
-    fun provideVideoListRepository(db: com.learnwithsubs.video_list.data.storage.VideoDatabase): com.learnwithsubs.video_list.domain.repository.VideoListRepository {
+    fun provideVideoListRepository(db: com.learnwithsubs.video_list.data.storage.VideoDatabase): com.learnwithsubs.database.domain.VideoListRepository {
         return com.learnwithsubs.video_list.data.repository.VideoListRepositoryImpl(db.videoListDao)
     }
 

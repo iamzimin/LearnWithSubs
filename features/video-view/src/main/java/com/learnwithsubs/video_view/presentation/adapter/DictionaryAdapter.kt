@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.learnwithsubs.R
 
 class DictionaryAdapter(
-    wordsInit: ArrayList<com.learnwithsubs.video_view.domain.models.DictionarySynonyms>
+    wordsInit: ArrayList<com.example.yandex_dictionary_api.models.DictionarySynonyms>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-    private var wordsList: ArrayList<com.learnwithsubs.video_view.domain.models.DictionarySynonyms> = wordsInit
+    private var wordsList: ArrayList<com.example.yandex_dictionary_api.models.DictionarySynonyms> = wordsInit
     private var onItemClickListener: OnDictionaryClick? = null
 
 
-    fun updateData(wordsList: ArrayList<com.learnwithsubs.video_view.domain.models.DictionarySynonyms>) {
+    fun updateData(wordsList: ArrayList<com.example.yandex_dictionary_api.models.DictionarySynonyms>) {
         this@DictionaryAdapter.wordsList = wordsList
         notifyDataSetChanged()
     }
@@ -25,11 +25,11 @@ class DictionaryAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            com.learnwithsubs.video_view.domain.models.DictionaryType.WORD.value -> DictionaryNormalHolder(
+            com.example.yandex_dictionary_api.models.DictionaryType.WORD.value -> DictionaryNormalHolder(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.tile_translate_word, parent, false), onItemClickListener)
 
-            com.learnwithsubs.video_view.domain.models.DictionaryType.PART_SPEECH.value -> DictionaryPartSpeechHolder(
+            com.example.yandex_dictionary_api.models.DictionaryType.PART_SPEECH.value -> DictionaryPartSpeechHolder(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.tile_translate_partspeech, parent, false))
 
@@ -50,12 +50,12 @@ class DictionaryAdapter(
         val word = wordsList[position]
 
         when (word.type) {
-            com.learnwithsubs.video_view.domain.models.DictionaryType.WORD -> {
+            com.example.yandex_dictionary_api.models.DictionaryType.WORD -> {
                 val normalHolder = holder as DictionaryNormalHolder
                 normalHolder.bind(wordsList[position])
             }
 
-            com.learnwithsubs.video_view.domain.models.DictionaryType.PART_SPEECH -> {
+            com.example.yandex_dictionary_api.models.DictionaryType.PART_SPEECH -> {
                 val loadingHolder = holder as DictionaryPartSpeechHolder
                 loadingHolder.bind(wordsList[position])
             }

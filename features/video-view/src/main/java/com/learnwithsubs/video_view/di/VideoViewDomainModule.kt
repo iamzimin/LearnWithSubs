@@ -1,14 +1,6 @@
 package com.learnwithsubs.video_view.di
 
-import com.learnwithsubs.video_view.domain.repository.TranslatorRepository
-import com.learnwithsubs.video_view.domain.repository.VideoViewRepository
-import com.learnwithsubs.video_view.domain.usecase.GetTranslationFromAndroidUseCase
-import com.learnwithsubs.video_view.domain.usecase.GetTranslationFromServerUseCase
-import com.learnwithsubs.video_view.domain.usecase.GetVideoSubtitlesUseCase
-import com.learnwithsubs.video_view.domain.usecase.GetWordsFromYandexDictionaryUseCase
-import com.learnwithsubs.video_view.domain.usecase.SaveWordUseCase
-import com.learnwithsubs.video_view.domain.usecase.UpdateVideoUseCase
-import com.learnwithsubs.video_view.domain.usecase.VideoViewUseCases
+import com.example.yandex_dictionary_api.domain.TranslatorRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -20,7 +12,7 @@ class VideoViewDomainModule {
     @Singleton
     fun provideVideoViewUseCase(
         videoViewRepository: com.learnwithsubs.video_view.domain.repository.VideoViewRepository,
-        translatorRepository: com.learnwithsubs.video_view.domain.repository.TranslatorRepository,
+        translatorRepository: com.example.yandex_dictionary_api.domain.TranslatorRepository,
     ): com.learnwithsubs.video_view.domain.usecase.VideoViewUseCases {
         return com.learnwithsubs.video_view.domain.usecase.VideoViewUseCases(
             getVideoSubtitlesUseCase = com.learnwithsubs.video_view.domain.usecase.GetVideoSubtitlesUseCase(

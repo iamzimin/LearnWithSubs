@@ -37,7 +37,7 @@ class VideoListVideoPicker(private val fragment: Fragment, private val requestCo
     ) {
         if (requestCode == this.requestCode && resultCode == Activity.RESULT_OK) {
             val selectedVideoUri: Uri = data?.data ?: return
-            var errorType: com.learnwithsubs.video_list.domain.models.VideoErrorType? = null
+            var errorType: com.learnwithsubs.database.domain.models.VideoErrorType? = null
 
             var path: String? = getVideoPath(context = context, videoUri = selectedVideoUri)
             val videoName: String = getVideoNameFromUri(selectedVideoUri, context)
@@ -49,12 +49,12 @@ class VideoListVideoPicker(private val fragment: Fragment, private val requestCo
                 path = ""
                 videoDuration = 0
                 bitrate = 0
-                errorType = com.learnwithsubs.video_list.domain.models.VideoErrorType.PROCESSING_VIDEO
+                errorType = com.learnwithsubs.database.domain.models.VideoErrorType.PROCESSING_VIDEO
             }
 
-            val video = com.learnwithsubs.video_list.domain.models.Video(
-                videoStatus = com.learnwithsubs.video_list.domain.models.VideoStatus.LOADING_VIDEO,
-                loadingType = com.learnwithsubs.video_list.domain.models.VideoLoadingType.WAITING,
+            val video = com.learnwithsubs.database.domain.models.Video(
+                videoStatus = com.learnwithsubs.database.domain.models.VideoStatus.LOADING_VIDEO,
+                loadingType = com.learnwithsubs.database.domain.models.VideoLoadingType.WAITING,
                 errorType = errorType,
                 name = videoName,
                 inputPath = path,

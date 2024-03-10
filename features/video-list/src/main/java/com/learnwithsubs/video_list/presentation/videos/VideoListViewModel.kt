@@ -25,29 +25,29 @@ class VideoListViewModel @Inject constructor(
 
     var videoOrder: MutableLiveData<com.learnwithsubs.video_list.domain.util.VideoOrder> = MutableLiveData<com.learnwithsubs.video_list.domain.util.VideoOrder>().apply { value = DEFAULT_SORT_MODE }
     private var filter: String? = null
-    var editableVideo: com.learnwithsubs.video_list.domain.models.Video? = null
+    var editableVideo: com.learnwithsubs.database.domain.models.Video? = null
 
-    val videoProgressLiveData: MutableLiveData<com.learnwithsubs.video_list.domain.models.Video?> = videoTranscodeRepository.getVideoProgressLiveData()
-    val errorTypeLiveData = MutableLiveData<com.learnwithsubs.video_list.domain.models.Video?>()
+    val videoProgressLiveData: MutableLiveData<com.learnwithsubs.database.domain.models.Video?> = videoTranscodeRepository.getVideoProgressLiveData()
+    val errorTypeLiveData = MutableLiveData<com.learnwithsubs.database.domain.models.Video?>()
 
     private val videoSemaphore = Semaphore(1)
-    private val processQueue = LinkedList<com.learnwithsubs.video_list.domain.models.Video?>()
-    private lateinit var poolList: com.learnwithsubs.video_list.domain.models.Video
+    private val processQueue = LinkedList<com.learnwithsubs.database.domain.models.Video?>()
+    private lateinit var poolList: com.learnwithsubs.database.domain.models.Video
 
     companion object {
         val DEFAULT_SORT_MODE: com.learnwithsubs.video_list.domain.util.VideoOrder = com.learnwithsubs.video_list.domain.util.VideoOrder.Date(OrderType.Descending)
     }
 
-    fun getSortedVideoList(videoList: List<com.learnwithsubs.video_list.domain.models.Video>): List<com.learnwithsubs.video_list.domain.models.Video> {
+    fun getSortedVideoList(videoList: List<com.learnwithsubs.database.domain.models.Video>): List<com.learnwithsubs.database.domain.models.Video> {
         val sort = getVideoOrder()
         return videoListUseCases.sortVideoListUseCase(videoList = ArrayList(videoList), sortMode = sort, filter = filter)
     }
 
-    fun editVideo(video: com.learnwithsubs.video_list.domain.models.Video) {
+    fun editVideo(video: com.learnwithsubs.database.domain.models.Video) {
         viewModelScope.launch { videoListUseCases.loadVideoUseCase.invoke(video) }
     }
 
-    fun addVideo(video: com.learnwithsubs.video_list.domain.models.Video) {
+    fun addVideo(video: com.learnwithsubs.database.domain.models.Video) {
         if (video.errorType != null) {
             errorTypeLiveData.postValue(video)
             return
@@ -55,7 +55,7 @@ class VideoListViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 videoListUseCases.loadVideoUseCase.invoke(video)
-                val lastVideo: com.learnwithsubs.video_list.domain.models.Video? = videoListUseCases.getLastVideoUseCase.invoke()
+                val lastVideo: com.learnwithsubs.database.domain.models.Video? = videoListUseCases.getLastVideoUseCase.invoke()
                 processQueue.add(lastVideo)
 
                 videoSemaphore.acquire()
@@ -63,10 +63,10 @@ class VideoListViewModel @Inject constructor(
                     poolList = processQueue.poll() ?: return@withContext
 
                     // Обработка извлечение аудио
-                    poolList.loadingType = com.learnwithsubs.video_list.domain.models.VideoLoadingType.EXTRACTING_AUDIO
+                    poolList.loadingType = com.learnwithsubs.database.domain.models.VideoLoadingType.EXTRACTING_AUDIO
                     editVideo(poolList)
                     // TODO Return, если null (пользователь отменил загрузку)
-                    val extractedAudio: com.learnwithsubs.video_list.domain.models.Video = videoListUseCases.extractAudioUseCase.invoke(poolList) ?: return@withContext
+                    val extractedAudio: com.learnwithsubs.database.domain.models.Video = videoListUseCases.extractAudioUseCase.invoke(poolList) ?: return@withContext
                     // Если ошибка не пуста, то отправка ошибки + остановка обработки
                     if (extractedAudio.errorType != null) {
                         errorTypeLiveData.postValue(extractedAudio)
@@ -75,7 +75,7 @@ class VideoListViewModel @Inject constructor(
 
                     // Декодирование видео
                     val transcodeVideo = async {
-                        poolList.loadingType = com.learnwithsubs.video_list.domain.models.VideoLoadingType.DECODING_VIDEO
+                        poolList.loadingType = com.learnwithsubs.database.domain.models.VideoLoadingType.DECODING_VIDEO
                         editVideo(poolList)
                         return@async videoListUseCases.transcodeVideoUseCase.invoke(poolList)
                     }
@@ -96,7 +96,7 @@ class VideoListViewModel @Inject constructor(
 
                     // После выполненеия декодирования ставится стстус генерации субтитров, если они ещё не готовы
                     if (subtitlesFromServer.isActive) {
-                        poolList.loadingType = com.learnwithsubs.video_list.domain.models.VideoLoadingType.GENERATING_SUBTITLES
+                        poolList.loadingType = com.learnwithsubs.database.domain.models.VideoLoadingType.GENERATING_SUBTITLES
                         editVideo(poolList)
                     }
                     val videoSubtitles = subtitlesFromServer.await()
@@ -109,8 +109,8 @@ class VideoListViewModel @Inject constructor(
                     videoListUseCases.extractVideoPreviewUseCase.invoke(recodedVideo)
 
                     // Успешное завершение
-                    recodedVideo.videoStatus = com.learnwithsubs.video_list.domain.models.VideoStatus.NORMAL_VIDEO
-                    recodedVideo.loadingType = com.learnwithsubs.video_list.domain.models.VideoLoadingType.DONE
+                    recodedVideo.videoStatus = com.learnwithsubs.database.domain.models.VideoStatus.NORMAL_VIDEO
+                    recodedVideo.loadingType = com.learnwithsubs.database.domain.models.VideoLoadingType.DONE
                     editVideo(recodedVideo)
                 } finally {
                     videoSemaphore.release()
@@ -119,13 +119,13 @@ class VideoListViewModel @Inject constructor(
         }
     }
 
-    fun deleteSelectedVideo(selectedVideos: List<com.learnwithsubs.video_list.domain.models.Video>?) {
+    fun deleteSelectedVideo(selectedVideos: List<com.learnwithsubs.database.domain.models.Video>?) {
         viewModelScope.launch {
             selectedVideos?.forEach { deleteVideo(it)}
         }
     }
 
-    fun deleteVideo(video: com.learnwithsubs.video_list.domain.models.Video) {
+    fun deleteVideo(video: com.learnwithsubs.database.domain.models.Video) {
         viewModelScope.launch {
             videoListUseCases.deleteVideoUseCase.invoke(video)
         }
@@ -140,12 +140,12 @@ class VideoListViewModel @Inject constructor(
             subSTR.deleteRecursively()
     }
 
-    fun loadNewSubtitles(video: com.learnwithsubs.video_list.domain.models.Video, subtitles: String) {
+    fun loadNewSubtitles(video: com.learnwithsubs.database.domain.models.Video, subtitles: String) {
         viewModelScope.launch {
             videoListUseCases.loadNewSubtitlesUseCase.invoke(video = video, subtitles = subtitles)
         }
     }
-    fun backOldSubtitles(video: com.learnwithsubs.video_list.domain.models.Video) {
+    fun backOldSubtitles(video: com.learnwithsubs.database.domain.models.Video) {
         viewModelScope.launch {
             videoListUseCases.backOldSubtitlesUseCase.invoke(video = video)
         }

@@ -8,7 +8,7 @@ import com.learnwithsubs.databinding.TileTranslateWordBinding
 abstract class DictionaryHolder(
     itemView: View
 ) : RecyclerView.ViewHolder(itemView) {
-    abstract fun bind(word: com.learnwithsubs.video_view.domain.models.DictionarySynonyms)
+    abstract fun bind(word: com.example.yandex_dictionary_api.models.DictionarySynonyms)
 }
 
 class DictionaryNormalHolder(
@@ -17,7 +17,7 @@ class DictionaryNormalHolder(
 ) : DictionaryHolder(itemView) {
     private val binding = TileTranslateWordBinding.bind(itemView)
 
-    override fun bind(word: com.learnwithsubs.video_view.domain.models.DictionarySynonyms) {
+    override fun bind(word: com.example.yandex_dictionary_api.models.DictionarySynonyms) {
         binding.wordId.text = word.id.toString()
         binding.similarWord.text = word.word
         binding.similarWordTranslate.text = word.translation
@@ -38,7 +38,7 @@ class DictionaryPartSpeechHolder(
 ) : DictionaryHolder(itemView) {
     private val binding = TileTranslatePartspeechBinding.bind(itemView)
 
-    override fun bind(word: com.learnwithsubs.video_view.domain.models.DictionarySynonyms) {
+    override fun bind(word: com.example.yandex_dictionary_api.models.DictionarySynonyms) {
         binding.partSpeech.text = word.partSpeech
     }
 }

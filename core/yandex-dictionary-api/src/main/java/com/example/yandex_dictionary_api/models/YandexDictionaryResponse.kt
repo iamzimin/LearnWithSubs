@@ -1,4 +1,4 @@
-package com.learnwithsubs.video_view.domain.models.server
+package com.example.yandex_dictionary_api.models
 
 data class YandexDictionaryResponse(
     val head: Any?,

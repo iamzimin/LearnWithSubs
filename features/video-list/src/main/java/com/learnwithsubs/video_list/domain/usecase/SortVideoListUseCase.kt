@@ -1,11 +1,11 @@
 package com.learnwithsubs.video_list.domain.usecase
 
-import com.learnwithsubs.video_list.domain.models.Video
+import com.learnwithsubs.database.domain.models.Video
 import com.learnwithsubs.general.util.OrderType
 import com.learnwithsubs.video_list.domain.util.VideoOrder
 
 class SortVideoListUseCase {
-    operator fun invoke(videoList: ArrayList<Video>, sortMode: VideoOrder, filter: String?): List<Video> {
+    operator fun invoke(videoList: ArrayList<com.learnwithsubs.database.domain.models.Video>, sortMode: VideoOrder, filter: String?): List<com.learnwithsubs.database.domain.models.Video> {
         val sorted = when (sortMode.orderType) {
             is OrderType.Ascending -> {
                 when (sortMode) {

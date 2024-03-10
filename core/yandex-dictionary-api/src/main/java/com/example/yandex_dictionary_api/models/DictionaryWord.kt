@@ -1,4 +1,4 @@
-package com.learnwithsubs.video_view.domain.models
+package com.example.yandex_dictionary_api.models
 
 data class DictionaryWord(
     var translation: String,

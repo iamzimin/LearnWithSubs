@@ -10,16 +10,16 @@ import com.learnwithsubs.SelectableAdapter
 
 
 class VideoListAdapter(
-    override var itemList: ArrayList<com.learnwithsubs.video_list.domain.models.Video>
-): SelectableAdapter<com.learnwithsubs.video_list.domain.models.Video>(itemList) {
+    override var itemList: ArrayList<com.learnwithsubs.database.domain.models.Video>
+): SelectableAdapter<com.learnwithsubs.database.domain.models.Video>(itemList) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            com.learnwithsubs.video_list.domain.models.VideoStatus.NORMAL_VIDEO.value -> NormalVideoViewHolder(
+            com.learnwithsubs.database.domain.models.VideoStatus.NORMAL_VIDEO.value -> NormalVideoViewHolder(
                 LayoutInflater.from(parent.context).inflate(R.layout.tile_video, parent, false), this@VideoListAdapter
             )
 
-            com.learnwithsubs.video_list.domain.models.VideoStatus.LOADING_VIDEO.value -> LoadingVideoViewHolder(
+            com.learnwithsubs.database.domain.models.VideoStatus.LOADING_VIDEO.value -> LoadingVideoViewHolder(
                 LayoutInflater.from(parent.context)
                     .inflate(R.layout.tile_video_uploading, parent, false), this@VideoListAdapter
             )
@@ -41,13 +41,13 @@ class VideoListAdapter(
         val video = itemList[position]
 
         when (video.videoStatus) {
-            com.learnwithsubs.video_list.domain.models.VideoStatus.NORMAL_VIDEO -> {
+            com.learnwithsubs.database.domain.models.VideoStatus.NORMAL_VIDEO -> {
                 val normalHolder = holder as NormalVideoViewHolder
                 val isSelected = selectedItems.any { it.id == itemList[position].id }
                 normalHolder.bind(itemList[position], isSelected)
             }
 
-            com.learnwithsubs.video_list.domain.models.VideoStatus.LOADING_VIDEO -> {
+            com.learnwithsubs.database.domain.models.VideoStatus.LOADING_VIDEO -> {
                 val loadingHolder = holder as LoadingVideoViewHolder
                 val isSelected = selectedItems.any { it.id == itemList[position].id }
                 loadingHolder.bind(itemList[position], isSelected)

@@ -5,10 +5,7 @@ import androidx.room.Room
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.learnwithsubs.video_list.data.storage.VideoDatabase
-import com.learnwithsubs.video_view.data.repository.VideoViewRepositoryImpl
-import com.learnwithsubs.video_view.domain.repository.TranslatorRepository
-import com.learnwithsubs.video_view.data.repository.TranslatorRepositoryImpl
-import com.learnwithsubs.video_view.domain.repository.VideoViewRepository
+import com.example.yandex_dictionary_api.domain.TranslatorRepository
 import com.learnwithsubs.word_list.data.storage.WordDatabase
 import dagger.Module
 import dagger.Provides
@@ -86,8 +83,8 @@ class VideoViewDataModule {
     fun provideYandexDictionaryRepository(
         @Named("YandexDictionary") yandexRetrofit: Retrofit,
         @Named("Server") serverRetrofit: Retrofit
-    ): com.learnwithsubs.video_view.domain.repository.TranslatorRepository {
-        return com.learnwithsubs.video_view.data.repository.TranslatorRepositoryImpl(
+    ): com.example.yandex_dictionary_api.domain.TranslatorRepository {
+        return com.example.yandex_dictionary_api.data.TranslatorRepositoryImpl(
             yandexRetrofit,
             serverRetrofit
         )

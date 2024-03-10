@@ -134,11 +134,11 @@ class VideoListFragment : Fragment(), OnSelectChange {
             if (video == null) return@observe
             val errorType = video.errorType ?: return@observe
             when (errorType) {
-                com.learnwithsubs.video_list.domain.models.VideoErrorType.PROCESSING_VIDEO ->      Toast.makeText(this@VideoListFragment.context, getString(R.string.video_processing_error), Toast.LENGTH_SHORT).show()
-                com.learnwithsubs.video_list.domain.models.VideoErrorType.EXTRACTING_AUDIO ->      Toast.makeText(this@VideoListFragment.context, getString(R.string.audio_extraction_error), Toast.LENGTH_SHORT).show()
-                com.learnwithsubs.video_list.domain.models.VideoErrorType.DECODING_VIDEO ->        Toast.makeText(this@VideoListFragment.context, getString(R.string.video_decoding_error), Toast.LENGTH_SHORT).show()
-                com.learnwithsubs.video_list.domain.models.VideoErrorType.GENERATING_SUBTITLES ->  Toast.makeText(this@VideoListFragment.context, getString(R.string.subtitle_generation_error), Toast.LENGTH_SHORT).show()
-                com.learnwithsubs.video_list.domain.models.VideoErrorType.UPLOADING_AUDIO ->       Toast.makeText(this@VideoListFragment.context, getString(R.string.audio_upload_error), Toast.LENGTH_SHORT).show()
+                com.learnwithsubs.database.domain.models.VideoErrorType.PROCESSING_VIDEO ->      Toast.makeText(this@VideoListFragment.context, getString(R.string.video_processing_error), Toast.LENGTH_SHORT).show()
+                com.learnwithsubs.database.domain.models.VideoErrorType.EXTRACTING_AUDIO ->      Toast.makeText(this@VideoListFragment.context, getString(R.string.audio_extraction_error), Toast.LENGTH_SHORT).show()
+                com.learnwithsubs.database.domain.models.VideoErrorType.DECODING_VIDEO ->        Toast.makeText(this@VideoListFragment.context, getString(R.string.video_decoding_error), Toast.LENGTH_SHORT).show()
+                com.learnwithsubs.database.domain.models.VideoErrorType.GENERATING_SUBTITLES ->  Toast.makeText(this@VideoListFragment.context, getString(R.string.subtitle_generation_error), Toast.LENGTH_SHORT).show()
+                com.learnwithsubs.database.domain.models.VideoErrorType.UPLOADING_AUDIO ->       Toast.makeText(this@VideoListFragment.context, getString(R.string.audio_upload_error), Toast.LENGTH_SHORT).show()
             }
             vm.deleteVideo(video = video)
         }
@@ -172,7 +172,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
             if (video == null) {
                 // Если видео не найдено - его нельзя редактировать
                 Toast.makeText(context, getString(R.string.the_video_does_not_exist), Toast.LENGTH_SHORT).show()
-            } else if (video.loadingType != com.learnwithsubs.video_list.domain.models.VideoLoadingType.DONE) {
+            } else if (video.loadingType != com.learnwithsubs.database.domain.models.VideoLoadingType.DONE) {
                 // Если видео не загружено - его нельзя редактировать
                 Toast.makeText(context, getString(R.string.the_video_is_uploading), Toast.LENGTH_SHORT).show()
             } else {
@@ -345,7 +345,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
     override fun onSingleSelected() {
         setTextInSubtitleMenu()
         changeCardVisibility(cardView = videoListFragmentBinding.deleteMenu, isVisible = true)
-        if ((adapter.getEditableItem()?.loadingType ?: false) == com.learnwithsubs.video_list.domain.models.VideoLoadingType.DONE) {
+        if ((adapter.getEditableItem()?.loadingType ?: false) == com.learnwithsubs.database.domain.models.VideoLoadingType.DONE) {
             changeCardVisibility(cardView = videoListFragmentBinding.addSubtitlesMenu, isVisible = true)
             changeCardVisibility(cardView = videoListFragmentBinding.renameMenu, isVisible = true)
         } else {

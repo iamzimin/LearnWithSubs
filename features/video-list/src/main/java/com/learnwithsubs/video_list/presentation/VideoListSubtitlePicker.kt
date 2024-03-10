@@ -21,7 +21,7 @@ class VideoListSubtitlePicker(private val fragment: Fragment, private val reques
         resultCode: Int,
         data: Intent?,
         vm: VideoListViewModel,
-        video: com.learnwithsubs.video_list.domain.models.Video?,
+        video: com.learnwithsubs.database.domain.models.Video?,
     ) {
         if (requestCode == this.requestCode && resultCode == Activity.RESULT_OK) {
             val selectedFileUri: Uri = data?.data ?: return
