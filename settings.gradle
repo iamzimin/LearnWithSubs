@@ -14,5 +14,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "LearnWithSubs"
 include ':app'
-include ':data'
-include ':domain'
+include ':features:video-view'
+include ':features:video-list'
+include ':features:word-list'

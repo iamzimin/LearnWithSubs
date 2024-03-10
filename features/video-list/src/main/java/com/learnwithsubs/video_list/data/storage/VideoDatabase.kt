@@ -1,0 +1,17 @@
+package com.learnwithsubs.video_list.data.storage
+
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import com.learnwithsubs.video_list.domain.models.Video
+
+@Database(
+    entities = [com.learnwithsubs.video_list.domain.models.Video::class],
+    version = 1
+)
+abstract class VideoDatabase: RoomDatabase() {
+    abstract val videoListDao: VideoListDao
+
+    companion object {
+        const val DATABASE_NAME = "videos_db"
+    }
+}
