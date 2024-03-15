@@ -1,4 +1,4 @@
-package com.learnwithsubs.video_list.domain.util
+package com.example.yandex_dictionary_api.domain.util
 
 import com.learnwithsubs.general.util.OrderType
 

@@ -19,7 +19,7 @@ class VideoListAppModule(val context: Context) {
     @Singleton
     fun provideVideoListViewModelFactory(
         videoListUseCases: com.learnwithsubs.video_list.domain.usecase.VideoListUseCases,
-        videoTranscodeRepository: com.learnwithsubs.video_list.domain.repository.VideoTranscodeRepository
+        videoTranscodeRepository: com.example.video_transcode.domain.repository.VideoTranscodeRepository
     ): VideoListViewModelFactory {
         return VideoListViewModelFactory(
             videoListUseCases = videoListUseCases,

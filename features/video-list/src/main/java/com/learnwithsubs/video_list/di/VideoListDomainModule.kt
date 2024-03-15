@@ -12,8 +12,8 @@ class VideoListDomainModule {
     @Singleton
     fun provideVideoListUseCases(
         videoListRepository: com.learnwithsubs.database.domain.VideoListRepository,
-        transcodeRepository: com.learnwithsubs.video_list.domain.repository.VideoTranscodeRepository,
-        serverInteractionRepository: com.learnwithsubs.video_list.domain.repository.ServerInteractionRepository
+        transcodeRepository: com.example.video_transcode.domain.repository.VideoTranscodeRepository,
+        serverInteractionRepository: com.example.yandex_dictionary_api.domain.repository.ServerInteractionRepository
     ): com.learnwithsubs.video_list.domain.usecase.VideoListUseCases {
         return com.learnwithsubs.video_list.domain.usecase.VideoListUseCases(
             getVideoListUseCase = com.learnwithsubs.video_list.domain.usecase.GetVideoListUseCase(

@@ -1,4 +1,4 @@
-package com.learnwithsubs.video_view.domain.service
+package com.example.yandex_dictionary_api.domain.service
 
 import com.example.yandex_dictionary_api.models.YandexDictionaryResponse
 import retrofit2.Call

@@ -1,4 +1,4 @@
-package com.learnwithsubs.video_list.data.repository
+package com.example.server_api.data.repository
 
 import com.learnwithsubs.database.domain.models.Video
 import okhttp3.MediaType.Companion.toMediaType
@@ -12,9 +12,9 @@ import java.lang.Exception
 
 class ServerInteractionRepositoryImpl(
     private val retrofit: Retrofit
-): com.learnwithsubs.video_list.domain.repository.ServerInteractionRepository {
+): com.example.yandex_dictionary_api.domain.repository.ServerInteractionRepository {
     override suspend fun sendAudioToServer(audio: MultipartBody.Part): Response<String> { //TODO merge getSubtitles
-        val apiService = retrofit.create(com.learnwithsubs.video_list.domain.repository.ServerInteractionRepository::class.java)
+        val apiService = retrofit.create(com.example.yandex_dictionary_api.domain.repository.ServerInteractionRepository::class.java)
         return apiService.sendAudioToServer(audio)
     }
 

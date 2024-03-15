@@ -1,9 +1,8 @@
-package com.learnwithsubs.video_list.data.repository
+package com.example.video_transcode.data.repository
 
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.os.Environment
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.arthenica.ffmpegkit.FFmpegKit
 import com.arthenica.ffmpegkit.FFmpegSession
@@ -30,7 +29,7 @@ class VideoTranscodeRepositoryImpl :
     override suspend fun transcodeVideo(video: com.learnwithsubs.database.domain.models.Video): com.learnwithsubs.database.domain.models.Video? = suspendCoroutine { continuation ->
         val videoFolder = getVideoFolderPath(video)
 
-        val outputVideoPath = File(videoFolder, com.learnwithsubs.video_list.domain.VideoConstants.COPIED_VIDEO)
+        val outputVideoPath = File(videoFolder, com.example.yandex_dictionary_api.domain.VideoConstants.COPIED_VIDEO)
         val command = "-i ${video.inputPath} -c:v mpeg4 -b:v ${video.bitrate}B ${outputVideoPath.absolutePath} -y"
 
         FFmpegKitConfig.enableStatisticsCallback {
@@ -69,7 +68,7 @@ class VideoTranscodeRepositoryImpl :
     override suspend fun extractAudio(video: com.learnwithsubs.database.domain.models.Video): com.learnwithsubs.database.domain.models.Video? = suspendCoroutine { continuation ->
         val videoFolder = getVideoFolderPath(video)
 
-        val outputAudioPath = File(videoFolder, com.learnwithsubs.video_list.domain.VideoConstants.EXTRACTED_AUDIO)
+        val outputAudioPath = File(videoFolder, com.example.yandex_dictionary_api.domain.VideoConstants.EXTRACTED_AUDIO)
         val command = "-i ${video.inputPath} -q:a 0 -map a ${outputAudioPath.absolutePath} -y"
 
         FFmpegKitConfig.enableStatisticsCallback {
@@ -117,7 +116,7 @@ class VideoTranscodeRepositoryImpl :
             val frame = retriever.getFrameAtTime(0)
             retriever.release()
 
-            val outputVideoPath = File(videoFolder, com.learnwithsubs.video_list.domain.VideoConstants.VIDEO_PREVIEW)
+            val outputVideoPath = File(videoFolder, com.example.yandex_dictionary_api.domain.VideoConstants.VIDEO_PREVIEW)
 
             withContext(Dispatchers.IO) {
                 FileOutputStream(outputVideoPath).use { out ->

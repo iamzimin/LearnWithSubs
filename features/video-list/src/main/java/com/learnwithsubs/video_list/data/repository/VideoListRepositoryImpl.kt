@@ -1,13 +1,13 @@
 package com.learnwithsubs.video_list.data.repository
 
-import com.learnwithsubs.video_list.data.storage.VideoListDao
+import com.learnwithsubs.database.data.storage.VideoListDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import java.io.File
 
 class VideoListRepositoryImpl(
-    private val dao: VideoListDao
+    private val dao: com.learnwithsubs.database.data.storage.VideoListDao
 ) : com.learnwithsubs.database.domain.VideoListRepository {
     override fun getVideos(): Flow<List<com.learnwithsubs.database.domain.models.Video>> {
         return dao.getVideos()
@@ -31,7 +31,7 @@ class VideoListRepositoryImpl(
 
 
     override suspend fun saveSubtitles(video: com.learnwithsubs.database.domain.models.Video, subtitles: String) {
-        val subSTR = File(video.outputPath, com.learnwithsubs.video_list.domain.VideoConstants.GENERATED_SUBTITLES)
+        val subSTR = File(video.outputPath, com.example.yandex_dictionary_api.domain.VideoConstants.GENERATED_SUBTITLES)
         if (subSTR.exists())
             subSTR.delete()
 
@@ -44,7 +44,7 @@ class VideoListRepositoryImpl(
     }
 
     override suspend fun loadNewSubtitles(video: com.learnwithsubs.database.domain.models.Video, subtitles: String) {
-        val subSTR = File(video.outputPath, com.learnwithsubs.video_list.domain.VideoConstants.OWN_SUBTITLES)
+        val subSTR = File(video.outputPath, com.example.yandex_dictionary_api.domain.VideoConstants.OWN_SUBTITLES)
         if (subSTR.exists())
             subSTR.delete()
 

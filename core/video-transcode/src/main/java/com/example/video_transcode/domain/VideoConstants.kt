@@ -1,4 +1,4 @@
-package com.learnwithsubs.video_list.domain
+package com.example.video_transcode.domain
 
 object VideoConstants {
     const val COPIED_VIDEO = "copied_video.mp4"

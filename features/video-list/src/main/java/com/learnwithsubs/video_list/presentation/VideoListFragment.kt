@@ -220,9 +220,9 @@ class VideoListFragment : Fragment(), OnSelectChange {
             ) else videoListActivity.applicationContext.getColor(R.color.button_pressed))
         }
 
-        sortByDialogBinding.nameCheckBox.isChecked = vm.getVideoOrder() is com.learnwithsubs.video_list.domain.util.VideoOrder.Name
-        sortByDialogBinding.dateCheckBox.isChecked = vm.getVideoOrder() is com.learnwithsubs.video_list.domain.util.VideoOrder.Date
-        sortByDialogBinding.durationCheckBox.isChecked = vm.getVideoOrder() is com.learnwithsubs.video_list.domain.util.VideoOrder.Duration
+        sortByDialogBinding.nameCheckBox.isChecked = vm.getVideoOrder() is com.example.yandex_dictionary_api.domain.util.VideoOrder.Name
+        sortByDialogBinding.dateCheckBox.isChecked = vm.getVideoOrder() is com.example.yandex_dictionary_api.domain.util.VideoOrder.Date
+        sortByDialogBinding.durationCheckBox.isChecked = vm.getVideoOrder() is com.example.yandex_dictionary_api.domain.util.VideoOrder.Duration
 
         val sortType = vm.getVideoOrder()
         setButtonColors(ascending = sortType.orderType is OrderType.Ascending)
@@ -243,15 +243,15 @@ class VideoListFragment : Fragment(), OnSelectChange {
 
         sortByDialogBinding.cardViewName.setOnClickListener {
             val currentOrderType = vm.getOrderType()
-            vm.setVideoOrder(com.learnwithsubs.video_list.domain.util.VideoOrder.Name(currentOrderType))
+            vm.setVideoOrder(com.example.yandex_dictionary_api.domain.util.VideoOrder.Name(currentOrderType))
         }
         sortByDialogBinding.cardViewDate.setOnClickListener {
             val currentOrderType = vm.getOrderType()
-            vm.setVideoOrder(com.learnwithsubs.video_list.domain.util.VideoOrder.Date(currentOrderType))
+            vm.setVideoOrder(com.example.yandex_dictionary_api.domain.util.VideoOrder.Date(currentOrderType))
         }
         sortByDialogBinding.cardViewDuration.setOnClickListener {
             val currentOrderType = vm.getOrderType()
-            vm.setVideoOrder(com.learnwithsubs.video_list.domain.util.VideoOrder.Duration(currentOrderType))
+            vm.setVideoOrder(com.example.yandex_dictionary_api.domain.util.VideoOrder.Duration(currentOrderType))
         }
 
         sortByDialogBinding.clearButton.setOnClickListener {
@@ -264,9 +264,9 @@ class VideoListFragment : Fragment(), OnSelectChange {
         }
 
         vm.videoOrder.observe(viewLifecycleOwner) { sortMode ->
-            sortByDialogBinding.nameCheckBox.isChecked = sortMode is com.learnwithsubs.video_list.domain.util.VideoOrder.Name
-            sortByDialogBinding.dateCheckBox.isChecked = sortMode is com.learnwithsubs.video_list.domain.util.VideoOrder.Date
-            sortByDialogBinding.durationCheckBox.isChecked = sortMode is com.learnwithsubs.video_list.domain.util.VideoOrder.Duration
+            sortByDialogBinding.nameCheckBox.isChecked = sortMode is com.example.yandex_dictionary_api.domain.util.VideoOrder.Name
+            sortByDialogBinding.dateCheckBox.isChecked = sortMode is com.example.yandex_dictionary_api.domain.util.VideoOrder.Date
+            sortByDialogBinding.durationCheckBox.isChecked = sortMode is com.example.yandex_dictionary_api.domain.util.VideoOrder.Duration
         }
 
         sortByDialog.show()

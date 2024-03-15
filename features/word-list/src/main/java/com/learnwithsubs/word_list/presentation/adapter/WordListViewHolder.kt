@@ -9,7 +9,7 @@ import java.util.Locale
 abstract class WordListViewHolder(
     itemView: View
 ) : RecyclerView.ViewHolder(itemView) {
-    abstract fun bind(word: com.learnwithsubs.word_list.domain.models.WordTranslation, isSelected: Boolean)
+    abstract fun bind(word: com.learnwithsubs.database.domain.models.WordTranslation, isSelected: Boolean)
 }
 
 class WordWithTranslationViewHolder(
@@ -19,7 +19,7 @@ class WordWithTranslationViewHolder(
     private val binding = TileWordWithTranslationBinding.bind(itemView)
     private val tts: TextToSpeech = TextToSpeech(itemView.context, this)
 
-    override fun bind(word: com.learnwithsubs.word_list.domain.models.WordTranslation, isSelected: Boolean) {
+    override fun bind(word: com.learnwithsubs.database.domain.models.WordTranslation, isSelected: Boolean) {
         binding.word.text = word.word
         binding.translation.text = word.translation
         binding.selectCheckBox.isChecked = isSelected

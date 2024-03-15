@@ -1,4 +1,4 @@
-package com.learnwithsubs.word_list.data.storage
+package com.learnwithsubs.database.data.storage
 
 import androidx.room.Dao
 import androidx.room.Delete

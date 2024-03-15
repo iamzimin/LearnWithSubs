@@ -1,4 +1,4 @@
-package com.learnwithsubs.video_list.data.storage
+package com.learnwithsubs.database.data.storage
 
 import androidx.room.*
 import com.learnwithsubs.database.domain.models.Video

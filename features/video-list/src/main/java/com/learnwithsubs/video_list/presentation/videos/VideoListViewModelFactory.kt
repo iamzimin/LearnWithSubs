@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 
 class VideoListViewModelFactory(
     val videoListUseCases: com.learnwithsubs.video_list.domain.usecase.VideoListUseCases,
-    val videoTranscodeRepository: com.learnwithsubs.video_list.domain.repository.VideoTranscodeRepository
+    val videoTranscodeRepository: com.example.video_transcode.domain.repository.VideoTranscodeRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return VideoListViewModel(

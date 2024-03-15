@@ -44,7 +44,7 @@ class NormalVideoViewHolder(
         binding.duration.text = "${duration}: ${formatDuration(video.duration)}"
         binding.savedWords.text = "${savedWords}: ${video.saveWords}"
         binding.selectCheckBox.isChecked = isSelected
-        binding.videoPreview.load(File(video.outputPath, com.learnwithsubs.video_list.domain.VideoConstants.VIDEO_PREVIEW).absoluteFile) {
+        binding.videoPreview.load(File(video.outputPath, com.example.yandex_dictionary_api.domain.VideoConstants.VIDEO_PREVIEW).absoluteFile) {
             transformations(RoundedCornersTransformation(10f))
             error(R.drawable.rectangle)
         }

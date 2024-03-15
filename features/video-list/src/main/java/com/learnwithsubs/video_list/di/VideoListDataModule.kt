@@ -18,11 +18,11 @@ class VideoListDataModule {
 
     @Provides
     @Singleton
-    fun provideVideoDatabase(context: Context) : com.learnwithsubs.video_list.data.storage.VideoDatabase {
+    fun provideVideoDatabase(context: Context) : com.learnwithsubs.database.data.storage.VideoDatabase {
         return Room.databaseBuilder(
             context,
-            com.learnwithsubs.video_list.data.storage.VideoDatabase::class.java,
-            com.learnwithsubs.video_list.data.storage.VideoDatabase.DATABASE_NAME
+            com.learnwithsubs.database.data.storage.VideoDatabase::class.java,
+            com.learnwithsubs.database.data.storage.VideoDatabase.DATABASE_NAME
         ).build()
     }
 
@@ -47,20 +47,22 @@ class VideoListDataModule {
 
     @Provides
     @Singleton
-    fun provideVideoListRepository(db: com.learnwithsubs.video_list.data.storage.VideoDatabase): com.learnwithsubs.database.domain.VideoListRepository {
+    fun provideVideoListRepository(db: com.learnwithsubs.database.data.storage.VideoDatabase): com.learnwithsubs.database.domain.VideoListRepository {
         return com.learnwithsubs.video_list.data.repository.VideoListRepositoryImpl(db.videoListDao)
     }
 
     @Provides
     @Singleton
-    fun provideVideoTranscodeRepository(): com.learnwithsubs.video_list.domain.repository.VideoTranscodeRepository {
-        return com.learnwithsubs.video_list.data.repository.VideoTranscodeRepositoryImpl()
+    fun provideVideoTranscodeRepository(): com.example.video_transcode.domain.repository.VideoTranscodeRepository {
+        return com.example.video_transcode.data.repository.VideoTranscodeRepositoryImpl()
     }
 
     @Provides
     @Singleton
-    fun provideServerInteractionRepository(retrofit: Retrofit): com.learnwithsubs.video_list.domain.repository.ServerInteractionRepository {
-        return com.learnwithsubs.video_list.data.repository.ServerInteractionRepositoryImpl(retrofit)
+    fun provideServerInteractionRepository(retrofit: Retrofit): com.example.yandex_dictionary_api.domain.repository.ServerInteractionRepository {
+        return com.example.yandex_dictionary_api.data.repository.ServerInteractionRepositoryImpl(
+            retrofit
+        )
     }
 
 }

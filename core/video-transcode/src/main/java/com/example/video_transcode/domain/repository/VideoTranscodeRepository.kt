@@ -1,4 +1,4 @@
-package com.learnwithsubs.video_list.domain.repository
+package com.example.video_transcode.domain.repository
 
 import androidx.lifecycle.MutableLiveData
 import com.learnwithsubs.database.domain.models.Video

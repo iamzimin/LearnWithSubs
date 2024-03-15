@@ -12,6 +12,8 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/database" />
+            <option value="$PROJECT_DIR$/core/server-api" />
+            <option value="$PROJECT_DIR$/core/video-transcode" />
             <option value="$PROJECT_DIR$/core/yandex-dictionary-api" />
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/video-list" />

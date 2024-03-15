@@ -1,4 +1,4 @@
-package com.learnwithsubs.video_list.domain.repository
+package com.example.server_api.domain.repository
 
 import com.learnwithsubs.database.domain.models.Video
 import okhttp3.MultipartBody

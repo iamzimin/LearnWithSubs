@@ -17,13 +17,13 @@ import javax.inject.Inject
 
 class VideoListViewModel @Inject constructor(
     val videoListUseCases: com.learnwithsubs.video_list.domain.usecase.VideoListUseCases,
-    val videoTranscodeRepository: com.learnwithsubs.video_list.domain.repository.VideoTranscodeRepository
+    val videoTranscodeRepository: com.example.video_transcode.domain.repository.VideoTranscodeRepository
 ) : ViewModel() {
 
     //private val videoListFlow: Flow<List<Video>> = videoListUseCases.getVideoListUseCase.invoke()
     val videoList = videoListUseCases.getVideoListUseCase.invoke().asLiveData(viewModelScope.coroutineContext)
 
-    var videoOrder: MutableLiveData<com.learnwithsubs.video_list.domain.util.VideoOrder> = MutableLiveData<com.learnwithsubs.video_list.domain.util.VideoOrder>().apply { value = DEFAULT_SORT_MODE }
+    var videoOrder: MutableLiveData<com.example.yandex_dictionary_api.domain.util.VideoOrder> = MutableLiveData<com.example.yandex_dictionary_api.domain.util.VideoOrder>().apply { value = DEFAULT_SORT_MODE }
     private var filter: String? = null
     var editableVideo: com.learnwithsubs.database.domain.models.Video? = null
 
@@ -35,7 +35,7 @@ class VideoListViewModel @Inject constructor(
     private lateinit var poolList: com.learnwithsubs.database.domain.models.Video
 
     companion object {
-        val DEFAULT_SORT_MODE: com.learnwithsubs.video_list.domain.util.VideoOrder = com.learnwithsubs.video_list.domain.util.VideoOrder.Date(OrderType.Descending)
+        val DEFAULT_SORT_MODE: com.example.yandex_dictionary_api.domain.util.VideoOrder = com.example.yandex_dictionary_api.domain.util.VideoOrder.Date(OrderType.Descending)
     }
 
     fun getSortedVideoList(videoList: List<com.learnwithsubs.database.domain.models.Video>): List<com.learnwithsubs.database.domain.models.Video> {
@@ -152,10 +152,10 @@ class VideoListViewModel @Inject constructor(
     }
 
 
-    fun setVideoOrder(orderMode: com.learnwithsubs.video_list.domain.util.VideoOrder) {
+    fun setVideoOrder(orderMode: com.example.yandex_dictionary_api.domain.util.VideoOrder) {
         videoOrder.value = orderMode
     }
-    fun getVideoOrder(): com.learnwithsubs.video_list.domain.util.VideoOrder {
+    fun getVideoOrder(): com.example.yandex_dictionary_api.domain.util.VideoOrder {
         return videoOrder.value ?: DEFAULT_SORT_MODE
     }
 

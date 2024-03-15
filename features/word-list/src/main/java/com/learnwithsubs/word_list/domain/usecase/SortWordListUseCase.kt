@@ -1,11 +1,11 @@
 package com.learnwithsubs.word_list.domain.usecase
 
-import com.learnwithsubs.word_list.domain.models.WordTranslation
+import com.learnwithsubs.database.domain.models.WordTranslation
 import com.learnwithsubs.word_list.domain.util.WordOrder
 import com.learnwithsubs.general.util.OrderType
 
 class SortWordListUseCase {
-    operator fun invoke(wordList: ArrayList<WordTranslation>, sortMode: WordOrder, filter: String?): List<WordTranslation> {
+    operator fun invoke(wordList: ArrayList<com.learnwithsubs.database.domain.models.WordTranslation>, sortMode: WordOrder, filter: String?): List<com.learnwithsubs.database.domain.models.WordTranslation> {
         val sorted = when (sortMode.orderType) {
             is OrderType.Ascending -> {
                 when (sortMode) {

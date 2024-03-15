@@ -130,7 +130,7 @@ class WordListFragment : Fragment(), OnSelectChange {
         dialogWordListMenuEditBinding.save.setOnClickListener {
             val word = vm.editableWord
             if (word == null) {
-                val newWord = com.learnwithsubs.word_list.domain.models.WordTranslation(
+                val newWord = com.learnwithsubs.database.domain.models.WordTranslation(
                     word = dialogWordListMenuEditBinding.word.text.toString(),
                     translation = dialogWordListMenuEditBinding.translation.text.toString(),
                     nativeLanguage = "ru", //TODO

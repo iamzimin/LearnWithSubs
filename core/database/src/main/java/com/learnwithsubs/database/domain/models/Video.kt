@@ -1,4 +1,4 @@
-package com.learnwithsubs.video_list.domain.models
+package com.learnwithsubs.database.domain.models
 
 import android.os.Parcelable
 import androidx.room.Entity
