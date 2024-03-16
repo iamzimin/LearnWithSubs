@@ -1,5 +1,6 @@
 package com.example.server_api.data.repository
 
+import com.example.server_api.domain.repository.ServerInteractionRepository
 import com.learnwithsubs.database.domain.models.Video
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -12,14 +13,14 @@ import java.lang.Exception
 
 class ServerInteractionRepositoryImpl(
     private val retrofit: Retrofit
-): com.example.yandex_dictionary_api.domain.repository.ServerInteractionRepository {
+): ServerInteractionRepository {
     override suspend fun sendAudioToServer(audio: MultipartBody.Part): Response<String> { //TODO merge getSubtitles
-        val apiService = retrofit.create(com.example.yandex_dictionary_api.domain.repository.ServerInteractionRepository::class.java)
+        val apiService = retrofit.create(ServerInteractionRepository::class.java)
         return apiService.sendAudioToServer(audio)
     }
 
-    override suspend fun getSubtitles(video: com.learnwithsubs.database.domain.models.Video): String? {
-        val file = File(video.outputPath, com.learnwithsubs.video_list.domain.VideoConstants.EXTRACTED_AUDIO)
+    override suspend fun getSubtitles(video: Video): String? {
+        val file = File(video.outputPath, VideoConstants.EXTRACTED_AUDIO)
         val requestFile = file.asRequestBody("audio/mp3".toMediaType())
         val audioPart = MultipartBody.Part.createFormData("audio", file.name, requestFile)
 

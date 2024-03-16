@@ -5,11 +5,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.learnwithsubs.general.models.Identifiable
 import kotlinx.parcelize.Parcelize
-import java.sql.Timestamp
 
 @Parcelize
 @Entity
-data class WordTranslation(
+data class WordTranslationDBO(
     @PrimaryKey override val id: Int? = null,
     var word: String,
     var translation: String,

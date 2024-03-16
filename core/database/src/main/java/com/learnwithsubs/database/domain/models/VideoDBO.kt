@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @Entity
-data class Video(
+data class VideoDBO(
     @PrimaryKey override val id: Int? = null,
     var videoStatus: VideoStatus,
     var loadingType: VideoLoadingType,

@@ -11,5 +11,5 @@ interface ServerInteractionRepository {
     @Multipart
     @POST("/generate_subtitles")
     suspend fun sendAudioToServer(@Part audio: MultipartBody.Part): Response<String>
-    suspend fun getSubtitles(video: com.learnwithsubs.database.domain.models.Video): String?
+    suspend fun getSubtitles(video: Video): String?
 }

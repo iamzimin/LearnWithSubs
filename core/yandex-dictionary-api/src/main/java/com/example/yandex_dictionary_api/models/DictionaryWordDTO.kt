@@ -1,6 +1,6 @@
 package com.example.yandex_dictionary_api.models
 
-data class DictionaryWord(
+data class DictionaryWordDTO(
     var translation: String,
     var synonyms: ArrayList<DictionarySynonyms>
 )

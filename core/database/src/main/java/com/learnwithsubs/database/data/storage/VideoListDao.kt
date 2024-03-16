@@ -1,24 +1,23 @@
 package com.learnwithsubs.database.data.storage
 
 import androidx.room.*
-import com.learnwithsubs.database.domain.models.Video
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface VideoListDao {
 
     @Query("SELECT * FROM video")
-    fun getVideos(): Flow<List<com.learnwithsubs.database.domain.models.Video>>
+    fun getVideos(): Flow<List<com.learnwithsubs.database.domain.models.VideoDBO>>
 
     @Query("SELECT * FROM video WHERE id = :id")
-    suspend fun getVideoById(id: Int) : com.learnwithsubs.database.domain.models.Video?
+    suspend fun getVideoById(id: Int) : com.learnwithsubs.database.domain.models.VideoDBO?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertVideo(video: com.learnwithsubs.database.domain.models.Video)
+    suspend fun insertVideo(videoDBO: com.learnwithsubs.database.domain.models.VideoDBO)
 
     @Delete
-    suspend fun deleteVideo(video: com.learnwithsubs.database.domain.models.Video)
+    suspend fun deleteVideo(videoDBO: com.learnwithsubs.database.domain.models.VideoDBO)
 
     @Query("SELECT * FROM video ORDER BY id DESC LIMIT 1")
-    suspend fun getLastVideo(): com.learnwithsubs.database.domain.models.Video?
+    suspend fun getLastVideo(): com.learnwithsubs.database.domain.models.VideoDBO?
 }

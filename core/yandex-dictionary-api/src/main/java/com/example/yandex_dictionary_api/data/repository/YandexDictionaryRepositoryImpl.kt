@@ -16,7 +16,7 @@ class TranslatorRepositoryImpl(
         key: String,
         lang: String,
         word: String
-    ): com.example.yandex_dictionary_api.models.DictionaryWord? {
+    ): com.example.yandex_dictionary_api.models.DictionaryWordDTO? {
         val apiService = yandexRetrofit.create(com.learnwithsubs.video_view.domain.service.TranslationService::class.java)
         val wordResponse = apiService.getWordsFromDictionary(key = key, lang = lang, word = word).awaitResponse()
 
@@ -27,7 +27,7 @@ class TranslatorRepositoryImpl(
                 return null
 
             val transl = definition[0].tr[0].text
-            val dictionaryWord = com.example.yandex_dictionary_api.models.DictionaryWord(
+            val dictionaryWordDTO = com.example.yandex_dictionary_api.models.DictionaryWordDTO(
                 translation = transl,
                 synonyms = ArrayList()
             )
@@ -42,7 +42,7 @@ class TranslatorRepositoryImpl(
                     partSpeech = speechPart.pos,
                     type = com.example.yandex_dictionary_api.models.DictionaryType.PART_SPEECH
                 )
-                dictionaryWord.synonyms.add(pSpeech)
+                dictionaryWordDTO.synonyms.add(pSpeech)
 
                 for (spID in translations.indices) {
                     val translation = translations[spID]
@@ -77,10 +77,10 @@ class TranslatorRepositoryImpl(
                             type = com.example.yandex_dictionary_api.models.DictionaryType.WORD
                         )
                     }
-                    dictionaryWord.synonyms.add(dWord)
+                    dictionaryWordDTO.synonyms.add(dWord)
                 }
             }
-            return dictionaryWord
+            return dictionaryWordDTO
         } else {
             return null
         }
