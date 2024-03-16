@@ -134,11 +134,11 @@ class VideoListFragment : Fragment(), OnSelectChange {
             if (video == null) return@observe
             val errorType = video.errorType ?: return@observe
             when (errorType) {
-                com.learnwithsubs.database.domain.models.VideoErrorType.PROCESSING_VIDEO ->      Toast.makeText(this@VideoListFragment.context, getString(R.string.video_processing_error), Toast.LENGTH_SHORT).show()
-                com.learnwithsubs.database.domain.models.VideoErrorType.EXTRACTING_AUDIO ->      Toast.makeText(this@VideoListFragment.context, getString(R.string.audio_extraction_error), Toast.LENGTH_SHORT).show()
-                com.learnwithsubs.database.domain.models.VideoErrorType.DECODING_VIDEO ->        Toast.makeText(this@VideoListFragment.context, getString(R.string.video_decoding_error), Toast.LENGTH_SHORT).show()
-                com.learnwithsubs.database.domain.models.VideoErrorType.GENERATING_SUBTITLES ->  Toast.makeText(this@VideoListFragment.context, getString(R.string.subtitle_generation_error), Toast.LENGTH_SHORT).show()
-                com.learnwithsubs.database.domain.models.VideoErrorType.UPLOADING_AUDIO ->       Toast.makeText(this@VideoListFragment.context, getString(R.string.audio_upload_error), Toast.LENGTH_SHORT).show()
+                VideoErrorType.PROCESSING_VIDEO ->      Toast.makeText(this@VideoListFragment.context, getString(R.string.video_processing_error), Toast.LENGTH_SHORT).show()
+                VideoErrorType.EXTRACTING_AUDIO ->      Toast.makeText(this@VideoListFragment.context, getString(R.string.audio_extraction_error), Toast.LENGTH_SHORT).show()
+                VideoErrorType.DECODING_VIDEO ->        Toast.makeText(this@VideoListFragment.context, getString(R.string.video_decoding_error), Toast.LENGTH_SHORT).show()
+                VideoErrorType.GENERATING_SUBTITLES ->  Toast.makeText(this@VideoListFragment.context, getString(R.string.subtitle_generation_error), Toast.LENGTH_SHORT).show()
+                VideoErrorType.UPLOADING_AUDIO ->       Toast.makeText(this@VideoListFragment.context, getString(R.string.audio_upload_error), Toast.LENGTH_SHORT).show()
             }
             vm.deleteVideo(video = video)
         }
@@ -172,7 +172,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
             if (video == null) {
                 // Если видео не найдено - его нельзя редактировать
                 Toast.makeText(context, getString(R.string.the_video_does_not_exist), Toast.LENGTH_SHORT).show()
-            } else if (video.loadingType != com.learnwithsubs.database.domain.models.VideoLoadingType.DONE) {
+            } else if (video.loadingType != VideoLoadingType.DONE) {
                 // Если видео не загружено - его нельзя редактировать
                 Toast.makeText(context, getString(R.string.the_video_is_uploading), Toast.LENGTH_SHORT).show()
             } else {
@@ -220,9 +220,9 @@ class VideoListFragment : Fragment(), OnSelectChange {
             ) else videoListActivity.applicationContext.getColor(R.color.button_pressed))
         }
 
-        sortByDialogBinding.nameCheckBox.isChecked = vm.getVideoOrder() is com.example.yandex_dictionary_api.domain.util.VideoOrder.Name
-        sortByDialogBinding.dateCheckBox.isChecked = vm.getVideoOrder() is com.example.yandex_dictionary_api.domain.util.VideoOrder.Date
-        sortByDialogBinding.durationCheckBox.isChecked = vm.getVideoOrder() is com.example.yandex_dictionary_api.domain.util.VideoOrder.Duration
+        sortByDialogBinding.nameCheckBox.isChecked = vm.getVideoOrder() is VideoOrder.Name
+        sortByDialogBinding.dateCheckBox.isChecked = vm.getVideoOrder() is VideoOrder.Date
+        sortByDialogBinding.durationCheckBox.isChecked = vm.getVideoOrder() is VideoOrder.Duration
 
         val sortType = vm.getVideoOrder()
         setButtonColors(ascending = sortType.orderType is OrderType.Ascending)
@@ -243,15 +243,15 @@ class VideoListFragment : Fragment(), OnSelectChange {
 
         sortByDialogBinding.cardViewName.setOnClickListener {
             val currentOrderType = vm.getOrderType()
-            vm.setVideoOrder(com.example.yandex_dictionary_api.domain.util.VideoOrder.Name(currentOrderType))
+            vm.setVideoOrder(VideoOrder.Name(currentOrderType))
         }
         sortByDialogBinding.cardViewDate.setOnClickListener {
             val currentOrderType = vm.getOrderType()
-            vm.setVideoOrder(com.example.yandex_dictionary_api.domain.util.VideoOrder.Date(currentOrderType))
+            vm.setVideoOrder(VideoOrder.Date(currentOrderType))
         }
         sortByDialogBinding.cardViewDuration.setOnClickListener {
             val currentOrderType = vm.getOrderType()
-            vm.setVideoOrder(com.example.yandex_dictionary_api.domain.util.VideoOrder.Duration(currentOrderType))
+            vm.setVideoOrder(VideoOrder.Duration(currentOrderType))
         }
 
         sortByDialogBinding.clearButton.setOnClickListener {
@@ -264,9 +264,9 @@ class VideoListFragment : Fragment(), OnSelectChange {
         }
 
         vm.videoOrder.observe(viewLifecycleOwner) { sortMode ->
-            sortByDialogBinding.nameCheckBox.isChecked = sortMode is com.example.yandex_dictionary_api.domain.util.VideoOrder.Name
-            sortByDialogBinding.dateCheckBox.isChecked = sortMode is com.example.yandex_dictionary_api.domain.util.VideoOrder.Date
-            sortByDialogBinding.durationCheckBox.isChecked = sortMode is com.example.yandex_dictionary_api.domain.util.VideoOrder.Duration
+            sortByDialogBinding.nameCheckBox.isChecked = sortMode is VideoOrder.Name
+            sortByDialogBinding.dateCheckBox.isChecked = sortMode is VideoOrder.Date
+            sortByDialogBinding.durationCheckBox.isChecked = sortMode is VideoOrder.Duration
         }
 
         sortByDialog.show()
@@ -345,7 +345,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
     override fun onSingleSelected() {
         setTextInSubtitleMenu()
         changeCardVisibility(cardView = videoListFragmentBinding.deleteMenu, isVisible = true)
-        if ((adapter.getEditableItem()?.loadingType ?: false) == com.learnwithsubs.database.domain.models.VideoLoadingType.DONE) {
+        if ((adapter.getEditableItem()?.loadingType ?: false) == VideoLoadingType.DONE) {
             changeCardVisibility(cardView = videoListFragmentBinding.addSubtitlesMenu, isVisible = true)
             changeCardVisibility(cardView = videoListFragmentBinding.renameMenu, isVisible = true)
         } else {

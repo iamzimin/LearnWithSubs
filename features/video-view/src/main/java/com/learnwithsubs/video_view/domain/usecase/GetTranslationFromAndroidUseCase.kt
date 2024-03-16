@@ -4,7 +4,7 @@ import com.learnwithsubs.video_view.domain.models.TranslationModel
 import com.example.yandex_dictionary_api.domain.TranslatorRepository
 
 class GetTranslationFromAndroidUseCase(
-    private val translatorRepository: com.example.yandex_dictionary_api.domain.TranslatorRepository
+    private val translatorRepository: TranslatorRepository
 ) {
     suspend fun invoke(model: TranslationModel): String? {
         return translatorRepository.getWordsFromAndroidTranslator(

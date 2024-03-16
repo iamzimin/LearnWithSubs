@@ -6,7 +6,7 @@ import com.learnwithsubs.word_list.domain.repository.WordListRepository
 class LoadWordUseCase(
     private val wordListRepository: WordListRepository
 ) {
-    suspend fun invoke(word: com.learnwithsubs.database.domain.models.WordTranslation) {
+    suspend fun invoke(word: WordTranslation) {
         wordListRepository.insertWord(word = word)
     }
 }

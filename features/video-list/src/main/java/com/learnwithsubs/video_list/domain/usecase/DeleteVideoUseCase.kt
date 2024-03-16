@@ -4,9 +4,9 @@ import com.learnwithsubs.database.domain.models.Video
 import com.learnwithsubs.database.domain.VideoListRepository
 
 class DeleteVideoUseCase(
-    private val repository: com.learnwithsubs.database.domain.VideoListRepository
+    private val repository: VideoListRepository
 ) {
-    suspend operator fun invoke(video: com.learnwithsubs.database.domain.models.Video) {
+    suspend operator fun invoke(video: models.Video) {
         repository.deleteVideo(video)
     }
 }

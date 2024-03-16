@@ -2,10 +2,10 @@ package com.learnwithsubs.database.data.storage
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.learnwithsubs.word_list.domain.models.WordTranslation
+import com.learnwithsubs.database.domain.models.WordTranslationDBO
 
 @Database(
-    entities = [com.learnwithsubs.word_list.domain.models.WordTranslation::class],
+    entities = [WordTranslationDBO::class],
     version = 1
 )
 abstract class WordDatabase : RoomDatabase() {

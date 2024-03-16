@@ -1,13 +1,13 @@
 package com.example.video_transcode.domain.repository
 
 import androidx.lifecycle.MutableLiveData
-import com.learnwithsubs.database.domain.models.Video
+import Video
 
 interface VideoTranscodeRepository {
-    suspend fun transcodeVideo(video: com.learnwithsubs.database.domain.models.Video): com.learnwithsubs.database.domain.models.Video?
+    suspend fun transcodeVideo(video: Video): Video?
     fun cancelTranscodeVideo()
-    suspend fun extractAudio(video: com.learnwithsubs.database.domain.models.Video): com.learnwithsubs.database.domain.models.Video?
+    suspend fun extractAudio(video: Video): Video?
     fun cancelExtractAudio()
-    fun getVideoProgressLiveData(): MutableLiveData<com.learnwithsubs.database.domain.models.Video?>
-    suspend fun extractPreview(video: com.learnwithsubs.database.domain.models.Video)
+    fun getVideoProgressLiveData(): MutableLiveData<Video?>
+    suspend fun extractPreview(video: Video)
 }

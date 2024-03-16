@@ -1,5 +1,7 @@
 package com.learnwithsubs.video_view.data.repository
 
+import com.learnwithsubs.database.data.storage.VideoListDao
+import com.learnwithsubs.database.data.storage.WordListDao
 import com.learnwithsubs.video_list.domain.VideoConstants
 import com.learnwithsubs.video_list.domain.models.Video
 import com.learnwithsubs.video_list.data.storage.VideoListDao
@@ -9,13 +11,13 @@ import com.learnwithsubs.feature_word_list.storage.WordListDao
 import java.io.File
 
 class VideoViewRepositoryImpl(
-    private val videoDao: com.learnwithsubs.video_list.data.storage.VideoListDao,
+    private val videoDao: VideoListDao,
     private val wordDao: WordListDao,
 ) : com.learnwithsubs.video_view.domain.repository.VideoViewRepository {
-    override fun getVideoSubtitles(video: com.learnwithsubs.video_list.domain.models.Video): List<com.learnwithsubs.video_view.domain.models.Subtitle>? {
+    override fun getVideoSubtitles(video: Video): List<Subtitle>? {
         val subtitlesPath = if (video.isOwnSubtitles)
-             File(video.outputPath, com.learnwithsubs.video_list.domain.VideoConstants.OWN_SUBTITLES)
-        else File(video.outputPath, com.learnwithsubs.video_list.domain.VideoConstants.GENERATED_SUBTITLES)
+             File(video.outputPath, VideoConstants.OWN_SUBTITLES)
+        else File(video.outputPath, VideoConstants.GENERATED_SUBTITLES)
 
         var subs = ""
         if (subtitlesPath.exists()) {
@@ -27,17 +29,17 @@ class VideoViewRepositoryImpl(
         return convertSubtitles(subs)
     }
 
-    override suspend fun updateVideo(video: com.learnwithsubs.video_list.domain.models.Video) {
+    override suspend fun updateVideo(video: models.Video) {
         videoDao.insertVideo(video)
     }
 
-    override suspend fun saveWord(word: com.learnwithsubs.word_list.domain.models.WordTranslation) {
+    override suspend fun saveWord(word: WordTranslation) {
         wordDao.insertWord(word = word)
     }
 
-    private fun convertSubtitles(subtitles: String): List<com.learnwithsubs.video_view.domain.models.Subtitle>? {
+    private fun convertSubtitles(subtitles: String): List<Subtitle>? {
         val subtitleLines = subtitles.trim().split("\n\n")
-        val subtitleList: List<com.learnwithsubs.video_view.domain.models.Subtitle>?
+        val subtitleList: List<Subtitle>?
         try {
             subtitleList = subtitleLines.map { subtitleLine ->
                 val parts = subtitleLine.split("\n")
@@ -46,7 +48,7 @@ class VideoViewRepositoryImpl(
                 val startTime = parseTime(timeRange[0])
                 val endTime = parseTime(timeRange[1])
                 val text = parts[2]
-                com.learnwithsubs.video_view.domain.models.Subtitle(
+                Subtitle(
                     number,
                     startTime,
                     endTime,

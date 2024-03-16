@@ -3,7 +3,7 @@ package com.learnwithsubs
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class SelectableAdapter<T : com.learnwithsubs.database.domain.Identifiable>(
+abstract class SelectableAdapter<T : Identifiable>(
     open var itemList: ArrayList<T>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

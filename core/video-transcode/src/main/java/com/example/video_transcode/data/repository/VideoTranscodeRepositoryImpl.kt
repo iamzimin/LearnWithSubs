@@ -3,11 +3,13 @@ package com.example.video_transcode.data.repository
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.os.Environment
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.arthenica.ffmpegkit.FFmpegKit
+import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFmpegSession
 import com.arthenica.ffmpegkit.FFmpegSessionCompleteCallback
-import com.learnwithsubs.database.domain.models.Video
+import com.example.video_transcode.domain.repository.VideoTranscodeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -17,19 +19,18 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 
-class VideoTranscodeRepositoryImpl :
-    com.learnwithsubs.video_list.domain.repository.VideoTranscodeRepository {
-    private val videoProgressLiveData: MutableLiveData<com.learnwithsubs.database.domain.models.Video?> = MutableLiveData()
+class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
+    private val videoProgressLiveData: MutableLiveData<Video?> = MutableLiveData()
     private lateinit var transcodeVideoExecutionId: FFmpegSession
     private lateinit var extractAudioExecutionId: FFmpegSession
 
     //val internalStorageDir = File(context.filesDir, "LearnWithSubs")
     private val externalStorageDir = File(Environment.getExternalStorageDirectory().toString(), "LearnWithSubs")
 
-    override suspend fun transcodeVideo(video: com.learnwithsubs.database.domain.models.Video): com.learnwithsubs.database.domain.models.Video? = suspendCoroutine { continuation ->
+    override suspend fun transcodeVideo(video: Video): Video? = suspendCoroutine { continuation ->
         val videoFolder = getVideoFolderPath(video)
 
-        val outputVideoPath = File(videoFolder, com.example.yandex_dictionary_api.domain.VideoConstants.COPIED_VIDEO)
+        val outputVideoPath = File(videoFolder, VideoConstants.COPIED_VIDEO)
         val command = "-i ${video.inputPath} -c:v mpeg4 -b:v ${video.bitrate}B ${outputVideoPath.absolutePath} -y"
 
         FFmpegKitConfig.enableStatisticsCallback {
@@ -51,7 +52,7 @@ class VideoTranscodeRepositoryImpl :
                        continuation.resume(null)
                    } else {
                        Log.i("FFmpeg", "Async command execution failed with returnCode=${session.returnCode}.")
-                       video.errorType = com.learnwithsubs.database.domain.models.VideoErrorType.DECODING_VIDEO
+                       video.errorType = VideoErrorType.DECODING_VIDEO
                        continuation.resume(video)
                    }
                 }
@@ -65,10 +66,10 @@ class VideoTranscodeRepositoryImpl :
             FFmpegKit.cancel(transcodeVideoExecutionId.sessionId)
     }
 
-    override suspend fun extractAudio(video: com.learnwithsubs.database.domain.models.Video): com.learnwithsubs.database.domain.models.Video? = suspendCoroutine { continuation ->
+    override suspend fun extractAudio(video: Video): Video? = suspendCoroutine { continuation ->
         val videoFolder = getVideoFolderPath(video)
 
-        val outputAudioPath = File(videoFolder, com.example.yandex_dictionary_api.domain.VideoConstants.EXTRACTED_AUDIO)
+        val outputAudioPath = File(videoFolder, VideoConstants.EXTRACTED_AUDIO)
         val command = "-i ${video.inputPath} -q:a 0 -map a ${outputAudioPath.absolutePath} -y"
 
         FFmpegKitConfig.enableStatisticsCallback {
@@ -90,7 +91,7 @@ class VideoTranscodeRepositoryImpl :
                         continuation.resume(null)
                     } else {
                         Log.i("FFmpeg", "Async command execution failed with returnCode=${session.returnCode}.")
-                        video.errorType = com.learnwithsubs.database.domain.models.VideoErrorType.DECODING_VIDEO
+                        video.errorType = VideoErrorType.DECODING_VIDEO
                         continuation.resume(video)
                     }
                 }
@@ -103,11 +104,11 @@ class VideoTranscodeRepositoryImpl :
             FFmpegKit.cancel(extractAudioExecutionId.sessionId)
     }
 
-    override fun getVideoProgressLiveData(): MutableLiveData<com.learnwithsubs.database.domain.models.Video?> {
+    override fun getVideoProgressLiveData(): MutableLiveData<Video?> {
         return videoProgressLiveData
     }
 
-    override suspend fun extractPreview(video: com.learnwithsubs.database.domain.models.Video) {
+    override suspend fun extractPreview(video: Video) {
         val videoFolder = getVideoFolderPath(video)
 
         try {
@@ -116,7 +117,7 @@ class VideoTranscodeRepositoryImpl :
             val frame = retriever.getFrameAtTime(0)
             retriever.release()
 
-            val outputVideoPath = File(videoFolder, com.example.yandex_dictionary_api.domain.VideoConstants.VIDEO_PREVIEW)
+            val outputVideoPath = File(videoFolder, VideoConstants.VIDEO_PREVIEW)
 
             withContext(Dispatchers.IO) {
                 FileOutputStream(outputVideoPath).use { out ->
@@ -128,7 +129,7 @@ class VideoTranscodeRepositoryImpl :
         }
     }
 
-    private fun getVideoFolderPath(video: com.learnwithsubs.database.domain.models.Video): File {
+    private fun getVideoFolderPath(video: Video): File {
         val videoFolder = File(externalStorageDir, video.id.toString())
 
         if (!videoFolder.exists())

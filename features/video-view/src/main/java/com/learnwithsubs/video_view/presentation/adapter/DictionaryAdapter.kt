@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.learnwithsubs.R
 
 class DictionaryAdapter(
-    wordsInit: ArrayList<com.example.yandex_dictionary_api.models.DictionarySynonyms>
+    wordsInit: ArrayList<DictionarySynonyms>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-    private var wordsList: ArrayList<com.example.yandex_dictionary_api.models.DictionarySynonyms> = wordsInit
+    private var wordsList: ArrayList<DictionarySynonyms> = wordsInit
     private var onItemClickListener: OnDictionaryClick? = null
 
 
-    fun updateData(wordsList: ArrayList<com.example.yandex_dictionary_api.models.DictionarySynonyms>) {
+    fun updateData(wordsList: ArrayList<DictionarySynonyms>) {
         this@DictionaryAdapter.wordsList = wordsList
         notifyDataSetChanged()
     }
@@ -25,11 +25,11 @@ class DictionaryAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            com.example.yandex_dictionary_api.models.DictionaryType.WORD.value -> DictionaryNormalHolder(
+            DictionaryType.WORD.value -> DictionaryNormalHolder(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.tile_translate_word, parent, false), onItemClickListener)
 
-            com.example.yandex_dictionary_api.models.DictionaryType.PART_SPEECH.value -> DictionaryPartSpeechHolder(
+            DictionaryType.PART_SPEECH.value -> DictionaryPartSpeechHolder(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.tile_translate_partspeech, parent, false))
 
@@ -50,12 +50,12 @@ class DictionaryAdapter(
         val word = wordsList[position]
 
         when (word.type) {
-            com.example.yandex_dictionary_api.models.DictionaryType.WORD -> {
+            DictionaryType.WORD -> {
                 val normalHolder = holder as DictionaryNormalHolder
                 normalHolder.bind(wordsList[position])
             }
 
-            com.example.yandex_dictionary_api.models.DictionaryType.PART_SPEECH -> {
+            DictionaryType.PART_SPEECH -> {
                 val loadingHolder = holder as DictionaryPartSpeechHolder
                 loadingHolder.bind(wordsList[position])
             }

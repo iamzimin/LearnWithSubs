@@ -11,7 +11,7 @@ interface TranslationService {
         @Query("key") key: String,
         @Query("lang") lang: String,
         @Query("text") word: String
-    ): Call<com.example.yandex_dictionary_api.models.YandexDictionaryResponse>
+    ): Call<YandexDictionaryResponse>
 
     @POST("/get_translation")
     fun getWordsFromServerTranslator(

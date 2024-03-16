@@ -18,21 +18,21 @@ class WordListDomainModule {
     @Provides
     @Singleton
     fun provideVideoListUseCases(
-        wordListRepository: com.learnwithsubs.word_list.domain.repository.WordListRepository
-    ): com.learnwithsubs.word_list.domain.usecase.WordListUseCases {
-        return com.learnwithsubs.word_list.domain.usecase.WordListUseCases(
-            getWordListUseCase = com.learnwithsubs.word_list.domain.usecase.GetWordListUseCase(
+        wordListRepository: WordListRepository
+    ): WordListUseCases {
+        return WordListUseCases(
+            getWordListUseCase = GetWordListUseCase(
                 wordListRepository
             ),
-            loadWordUseCase = com.learnwithsubs.word_list.domain.usecase.LoadWordUseCase(
+            loadWordUseCase = LoadWordUseCase(
                 wordListRepository
             ),
-            deleteWordUseCase = com.learnwithsubs.word_list.domain.usecase.DeleteWordUseCase(
+            deleteWordUseCase = DeleteWordUseCase(
                 wordListRepository
             ),
-            sortWordListUseCases = com.learnwithsubs.word_list.domain.usecase.SortWordListUseCase(),
-            filterWordListUseCase = com.learnwithsubs.word_list.domain.usecase.FilterWordListUseCase(),
-            getWordsListSortedByVideoIdUseCase = com.learnwithsubs.word_list.domain.usecase.GetWordsListSortedByVideoIdUseCase(
+            sortWordListUseCases = SortWordListUseCase(),
+            filterWordListUseCase = FilterWordListUseCase(),
+            getWordsListSortedByVideoIdUseCase = GetWordsListSortedByVideoIdUseCase(
                 wordListRepository
             ),
         )

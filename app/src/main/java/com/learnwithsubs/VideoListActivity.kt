@@ -18,8 +18,8 @@ import javax.inject.Inject
 
 class VideoListActivity : AppCompatActivity() {
     @Inject
-    lateinit var vmFactory: com.learnwithsubs.video_list.presentation.videos.VideoListViewModelFactory
-    private lateinit var vm: com.learnwithsubs.video_list.presentation.videos.VideoListViewModel
+    lateinit var vmFactory: VideoListViewModelFactory
+    private lateinit var vm: VideoListViewModel
 
     lateinit var videoListBinding: ActivityVideoListBinding
 
@@ -32,7 +32,7 @@ class VideoListActivity : AppCompatActivity() {
         videoListBinding.fragmentNavigation.selectedItemId = R.id.video_bottom_menu
 
         (applicationContext as App).videoListAppComponent.inject(this)
-        vm = ViewModelProvider(this, vmFactory)[com.learnwithsubs.video_list.presentation.videos.VideoListViewModel::class.java]
+        vm = ViewModelProvider(this, vmFactory)[VideoListViewModel::class.java]
 
         val PERMISSION_REQUEST_CODE = 123
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||

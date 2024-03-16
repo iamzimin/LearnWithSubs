@@ -14,9 +14,9 @@ import java.io.File
 import javax.inject.Inject
 
 class VideoViewViewModel @Inject constructor(
-    private val videoViewUseCases: com.learnwithsubs.video_view.domain.usecase.VideoViewUseCases
+    private val videoViewUseCases: VideoViewUseCases
 ) : ViewModel() {
-    var currentVideo: com.learnwithsubs.video_list.domain.models.Video? = null
+    var currentVideo: Video? = null
 
     val videoPath = MutableLiveData<String>()
     val videoName = MutableLiveData<String>()
@@ -32,20 +32,20 @@ class VideoViewViewModel @Inject constructor(
     var videoPlaying = MutableLiveData<Boolean>()
     var isButtonsShowedLiveData = MutableLiveData<Boolean>()
 
-    private var subtitleList: List<com.learnwithsubs.video_view.domain.models.Subtitle> = emptyList()
+    private var subtitleList: List<Subtitle> = emptyList()
 
-    val dictionaryWordsLiveData =  MutableLiveData<com.example.yandex_dictionary_api.models.DictionaryWord?>()
+    val dictionaryWordsLiveData =  MutableLiveData<DictionaryWord?>()
     val translatorTranslationLiveData = MutableLiveData<String?>()
 
 
-    fun openVideo(video: com.learnwithsubs.video_list.domain.models.Video, isPlaying: Boolean) {
+    fun openVideo(video: Video, isPlaying: Boolean) {
         val subList = videoViewUseCases.getVideoSubtitlesUseCase.invoke(video)
         if (subList == null)
             subtitleError.value = ""
 
         subtitleList = subList ?: emptyList()
 
-        videoPath.value = File(video.outputPath, com.learnwithsubs.video_list.domain.VideoConstants.COPIED_VIDEO).absolutePath
+        videoPath.value = File(video.outputPath, VideoConstants.COPIED_VIDEO).absolutePath
         videoName.value = video.name
         maxVideoTime = video.duration
         maxTimeString = formatTime(time = maxVideoTime)
@@ -54,7 +54,7 @@ class VideoViewViewModel @Inject constructor(
     }
 
 
-    fun saveVideo(video: com.learnwithsubs.video_list.domain.models.Video) {
+    fun saveVideo(video: Video) {
         video.watchProgress = currentVideoWatchTime
         viewModelScope.launch(Dispatchers.IO) {
             videoViewUseCases.updateVideoUseCase.invoke(video = video)
@@ -97,7 +97,7 @@ class VideoViewViewModel @Inject constructor(
     }
 
     fun getWordsFromDictionary(word: String, inputLang: String, outputLang: String) {
-        val translationModel = com.learnwithsubs.video_view.domain.models.TranslationModel(
+        val translationModel = TranslationModel(
             word = word,
             inputLanguage = inputLang,
             outputLanguage = outputLang,
@@ -109,7 +109,7 @@ class VideoViewViewModel @Inject constructor(
     }
 
     fun getFullTranslation(word: String, inputLang: String, outputLang: String) {
-        val translationModel = com.learnwithsubs.video_view.domain.models.TranslationModel(
+        val translationModel = TranslationModel(
             word = word,
             inputLanguage = inputLang,
             outputLanguage = outputLang,
@@ -121,21 +121,21 @@ class VideoViewViewModel @Inject constructor(
         }
     }
 
-    private fun getWordsFromServerTranslator(translationModel: com.learnwithsubs.video_view.domain.models.TranslationModel) {
+    private fun getWordsFromServerTranslator(translationModel: TranslationModel) {
         viewModelScope.launch {
             val translate = videoViewUseCases.getTranslationFromServerUseCase.invoke(model = translationModel)
             translatorTranslationLiveData.postValue(translate)
         }
     }
 
-    private fun getWordsFromAndroidTranslator(translationModel: com.learnwithsubs.video_view.domain.models.TranslationModel) {
+    private fun getWordsFromAndroidTranslator(translationModel: TranslationModel) {
         viewModelScope.launch {
             val translate = videoViewUseCases.getTranslationFromAndroidUseCase.invoke(model = translationModel)
             translatorTranslationLiveData.postValue(translate)
         }
     }
 
-    fun changePartSpeech(context: Context, list: ArrayList<com.example.yandex_dictionary_api.models.DictionarySynonyms>):  ArrayList<com.example.yandex_dictionary_api.models.DictionarySynonyms> {
+    fun changePartSpeech(context: Context, list: ArrayList<DictionarySynonyms>):  ArrayList<DictionarySynonyms> {
         for (elem in list) {
             when (elem.partSpeech) {
                 "noun" -> elem.partSpeech = context.getString(R.string.noun)

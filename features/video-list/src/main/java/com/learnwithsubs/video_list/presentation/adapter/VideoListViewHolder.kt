@@ -29,7 +29,7 @@ abstract class VideoViewHolder(
         return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 
-    abstract fun bind(video: com.learnwithsubs.database.domain.models.Video, isSelected: Boolean)
+    abstract fun bind(video: Video, isSelected: Boolean)
 }
 
 // ViewHolder для обычного видео
@@ -39,12 +39,12 @@ class NormalVideoViewHolder(
 ) : VideoViewHolder(itemView) {
     private val binding = TileVideoBinding.bind(itemView)
 
-    override fun bind(video: com.learnwithsubs.database.domain.models.Video, isSelected: Boolean) {
+    override fun bind(video: Video, isSelected: Boolean) {
         binding.videoName.text = video.name
         binding.duration.text = "${duration}: ${formatDuration(video.duration)}"
         binding.savedWords.text = "${savedWords}: ${video.saveWords}"
         binding.selectCheckBox.isChecked = isSelected
-        binding.videoPreview.load(File(video.outputPath, com.example.yandex_dictionary_api.domain.VideoConstants.VIDEO_PREVIEW).absoluteFile) {
+        binding.videoPreview.load(File(video.outputPath, VideoConstants.VIDEO_PREVIEW).absoluteFile) {
             transformations(RoundedCornersTransformation(10f))
             error(R.drawable.rectangle)
         }
@@ -88,28 +88,28 @@ class LoadingVideoViewHolder(
 ) : VideoViewHolder(itemView) {
     private val binding = TileVideoUploadingBinding.bind(itemView)
 
-    override fun bind(video: com.learnwithsubs.database.domain.models.Video, isSelected: Boolean) {
+    override fun bind(video: Video, isSelected: Boolean) {
         binding.videoName.text = video.name
         binding.selectCheckBox.isChecked = isSelected
         binding.duration.text = "${duration}: ${formatDuration(video.duration)}"
 
         val status = "${itemView.context.getString(R.string.video_loading_status)}: "
         when (video.loadingType) {
-            com.learnwithsubs.database.domain.models.VideoLoadingType.WAITING ->
+            VideoLoadingType.WAITING ->
                 binding.loadingStatus.text = status + itemView.context.getString(R.string.video_loading_status_waiting)
-            com.learnwithsubs.database.domain.models.VideoLoadingType.EXTRACTING_AUDIO ->
+            VideoLoadingType.EXTRACTING_AUDIO ->
                 binding.loadingStatus.text = status + itemView.context.getString(R.string.video_loading_status_extracting_audio)
-            com.learnwithsubs.database.domain.models.VideoLoadingType.DECODING_VIDEO ->
+            VideoLoadingType.DECODING_VIDEO ->
                 binding.loadingStatus.text = status + itemView.context.getString(R.string.video_loading_status_decoding_video)
-            com.learnwithsubs.database.domain.models.VideoLoadingType.LOADING_AUDIO ->
+            VideoLoadingType.LOADING_AUDIO ->
                 binding.loadingStatus.text = status + itemView.context.getString(R.string.video_loading_status_loading_audio)
-            com.learnwithsubs.database.domain.models.VideoLoadingType.GENERATING_SUBTITLES ->
+            VideoLoadingType.GENERATING_SUBTITLES ->
                 binding.loadingStatus.text = status + itemView.context.getString(R.string.video_loading_status_generating_subtitles)
-            com.learnwithsubs.database.domain.models.VideoLoadingType.DONE ->
+            VideoLoadingType.DONE ->
                 binding.loadingStatus.text = status + itemView.context.getString(R.string.video_loading_status_done)
         }
         binding.progressVideoLoadingText.text = if (video.uploadingProgress == 0) "" else video.uploadingProgress.toString()
-        if (video.loadingType == com.learnwithsubs.database.domain.models.VideoLoadingType.GENERATING_SUBTITLES) {
+        if (video.loadingType == VideoLoadingType.GENERATING_SUBTITLES) {
             binding.progressVideoLoading.isIndeterminate = true
         }
         else {

@@ -11,26 +11,26 @@ class VideoViewDomainModule {
     @Provides
     @Singleton
     fun provideVideoViewUseCase(
-        videoViewRepository: com.learnwithsubs.video_view.domain.repository.VideoViewRepository,
-        translatorRepository: com.example.yandex_dictionary_api.domain.TranslatorRepository,
-    ): com.learnwithsubs.video_view.domain.usecase.VideoViewUseCases {
-        return com.learnwithsubs.video_view.domain.usecase.VideoViewUseCases(
-            getVideoSubtitlesUseCase = com.learnwithsubs.video_view.domain.usecase.GetVideoSubtitlesUseCase(
+        videoViewRepository: VideoViewRepository,
+        translatorRepository: TranslatorRepository,
+    ): VideoViewUseCases {
+        return VideoViewUseCases(
+            getVideoSubtitlesUseCase = GetVideoSubtitlesUseCase(
                 videoViewRepository
             ),
-            updateVideoUseCase = com.learnwithsubs.video_view.domain.usecase.UpdateVideoUseCase(
+            updateVideoUseCase = UpdateVideoUseCase(
                 videoViewRepository
             ),
-            getWordsFromYandexDictionaryUseCase = com.learnwithsubs.video_view.domain.usecase.GetWordsFromYandexDictionaryUseCase(
+            getWordsFromYandexDictionaryUseCase = GetWordsFromYandexDictionaryUseCase(
                 translatorRepository
             ),
-            getTranslationFromServerUseCase = com.learnwithsubs.video_view.domain.usecase.GetTranslationFromServerUseCase(
+            getTranslationFromServerUseCase = GetTranslationFromServerUseCase(
                 translatorRepository
             ),
-            getTranslationFromAndroidUseCase = com.learnwithsubs.video_view.domain.usecase.GetTranslationFromAndroidUseCase(
+            getTranslationFromAndroidUseCase = GetTranslationFromAndroidUseCase(
                 translatorRepository
             ),
-            saveWordUseCase = com.learnwithsubs.video_view.domain.usecase.SaveWordUseCase(
+            saveWordUseCase = SaveWordUseCase(
                 videoViewRepository
             )
         )

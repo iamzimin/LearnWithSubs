@@ -2,10 +2,11 @@ package com.learnwithsubs.video_list.presentation.videos
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.learnwithsubs.video_list.domain.usecase.VideoListUseCases
 
 class VideoListViewModelFactory(
-    val videoListUseCases: com.learnwithsubs.video_list.domain.usecase.VideoListUseCases,
-    val videoTranscodeRepository: com.example.video_transcode.domain.repository.VideoTranscodeRepository
+    val videoListUseCases: VideoListUseCases,
+    val videoTranscodeRepository: VideoTranscodeRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return VideoListViewModel(

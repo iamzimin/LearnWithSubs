@@ -27,7 +27,7 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         this.onSelectChangeListener = onSelectChangeListener
     }
 
-    fun updateData(newItemList: List<com.learnwithsubs.database.domain.models.WordTranslation>) {
+    fun updateData(newItemList: List<WordTranslation>) {
         val groupedList = ArrayList(sortAndAddTitles(newItemList))
         clearSelectionList()
 
@@ -37,7 +37,7 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         callbacks()
     }
 
-    private fun sortAndAddTitles(list: List<com.learnwithsubs.database.domain.models.WordTranslation>): List<WordList> {
+    private fun sortAndAddTitles(list: List<WordTranslation>): List<WordList> {
         val groupedMap = list.groupBy { it.videoID }
 
         items = WordManager()
@@ -172,14 +172,14 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     fun getChildSelectedItemsSize(): Int {
         return selectedItems.getWordsListSize()
     }
-    fun getChildSelectedItems(): List<com.learnwithsubs.database.domain.models.WordTranslation> {
-        val selected = ArrayList<com.learnwithsubs.database.domain.models.WordTranslation>()
+    fun getChildSelectedItems(): List<WordTranslation> {
+        val selected = ArrayList<WordTranslation>()
         for (elem in selectedItems.getWordsList()) {
             selected.add(elem)
         }
         return selected
     }
-    fun getEditableItem(): com.learnwithsubs.database.domain.models.WordTranslation? {
+    fun getEditableItem(): WordTranslation? {
         val selected = selectedItems.getWordsList()
         return if (selected.size == 1) {
             return selected.find { it.id == selected[0].id }

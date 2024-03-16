@@ -8,5 +8,5 @@ interface VideoViewRepository {
     fun getVideoSubtitles(video: Video): List<Subtitle>?
 
     suspend fun updateVideo(video: Video)
-    suspend fun saveWord(word: com.learnwithsubs.word_list.domain.models.WordTranslation)
+    suspend fun saveWord(word: WordTranslation)
 }

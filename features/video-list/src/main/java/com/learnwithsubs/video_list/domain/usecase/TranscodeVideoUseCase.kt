@@ -4,9 +4,9 @@ import com.learnwithsubs.database.domain.models.Video
 import com.example.video_transcode.domain.repository.VideoTranscodeRepository
 
 class TranscodeVideoUseCase(
-    private val videoTranscodeRepository: com.example.video_transcode.domain.repository.VideoTranscodeRepository
+    private val videoTranscodeRepository: VideoTranscodeRepository
 ) {
-    suspend fun invoke(video: com.learnwithsubs.database.domain.models.Video): com.learnwithsubs.database.domain.models.Video? {
+    suspend fun invoke(video: Video): Video? {
         return videoTranscodeRepository.transcodeVideo(video = video)
     }
 }

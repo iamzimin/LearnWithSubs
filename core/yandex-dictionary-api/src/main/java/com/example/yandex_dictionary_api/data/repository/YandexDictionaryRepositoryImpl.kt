@@ -1,6 +1,7 @@
 package com.example.yandex_dictionary_api.data.repository
 
 import com.example.yandex_dictionary_api.domain.repository.TranslatorRepository
+import com.example.yandex_dictionary_api.domain.service.TranslationService
 import com.google.android.gms.tasks.Task
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
@@ -17,7 +18,7 @@ class TranslatorRepositoryImpl(
         lang: String,
         word: String
     ): com.example.yandex_dictionary_api.models.DictionaryWordDTO? {
-        val apiService = yandexRetrofit.create(com.learnwithsubs.video_view.domain.service.TranslationService::class.java)
+        val apiService = yandexRetrofit.create(TranslationService::class.java)
         val wordResponse = apiService.getWordsFromDictionary(key = key, lang = lang, word = word).awaitResponse()
 
         if (wordResponse.isSuccessful) {
@@ -91,7 +92,7 @@ class TranslatorRepositoryImpl(
         fromLang: String,
         toLang: String
     ): String? {
-        val apiService = serverRetrofit.create(com.learnwithsubs.video_view.domain.service.TranslationService::class.java)
+        val apiService = serverRetrofit.create(TranslationService::class.java)
         val response = apiService.getWordsFromServerTranslator(word = word, fromLang = fromLang, toLang = toLang).awaitResponse()
         return response.body()
     }

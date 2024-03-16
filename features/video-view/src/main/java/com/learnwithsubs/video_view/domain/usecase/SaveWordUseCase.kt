@@ -6,7 +6,7 @@ import com.learnwithsubs.word_list.domain.models.WordTranslation
 class SaveWordUseCase(
     private val videoViewRepository: VideoViewRepository
 ) {
-    suspend fun invoke(word: com.learnwithsubs.word_list.domain.models.WordTranslation) {
+    suspend fun invoke(word: WordTranslation) {
         videoViewRepository.saveWord(word = word)
     }
 }

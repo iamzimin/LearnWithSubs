@@ -116,7 +116,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
 
         translateDialogBind.saveWord.setOnClickListener {
             vm.saveWord( //TODO
-                com.learnwithsubs.word_list.domain.models.WordTranslation(
+                WordTranslation(
                     word = translateDialogBind.inputWord.text.toString(),
                     translation = translateDialogBind.outputWord.text.toString(),
                     nativeLanguage = "ru", learnLanguage = "en",

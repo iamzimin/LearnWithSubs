@@ -1,6 +1,7 @@
 package com.learnwithsubs.video_list.di
 
 import android.content.Context
+import com.learnwithsubs.video_list.domain.usecase.VideoListUseCases
 import com.learnwithsubs.video_list.presentation.videos.VideoListViewModelFactory
 import dagger.Module
 import dagger.Provides
@@ -18,8 +19,8 @@ class VideoListAppModule(val context: Context) {
     @Provides
     @Singleton
     fun provideVideoListViewModelFactory(
-        videoListUseCases: com.learnwithsubs.video_list.domain.usecase.VideoListUseCases,
-        videoTranscodeRepository: com.example.video_transcode.domain.repository.VideoTranscodeRepository
+        videoListUseCases: VideoListUseCases,
+        videoTranscodeRepository: VideoTranscodeRepository
     ): VideoListViewModelFactory {
         return VideoListViewModelFactory(
             videoListUseCases = videoListUseCases,

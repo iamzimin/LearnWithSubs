@@ -2,7 +2,7 @@ package com.learnwithsubs.word_list.presentation.model
 
 class WordManager {
     private var list = ArrayList<WordTitle>()
-    private var wordList = ArrayList<com.learnwithsubs.database.domain.models.WordTranslation>()
+    private var wordList = ArrayList<WordTranslation>()
 
     fun setData(list: List<WordTitle>) {
         this.list.clear()
@@ -17,7 +17,7 @@ class WordManager {
         wordList.addAll(elem.wordList)
         list.add(elem)
     }
-    fun addWord(elem: com.learnwithsubs.database.domain.models.WordTranslation, index: Int) {
+    fun addWord(elem: WordTranslation, index: Int) {
         wordList.add(elem)
         list[index].wordList.add(elem)
     }
@@ -28,7 +28,7 @@ class WordManager {
         for (word in list)
             wordList.addAll(ArrayList(word.wordList))
     }
-    fun removeWord(elem: com.learnwithsubs.database.domain.models.WordTranslation, index: Int) {
+    fun removeWord(elem: WordTranslation, index: Int) {
         wordList.removeIf { it.id == elem.id }
         list[index].wordList.removeIf { it.id == elem.id }
     }
@@ -48,7 +48,7 @@ class WordManager {
     }
 
     fun getList(): List<WordTitle> = ArrayList(list)
-    fun getWordsList(): List<com.learnwithsubs.database.domain.models.WordTranslation> = ArrayList(wordList)
+    fun getWordsList(): List<WordTranslation> = ArrayList(wordList)
     fun getTitle(index: Int): WordTitle = list[index]
     fun getTitleSize(index: Int): Int = list[index].wordList.size
     fun getListSize(): Int = list.size

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class GetWordListUseCase(
     private val wordListRepository: WordListRepository
 ) {
-    fun invoke() : Flow<List<com.learnwithsubs.database.domain.models.WordTranslation>> {
+    fun invoke() : Flow<List<WordTranslation>> {
         return wordListRepository.getWords()
     }
 }

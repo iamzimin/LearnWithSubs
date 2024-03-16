@@ -5,9 +5,9 @@ import com.learnwithsubs.database.domain.VideoListRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetVideoListUseCase(
-    private val repository: com.learnwithsubs.database.domain.VideoListRepository
+    private val repository: VideoListRepository
 ) {
-    fun invoke() : Flow<List<com.learnwithsubs.database.domain.models.Video>> {
+    fun invoke() : Flow<List<Video>> {
         return repository.getVideos()
     }
 }

@@ -3,7 +3,7 @@ package com.learnwithsubs.database.domain.models
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.learnwithsubs.video_list.domain.Identifiable
+import com.learnwithsubs.database.domain.Identifiable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

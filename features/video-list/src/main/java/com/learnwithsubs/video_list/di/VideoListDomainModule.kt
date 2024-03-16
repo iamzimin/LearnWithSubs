@@ -11,41 +11,41 @@ class VideoListDomainModule {
     @Provides
     @Singleton
     fun provideVideoListUseCases(
-        videoListRepository: com.learnwithsubs.database.domain.VideoListRepository,
-        transcodeRepository: com.example.video_transcode.domain.repository.VideoTranscodeRepository,
-        serverInteractionRepository: com.example.yandex_dictionary_api.domain.repository.ServerInteractionRepository
-    ): com.learnwithsubs.video_list.domain.usecase.VideoListUseCases {
-        return com.learnwithsubs.video_list.domain.usecase.VideoListUseCases(
-            getVideoListUseCase = com.learnwithsubs.video_list.domain.usecase.GetVideoListUseCase(
+        videoListRepository: VideoListRepository,
+        transcodeRepository: VideoTranscodeRepository,
+        serverInteractionRepository: ServerInteractionRepository
+    ): VideoListUseCases {
+        return VideoListUseCases(
+            getVideoListUseCase = GetVideoListUseCase(
                 videoListRepository
             ),
-            deleteVideoUseCase = com.learnwithsubs.video_list.domain.usecase.DeleteVideoUseCase(
+            deleteVideoUseCase = DeleteVideoUseCase(
                 videoListRepository
             ),
-            loadVideoUseCase = com.learnwithsubs.video_list.domain.usecase.LoadVideoUseCase(
+            loadVideoUseCase = LoadVideoUseCase(
                 videoListRepository
             ),
-            getLastVideoUseCase = com.learnwithsubs.video_list.domain.usecase.GetLastVideoUseCase(
+            getLastVideoUseCase = GetLastVideoUseCase(
                 videoListRepository
             ),
-            transcodeVideoUseCase = com.learnwithsubs.video_list.domain.usecase.TranscodeVideoUseCase(
+            transcodeVideoUseCase = TranscodeVideoUseCase(
                 transcodeRepository
             ),
-            extractAudioUseCase = com.learnwithsubs.video_list.domain.usecase.ExtractAudioUseCase(
+            extractAudioUseCase = ExtractAudioUseCase(
                 transcodeRepository
             ),
-            getSubtitlesFromServerUseCase = com.learnwithsubs.video_list.domain.usecase.GetSubtitlesFromServerUseCase(
+            getSubtitlesFromServerUseCase = GetSubtitlesFromServerUseCase(
                 serverInteractionRepository,
                 videoListRepository
             ),
-            extractVideoPreviewUseCase = com.learnwithsubs.video_list.domain.usecase.ExtractVideoPreviewUseCase(
+            extractVideoPreviewUseCase = ExtractVideoPreviewUseCase(
                 transcodeRepository
             ),
-            sortVideoListUseCase = com.learnwithsubs.video_list.domain.usecase.SortVideoListUseCase(),
-            loadNewSubtitlesUseCase = com.learnwithsubs.video_list.domain.usecase.LoadNewSubtitlesUseCase(
+            sortVideoListUseCase = SortVideoListUseCase(),
+            loadNewSubtitlesUseCase = LoadNewSubtitlesUseCase(
                 videoListRepository
             ),
-            backOldSubtitlesUseCase = com.learnwithsubs.video_list.domain.usecase.BackOldSubtitlesUseCase(
+            backOldSubtitlesUseCase = BackOldSubtitlesUseCase(
                 videoListRepository
             ),
         )
