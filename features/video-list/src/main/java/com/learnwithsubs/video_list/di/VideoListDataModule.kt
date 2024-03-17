@@ -2,9 +2,16 @@ package com.learnwithsubs.video_list.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.server_api.data.repository.ServerInteractionRepositoryImpl
+import com.example.server_api.domain.repository.ServerInteractionRepository
+import com.example.video_transcode.data.repository.VideoTranscodeRepositoryImpl
+import com.example.video_transcode.domain.repository.VideoTranscodeRepository
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.learnwithsubs.database.data.storage.VideoDatabase
 import com.learnwithsubs.database.domain.VideoListRepository
+import com.learnwithsubs.video_list.data.repository.VideoListRepositoryImpl
+import com.learnwithsubs.video_list.domain.repository.VideoListRepository
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient

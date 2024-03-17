@@ -9,6 +9,9 @@ import com.arthenica.ffmpegkit.FFmpegKit
 import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFmpegSession
 import com.arthenica.ffmpegkit.FFmpegSessionCompleteCallback
+import com.example.video_transcode.domain.VideoConstants
+import com.example.video_transcode.domain.models.Video
+import com.example.video_transcode.domain.models.VideoErrorType
 import com.example.video_transcode.domain.repository.VideoTranscodeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

@@ -1,6 +1,7 @@
 package com.learnwithsubs.video_list.di
 
 import android.content.Context
+import com.example.video_transcode.domain.repository.VideoTranscodeRepository
 import com.learnwithsubs.video_list.domain.usecase.VideoListUseCases
 import com.learnwithsubs.video_list.presentation.videos.VideoListViewModelFactory
 import dagger.Module

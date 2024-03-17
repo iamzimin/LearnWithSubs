@@ -1,7 +1,6 @@
 package com.example.server_api.data.repository
 
 import com.example.server_api.domain.repository.ServerInteractionRepository
-import com.learnwithsubs.database.domain.models.Video
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -19,10 +18,10 @@ class ServerInteractionRepositoryImpl(
         return apiService.sendAudioToServer(audio)
     }
 
-    override suspend fun getSubtitles(video: Video): String? {
-        val file = File(video.outputPath, VideoConstants.EXTRACTED_AUDIO)
-        val requestFile = file.asRequestBody("audio/mp3".toMediaType())
-        val audioPart = MultipartBody.Part.createFormData("audio", file.name, requestFile)
+    override suspend fun getSubtitles(videoFile: File): String? {
+        //val file = File(video.outputPath, VideoConstants.EXTRACTED_AUDIO)
+        val requestFile = videoFile.asRequestBody("audio/mp3".toMediaType())
+        val audioPart = MultipartBody.Part.createFormData("audio", videoFile.name, requestFile)
 
         return try {
             val response = sendAudioToServer(audioPart)

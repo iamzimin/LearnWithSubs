@@ -1,7 +1,7 @@
 package com.example.video_transcode.domain.repository
 
 import androidx.lifecycle.MutableLiveData
-import Video
+import com.example.video_transcode.domain.models.Video
 
 interface VideoTranscodeRepository {
     suspend fun transcodeVideo(video: Video): Video?
