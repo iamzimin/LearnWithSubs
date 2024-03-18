@@ -1,10 +1,11 @@
 package com.learnwithsubs.video_list.domain.usecase
 
-import com.learnwithsubs.database.domain.models.Video
-import com.learnwithsubs.database.domain.models.VideoErrorType
-import com.example.yandex_dictionary_api.domain.repository.ServerInteractionRepository
-import com.learnwithsubs.database.domain.VideoListRepository
+import com.example.server_api.domain.repository.ServerInteractionRepository
+import com.example.video_transcode.domain.VideoConstants
+import com.learnwithsubs.video_list.domain.models.Video
+import com.learnwithsubs.video_list.domain.models.VideoErrorType
 import com.learnwithsubs.video_list.domain.repository.VideoListRepository
+import java.io.File
 
 
 class GetSubtitlesFromServerUseCase(
@@ -12,12 +13,14 @@ class GetSubtitlesFromServerUseCase(
     private val videoListRepository: VideoListRepository,
 ) {
     suspend fun invoke(video: Video): Video {
-        val subtitles = serverInteractionRepository.getSubtitles(video = video)
+        val file = File(video.outputPath, VideoConstants.EXTRACTED_AUDIO)
+        val subtitles = serverInteractionRepository.getSubtitles(videoFile = file)
 
         if (subtitles == null) {
             video.apply { errorType = VideoErrorType.GENERATING_SUBTITLES }
         } else {
-            videoListRepository.saveSubtitles(video = video, subtitles = subtitles)
+            val videoID = video.id ?: -1 //TODO
+            videoListRepository.saveSubtitles(videoID = videoID, subtitles = subtitles)
         }
         return video
     }

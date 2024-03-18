@@ -1,8 +1,6 @@
 package com.example.video_transcode.domain.models
 
-import android.os.Parcelable
-
-data class Video(
+data class VideoTranscode(
     val id: Int? = null,
     var videoStatus: VideoStatus,
     var loadingType: VideoLoadingType,

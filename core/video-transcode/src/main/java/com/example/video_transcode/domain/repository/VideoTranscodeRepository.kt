@@ -1,13 +1,13 @@
 package com.example.video_transcode.domain.repository
 
 import androidx.lifecycle.MutableLiveData
-import com.example.video_transcode.domain.models.Video
+import com.example.video_transcode.domain.models.VideoTranscode
 
 interface VideoTranscodeRepository {
-    suspend fun transcodeVideo(video: Video): Video?
+    suspend fun transcodeVideo(videoTranscode: VideoTranscode): VideoTranscode?
     fun cancelTranscodeVideo()
-    suspend fun extractAudio(video: Video): Video?
+    suspend fun extractAudio(videoTranscode: VideoTranscode): VideoTranscode?
     fun cancelExtractAudio()
-    fun getVideoProgressLiveData(): MutableLiveData<Video?>
-    suspend fun extractPreview(video: Video)
+    fun getVideoProgressLiveData(): MutableLiveData<VideoTranscode?>
+    suspend fun extractPreview(videoTranscode: VideoTranscode)
 }

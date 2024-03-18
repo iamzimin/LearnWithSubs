@@ -1,7 +1,7 @@
 package com.learnwithsubs.video_list.domain.usecase
 
-import com.learnwithsubs.database.domain.models.Video
 import com.learnwithsubs.general.util.OrderType
+import com.learnwithsubs.video_list.domain.models.Video
 
 class SortVideoListUseCase {
     operator fun invoke(videoList: ArrayList<Video>, sortMode: VideoOrder, filter: String?): List<Video> {

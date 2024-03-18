@@ -10,7 +10,7 @@ import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFmpegSession
 import com.arthenica.ffmpegkit.FFmpegSessionCompleteCallback
 import com.example.video_transcode.domain.VideoConstants
-import com.example.video_transcode.domain.models.Video
+import com.example.video_transcode.domain.models.VideoTranscode
 import com.example.video_transcode.domain.models.VideoErrorType
 import com.example.video_transcode.domain.repository.VideoTranscodeRepository
 import kotlinx.coroutines.Dispatchers
@@ -23,23 +23,23 @@ import kotlin.coroutines.suspendCoroutine
 
 
 class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
-    private val videoProgressLiveData: MutableLiveData<Video?> = MutableLiveData()
+    private val videoTranscodeProgressLiveData: MutableLiveData<VideoTranscode?> = MutableLiveData()
     private lateinit var transcodeVideoExecutionId: FFmpegSession
     private lateinit var extractAudioExecutionId: FFmpegSession
 
     //val internalStorageDir = File(context.filesDir, "LearnWithSubs")
     private val externalStorageDir = File(Environment.getExternalStorageDirectory().toString(), "LearnWithSubs")
 
-    override suspend fun transcodeVideo(video: Video): Video? = suspendCoroutine { continuation ->
-        val videoFolder = getVideoFolderPath(video)
+    override suspend fun transcodeVideo(videoTranscode: VideoTranscode): VideoTranscode? = suspendCoroutine { continuation ->
+        val videoFolder = getVideoFolderPath(videoTranscode)
 
         val outputVideoPath = File(videoFolder, VideoConstants.COPIED_VIDEO)
-        val command = "-i ${video.inputPath} -c:v mpeg4 -b:v ${video.bitrate}B ${outputVideoPath.absolutePath} -y"
+        val command = "-i ${videoTranscode.inputPath} -c:v mpeg4 -b:v ${videoTranscode.bitrate}B ${outputVideoPath.absolutePath} -y"
 
         FFmpegKitConfig.enableStatisticsCallback {
-            video.uploadingProgress = ((it.time / video.duration.toDouble()) * 100).toInt()
-            if (video.uploadingProgress > 100) video.uploadingProgress = 0
-            videoProgressLiveData.postValue(video)
+            videoTranscode.uploadingProgress = ((it.time / videoTranscode.duration.toDouble()) * 100).toInt()
+            if (videoTranscode.uploadingProgress > 100) videoTranscode.uploadingProgress = 0
+            videoTranscodeProgressLiveData.postValue(videoTranscode)
         }
 
         transcodeVideoExecutionId = FFmpegKit.executeAsync(command, object : FFmpegSessionCompleteCallback {
@@ -47,16 +47,16 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
                 if (session != null) {
                    if (session.returnCode.isValueSuccess) {
                        Log.i("FFmpeg", "Async command execution completed successfully.")
-                       video.uploadingProgress = 0
-                       video.outputPath = videoFolder.absolutePath
-                       continuation.resume(video)
+                       videoTranscode.uploadingProgress = 0
+                       videoTranscode.outputPath = videoFolder.absolutePath
+                       continuation.resume(videoTranscode)
                    } else if (session.returnCode.isValueCancel) {
                        Log.i("FFmpeg", "Async command execution cancelled by user.")
                        continuation.resume(null)
                    } else {
                        Log.i("FFmpeg", "Async command execution failed with returnCode=${session.returnCode}.")
-                       video.errorType = VideoErrorType.DECODING_VIDEO
-                       continuation.resume(video)
+                       videoTranscode.errorType = VideoErrorType.DECODING_VIDEO
+                       continuation.resume(videoTranscode)
                    }
                 }
             }
@@ -69,16 +69,16 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
             FFmpegKit.cancel(transcodeVideoExecutionId.sessionId)
     }
 
-    override suspend fun extractAudio(video: Video): Video? = suspendCoroutine { continuation ->
-        val videoFolder = getVideoFolderPath(video)
+    override suspend fun extractAudio(videoTranscode: VideoTranscode): VideoTranscode? = suspendCoroutine { continuation ->
+        val videoFolder = getVideoFolderPath(videoTranscode)
 
         val outputAudioPath = File(videoFolder, VideoConstants.EXTRACTED_AUDIO)
-        val command = "-i ${video.inputPath} -q:a 0 -map a ${outputAudioPath.absolutePath} -y"
+        val command = "-i ${videoTranscode.inputPath} -q:a 0 -map a ${outputAudioPath.absolutePath} -y"
 
         FFmpegKitConfig.enableStatisticsCallback {
-            video.uploadingProgress = ((it.time / video.duration.toDouble()) * 100).toInt()
-            if (video.uploadingProgress > 100) video.uploadingProgress = 0
-            videoProgressLiveData.postValue(video)
+            videoTranscode.uploadingProgress = ((it.time / videoTranscode.duration.toDouble()) * 100).toInt()
+            if (videoTranscode.uploadingProgress > 100) videoTranscode.uploadingProgress = 0
+            videoTranscodeProgressLiveData.postValue(videoTranscode)
         }
 
         extractAudioExecutionId = FFmpegKit.executeAsync(command, object : FFmpegSessionCompleteCallback {
@@ -86,16 +86,16 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
                 if (session != null) {
                     if (session.returnCode.isValueSuccess) {
                         Log.i("FFmpeg", "Async command execution completed successfully.")
-                        video.uploadingProgress = 0
-                        video.outputPath = videoFolder.absolutePath
-                        continuation.resume(video)
+                        videoTranscode.uploadingProgress = 0
+                        videoTranscode.outputPath = videoFolder.absolutePath
+                        continuation.resume(videoTranscode)
                     } else if (session.returnCode.isValueCancel) {
                         Log.i("FFmpeg", "Async command execution cancelled by user.")
                         continuation.resume(null)
                     } else {
                         Log.i("FFmpeg", "Async command execution failed with returnCode=${session.returnCode}.")
-                        video.errorType = VideoErrorType.DECODING_VIDEO
-                        continuation.resume(video)
+                        videoTranscode.errorType = VideoErrorType.DECODING_VIDEO
+                        continuation.resume(videoTranscode)
                     }
                 }
             }
@@ -107,16 +107,16 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
             FFmpegKit.cancel(extractAudioExecutionId.sessionId)
     }
 
-    override fun getVideoProgressLiveData(): MutableLiveData<Video?> {
-        return videoProgressLiveData
+    override fun getVideoProgressLiveData(): MutableLiveData<VideoTranscode?> {
+        return videoTranscodeProgressLiveData
     }
 
-    override suspend fun extractPreview(video: Video) {
-        val videoFolder = getVideoFolderPath(video)
+    override suspend fun extractPreview(videoTranscode: VideoTranscode) {
+        val videoFolder = getVideoFolderPath(videoTranscode)
 
         try {
             val retriever = MediaMetadataRetriever()
-            retriever.setDataSource(video.inputPath)
+            retriever.setDataSource(videoTranscode.inputPath)
             val frame = retriever.getFrameAtTime(0)
             retriever.release()
 
@@ -132,8 +132,8 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
         }
     }
 
-    private fun getVideoFolderPath(video: Video): File {
-        val videoFolder = File(externalStorageDir, video.id.toString())
+    private fun getVideoFolderPath(videoTranscode: VideoTranscode): File {
+        val videoFolder = File(externalStorageDir, videoTranscode.id.toString())
 
         if (!videoFolder.exists())
             videoFolder.mkdirs()

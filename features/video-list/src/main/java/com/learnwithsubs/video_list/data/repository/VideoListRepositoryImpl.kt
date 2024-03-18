@@ -1,6 +1,7 @@
 package com.learnwithsubs.video_list.data.repository
 
 import com.learnwithsubs.database.data.storage.VideoListDao
+import com.learnwithsubs.database.domain.models.VideoDBO
 import com.learnwithsubs.video_list.domain.repository.VideoListRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -10,28 +11,29 @@ import java.io.File
 class VideoListRepositoryImpl(
     private val dao: VideoListDao
 ) : VideoListRepository {
-    override fun getVideos(): Flow<List<Video>> {
+    override fun getVideos(): Flow<List<VideoDBO>> {
         return dao.getVideos()
     }
 
-    override suspend fun getVideoById(id: Int): Video? {
+    override suspend fun getVideoById(id: Int): VideoDBO? {
         return dao.getVideoById(id)
     }
 
-    override suspend fun insertVideo(video: Video) {
+    override suspend fun insertVideo(video: VideoDBO) {
         return dao.insertVideo(video)
     }
 
-    override suspend fun deleteVideo(video: Video) {
+    override suspend fun deleteVideo(video: VideoDBO) {
         return dao.deleteVideo(video)
     }
 
-    override suspend fun getLastVideo(): Video? {
+    override suspend fun getLastVideo(): VideoDBO? {
         return dao.getLastVideo()
     }
 
 
-    override suspend fun saveSubtitles(video: Video, subtitles: String) {
+    override suspend fun saveSubtitles(videoID: Int, subtitles: String) {
+        val video = getVideoById(videoID) ?: return //TODO
         val subSTR = File(video.outputPath, VideoConstants.GENERATED_SUBTITLES)
         if (subSTR.exists())
             subSTR.delete()
@@ -44,7 +46,8 @@ class VideoListRepositoryImpl(
         }
     }
 
-    override suspend fun loadNewSubtitles(video: Video, subtitles: String) {
+    override suspend fun loadNewSubtitles(videoID: Int, subtitles: String) {
+        val video = getVideoById(videoID) ?: return //TODO
         val subSTR = File(video.outputPath, VideoConstants.OWN_SUBTITLES)
         if (subSTR.exists())
             subSTR.delete()
@@ -62,7 +65,8 @@ class VideoListRepositoryImpl(
         insertVideo(video = video)
     }
 
-    override suspend fun backOldSubtitles(video: Video) {
+    override suspend fun backOldSubtitles(videoID: Int) {
+        val video = getVideoById(videoID) ?: return //TODO
         video.apply {
             isOwnSubtitles = false
         }
