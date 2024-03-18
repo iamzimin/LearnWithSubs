@@ -1,4 +1,4 @@
-package com.example.video_transcode.domain
+package com.example.base
 
 object VideoConstants {
     const val COPIED_VIDEO = "copied_video.mp4"

@@ -4,7 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.learnwithsubs.general.util.OrderType
+import com.example.base.util.OrderType
+import com.example.base.util.VideoOrder
+import com.example.video_transcode.domain.repository.VideoTranscodeRepository
+import com.learnwithsubs.video_list.domain.models.Video
+import com.learnwithsubs.video_list.domain.models.VideoLoadingType
+import com.learnwithsubs.video_list.domain.models.VideoStatus
+import com.learnwithsubs.video_list.domain.usecase.VideoListUseCases
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch

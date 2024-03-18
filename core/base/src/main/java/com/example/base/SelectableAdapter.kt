@@ -1,4 +1,4 @@
-package com.learnwithsubs
+package com.example.base
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView

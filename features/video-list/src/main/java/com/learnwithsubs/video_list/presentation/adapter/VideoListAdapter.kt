@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.learnwithsubs.R
-import com.learnwithsubs.SelectableAdapter
+import com.example.base.SelectableAdapter
+import com.learnwithsubs.video_list.R
+import com.learnwithsubs.video_list.domain.models.Video
+import com.learnwithsubs.video_list.domain.models.VideoStatus
 
 
 class VideoListAdapter(

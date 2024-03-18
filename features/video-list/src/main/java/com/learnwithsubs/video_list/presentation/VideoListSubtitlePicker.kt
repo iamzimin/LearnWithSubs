@@ -6,6 +6,7 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.learnwithsubs.R
+import com.learnwithsubs.video_list.domain.models.Video
 import com.learnwithsubs.video_list.presentation.videos.VideoListViewModel
 
 class VideoListSubtitlePicker(private val fragment: Fragment, private val requestCode: Int) {
@@ -21,7 +22,7 @@ class VideoListSubtitlePicker(private val fragment: Fragment, private val reques
         resultCode: Int,
         data: Intent?,
         vm: VideoListViewModel,
-        video: com.learnwithsubs.database.domain.models.Video?,
+        video: Video?,
     ) {
         if (requestCode == this.requestCode && resultCode == Activity.RESULT_OK) {
             val selectedFileUri: Uri = data?.data ?: return

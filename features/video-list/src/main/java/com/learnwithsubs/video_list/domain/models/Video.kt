@@ -1,6 +1,6 @@
 package com.learnwithsubs.video_list.domain.models
 
-import com.learnwithsubs.database.domain.Identifiable
+import com.example.base.Identifiable
 
 data class Video(
     override val id: Int? = null,

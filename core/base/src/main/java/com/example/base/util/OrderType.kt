@@ -1,4 +1,4 @@
-package com.learnwithsubs.util
+package com.example.base.util
 
 sealed class OrderType {
     object Ascending: OrderType()

@@ -12,6 +12,10 @@ import androidx.fragment.app.Fragment
 import com.arthenica.ffmpegkit.FFprobeKit
 //import com.arthenica.mobileffmpeg.FFprobe
 import com.learnwithsubs.R
+import com.learnwithsubs.video_list.domain.models.Video
+import com.learnwithsubs.video_list.domain.models.VideoErrorType
+import com.learnwithsubs.video_list.domain.models.VideoLoadingType
+import com.learnwithsubs.video_list.domain.models.VideoStatus
 import com.learnwithsubs.video_list.presentation.videos.VideoListViewModel
 import java.io.File
 import java.io.FileOutputStream
@@ -37,7 +41,7 @@ class VideoListVideoPicker(private val fragment: Fragment, private val requestCo
     ) {
         if (requestCode == this.requestCode && resultCode == Activity.RESULT_OK) {
             val selectedVideoUri: Uri = data?.data ?: return
-            var errorType: com.learnwithsubs.database.domain.models.VideoErrorType? = null
+            var errorType: VideoErrorType? = null
 
             var path: String? = getVideoPath(context = context, videoUri = selectedVideoUri)
             val videoName: String = getVideoNameFromUri(selectedVideoUri, context)
@@ -49,12 +53,12 @@ class VideoListVideoPicker(private val fragment: Fragment, private val requestCo
                 path = ""
                 videoDuration = 0
                 bitrate = 0
-                errorType = com.learnwithsubs.database.domain.models.VideoErrorType.PROCESSING_VIDEO
+                errorType = VideoErrorType.PROCESSING_VIDEO
             }
 
-            val video = com.learnwithsubs.database.domain.models.Video(
-                videoStatus = com.learnwithsubs.database.domain.models.VideoStatus.LOADING_VIDEO,
-                loadingType = com.learnwithsubs.database.domain.models.VideoLoadingType.WAITING,
+            val video = Video(
+                videoStatus = VideoStatus.LOADING_VIDEO,
+                loadingType = VideoLoadingType.WAITING,
                 errorType = errorType,
                 name = videoName,
                 inputPath = path,
@@ -132,7 +136,7 @@ class VideoListVideoPicker(private val fragment: Fragment, private val requestCo
     private fun getVideoBitrate(videoPath: String?): Int? {
         videoPath ?: return null
         return try {
-            val info = FFprobeKit.getMediaInformation(videoPath)
+            val info = FFprobeKit.getMediaInformation(videoPath) //TODO вынести в другой модуль
             info.mediaInformation.bitrate.toInt()
         } catch (e: Exception) {
             return null

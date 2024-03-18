@@ -9,7 +9,8 @@ import coil.transform.RoundedCornersTransformation
 import com.learnwithsubs.R
 import com.learnwithsubs.databinding.TileVideoBinding
 import com.learnwithsubs.databinding.TileVideoUploadingBinding
-import com.learnwithsubs.feature_video_view.VideoViewActivity
+import com.learnwithsubs.video_list.domain.models.Video
+import com.learnwithsubs.video_list.domain.models.VideoLoadingType
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -61,8 +62,7 @@ class NormalVideoViewHolder(
                     val position = adapterPosition
                     binding.selectCheckBox.isChecked = !binding.selectCheckBox.isChecked
                     adapter.updateSelection(position = position, isSelected = binding.selectCheckBox.isChecked)
-                }
-                else {
+                } else {
                     val intent = Intent(itemView.context, VideoViewActivity::class.java)
                     intent.putExtra("videoData", video)
                     itemView.context.startActivity(intent)

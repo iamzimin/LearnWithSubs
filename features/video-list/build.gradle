@@ -32,6 +32,7 @@ android {
 
 dependencies {
     implementation project(':core:database')
+    implementation project(':core:base')
     implementation project(':core:video-transcode')
     implementation project(':core:server-api')
 
@@ -58,4 +59,15 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
+
+    //ViewModel - LiveData
+    def lifecycle_version = "2.7.0"
+    implementation("androidx.lifecycle:lifecycle-common:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1'
+
+    //FFmpeg
+    //implementation 'com.arthenica:mobile-ffmpeg-full:4.4'
+    implementation 'com.arthenica:ffmpeg-kit-full:5.1'
 }

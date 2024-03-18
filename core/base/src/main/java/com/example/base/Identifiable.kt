@@ -1,4 +1,4 @@
-package com.learnwithsubs.database.domain
+package com.example.base
 
 interface Identifiable {
     val id: Int?

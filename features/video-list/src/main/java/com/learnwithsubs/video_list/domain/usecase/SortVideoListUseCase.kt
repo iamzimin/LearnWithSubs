@@ -1,6 +1,7 @@
 package com.learnwithsubs.video_list.domain.usecase
 
-import com.learnwithsubs.general.util.OrderType
+import com.example.base.util.OrderType
+import com.example.base.util.VideoOrder
 import com.learnwithsubs.video_list.domain.models.Video
 
 class SortVideoListUseCase {

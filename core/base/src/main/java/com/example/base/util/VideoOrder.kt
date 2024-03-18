@@ -1,4 +1,4 @@
-package com.learnwithsubs.util
+package com.example.base.util
 
 sealed class VideoOrder(var orderType: OrderType) {
     class Name(orderType: OrderType): VideoOrder(orderType)
