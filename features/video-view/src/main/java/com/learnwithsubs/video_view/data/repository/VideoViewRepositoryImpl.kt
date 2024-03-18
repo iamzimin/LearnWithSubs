@@ -2,12 +2,7 @@ package com.learnwithsubs.video_view.data.repository
 
 import com.learnwithsubs.database.data.storage.VideoListDao
 import com.learnwithsubs.database.data.storage.WordListDao
-import com.learnwithsubs.video_list.domain.VideoConstants
-import com.learnwithsubs.video_list.domain.models.Video
-import com.learnwithsubs.video_list.data.storage.VideoListDao
 import com.learnwithsubs.video_view.domain.models.Subtitle
-import com.learnwithsubs.word_list.domain.models.WordTranslation
-import com.learnwithsubs.feature_word_list.storage.WordListDao
 import java.io.File
 
 class VideoViewRepositoryImpl(

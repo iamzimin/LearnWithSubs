@@ -1,4 +1,4 @@
-package com.learnwithsubs.video_list.presentation
+package com.example.base
 
 interface OnSelectChange {
     fun onModeChange(isSelectionMode: Boolean)

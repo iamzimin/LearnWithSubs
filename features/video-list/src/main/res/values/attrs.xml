@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Pop-up SortBy-->
+    <attr name="button_normal_dark"/>
+    <attr name="button_pressed_dark"/>
+</resources>

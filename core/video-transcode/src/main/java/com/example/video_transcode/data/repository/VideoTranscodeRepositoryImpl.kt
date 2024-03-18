@@ -27,13 +27,13 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
     private lateinit var transcodeVideoExecutionId: FFmpegSession
     private lateinit var extractAudioExecutionId: FFmpegSession
 
-    //val internalStorageDir = File(context.filesDir, "LearnWithSubs")
+    //val internalStorageDir = File(context.filesDir, "LearnWithSubs") //TODO release
     private val externalStorageDir = File(Environment.getExternalStorageDirectory().toString(), "LearnWithSubs")
 
     override suspend fun transcodeVideo(videoTranscode: VideoTranscode): VideoTranscode? = suspendCoroutine { continuation ->
         val videoFolder = getVideoFolderPath(videoTranscode)
 
-        val outputVideoPath = File(videoFolder, com.example.base.VideoConstants.COPIED_VIDEO)
+        val outputVideoPath = File(videoFolder, VideoConstants.COPIED_VIDEO)
         val command = "-i ${videoTranscode.inputPath} -c:v mpeg4 -b:v ${videoTranscode.bitrate}B ${outputVideoPath.absolutePath} -y"
 
         FFmpegKitConfig.enableStatisticsCallback {
@@ -72,7 +72,7 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
     override suspend fun extractAudio(videoTranscode: VideoTranscode): VideoTranscode? = suspendCoroutine { continuation ->
         val videoFolder = getVideoFolderPath(videoTranscode)
 
-        val outputAudioPath = File(videoFolder, com.example.base.VideoConstants.EXTRACTED_AUDIO)
+        val outputAudioPath = File(videoFolder, VideoConstants.EXTRACTED_AUDIO)
         val command = "-i ${videoTranscode.inputPath} -q:a 0 -map a ${outputAudioPath.absolutePath} -y"
 
         FFmpegKitConfig.enableStatisticsCallback {
@@ -120,7 +120,7 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
             val frame = retriever.getFrameAtTime(0)
             retriever.release()
 
-            val outputVideoPath = File(videoFolder, com.example.base.VideoConstants.VIDEO_PREVIEW)
+            val outputVideoPath = File(videoFolder, VideoConstants.VIDEO_PREVIEW)
 
             withContext(Dispatchers.IO) {
                 FileOutputStream(outputVideoPath).use { out ->

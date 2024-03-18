@@ -13,7 +13,7 @@ class GetSubtitlesFromServerUseCase(
     private val videoListRepository: VideoListRepository,
 ) {
     suspend fun invoke(video: Video): Video {
-        val file = File(video.outputPath, com.example.base.VideoConstants.EXTRACTED_AUDIO)
+        val file = File(video.outputPath, VideoConstants.EXTRACTED_AUDIO)
         val subtitles = serverInteractionRepository.getSubtitles(videoFile = file)
 
         if (subtitles == null) {

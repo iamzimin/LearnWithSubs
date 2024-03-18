@@ -20,15 +20,18 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.learnwithsubs.OnSelectChange
-import com.learnwithsubs.R
+import com.example.base.OnSelectChange
+import com.example.base.util.OrderType
+import com.example.base.util.VideoOrder
 import com.learnwithsubs.VideoListActivity
 import com.learnwithsubs.databinding.ActivityVideoListBinding
 import com.learnwithsubs.databinding.DialogVideoListMenuRenameBinding
 import com.learnwithsubs.databinding.DialogVideoListMenuSortByBinding
 import com.learnwithsubs.databinding.FragmentVideoListBinding
 import com.learnwithsubs.databinding.SearchViewBinding
-import com.learnwithsubs.general.util.OrderType
+import com.learnwithsubs.video_list.R
+import com.learnwithsubs.video_list.domain.models.VideoErrorType
+import com.learnwithsubs.video_list.domain.models.VideoLoadingType
 import com.learnwithsubs.video_list.presentation.adapter.VideoListAdapter
 import com.learnwithsubs.video_list.presentation.videos.VideoListViewModel
 import com.learnwithsubs.video_list.presentation.videos.VideoListViewModelFactory
@@ -134,7 +137,8 @@ class VideoListFragment : Fragment(), OnSelectChange {
             if (video == null) return@observe
             val errorType = video.errorType ?: return@observe
             when (errorType) {
-                VideoErrorType.PROCESSING_VIDEO ->      Toast.makeText(this@VideoListFragment.context, getString(R.string.video_processing_error), Toast.LENGTH_SHORT).show()
+                VideoErrorType.PROCESSING_VIDEO ->      Toast.makeText(this@VideoListFragment.context, getString(
+                    R.string.video_processing_error), Toast.LENGTH_SHORT).show()
                 VideoErrorType.EXTRACTING_AUDIO ->      Toast.makeText(this@VideoListFragment.context, getString(R.string.audio_extraction_error), Toast.LENGTH_SHORT).show()
                 VideoErrorType.DECODING_VIDEO ->        Toast.makeText(this@VideoListFragment.context, getString(R.string.video_decoding_error), Toast.LENGTH_SHORT).show()
                 VideoErrorType.GENERATING_SUBTITLES ->  Toast.makeText(this@VideoListFragment.context, getString(R.string.subtitle_generation_error), Toast.LENGTH_SHORT).show()

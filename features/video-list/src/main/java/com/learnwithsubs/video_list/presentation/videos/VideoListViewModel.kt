@@ -23,9 +23,7 @@ import javax.inject.Inject
 
 class VideoListViewModel @Inject constructor(
     val videoListUseCases: VideoListUseCases,
-    val videoTranscodeRepository: VideoTranscodeRepository
 ) : ViewModel() {
-
     //private val videoListFlow: Flow<List<Video>> = videoListUseCases.getVideoListUseCase.invoke()
     val videoList = videoListUseCases.getVideoListUseCase.invoke().asLiveData(viewModelScope.coroutineContext)
 
@@ -33,7 +31,7 @@ class VideoListViewModel @Inject constructor(
     private var filter: String? = null
     var editableVideo: Video? = null
 
-    val videoProgressLiveData: MutableLiveData<Video?> = videoTranscodeRepository.getVideoProgressLiveData()
+    val videoProgressLiveData: MutableLiveData<Video?> = videoListUseCases.getVideoProgressLiveData.invoke()
     val errorTypeLiveData = MutableLiveData<Video?>()
 
     private val videoSemaphore = Semaphore(1)
@@ -136,8 +134,8 @@ class VideoListViewModel @Inject constructor(
             videoListUseCases.deleteVideoUseCase.invoke(video)
         }
         if (::poolList.isInitialized && poolList.id == video.id) {
-            videoTranscodeRepository.cancelTranscodeVideo()
-            videoTranscodeRepository.cancelExtractAudio()
+            videoListUseCases.cancelTranscodeVideo.invoke()
+            videoListUseCases.cancelExtractAudio.invoke()
         } else {
             processQueue.remove(processQueue.find { it?.id == video.id })
         }
@@ -148,12 +146,14 @@ class VideoListViewModel @Inject constructor(
 
     fun loadNewSubtitles(video: Video, subtitles: String) {
         viewModelScope.launch {
-            videoListUseCases.loadNewSubtitlesUseCase.invoke(video = video, subtitles = subtitles)
+            val videoID = video.id ?: -1 //TODO
+            videoListUseCases.loadNewSubtitlesUseCase.invoke(videoID = videoID, subtitles = subtitles)
         }
     }
     fun backOldSubtitles(video: Video) {
         viewModelScope.launch {
-            videoListUseCases.backOldSubtitlesUseCase.invoke(video = video)
+            val videoID = video.id ?: -1 //TODO
+            videoListUseCases.backOldSubtitlesUseCase.invoke(videoID = videoID)
         }
     }
 

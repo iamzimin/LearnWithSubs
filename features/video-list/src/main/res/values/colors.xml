@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--____________Light Theme____________-->
+
+
+    <!--____________Dark Theme____________-->
+    <color name="button_normal">#41415F</color>
+    <color name="button_pressed">#28283C</color>
+</resources>

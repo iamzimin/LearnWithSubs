@@ -129,7 +129,7 @@ abstract class SelectableAdapter<T : Identifiable>(
     }
 
 
-    class GenericDiffCallback<T : com.learnwithsubs.database.domain.Identifiable>(private val oldList: List<T>, private val newList: List<T>) : DiffUtil.Callback() {
+    class GenericDiffCallback<T : Identifiable>(private val oldList: List<T>, private val newList: List<T>) : DiffUtil.Callback() {
         override fun getOldListSize(): Int {
             return oldList.size
         }

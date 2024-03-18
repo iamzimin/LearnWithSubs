@@ -3,7 +3,6 @@
     <string name="videos">Videos</string>
     <string name="module">Module</string>
     <string name="word_list">Word list</string>
-    <string name="video">Video</string>
     <string name="favourite">Favourite</string>
     <string name="account">Account</string>
     <string name="search">Search</string>
@@ -11,32 +10,7 @@
     <string name="translate">Translate</string>
 
 
-    <string name="video_duration">Duration</string>
-    <string name="video_saved_words">Saved words</string>
-    <string name="video_is_uploading">Video is uploading</string>
-
     <string name="storage_access_required">Storage access required</string>
-
-
-    <string name="video_loading_status">Status</string>
-    <string name="video_loading_status_waiting">Waiting</string>
-    <string name="video_loading_status_loading_audio">Loading audio</string>
-    <string name="video_loading_status_decoding_video">Decoding video</string>
-    <string name="video_loading_status_extracting_audio">Extracting audio</string>
-    <string name="video_loading_status_generating_subtitles">Generating subtitles</string>
-    <string name="video_loading_status_done">Done</string>
-
-    <string name="copy">Copy</string>
-    <string name="share">Share</string>
-    <string name="sort_by">Sort by</string>
-    <string name="select_all">Select all</string>
-    <string name="deselect_all">Deselect all</string>
-    <string name="delete">Delete</string>
-    <string name="rename">Rename</string>
-    <string name="add_subtitles">Add subtitles</string>
-    <string name="return_subtitles">Return subtitles</string>
-    <string name="add_preview">Add preview</string>
-
 
     <string name="name">Name</string>
     <string name="alphabet">Alphabet</string>
@@ -61,18 +35,7 @@
     <string name="participle">Participle</string>
     <string name="predicative">Predicative</string>
 
-    <string name="video_processing_error">Video processing error</string>
-    <string name="audio_extraction_error">Audio extraction error</string>
-    <string name="video_decoding_error">Video decoding error</string>
-    <string name="audio_upload_error">Audio upload error</string>
-    <string name="subtitle_generation_error">Subtitle generation error</string>
-
-    <string name="the_video_does_not_exist">The video does not exist</string>
-    <string name="the_video_is_uploading">The video is uploading</string>
-
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <string name="subtitle_extraction_error">Subtitle extraction error</string>
 
     <string name="yandex_service_is_not_available">The yandex service is not available</string>
     <string name="server_for_translation_is_not_available">Server for translation is not available</string>

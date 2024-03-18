@@ -6,9 +6,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
-import com.learnwithsubs.R
-import com.learnwithsubs.databinding.TileVideoBinding
-import com.learnwithsubs.databinding.TileVideoUploadingBinding
+import com.example.base.VideoConstants
+import com.learnwithsubs.video_list.R
 import com.learnwithsubs.video_list.domain.models.Video
 import com.learnwithsubs.video_list.domain.models.VideoLoadingType
 import java.io.File

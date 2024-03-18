@@ -70,4 +70,7 @@ dependencies {
     //FFmpeg
     //implementation 'com.arthenica:mobile-ffmpeg-full:4.4'
     implementation 'com.arthenica:ffmpeg-kit-full:5.1'
+
+    //Coil
+    implementation 'io.coil-kt:coil:2.4.0'
 }
