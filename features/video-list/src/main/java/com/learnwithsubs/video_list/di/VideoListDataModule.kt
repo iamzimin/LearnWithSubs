@@ -9,7 +9,6 @@ import com.example.video_transcode.domain.repository.VideoTranscodeRepository
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.learnwithsubs.database.data.storage.VideoDatabase
-import com.learnwithsubs.database.domain.VideoListRepository
 import com.learnwithsubs.video_list.data.repository.VideoListRepositoryImpl
 import com.learnwithsubs.video_list.domain.repository.VideoListRepository
 import dagger.Module
