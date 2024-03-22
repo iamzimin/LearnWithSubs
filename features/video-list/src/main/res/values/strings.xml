@@ -30,8 +30,6 @@
     <string name="copy">Copy</string>
     <string name="share">Share</string>
     <string name="sort_by">Sort by</string>
-    <string name="select_all">Select all</string>
-    <string name="deselect_all">Deselect all</string>
     <string name="delete">Delete</string>
     <string name="rename">Rename</string>
     <string name="add_subtitles">Add subtitles</string>

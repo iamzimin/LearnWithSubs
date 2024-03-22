@@ -1,6 +1,7 @@
 package com.learnwithsubs.word_list.domain.usecase
 
-import com.learnwithsubs.database.domain.models.WordTranslation
+import com.learnwithsubs.word_list.domain.models.WordTranslation
+
 
 class FilterWordListUseCase {
     operator fun invoke(wordList: ArrayList<WordTranslation>, filter: String?): List<WordTranslation> {

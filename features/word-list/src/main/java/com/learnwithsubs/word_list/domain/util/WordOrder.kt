@@ -1,6 +1,6 @@
 package com.learnwithsubs.word_list.domain.util
 
-import com.learnwithsubs.general.util.OrderType
+import com.example.base.util.OrderType
 
 sealed class WordOrder(var orderType: OrderType) {
     class Alphabet(orderType: OrderType): WordOrder(orderType)

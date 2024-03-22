@@ -1,0 +1,4 @@
+<resources>
+    <string name="select_all">Select all</string>
+    <string name="deselect_all">Deselect all</string>
+</resources>

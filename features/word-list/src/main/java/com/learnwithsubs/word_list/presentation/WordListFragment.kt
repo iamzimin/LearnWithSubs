@@ -15,8 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.learnwithsubs.OnSelectChange
-import com.learnwithsubs.R
+import com.example.base.OnSelectChange
 import com.learnwithsubs.app.App
 import com.learnwithsubs.databinding.ActivityVideoListBinding
 import com.learnwithsubs.databinding.DialogWordListMenuEditBinding
@@ -24,6 +23,8 @@ import com.learnwithsubs.databinding.DialogWordListMenuSortByBinding
 import com.learnwithsubs.databinding.FragmentWordListBinding
 import com.learnwithsubs.databinding.SearchViewBinding
 import com.learnwithsubs.VideoListActivity
+import com.learnwithsubs.word_list.R
+import com.learnwithsubs.word_list.domain.models.WordTranslation
 import com.learnwithsubs.word_list.presentation.adapter.WordListTitleAdapter
 import java.util.Date
 import javax.inject.Inject

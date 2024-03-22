@@ -1,8 +1,8 @@
 package com.learnwithsubs.word_list.domain.usecase
 
-import com.learnwithsubs.database.domain.models.WordTranslation
+import com.example.base.util.OrderType
+import com.learnwithsubs.word_list.domain.models.WordTranslation
 import com.learnwithsubs.word_list.domain.util.WordOrder
-import com.learnwithsubs.general.util.OrderType
 
 class SortWordListUseCase {
     operator fun invoke(wordList: ArrayList<WordTranslation>, sortMode: WordOrder, filter: String?): List<WordTranslation> {

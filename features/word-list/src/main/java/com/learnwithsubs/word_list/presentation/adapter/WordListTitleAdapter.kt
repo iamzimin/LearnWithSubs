@@ -4,11 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.learnwithsubs.OnSelectChange
-import com.learnwithsubs.R
+import com.example.base.OnSelectChange
+import com.learnwithsubs.word_list.R
+import com.learnwithsubs.word_list.domain.models.WordTranslation
 import com.learnwithsubs.word_list.presentation.model.WordList
-import com.learnwithsubs.word_list.presentation.model.WordTitle
 import com.learnwithsubs.word_list.presentation.model.WordManager
+import com.learnwithsubs.word_list.presentation.model.WordTitle
 
 class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var itemList = ArrayList<WordList>()
