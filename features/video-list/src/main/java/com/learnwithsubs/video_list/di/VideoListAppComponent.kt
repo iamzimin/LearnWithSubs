@@ -1,6 +1,5 @@
 package com.learnwithsubs.video_list.di
 
-import com.learnwithsubs.VideoListActivity
 import dagger.Component
 import javax.inject.Singleton
 
