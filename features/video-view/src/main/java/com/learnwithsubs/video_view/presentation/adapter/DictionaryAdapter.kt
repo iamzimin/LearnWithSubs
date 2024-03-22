@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.learnwithsubs.R
+import com.example.yandex_dictionary_api.models.DictionarySynonyms
+import com.example.yandex_dictionary_api.models.DictionaryType
+import com.learnwithsubs.video_view.R
 
 class DictionaryAdapter(
     wordsInit: ArrayList<DictionarySynonyms>

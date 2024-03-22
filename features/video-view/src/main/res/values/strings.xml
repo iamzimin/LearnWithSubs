@@ -1,0 +1,25 @@
+<resources>
+    <string name="noun">Noun</string>
+    <string name="adjective">Adjective</string>
+    <string name="adverb">Adverb</string>
+    <string name="participle">Participle</string>
+    <string name="predicative">Predicative</string>
+
+    <string name="submenu">Submenu</string>
+
+    <string name="select_all">Select all</string>
+    <string name="deselect_all">Deselect all</string>
+    <string name="copy">Copy</string>
+    <string name="share">Share</string>
+    <string name="translate">Translate</string>
+
+    <string name="wrong_subtitle_format">Wrong subtitle format</string>
+
+    <string name="server_for_translation_is_not_available">Server for translation is not available</string>
+
+    <string name="russian">Russian</string>
+    <string name="english">English</string>
+    <string name="spanish">Spanish</string>
+
+    <string name="storage_access_required">Storage access required</string>
+</resources>

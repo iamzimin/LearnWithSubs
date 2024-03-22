@@ -1,15 +1,20 @@
 package com.learnwithsubs.video_view.data.repository
 
+import com.example.base.VideoConstants
 import com.learnwithsubs.database.data.storage.VideoListDao
 import com.learnwithsubs.database.data.storage.WordListDao
+import com.learnwithsubs.database.domain.models.VideoDBO
+import com.learnwithsubs.database.domain.models.WordTranslationDBO
 import com.learnwithsubs.video_view.domain.models.Subtitle
+import com.learnwithsubs.video_view.domain.models.Video
+import com.learnwithsubs.video_view.domain.models.WordTranslation
 import java.io.File
 
 class VideoViewRepositoryImpl(
     private val videoDao: VideoListDao,
     private val wordDao: WordListDao,
 ) : com.learnwithsubs.video_view.domain.repository.VideoViewRepository {
-    override fun getVideoSubtitles(video: Video): List<Subtitle>? {
+    override fun getVideoSubtitles(video: VideoDBO): List<Subtitle>? {
         val subtitlesPath = if (video.isOwnSubtitles)
              File(video.outputPath, VideoConstants.OWN_SUBTITLES)
         else File(video.outputPath, VideoConstants.GENERATED_SUBTITLES)
@@ -24,11 +29,11 @@ class VideoViewRepositoryImpl(
         return convertSubtitles(subs)
     }
 
-    override suspend fun updateVideo(video: models.Video) {
+    override suspend fun updateVideo(video: VideoDBO) {
         videoDao.insertVideo(video)
     }
 
-    override suspend fun saveWord(word: WordTranslation) {
+    override suspend fun saveWord(word: WordTranslationDBO) {
         wordDao.insertWord(word = word)
     }
 

@@ -7,10 +7,6 @@
     <string name="account">Account</string>
     <string name="search">Search</string>
 
-    <string name="translate">Translate</string>
-
-
-    <string name="storage_access_required">Storage access required</string>
 
     <string name="name">Name</string>
     <string name="alphabet">Alphabet</string>
@@ -25,10 +21,6 @@
     <string name="rename_video">Rename Video</string>
     <string name="edit">Edit</string>
 
-    <string name="russian">Russian</string>
-    <string name="english">English</string>
-    <string name="spanish">Spanish</string>
-
     <string name="noun">Noun</string>
     <string name="adjective">Adjective</string>
     <string name="adverb">Adverb</string>
@@ -38,12 +30,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="yandex_service_is_not_available">The yandex service is not available</string>
-    <string name="server_for_translation_is_not_available">Server for translation is not available</string>
     <string name="save">Save</string>
-
-    <string name="wrong_subtitle_format">Wrong subtitle format</string>
-
-    <string name="submenu">Submenu</string>
 
     <string name="custom">Custom</string>
 

@@ -4,10 +4,15 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.learnwithsubs.R
-import com.learnwithsubs.video_list.domain.VideoConstants
-import com.learnwithsubs.video_list.domain.models.Video
-import com.learnwithsubs.word_list.domain.models.WordTranslation
+import com.example.base.VideoConstants
+import com.example.yandex_dictionary_api.models.DictionarySynonyms
+import com.example.yandex_dictionary_api.models.DictionaryWordDTO
+import com.learnwithsubs.video_view.R
+import com.learnwithsubs.video_view.domain.models.Subtitle
+import com.learnwithsubs.video_view.domain.models.TranslationModel
+import com.learnwithsubs.video_view.domain.models.Video
+import com.learnwithsubs.video_view.domain.models.WordTranslation
+import com.learnwithsubs.video_view.domain.usecase.VideoViewUseCases
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -34,7 +39,7 @@ class VideoViewViewModel @Inject constructor(
 
     private var subtitleList: List<Subtitle> = emptyList()
 
-    val dictionaryWordsLiveData =  MutableLiveData<DictionaryWord?>()
+    val dictionaryWordsLiveData =  MutableLiveData<DictionaryWordDTO?>()
     val translatorTranslationLiveData = MutableLiveData<String?>()
 
 
@@ -61,7 +66,7 @@ class VideoViewViewModel @Inject constructor(
         }
     }
 
-    fun saveWord(word: com.learnwithsubs.word_list.domain.models.WordTranslation) {
+    fun saveWord(word: WordTranslation) {
         viewModelScope.launch {
             videoViewUseCases.saveWordUseCase.invoke(word = word)
             val vid = currentVideo ?: return@launch

@@ -2,11 +2,13 @@ package com.learnwithsubs.video_view.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.yandex_dictionary_api.data.repository.TranslatorRepositoryImpl
+import com.example.yandex_dictionary_api.domain.repository.TranslatorRepository
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.learnwithsubs.video_list.data.storage.VideoDatabase
-import com.example.yandex_dictionary_api.domain.TranslatorRepository
-import com.learnwithsubs.word_list.data.storage.WordDatabase
+import com.learnwithsubs.database.data.storage.VideoDatabase
+import com.learnwithsubs.database.data.storage.WordDatabase
+import com.learnwithsubs.video_view.domain.repository.VideoViewRepository
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -30,11 +32,11 @@ class VideoViewDataModule {
     }
     @Provides
     @Singleton
-    fun provideWordDatabase(context: Context) :WordDatabase {
+    fun provideWordDatabase(context: Context) : WordDatabase {
         return Room.databaseBuilder(
             context,
             WordDatabase::class.java,
-           WordDatabase.DATABASE_NAME
+            WordDatabase.DATABASE_NAME
         ).build()
     }
 
