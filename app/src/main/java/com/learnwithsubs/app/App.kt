@@ -1,13 +1,13 @@
 package com.learnwithsubs.app
 
 import android.app.Application
-import com.learnwithsubs.feature_video_list.di.DaggerVideoListAppComponent
-import com.learnwithsubs.feature_video_view.di.DaggerVideoViewAppComponent
-import com.learnwithsubs.feature_word_list.di.DaggerWordListAppComponent
+import com.learnwithsubs.video_list.di.DaggerVideoListAppComponent
 import com.learnwithsubs.video_list.di.VideoListAppComponent
 import com.learnwithsubs.video_list.di.VideoListAppModule
+import com.learnwithsubs.video_view.di.DaggerVideoViewAppComponent
 import com.learnwithsubs.video_view.di.VideoViewAppComponent
 import com.learnwithsubs.video_view.di.VideoViewAppModule
+import com.learnwithsubs.word_list.di.DaggerWordListAppComponent
 import com.learnwithsubs.word_list.di.WordListAppComponent
 import com.learnwithsubs.word_list.di.WordListAppModule
 

@@ -12,18 +12,16 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.base.OnSelectChange
-import com.learnwithsubs.app.App
-import com.learnwithsubs.databinding.ActivityVideoListBinding
-import com.learnwithsubs.databinding.DialogWordListMenuEditBinding
-import com.learnwithsubs.databinding.DialogWordListMenuSortByBinding
-import com.learnwithsubs.databinding.FragmentWordListBinding
-import com.learnwithsubs.databinding.SearchViewBinding
 import com.learnwithsubs.VideoListActivity
+import com.learnwithsubs.databinding.ActivityVideoListBinding
 import com.learnwithsubs.word_list.R
+import com.learnwithsubs.word_list.databinding.DialogWordListMenuEditBinding
+import com.learnwithsubs.word_list.databinding.DialogWordListMenuSortByBinding
+import com.learnwithsubs.word_list.databinding.FragmentWordListBinding
+import com.learnwithsubs.word_list.databinding.SearchViewBinding
 import com.learnwithsubs.word_list.domain.models.WordTranslation
 import com.learnwithsubs.word_list.presentation.adapter.WordListTitleAdapter
 import java.util.Date
@@ -35,9 +33,9 @@ class WordListFragment : Fragment(), OnSelectChange {
     private lateinit var vm: WordListViewModel
 
     private lateinit var videoListActivity: VideoListActivity
+    private lateinit var videoListBinding: ActivityVideoListBinding
     private lateinit var fragmentWordListBinding: FragmentWordListBinding
     private lateinit var searchViewBinding: SearchViewBinding
-    private lateinit var videoListBinding: ActivityVideoListBinding
     private lateinit var dialogWordListMenuEditBinding: DialogWordListMenuEditBinding
     private lateinit var sortByDialogBinding: DialogWordListMenuSortByBinding
 
@@ -56,8 +54,8 @@ class WordListFragment : Fragment(), OnSelectChange {
         videoListBinding = videoListActivity.videoListBinding
         setupRecyclerView()
 
-        (videoListActivity.applicationContext as App).wordListAppComponent.inject(this)
-        vm = ViewModelProvider(this, vmFactory)[WordListViewModel::class.java]
+//        (videoListActivity.applicationContext as App).wordListAppComponent.inject(this)
+//        vm = ViewModelProvider(this, vmFactory)[WordListViewModel::class.java]
 
         vm.wordList.observe(viewLifecycleOwner) { wordList ->
             wordList ?: return@observe

@@ -23,17 +23,17 @@ import android.view.WindowManager
 import android.widget.SeekBar
 import android.widget.Toast
 import android.widget.VideoView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.mlkit.nl.translate.TranslateLanguage
-import com.learnwithsubs.databinding.ActivityVideoViewBinding
-import com.learnwithsubs.databinding.DialogTranslateBinding
-import com.learnwithsubs.databinding.VideoViewInterfaceBinding
 import com.learnwithsubs.video_view.R
+import com.learnwithsubs.video_view.databinding.ActivityVideoViewBinding
+import com.learnwithsubs.video_view.databinding.DialogTranslateBinding
+import com.learnwithsubs.video_view.databinding.VideoViewInterfaceBinding
 import com.learnwithsubs.video_view.domain.models.WordTranslation
 import com.learnwithsubs.video_view.presentation.adapter.DictionaryAdapter
 import com.learnwithsubs.video_view.presentation.adapter.OnDictionaryClick
@@ -51,7 +51,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
 
     @Inject
     lateinit var vmFactory: VideoViewViewModelFactory
-    private lateinit var vm: VideoViewViewModel
+    private val vm: VideoViewViewModel by viewModels()
 
     private lateinit var translateDialogBind: DialogTranslateBinding
     private lateinit var videoViewBind: ActivityVideoViewBinding
@@ -89,8 +89,8 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
         setupTranslateDialog()
 
         // Set VM
-        (applicationContext as App).videoViewAppComponent.inject(this)
-        vm = ViewModelProvider(this, vmFactory)[VideoViewViewModel::class.java]
+//        (applicationContext as App).videoViewAppComponent.inject(this)
+//        vm = ViewModelProvider(this, vmFactory)[VideoViewViewModel::class.java]
         vm.currentVideo = intent.getParcelableExtra("videoData")
         getLanguageFromSettings()
 

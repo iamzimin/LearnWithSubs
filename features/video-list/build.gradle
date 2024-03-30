@@ -21,6 +21,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    buildFeatures {
+        viewBinding true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -31,6 +36,7 @@ android {
 }
 
 dependencies {
+    //implementation project(':app')
     implementation project(':core:database')
     implementation project(':core:base')
     implementation project(':core:video-transcode')
@@ -73,4 +79,7 @@ dependencies {
 
     //Coil
     implementation 'io.coil-kt:coil:2.4.0'
+
+    //Fragment
+    implementation 'androidx.fragment:fragment-ktx:1.6.2'
 }

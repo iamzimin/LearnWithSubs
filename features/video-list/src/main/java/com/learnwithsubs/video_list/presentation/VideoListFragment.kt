@@ -17,7 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.base.OnSelectChange
@@ -25,11 +25,11 @@ import com.example.base.util.OrderType
 import com.example.base.util.VideoOrder
 import com.learnwithsubs.VideoListActivity
 import com.learnwithsubs.databinding.ActivityVideoListBinding
-import com.learnwithsubs.databinding.DialogVideoListMenuRenameBinding
-import com.learnwithsubs.databinding.DialogVideoListMenuSortByBinding
-import com.learnwithsubs.databinding.FragmentVideoListBinding
-import com.learnwithsubs.databinding.SearchViewBinding
 import com.learnwithsubs.video_list.R
+import com.learnwithsubs.video_list.databinding.DialogVideoListMenuRenameBinding
+import com.learnwithsubs.video_list.databinding.DialogVideoListMenuSortByBinding
+import com.learnwithsubs.video_list.databinding.FragmentVideoListBinding
+import com.learnwithsubs.video_list.databinding.SearchViewBinding
 import com.learnwithsubs.video_list.domain.models.VideoErrorType
 import com.learnwithsubs.video_list.domain.models.VideoLoadingType
 import com.learnwithsubs.video_list.presentation.adapter.VideoListAdapter
@@ -44,8 +44,9 @@ class VideoListFragment : Fragment(), OnSelectChange {
     }
 
     private lateinit var vmFactory: VideoListViewModelFactory
-    private lateinit var vm: VideoListViewModel
+    private val vm: VideoListViewModel by viewModels()
     private lateinit var videoListActivity: VideoListActivity
+    private lateinit var videoListBinding: ActivityVideoListBinding
 
     private lateinit var videoListVideoPicker: VideoListVideoPicker
     private lateinit var videoListSubtitlePicker: VideoListSubtitlePicker
@@ -53,7 +54,6 @@ class VideoListFragment : Fragment(), OnSelectChange {
     private lateinit var videoListFragmentBinding: FragmentVideoListBinding
     private lateinit var searchViewBinding: SearchViewBinding
     private lateinit var renameDialogBinding: DialogVideoListMenuRenameBinding
-    private lateinit var videoListBinding: ActivityVideoListBinding
     private lateinit var sortByDialogBinding: DialogVideoListMenuSortByBinding
 
     private val adapter = VideoListAdapter(ArrayList())
@@ -70,8 +70,8 @@ class VideoListFragment : Fragment(), OnSelectChange {
         searchViewBinding = videoListFragmentBinding.searchBar
         setupRecyclerView()
 
-        vmFactory = videoListActivity.vmFactory
-        vm = ViewModelProvider(videoListActivity, vmFactory)[VideoListViewModel::class.java]
+//        vmFactory = videoListActivity.vmFactory
+//        vm = ViewModelProvider(videoListActivity, vmFactory)[VideoListViewModel::class.java]
 
         videoListVideoPicker = VideoListVideoPicker(this, PICK_VIDEO_REQUEST)
         videoListSubtitlePicker = VideoListSubtitlePicker(this, PICK_SUBTITLES_REQUEST)
