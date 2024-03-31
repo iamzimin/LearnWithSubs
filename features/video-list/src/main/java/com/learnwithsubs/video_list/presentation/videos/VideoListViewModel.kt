@@ -146,14 +146,12 @@ class VideoListViewModel @Inject constructor(
 
     fun loadNewSubtitles(video: Video, subtitles: String) {
         viewModelScope.launch {
-            val videoID = video.id ?: -1 //TODO
-            videoListUseCases.loadNewSubtitlesUseCase.invoke(videoID = videoID, subtitles = subtitles)
+            videoListUseCases.loadNewSubtitlesUseCase.invoke(video = video, subtitles = subtitles)
         }
     }
     fun backOldSubtitles(video: Video) {
         viewModelScope.launch {
-            val videoID = video.id ?: -1 //TODO
-            videoListUseCases.backOldSubtitlesUseCase.invoke(videoID = videoID)
+            videoListUseCases.backOldSubtitlesUseCase.invoke(video = video)
         }
     }
 

@@ -5,6 +5,7 @@ import com.example.base.VideoConstants
 import com.learnwithsubs.video_list.domain.models.Video
 import com.learnwithsubs.video_list.domain.models.VideoErrorType
 import com.learnwithsubs.video_list.domain.repository.VideoListRepository
+import com.learnwithsubs.video_list.domain.toVideoDBO
 import java.io.File
 
 
@@ -19,8 +20,7 @@ class GetSubtitlesFromServerUseCase(
         if (subtitles == null) {
             video.apply { errorType = VideoErrorType.GENERATING_SUBTITLES }
         } else {
-            val videoID = video.id ?: -1 //TODO
-            videoListRepository.saveSubtitles(videoID = videoID, subtitles = subtitles)
+            videoListRepository.saveSubtitles(video = video.toVideoDBO(), subtitles = subtitles)
         }
         return video
     }

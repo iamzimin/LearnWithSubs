@@ -33,8 +33,7 @@ class VideoListRepositoryImpl(
     }
 
 
-    override suspend fun saveSubtitles(videoID: Int, subtitles: String) {
-        val video = getVideoById(videoID) ?: return //TODO
+    override suspend fun saveSubtitles(video: VideoDBO, subtitles: String) {
         val subSTR = File(video.outputPath, VideoConstants.GENERATED_SUBTITLES)
         if (subSTR.exists())
             subSTR.delete()
@@ -47,8 +46,7 @@ class VideoListRepositoryImpl(
         }
     }
 
-    override suspend fun loadNewSubtitles(videoID: Int, subtitles: String) {
-        val video = getVideoById(videoID) ?: return //TODO
+    override suspend fun loadNewSubtitles(video: VideoDBO, subtitles: String) {
         val subSTR = File(video.outputPath, VideoConstants.OWN_SUBTITLES)
         if (subSTR.exists())
             subSTR.delete()
@@ -66,8 +64,7 @@ class VideoListRepositoryImpl(
         insertVideo(video = video)
     }
 
-    override suspend fun backOldSubtitles(videoID: Int) {
-        val video = getVideoById(videoID) ?: return //TODO
+    override suspend fun backOldSubtitles(video: VideoDBO) {
         video.apply {
             isOwnSubtitles = false
         }
