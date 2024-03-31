@@ -1,5 +1,6 @@
 package com.learnwithsubs.video_list.di
 
+import com.learnwithsubs.video_list.presentation.VideoListFragment
 import dagger.Component
 import javax.inject.Singleton
 
@@ -11,6 +12,6 @@ import javax.inject.Singleton
         VideoListDataModule::class,
     ]
 )
-interface VideoListAppComponent {
-    fun inject(videoListActivity: VideoListActivity)
+internal interface VideoListAppComponent {
+    fun inject(videoListFragment: VideoListFragment)
 }

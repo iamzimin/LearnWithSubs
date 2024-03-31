@@ -3,8 +3,8 @@ package com.learnwithsubs.video_view.presentation.adapter
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yandex_dictionary_api.models.DictionarySynonyms
-import com.learnwithsubs.databinding.TileTranslatePartspeechBinding
-import com.learnwithsubs.databinding.TileTranslateWordBinding
+import com.learnwithsubs.video_view.databinding.TileTranslatePartspeechBinding
+import com.learnwithsubs.video_view.databinding.TileTranslateWordBinding
 
 abstract class DictionaryHolder(
     itemView: View

@@ -3,7 +3,7 @@ package com.learnwithsubs.word_list.presentation.adapter
 import android.speech.tts.TextToSpeech
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.learnwithsubs.databinding.TileWordWithTranslationBinding
+import com.learnwithsubs.word_list.databinding.TileWordWithTranslationBinding
 import com.learnwithsubs.word_list.domain.models.WordTranslation
 import java.util.Locale
 

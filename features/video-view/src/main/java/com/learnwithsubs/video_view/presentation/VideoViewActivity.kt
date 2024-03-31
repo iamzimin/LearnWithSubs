@@ -28,12 +28,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.learnwithsubs.video_view.R
 import com.learnwithsubs.video_view.databinding.ActivityVideoViewBinding
 import com.learnwithsubs.video_view.databinding.DialogTranslateBinding
 import com.learnwithsubs.video_view.databinding.VideoViewInterfaceBinding
+import com.learnwithsubs.video_view.di.DaggerVideoViewAppComponent
+import com.learnwithsubs.video_view.di.VideoViewAppModule
 import com.learnwithsubs.video_view.domain.models.WordTranslation
 import com.learnwithsubs.video_view.presentation.adapter.DictionaryAdapter
 import com.learnwithsubs.video_view.presentation.adapter.OnDictionaryClick
@@ -51,7 +54,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
 
     @Inject
     lateinit var vmFactory: VideoViewViewModelFactory
-    private val vm: VideoViewViewModel by viewModels()
+    private lateinit var vm: VideoViewViewModel/* by viewModels()*/
 
     private lateinit var translateDialogBind: DialogTranslateBinding
     private lateinit var videoViewBind: ActivityVideoViewBinding
@@ -77,6 +80,9 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        DaggerVideoViewAppComponent.builder().videoViewAppModule(VideoViewAppModule(context = this)).build().inject(this)
+        //DaggerVideoViewAppComponent.builder().build().inject(this)
+
         configSystemUI()
         setContentView(R.layout.activity_video_view)
         val videoViewLayout = findViewById<ConstraintLayout>(R.id.video_view_constraint_layout)
@@ -90,8 +96,8 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
 
         // Set VM
 //        (applicationContext as App).videoViewAppComponent.inject(this)
-//        vm = ViewModelProvider(this, vmFactory)[VideoViewViewModel::class.java]
-        vm.currentVideo = intent.getParcelableExtra("videoData")
+        vm = ViewModelProvider(this, vmFactory)[VideoViewViewModel::class.java]
+        //vm.currentVideo = intent.getParcelableExtra("videoData")
         getLanguageFromSettings()
 
         videoViewBind.subtitle.setBackgroundResource(android.R.color.black)

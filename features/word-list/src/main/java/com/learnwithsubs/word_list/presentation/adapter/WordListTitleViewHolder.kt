@@ -2,8 +2,8 @@ package com.learnwithsubs.word_list.presentation.adapter
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.learnwithsubs.R
-import com.learnwithsubs.databinding.TileWordTitleBinding
+import com.learnwithsubs.word_list.R
+import com.learnwithsubs.word_list.databinding.TileWordTitleBinding
 
 abstract class WordListTitleViewHolder(
     itemView: View

@@ -8,6 +8,8 @@ import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.example.base.VideoConstants
 import com.learnwithsubs.video_list.R
+import com.learnwithsubs.video_list.databinding.TileVideoBinding
+import com.learnwithsubs.video_list.databinding.TileVideoUploadingBinding
 import com.learnwithsubs.video_list.domain.models.Video
 import com.learnwithsubs.video_list.domain.models.VideoLoadingType
 import java.io.File
@@ -62,9 +64,9 @@ class NormalVideoViewHolder(
                     binding.selectCheckBox.isChecked = !binding.selectCheckBox.isChecked
                     adapter.updateSelection(position = position, isSelected = binding.selectCheckBox.isChecked)
                 } else {
-                    val intent = Intent(itemView.context, VideoViewActivity::class.java)
-                    intent.putExtra("videoData", video)
-                    itemView.context.startActivity(intent)
+//                    val intent = Intent(itemView.context, VideoViewActivity::class.java)
+//                    intent.putExtra("videoData", video)
+//                    itemView.context.startActivity(intent)
                 }
             }
         })
