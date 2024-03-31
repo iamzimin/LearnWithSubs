@@ -11,7 +11,7 @@ import com.arthenica.ffmpegkit.FFmpegSession
 import com.arthenica.ffmpegkit.FFmpegSessionCompleteCallback
 import com.example.base.VideoConstants
 import com.example.video_transcode.domain.models.VideoTranscode
-import com.example.video_transcode.domain.models.VideoErrorType
+import com.example.video_transcode.domain.models.VideoTranscodeErrorType
 import com.example.video_transcode.domain.repository.VideoTranscodeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -55,7 +55,7 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
                        continuation.resume(null)
                    } else {
                        Log.i("FFmpeg", "Async command execution failed with returnCode=${session.returnCode}.")
-                       videoTranscode.errorType = VideoErrorType.DECODING_VIDEO
+                       videoTranscode.errorType = VideoTranscodeErrorType.DECODING_VIDEO
                        continuation.resume(videoTranscode)
                    }
                 }
@@ -94,7 +94,7 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
                         continuation.resume(null)
                     } else {
                         Log.i("FFmpeg", "Async command execution failed with returnCode=${session.returnCode}.")
-                        videoTranscode.errorType = VideoErrorType.DECODING_VIDEO
+                        videoTranscode.errorType = VideoTranscodeErrorType.DECODING_VIDEO
                         continuation.resume(videoTranscode)
                     }
                 }

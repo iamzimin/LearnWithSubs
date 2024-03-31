@@ -2,9 +2,9 @@ package com.example.video_transcode.domain.models
 
 data class VideoTranscode(
     val id: Int? = null,
-    var videoStatus: VideoStatus,
-    var loadingType: VideoLoadingType,
-    var errorType: VideoErrorType?,
+    var videoStatus: VideoTranscodeStatus,
+    var loadingType: VideoTranscodeLoadingType,
+    var errorType: VideoTranscodeErrorType?,
     var isOwnSubtitles: Boolean = false,
     var name: String,
     val duration: Long,
@@ -18,12 +18,12 @@ data class VideoTranscode(
     val timestamp: Long,
 ) //: Parcelable
 
-enum class VideoStatus(val value: Int) {
+enum class VideoTranscodeStatus(val value: Int) {
     NORMAL_VIDEO(1),
     LOADING_VIDEO(2)
 }
 
-enum class VideoLoadingType(val value: Int) {
+enum class VideoTranscodeLoadingType(val value: Int) {
     WAITING(1),
     EXTRACTING_AUDIO(2),
     DECODING_VIDEO(3),
@@ -32,7 +32,7 @@ enum class VideoLoadingType(val value: Int) {
     DONE(6)
 }
 
-enum class VideoErrorType(val value: Int) {
+enum class VideoTranscodeErrorType(val value: Int) {
     PROCESSING_VIDEO(1),
     EXTRACTING_AUDIO(2),
     DECODING_VIDEO(3),

@@ -10,9 +10,9 @@ import kotlinx.parcelize.Parcelize
 @Entity
 data class VideoDBO(
     @PrimaryKey override val id: Int? = null,
-    var videoStatus: VideoStatus,
-    var loadingType: VideoLoadingType,
-    var errorType: VideoErrorType?,
+    var videoStatus: VideoStatusDBO,
+    var loadingType: VideoLoadingTypeDBO,
+    var errorType: VideoErrorTypeDBO?,
     var isOwnSubtitles: Boolean = false,
     var name: String,
     val duration: Long,
@@ -26,12 +26,12 @@ data class VideoDBO(
     val timestamp: Long,
 ) : Parcelable, Identifiable
 
-enum class VideoStatus(val value: Int) {
+enum class VideoStatusDBO(val value: Int) {
     NORMAL_VIDEO(1),
     LOADING_VIDEO(2)
 }
 
-enum class VideoLoadingType(val value: Int) {
+enum class VideoLoadingTypeDBO(val value: Int) {
     WAITING(1),
     EXTRACTING_AUDIO(2),
     DECODING_VIDEO(3),
@@ -40,7 +40,7 @@ enum class VideoLoadingType(val value: Int) {
     DONE(6)
 }
 
-enum class VideoErrorType(val value: Int) {
+enum class VideoErrorTypeDBO(val value: Int) {
     PROCESSING_VIDEO(1),
     EXTRACTING_AUDIO(2),
     DECODING_VIDEO(3),
