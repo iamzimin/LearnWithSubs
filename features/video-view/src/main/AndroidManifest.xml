@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <activity
+            android:name=".presentation.VideoViewActivity"
+            android:exported="true">
+            <intent-filter android:label="Video View">
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="app"
+                    android:host="learnwithsubs"
+                    android:pathPrefix="/video_view"/>
+            </intent-filter>
+        </activity>
+    </application>
 </manifest>

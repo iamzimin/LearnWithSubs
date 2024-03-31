@@ -1,6 +1,7 @@
 package com.learnwithsubs.video_list.presentation.adapter
 
 import android.content.Intent
+import android.net.Uri
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -64,9 +65,11 @@ class NormalVideoViewHolder(
                     binding.selectCheckBox.isChecked = !binding.selectCheckBox.isChecked
                     adapter.updateSelection(position = position, isSelected = binding.selectCheckBox.isChecked)
                 } else {
-//                    val intent = Intent(itemView.context, VideoViewActivity::class.java)
-//                    intent.putExtra("videoData", video)
-//                    itemView.context.startActivity(intent)
+                    val deeplink = Uri.parse("app://learnwithsubs/video_view")
+                    val intent = Intent(Intent.ACTION_VIEW, deeplink)
+                    intent.setPackage("com.learnwithsubs")
+                    intent.putExtra("videoData", video)
+                    itemView.context.startActivity(intent)
                 }
             }
         })

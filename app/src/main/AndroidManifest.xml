@@ -25,10 +25,6 @@
         android:theme="@style/Theme.LearnWithSubs"
         tools:targetApi="31" >
         <activity
-            android:name=".video_view.presentation.VideoViewActivity"
-            android:configChanges="orientation|screenSize"
-            android:exported="false" />
-        <activity
             android:name=".VideoListActivity"
             android:exported="true" >
             <intent-filter>
