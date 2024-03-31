@@ -23,7 +23,6 @@ import android.view.WindowManager
 import android.widget.SeekBar
 import android.widget.Toast
 import android.widget.VideoView
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
@@ -37,6 +36,7 @@ import com.learnwithsubs.video_view.databinding.DialogTranslateBinding
 import com.learnwithsubs.video_view.databinding.VideoViewInterfaceBinding
 import com.learnwithsubs.video_view.di.DaggerVideoViewAppComponent
 import com.learnwithsubs.video_view.di.VideoViewAppModule
+import com.learnwithsubs.video_view.domain.models.Video
 import com.learnwithsubs.video_view.domain.models.WordTranslation
 import com.learnwithsubs.video_view.presentation.adapter.DictionaryAdapter
 import com.learnwithsubs.video_view.presentation.adapter.OnDictionaryClick
@@ -97,7 +97,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
         // Set VM
 //        (applicationContext as App).videoViewAppComponent.inject(this)
         vm = ViewModelProvider(this, vmFactory)[VideoViewViewModel::class.java]
-        //vm.currentVideo = intent.getParcelableExtra("videoData")
+        vm.currentVideo = intent.getParcelableExtra("videoData")
         getLanguageFromSettings()
 
         videoViewBind.subtitle.setBackgroundResource(android.R.color.black)
