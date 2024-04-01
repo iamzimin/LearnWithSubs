@@ -1,10 +1,7 @@
 package com.learnwithsubs.video_list.domain.models
 
-import android.os.Parcelable
 import com.example.base.Identifiable
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
 data class Video(
     override val id: Int? = null,
     var videoStatus: VideoStatus,
@@ -21,7 +18,7 @@ data class Video(
     val inputPath: String = "",
     var outputPath: String = "",
     val timestamp: Long,
-) : Parcelable, Identifiable
+) : Identifiable
 
 enum class VideoStatus(val value: Int) {
     NORMAL_VIDEO(1),

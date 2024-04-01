@@ -8,12 +8,13 @@ import com.learnwithsubs.database.domain.models.WordTranslationDBO
 import com.learnwithsubs.video_view.domain.models.Subtitle
 import com.learnwithsubs.video_view.domain.models.Video
 import com.learnwithsubs.video_view.domain.models.WordTranslation
+import com.learnwithsubs.video_view.domain.repository.VideoViewRepository
 import java.io.File
 
 class VideoViewRepositoryImpl(
     private val videoDao: VideoListDao,
     private val wordDao: WordListDao,
-) : com.learnwithsubs.video_view.domain.repository.VideoViewRepository {
+) : VideoViewRepository {
     override fun getVideoSubtitles(video: VideoDBO): List<Subtitle>? {
         val subtitlesPath = if (video.isOwnSubtitles)
              File(video.outputPath, VideoConstants.OWN_SUBTITLES)
@@ -29,8 +30,12 @@ class VideoViewRepositoryImpl(
         return convertSubtitles(subs)
     }
 
+    override suspend fun getVideoById(videoID: Int): VideoDBO? {
+        return videoDao.getVideoById(id = videoID)
+    }
+
     override suspend fun updateVideo(video: VideoDBO) {
-        videoDao.insertVideo(video)
+        videoDao.insertVideo(videoDBO = video)
     }
 
     override suspend fun saveWord(word: WordTranslationDBO) {

@@ -68,7 +68,7 @@ class NormalVideoViewHolder(
                     val deeplink = Uri.parse("app://learnwithsubs/video_view")
                     val intent = Intent(Intent.ACTION_VIEW, deeplink)
                     intent.setPackage("com.learnwithsubs")
-                    intent.putExtra("videoData", video)
+                    intent.putExtra("videoID", video.id)
                     itemView.context.startActivity(intent)
                 }
             }

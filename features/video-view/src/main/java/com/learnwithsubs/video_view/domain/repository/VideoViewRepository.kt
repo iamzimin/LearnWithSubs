@@ -6,6 +6,7 @@ import com.learnwithsubs.video_view.domain.models.Subtitle
 
 interface VideoViewRepository {
     fun getVideoSubtitles(video: VideoDBO): List<Subtitle>?
+    suspend fun getVideoById(videoID: Int): VideoDBO?
     suspend fun updateVideo(video: VideoDBO)
     suspend fun saveWord(word: WordTranslationDBO)
 }

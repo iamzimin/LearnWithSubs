@@ -97,7 +97,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
         // Set VM
 //        (applicationContext as App).videoViewAppComponent.inject(this)
         vm = ViewModelProvider(this, vmFactory)[VideoViewViewModel::class.java]
-        vm.currentVideo = intent.getParcelableExtra("videoData")
+        vm.initCurrentVideo(videoId = intent.getIntExtra("videoID", -1))
         getLanguageFromSettings()
 
         videoViewBind.subtitle.setBackgroundResource(android.R.color.black)

@@ -4,6 +4,7 @@ import com.example.yandex_dictionary_api.domain.repository.TranslatorRepository
 import com.learnwithsubs.video_view.domain.repository.VideoViewRepository
 import com.learnwithsubs.video_view.domain.usecase.GetTranslationFromAndroidUseCase
 import com.learnwithsubs.video_view.domain.usecase.GetTranslationFromServerUseCase
+import com.learnwithsubs.video_view.domain.usecase.GetVideoByIdUseCase
 import com.learnwithsubs.video_view.domain.usecase.GetVideoSubtitlesUseCase
 import com.learnwithsubs.video_view.domain.usecase.GetWordsFromYandexDictionaryUseCase
 import com.learnwithsubs.video_view.domain.usecase.SaveWordUseCase
@@ -40,7 +41,10 @@ class VideoViewDomainModule {
             ),
             saveWordUseCase = SaveWordUseCase(
                 videoViewRepository
-            )
+            ),
+            getVideoByIdUseCase = GetVideoByIdUseCase(
+                videoViewRepository
+            ),
         )
     }
 }

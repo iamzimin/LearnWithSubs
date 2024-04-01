@@ -42,6 +42,11 @@ class VideoViewViewModel @Inject constructor(
     val dictionaryWordsLiveData =  MutableLiveData<DictionaryWordDTO?>()
     val translatorTranslationLiveData = MutableLiveData<String?>()
 
+    fun initCurrentVideo(videoId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            currentVideo = videoViewUseCases.getVideoByIdUseCase.invoke(videoId)
+        }
+    }
 
     fun openVideo(video: Video, isPlaying: Boolean) {
         val subList = videoViewUseCases.getVideoSubtitlesUseCase.invoke(video)
