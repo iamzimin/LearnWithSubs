@@ -24,7 +24,10 @@ import javax.inject.Inject
 class VideoListViewModel @Inject constructor(
     val videoListUseCases: VideoListUseCases,
 ) : ViewModel() {
-    //private val videoListFlow: Flow<List<Video>> = videoListUseCases.getVideoListUseCase.invoke()
+    companion object {
+        val DEFAULT_SORT_MODE: VideoOrder = VideoOrder.Date(OrderType.Descending)
+    }
+
     val videoList = videoListUseCases.getVideoListUseCase.invoke().asLiveData(viewModelScope.coroutineContext)
 
     var videoOrder: MutableLiveData<VideoOrder> = MutableLiveData<VideoOrder>().apply { value = DEFAULT_SORT_MODE }
@@ -38,9 +41,7 @@ class VideoListViewModel @Inject constructor(
     private val processQueue = LinkedList<Video?>()
     private lateinit var poolList: Video
 
-    companion object {
-        val DEFAULT_SORT_MODE: VideoOrder = VideoOrder.Date(OrderType.Descending)
-    }
+
 
     fun getSortedVideoList(videoList: List<Video>): List<Video> {
         val sort = getVideoOrder()

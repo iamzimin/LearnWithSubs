@@ -68,23 +68,21 @@ class VideoListFragment : Fragment(), OnSelectChange {
     ): View {
         context = requireContext()
         DaggerVideoListAppComponent.builder().videoListAppModule(VideoListAppModule(context = context)).build().inject(this)
-        //DaggerVideoListAppComponent.builder().build().inject(this)
+
+        vm = ViewModelProvider(this, vmFactory)[VideoListViewModel::class.java]
 
         val videoListActivity = requireActivity()
         videoListFragmentBinding = FragmentVideoListBinding.inflate(inflater, container, false)
         sortByDialogBinding = DialogVideoListMenuSortByBinding.inflate(videoListActivity.layoutInflater)
-        renameDialogBinding = DialogVideoListMenuRenameBinding.inflate(videoListActivity.layoutInflater)
+        val renameDialog = RenameDialog(fragmentActivity = videoListActivity, vm = vm, adapter = adapter)
+        //renameDialogBinding = DialogVideoListMenuRenameBinding.inflate(videoListActivity.layoutInflater)
         searchViewBinding = SearchViewBinding.inflate(inflater, container, false)
         setupRecyclerView()
 
-        //vmFactory = videoListActivity.vmFactory
-        vm = ViewModelProvider(this, vmFactory)[VideoListViewModel::class.java]
 
         videoListVideoPicker = VideoListVideoPicker(this, PICK_VIDEO_REQUEST)
         videoListSubtitlePicker = VideoListSubtitlePicker(this, PICK_SUBTITLES_REQUEST)
 
-
-        (videoListFragmentBinding.videoList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
         videoListFragmentBinding.loadVideoCard.setOnClickListener {
             videoListVideoPicker.pickVideo()
@@ -123,7 +121,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
         }
         videoListFragmentBinding.renameMenu.setOnClickListener {
             vm.editableVideo = adapter.getEditableItem()
-            openRenameMenu()
+            renameDialog.openRenameMenu()
         }
         videoListFragmentBinding.deleteMenu.setOnClickListener {
             vm.deleteSelectedVideo(selectedVideos = adapter.getSelectedItems())
@@ -167,53 +165,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
         return videoListFragmentBinding.root
     }
 
-
-    private fun openRenameMenu() {
-        val renameMenu = Dialog(context)
-        renameMenu.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        val dialogView = renameDialogBinding.root
-        val parentView = dialogView.parent as? ViewGroup
-        parentView?.removeView(dialogView)
-        renameMenu.setContentView(dialogView)
-
-        fun save(textView: TextView) {
-            textView.clearFocus()
-            val video = vm.videoList.value?.find { it.id == vm.editableVideo?.id }?.copy()
-
-            if (video == null) {
-                // Если видео не найдено - его нельзя редактировать
-                Toast.makeText(context, getString(R.string.the_video_does_not_exist), Toast.LENGTH_SHORT).show()
-            } else if (video.loadingType != VideoLoadingType.DONE) {
-                // Если видео не загружено - его нельзя редактировать
-                Toast.makeText(context, getString(R.string.the_video_is_uploading), Toast.LENGTH_SHORT).show()
-            } else {
-                // Обновляем и загружаем видео
-                video.name = textView.text.toString()
-                vm.editVideo(video = video)
-            }
-
-            adapter.changeMode(isSelectionMode = false)
-            renameMenu.dismiss()
-            vm.editableVideo = null
-        }
-
-        renameDialogBinding.videoNameEdittext.setText(vm.editableVideo?.name)
-
-        renameDialogBinding.videoNameEdittext.setOnEditorActionListener { textView, actionId, keyEvent ->
-            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
-                save(textView)
-                true
-            } else false
-        }
-        renameDialogBinding.save.setOnClickListener {
-            save(renameDialogBinding.videoNameEdittext)
-        }
-
-        renameMenu.show()
-        renameMenu.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        renameMenu.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-    }
-
+    
     private fun openSortByMenu() {
         val sortByDialog = Dialog(context)
         sortByDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -300,6 +252,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
         val itemDecoration = VideoListAdapter.RecyclerViewItemDecoration(16)
         videoListFragmentBinding.videoList.addItemDecoration(itemDecoration)
         adapter.setOnModeChangeListener(this@VideoListFragment)
+        (videoListFragmentBinding.videoList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
     }
 
     private fun changeCardVisibility(cardView: CardView, isVisible: Boolean) {
