@@ -8,16 +8,16 @@ import android.view.Window
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.Fragment
 import com.learnwithsubs.video_list.R
 import com.learnwithsubs.video_list.databinding.DialogVideoListMenuRenameBinding
 import com.learnwithsubs.video_list.domain.models.VideoLoadingType
 import com.learnwithsubs.video_list.presentation.adapter.VideoListAdapter
 import com.learnwithsubs.video_list.presentation.videos.VideoListViewModel
 
-class RenameDialog(fragmentActivity: FragmentActivity, private val vm: VideoListViewModel, private val adapter: VideoListAdapter) {
-    val context = fragmentActivity
-    private val renameDialogBinding: DialogVideoListMenuRenameBinding = DialogVideoListMenuRenameBinding.inflate(fragmentActivity.layoutInflater)
+class RenameDialog(fragment: Fragment, private val vm: VideoListViewModel, private val adapter: VideoListAdapter) {
+    val context = fragment.requireContext()
+    private val renameDialogBinding: DialogVideoListMenuRenameBinding = DialogVideoListMenuRenameBinding.inflate(fragment.layoutInflater)
     private val renameMenu = Dialog(context)
 
     init {
