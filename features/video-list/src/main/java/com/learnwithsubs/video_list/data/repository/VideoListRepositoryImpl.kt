@@ -21,11 +21,14 @@ class VideoListRepositoryImpl(
     }
 
     override suspend fun insertVideo(video: VideoDBO) {
-        return dao.insertVideo(video)
+        dao.insertVideo(video)
     }
 
     override suspend fun deleteVideo(video: VideoDBO) {
-        return dao.deleteVideo(video)
+        val subSTR = File(video.outputPath)
+        if (subSTR.exists())
+            subSTR.deleteRecursively()
+        dao.deleteVideo(video)
     }
 
     override suspend fun getLastVideo(): VideoDBO? {

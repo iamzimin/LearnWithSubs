@@ -140,9 +140,6 @@ class VideoListViewModel @Inject constructor(
         } else {
             processQueue.remove(processQueue.find { it?.id == video.id })
         }
-        val subSTR = File(video.outputPath)
-        if (subSTR.exists())
-            subSTR.deleteRecursively()
     }
 
     fun loadNewSubtitles(video: Video, subtitles: String) {

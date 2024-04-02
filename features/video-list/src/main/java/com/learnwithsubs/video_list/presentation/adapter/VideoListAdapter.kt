@@ -26,12 +26,7 @@ class VideoListAdapter(
                     .inflate(R.layout.tile_video_uploading, parent, false), this@VideoListAdapter
             )
 
-            else -> {
-                LoadingVideoViewHolder(
-                    LayoutInflater.from(parent.context)
-                        .inflate(R.layout.tile_video_uploading, parent, false), this@VideoListAdapter
-                )
-            }
+            else -> throw IllegalArgumentException("Unexpected viewType: $viewType")
         }
     }
 
