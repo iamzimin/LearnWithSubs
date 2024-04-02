@@ -46,13 +46,11 @@ class VideoListVideoPicker(private val fragment: Fragment, private val requestCo
             var path: String? = getVideoPath(context = context, videoUri = selectedVideoUri)
             val videoName: String = getVideoNameFromUri(selectedVideoUri, context)
             var videoDuration: Long? = getVideoDuration(selectedVideoUri, context)
-            var bitrate: Int? = getVideoBitrate(videoPath = path)
             val currentTime = Date().time
 
-            if (path == null || videoDuration == null || bitrate == null) {
+            if (path == null || videoDuration == null) {
                 path = ""
                 videoDuration = 0
-                bitrate = 0
                 errorType = VideoErrorType.PROCESSING_VIDEO
             }
 
@@ -63,7 +61,6 @@ class VideoListVideoPicker(private val fragment: Fragment, private val requestCo
                 name = videoName,
                 inputPath = path,
                 duration = videoDuration,
-                bitrate = bitrate,
                 URI = selectedVideoUri.toString(),
                 timestamp = currentTime
             )
@@ -131,15 +128,5 @@ class VideoListVideoPicker(private val fragment: Fragment, private val requestCo
         }
 
         return duration
-    }
-
-    private fun getVideoBitrate(videoPath: String?): Int? {
-        videoPath ?: return null
-        return try {
-            val info = FFprobeKit.getMediaInformation(videoPath) //TODO вынести в другой модуль
-            info.mediaInformation.bitrate.toInt()
-        } catch (e: Exception) {
-            return null
-        }
     }
 }

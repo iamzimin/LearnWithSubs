@@ -16,7 +16,6 @@ data class VideoDBO(
     var isOwnSubtitles: Boolean = false,
     var name: String,
     val duration: Long,
-    val bitrate: Int,
     var watchProgress: Int = 0,
     var saveWords: Int = 0,
     var uploadingProgress: Int = 0,

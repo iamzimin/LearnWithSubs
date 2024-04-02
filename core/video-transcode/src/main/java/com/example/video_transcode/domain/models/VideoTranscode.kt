@@ -8,7 +8,6 @@ data class VideoTranscode(
     var isOwnSubtitles: Boolean = false,
     var name: String,
     val duration: Long,
-    val bitrate: Int,
     var watchProgress: Int = 0,
     var saveWords: Int = 0,
     var uploadingProgress: Int = 0,
@@ -16,7 +15,7 @@ data class VideoTranscode(
     val inputPath: String = "",
     var outputPath: String = "",
     val timestamp: Long,
-) //: Parcelable
+)
 
 enum class VideoTranscodeStatus(val value: Int) {
     NORMAL_VIDEO(1),

@@ -9,6 +9,7 @@ import com.arthenica.ffmpegkit.FFmpegKit
 import com.arthenica.ffmpegkit.FFmpegKitConfig
 import com.arthenica.ffmpegkit.FFmpegSession
 import com.arthenica.ffmpegkit.FFmpegSessionCompleteCallback
+import com.arthenica.ffmpegkit.FFprobeKit
 import com.example.base.VideoConstants
 import com.example.video_transcode.domain.models.VideoTranscode
 import com.example.video_transcode.domain.models.VideoTranscodeErrorType
@@ -34,7 +35,8 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
         val videoFolder = getVideoFolderPath(videoTranscode)
 
         val outputVideoPath = File(videoFolder, VideoConstants.COPIED_VIDEO)
-        val command = "-i ${videoTranscode.inputPath} -c:v mpeg4 -b:v ${videoTranscode.bitrate}B ${outputVideoPath.absolutePath} -y"
+        val bitrate = getVideoBitrate(videoPath = videoTranscode.inputPath)
+        val command = "-i ${videoTranscode.inputPath} -c:v mpeg4 -b:v ${bitrate}B ${outputVideoPath.absolutePath} -y"
 
         FFmpegKitConfig.enableStatisticsCallback {
             videoTranscode.uploadingProgress = ((it.time / videoTranscode.duration.toDouble()) * 100).toInt()
@@ -139,5 +141,15 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
             videoFolder.mkdirs()
 
         return videoFolder
+    }
+
+    private fun getVideoBitrate(videoPath: String?): Int? {
+        videoPath ?: return null
+        return try {
+            val info = FFprobeKit.getMediaInformation(videoPath)
+            info.mediaInformation.bitrate.toInt()
+        } catch (e: Exception) {
+            return null
+        }
     }
 }
