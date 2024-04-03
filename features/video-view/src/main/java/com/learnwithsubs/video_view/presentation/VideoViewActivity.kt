@@ -43,43 +43,28 @@ class VideoViewActivity : AppCompatActivity() {
 
     @Inject
     lateinit var vmFactory: VideoViewViewModelFactory
-    private lateinit var vm: VideoViewViewModel/* by viewModels()*/
+    private lateinit var vm: VideoViewViewModel
 
-    //private lateinit var translateDialogBind: DialogTranslateBinding
     private lateinit var videoViewBind: ActivityVideoViewBinding
     private lateinit var videoViewIBind: VideoViewInterfaceBinding
     private lateinit var videoView: VideoView
     private var currentPosition = 0
 
-/*    private lateinit var ttsFrom: TextToSpeech
-    private lateinit var ttsTo: TextToSpeech*/
-
-/*    private var nativeLanguage = TranslateLanguage.RUSSIAN
-    private var learnLanguage = TranslateLanguage.ENGLISH*/
-
-/*    override fun onInit(status: Int) {
-        if (status == TextToSpeech.SUCCESS) {
-            ttsFrom.language = Locale(nativeLanguage)
-            ttsTo.language = Locale(learnLanguage)
-        }
-    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerVideoViewAppComponent.builder().videoViewAppModule(VideoViewAppModule(context = this)).build().inject(this)
+        DaggerVideoViewAppComponent.builder().videoViewAppModule(VideoViewAppModule(context = this))
+            .build().inject(this)
         vm = ViewModelProvider(this, vmFactory)[VideoViewViewModel::class.java]
 
         configSystemUI()
         setContentView(R.layout.activity_video_view)
         val videoViewLayout = findViewById<ConstraintLayout>(R.id.video_view_constraint_layout)
 
-        //translateDialogBind = DialogTranslateBinding.inflate(layoutInflater)
         val translateDialog = TranslateDialog(activity = this@VideoViewActivity, vm = vm)
         videoViewBind = ActivityVideoViewBinding.inflate(layoutInflater, videoViewLayout, true)
         videoViewIBind = videoViewBind.videoViewInterface
         videoView = videoViewBind.videoView
-/*        renameMenu = Dialog(this@VideoViewActivity)
-        setupTranslateDialog()*/
 
 
         vm.initCurrentVideo(videoId = intent.getIntExtra("videoID", -1))
@@ -93,37 +78,30 @@ class VideoViewActivity : AppCompatActivity() {
         videoView.setMediaController(mediaController)
         setVideoViewConfiguration(config = resources.configuration)
 
-/*        ttsFrom = TextToSpeech(this, this)
-        ttsTo = TextToSpeech(this, this)
-
-        translateDialogBind.audioInputWord.setOnClickListener {
-            ttsFrom.speak(translateDialogBind.inputWord.text, TextToSpeech.QUEUE_FLUSH, null, "")
-        }
-        translateDialogBind.audioOutputWord.setOnClickListener {
-            ttsTo.speak(translateDialogBind.outputWord.text, TextToSpeech.QUEUE_FLUSH, null, "")
-        }
-
-        translateDialogBind.saveWord.setOnClickListener {
-            vm.saveWord( //TODO
-                WordTranslation(
-                    word = translateDialogBind.inputWord.text.toString(),
-                    translation = translateDialogBind.outputWord.text.toString(),
-                    nativeLanguage = "ru", learnLanguage = "en",
-                    videoID = vm.currentVideo?.id, videoName = vm.currentVideo?.name,
-                    timestamp = Date().time,
-                )
-            )
-        }*/
 
         //Video Play
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_VIDEO) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_MEDIA_VIDEO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             if (Build.VERSION.SDK_INT >= 33)
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_MEDIA_VIDEO), STORAGE_PERMISSION_REQUEST_CODE)
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.READ_MEDIA_VIDEO),
+                    STORAGE_PERMISSION_REQUEST_CODE
+                )
             else
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), STORAGE_PERMISSION_REQUEST_CODE)
-        }
-        else
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    STORAGE_PERMISSION_REQUEST_CODE
+                )
+        } else
             vm.currentVideo?.let { vm.openVideo(video = it, isPlaying = true) }
 
         videoViewBind.subtitle.setCustomSelectionActionModeCallback(object : ActionMode.Callback {
@@ -159,7 +137,6 @@ class VideoViewActivity : AppCompatActivity() {
         })
 
 
-
         // Live Data - Click Listener
 
         // URI listener
@@ -180,7 +157,11 @@ class VideoViewActivity : AppCompatActivity() {
 
         // Subtitle error
         vm.subtitleError.observe(this@VideoViewActivity) { error ->
-            Toast.makeText(this.applicationContext, R.string.wrong_subtitle_format, Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this.applicationContext,
+                R.string.wrong_subtitle_format,
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
 
@@ -223,7 +204,8 @@ class VideoViewActivity : AppCompatActivity() {
         vm.videoSeekBarProgress.observe(this) { progress ->
             videoViewIBind.videoPlaySeekBar.progress = progress
         }
-        videoViewIBind.videoPlaySeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        videoViewIBind.videoPlaySeekBar.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     val newPosition = (videoView.duration * progress) / 100
@@ -242,7 +224,8 @@ class VideoViewActivity : AppCompatActivity() {
             vm.isButtonsShowedLiveData.value = vm.isButtonsShowedLiveData.value != true
         }
         vm.isButtonsShowedLiveData.observe(this) { isButtonsShowed ->
-            videoViewIBind.videoControls.visibility = if (isButtonsShowed) View.VISIBLE else View.GONE
+            videoViewIBind.videoControls.visibility =
+                if (isButtonsShowed) View.VISIBLE else View.GONE
             if (isButtonsShowed) {
                 timer = object : CountDownTimer(5000, 1000) {
                     override fun onTick(millisUntilFinished: Long) {}
@@ -252,11 +235,21 @@ class VideoViewActivity : AppCompatActivity() {
                         vm.isButtonsShowedLiveData.value = false
                     }
                 }.start()
-                subtitleLP.setMargins(subtitleLP.leftMargin, subtitleLP.topMargin, subtitleLP.rightMargin, resources.getDimensionPixelSize(R.dimen.subtitle_indentation_with_interface))
+                subtitleLP.setMargins(
+                    subtitleLP.leftMargin,
+                    subtitleLP.topMargin,
+                    subtitleLP.rightMargin,
+                    resources.getDimensionPixelSize(R.dimen.subtitle_indentation_with_interface)
+                )
                 videoViewBind.subtitle.layoutParams = subtitleLP
             } else {
                 timer?.cancel()
-                subtitleLP.setMargins(subtitleLP.leftMargin, subtitleLP.topMargin, subtitleLP.rightMargin, resources.getDimensionPixelSize(R.dimen.subtitle_indentation_without_interface))
+                subtitleLP.setMargins(
+                    subtitleLP.leftMargin,
+                    subtitleLP.topMargin,
+                    subtitleLP.rightMargin,
+                    resources.getDimensionPixelSize(R.dimen.subtitle_indentation_without_interface)
+                )
                 videoViewBind.subtitle.layoutParams = subtitleLP
             }
         }
@@ -306,84 +299,8 @@ class VideoViewActivity : AppCompatActivity() {
         videoViewIBind.exitVideoView.setOnClickListener {
             finish()
         }
-
-
-        /*// Translate
-        vm.dictionaryWordsLiveData.observe(this@VideoViewActivity) { dict ->
-            if (dict == null) {
-                vm.getFullTranslation(word = textToTranslate, inputLang = learnLanguage, outputLang = nativeLanguage)
-            } else {
-                translateDialogBind.outputWord.setText(dict.translation)
-                translateDialogBind.outputWord.clearFocus()
-                val updatedPartSpeech = vm.changePartSpeech(context = this@VideoViewActivity.applicationContext, list = dict.synonyms)
-                dictionaryAdapter.updateData(wordsList = updatedPartSpeech)
-            }
-
-        }
-        vm.translatorTranslationLiveData.observe(this@VideoViewActivity) { transl ->
-            transl ?: Toast.makeText(this.applicationContext, R.string.server_for_translation_is_not_available, Toast.LENGTH_SHORT).show()
-            val text = transl ?: return@observe
-            translateDialogBind.outputWord.setText(text)
-            translateDialogBind.outputWord.clearFocus()
-        }*/
     }
 
-/*    private fun openTranslateDialog() {
-        val nativeLang = nativeLanguage
-        val learnLang = learnLanguage
-        vm.getWordsFromDictionary(
-            inputLang = learnLang,
-            outputLang = nativeLang,
-            word = textToTranslate
-        )
-
-        translateDialogBind.inputWord.setText(textToTranslate)
-        translateDialogBind.inputWord.clearFocus()
-
-        renameMenu.setOnDismissListener {
-            translateDialogBind.inputWord.setText("")
-            translateDialogBind.outputWord.setText("")
-            dictionaryAdapter.updateData(wordsList = ArrayList())
-        }
-        renameMenu.show()
-    }*/
-
-/*    private fun getLanguageFromSettings() {
-        val nativeLanguageRes = R.string.russian // TODO взять язык из настроек
-        val learnLanguageRes = R.string.english  // TODO взять язык из настроек
-
-        translateDialogBind.inputLanguage.text = getString(learnLanguageRes)
-        translateDialogBind.outputLanguage.text = getString(nativeLanguageRes)
-
-        *//*val config = Configuration(resources.configuration)
-        config.setLocale(Locale("en"))
-        val englishResources = createConfigurationContext(config).resources
-
-        val nativeLanguage = englishResources.getString(nativeLanguageRes)
-        val learnLanguage = englishResources.getString(learnLanguageRes)*//*
-
-        //this.nativeLanguage = TODO взять язык из настроек
-        //this.learnLanguage = TODO взять язык из настроек
-    }*/
-
-/*    private fun setupTranslateDialog() {
-        renameMenu.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        renameMenu.setContentView(R.layout.dialog_translate)
-
-        dictionaryAdapter.setOnItemClickListener(this@VideoViewActivity)
-
-        renameMenu.setContentView(translateDialogBind.root)
-        translateDialogBind.dictionaryRecycler.layoutManager = LinearLayoutManager(this)
-        translateDialogBind.dictionaryRecycler.adapter = dictionaryAdapter
-        translateDialogBind.translatorType.text = "Yandex Translator" // TODO select the type of translator from the settings
-
-        val itemDecoration = DictionaryAdapter.RecyclerViewItemDecoration(10)
-        translateDialogBind.dictionaryRecycler.addItemDecoration(itemDecoration)
-
-        if (renameMenu.window != null) {
-            renameMenu.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        }
-    }*/
 
     private fun setVideoViewConfiguration(config: Configuration) {
         if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -443,7 +360,4 @@ class VideoViewActivity : AppCompatActivity() {
             }
         }
     }
-
-
-
 }
