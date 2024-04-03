@@ -31,6 +31,7 @@ class VideoViewViewModel @Inject constructor(
     private var maxTimeString: String = ""
     private var currentVideoWatchTime: Int = 0
     var videoTime = MutableLiveData<String>()
+    var textToTranslate = ""
 
     var videoSeekBarProgress = MutableLiveData<Int>()
 

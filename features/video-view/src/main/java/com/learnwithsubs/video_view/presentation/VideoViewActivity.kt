@@ -5,14 +5,12 @@ import android.app.Dialog
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
-import android.speech.tts.TextToSpeech
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
@@ -28,26 +26,17 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.mlkit.nl.translate.TranslateLanguage
 import com.learnwithsubs.video_view.R
 import com.learnwithsubs.video_view.databinding.ActivityVideoViewBinding
-import com.learnwithsubs.video_view.databinding.DialogTranslateBinding
 import com.learnwithsubs.video_view.databinding.VideoViewInterfaceBinding
 import com.learnwithsubs.video_view.di.DaggerVideoViewAppComponent
 import com.learnwithsubs.video_view.di.VideoViewAppModule
-import com.learnwithsubs.video_view.domain.models.Video
-import com.learnwithsubs.video_view.domain.models.WordTranslation
-import com.learnwithsubs.video_view.presentation.adapter.DictionaryAdapter
-import com.learnwithsubs.video_view.presentation.adapter.OnDictionaryClick
 import com.learnwithsubs.video_view.presentation.videos.VideoViewViewModel
 import com.learnwithsubs.video_view.presentation.videos.VideoViewViewModelFactory
-import java.util.Date
-import java.util.Locale
 import javax.inject.Inject
 
 
-class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.OnInitListener {
+class VideoViewActivity : AppCompatActivity() {
     companion object {
         private const val STORAGE_PERMISSION_REQUEST_CODE = 1
     }
@@ -56,49 +45,44 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
     lateinit var vmFactory: VideoViewViewModelFactory
     private lateinit var vm: VideoViewViewModel/* by viewModels()*/
 
-    private lateinit var translateDialogBind: DialogTranslateBinding
+    //private lateinit var translateDialogBind: DialogTranslateBinding
     private lateinit var videoViewBind: ActivityVideoViewBinding
     private lateinit var videoViewIBind: VideoViewInterfaceBinding
     private lateinit var videoView: VideoView
     private var currentPosition = 0
 
-    private lateinit var renameMenu: Dialog
-    private val dictionaryAdapter = DictionaryAdapter(wordsInit = ArrayList())
-    private lateinit var ttsFrom: TextToSpeech
-    private lateinit var ttsTo: TextToSpeech
+/*    private lateinit var ttsFrom: TextToSpeech
+    private lateinit var ttsTo: TextToSpeech*/
 
-    private var nativeLanguage = TranslateLanguage.RUSSIAN
-    private var learnLanguage = TranslateLanguage.ENGLISH
-    private var textToTranslate = ""
+/*    private var nativeLanguage = TranslateLanguage.RUSSIAN
+    private var learnLanguage = TranslateLanguage.ENGLISH*/
 
-    override fun onInit(status: Int) {
+/*    override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
             ttsFrom.language = Locale(nativeLanguage)
             ttsTo.language = Locale(learnLanguage)
         }
-    }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerVideoViewAppComponent.builder().videoViewAppModule(VideoViewAppModule(context = this)).build().inject(this)
-        //DaggerVideoViewAppComponent.builder().build().inject(this)
+        vm = ViewModelProvider(this, vmFactory)[VideoViewViewModel::class.java]
 
         configSystemUI()
         setContentView(R.layout.activity_video_view)
         val videoViewLayout = findViewById<ConstraintLayout>(R.id.video_view_constraint_layout)
 
-        translateDialogBind = DialogTranslateBinding.inflate(layoutInflater)
+        //translateDialogBind = DialogTranslateBinding.inflate(layoutInflater)
+        val translateDialog = TranslateDialog(activity = this@VideoViewActivity, vm = vm)
         videoViewBind = ActivityVideoViewBinding.inflate(layoutInflater, videoViewLayout, true)
         videoViewIBind = videoViewBind.videoViewInterface
         videoView = videoViewBind.videoView
-        renameMenu = Dialog(this@VideoViewActivity)
-        setupTranslateDialog()
+/*        renameMenu = Dialog(this@VideoViewActivity)
+        setupTranslateDialog()*/
 
-        // Set VM
-//        (applicationContext as App).videoViewAppComponent.inject(this)
-        vm = ViewModelProvider(this, vmFactory)[VideoViewViewModel::class.java]
+
         vm.initCurrentVideo(videoId = intent.getIntExtra("videoID", -1))
-        getLanguageFromSettings()
 
         videoViewBind.subtitle.setBackgroundResource(android.R.color.black)
         val subtitleLP = videoViewBind.subtitle.layoutParams as ConstraintLayout.LayoutParams
@@ -109,7 +93,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
         videoView.setMediaController(mediaController)
         setVideoViewConfiguration(config = resources.configuration)
 
-        ttsFrom = TextToSpeech(this, this)
+/*        ttsFrom = TextToSpeech(this, this)
         ttsTo = TextToSpeech(this, this)
 
         translateDialogBind.audioInputWord.setOnClickListener {
@@ -129,7 +113,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
                     timestamp = Date().time,
                 )
             )
-        }
+        }*/
 
         //Video Play
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
@@ -163,8 +147,8 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
                     getString(R.string.translate) -> {
                         val sub = videoViewBind.subtitle
                         val selectedText = sub.text.substring(sub.selectionStart, sub.selectionEnd)
-                        textToTranslate = selectedText
-                        openTranslateDialog()
+                        vm.textToTranslate = selectedText
+                        translateDialog.openTranslateDialog()
                         return true
                     }
                 }
@@ -268,13 +252,11 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
                         vm.isButtonsShowedLiveData.value = false
                     }
                 }.start()
-                subtitleLP.setMargins(subtitleLP.leftMargin, subtitleLP.topMargin, subtitleLP.rightMargin,
-                    resources.getDimensionPixelSize(R.dimen.subtitle_indentation_with_interface))
+                subtitleLP.setMargins(subtitleLP.leftMargin, subtitleLP.topMargin, subtitleLP.rightMargin, resources.getDimensionPixelSize(R.dimen.subtitle_indentation_with_interface))
                 videoViewBind.subtitle.layoutParams = subtitleLP
             } else {
                 timer?.cancel()
-                subtitleLP.setMargins(subtitleLP.leftMargin, subtitleLP.topMargin, subtitleLP.rightMargin,
-                    resources.getDimensionPixelSize(R.dimen.subtitle_indentation_without_interface))
+                subtitleLP.setMargins(subtitleLP.leftMargin, subtitleLP.topMargin, subtitleLP.rightMargin, resources.getDimensionPixelSize(R.dimen.subtitle_indentation_without_interface))
                 videoViewBind.subtitle.layoutParams = subtitleLP
             }
         }
@@ -326,7 +308,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
         }
 
 
-        // Translate
+        /*// Translate
         vm.dictionaryWordsLiveData.observe(this@VideoViewActivity) { dict ->
             if (dict == null) {
                 vm.getFullTranslation(word = textToTranslate, inputLang = learnLanguage, outputLang = nativeLanguage)
@@ -343,10 +325,10 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
             val text = transl ?: return@observe
             translateDialogBind.outputWord.setText(text)
             translateDialogBind.outputWord.clearFocus()
-        }
+        }*/
     }
 
-    private fun openTranslateDialog() {
+/*    private fun openTranslateDialog() {
         val nativeLang = nativeLanguage
         val learnLang = learnLanguage
         vm.getWordsFromDictionary(
@@ -364,27 +346,27 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
             dictionaryAdapter.updateData(wordsList = ArrayList())
         }
         renameMenu.show()
-    }
+    }*/
 
-    private fun getLanguageFromSettings() {
+/*    private fun getLanguageFromSettings() {
         val nativeLanguageRes = R.string.russian // TODO взять язык из настроек
         val learnLanguageRes = R.string.english  // TODO взять язык из настроек
 
         translateDialogBind.inputLanguage.text = getString(learnLanguageRes)
         translateDialogBind.outputLanguage.text = getString(nativeLanguageRes)
 
-        /*val config = Configuration(resources.configuration)
+        *//*val config = Configuration(resources.configuration)
         config.setLocale(Locale("en"))
         val englishResources = createConfigurationContext(config).resources
 
         val nativeLanguage = englishResources.getString(nativeLanguageRes)
-        val learnLanguage = englishResources.getString(learnLanguageRes)*/
+        val learnLanguage = englishResources.getString(learnLanguageRes)*//*
 
         //this.nativeLanguage = TODO взять язык из настроек
         //this.learnLanguage = TODO взять язык из настроек
-    }
+    }*/
 
-    private fun setupTranslateDialog() {
+/*    private fun setupTranslateDialog() {
         renameMenu.requestWindowFeature(Window.FEATURE_NO_TITLE)
         renameMenu.setContentView(R.layout.dialog_translate)
 
@@ -401,7 +383,7 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
         if (renameMenu.window != null) {
             renameMenu.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
-    }
+    }*/
 
     private fun setVideoViewConfiguration(config: Configuration) {
         if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -462,9 +444,6 @@ class VideoViewActivity : AppCompatActivity(), OnDictionaryClick, TextToSpeech.O
         }
     }
 
-    override fun onItemClick(similarWord: String, similarWordTranslate: String) {
-        translateDialogBind.inputWord.setText(similarWord)
-        translateDialogBind.outputWord.setText(similarWordTranslate)
-    }
+
 
 }
