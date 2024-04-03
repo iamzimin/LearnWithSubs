@@ -24,7 +24,6 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
     private val translateDialogBind: DialogTranslateBinding = DialogTranslateBinding.inflate(activity.layoutInflater)
     private val dialogMenu = Dialog(activity)
     private val adapter = DictionaryAdapter(wordsInit = ArrayList())
-    private val textToTranslate = vm.textToTranslate
 
     private lateinit var ttsFrom: TextToSpeech
     private lateinit var ttsTo: TextToSpeech
@@ -41,22 +40,17 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
     }
 
     fun openTranslateDialog() {
-        val nativeLang = nativeLanguage
-        val learnLang = learnLanguage
+        val textToTranslate = vm.textToTranslate
+
         vm.getWordsFromDictionary(
-            inputLang = learnLang,
-            outputLang = nativeLang,
+            inputLang = learnLanguage,
+            outputLang = nativeLanguage,
             word = textToTranslate
         )
 
         translateDialogBind.inputWord.setText(textToTranslate)
         translateDialogBind.inputWord.clearFocus()
 
-        dialogMenu.setOnDismissListener {
-            translateDialogBind.inputWord.setText("")
-            translateDialogBind.outputWord.setText("")
-            adapter.updateData(wordsList = ArrayList())
-        }
         dialogMenu.show()
     }
 
@@ -80,6 +74,13 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
 
         getLanguageFromSettings()
 
+
+
+        dialogMenu.setOnDismissListener {
+            translateDialogBind.inputWord.setText("")
+            translateDialogBind.outputWord.setText("")
+            adapter.updateData(wordsList = ArrayList())
+        }
 
         translateDialogBind.audioInputWord.setOnClickListener {
             ttsFrom.speak(translateDialogBind.inputWord.text, TextToSpeech.QUEUE_FLUSH, null, "")
@@ -115,8 +116,8 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
 
         // Translate
         vm.dictionaryWordsLiveData.observe(activity as LifecycleOwner) { dict ->
-            if (dict == null) {
-                vm.getFullTranslation(word = textToTranslate, inputLang = learnLanguage, outputLang = nativeLanguage)
+            if (dict == null) { //TODO вынести словарь и перевод в одну фнккцию
+                vm.getFullTranslation(word = vm.textToTranslate, inputLang = learnLanguage, outputLang = nativeLanguage)
             } else {
                 translateDialogBind.outputWord.setText(dict.translation)
                 translateDialogBind.outputWord.clearFocus()
