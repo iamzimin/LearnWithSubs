@@ -6,17 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.learnwithsubs.video_view.R
-import com.learnwithsubs.video_view.domain.models.DictionarySynonyms
-import com.learnwithsubs.video_view.domain.models.DictionaryType
+import com.learnwithsubs.video_view.domain.models.DictionaryElement
 
 class DictionaryAdapter(
-    wordsInit: ArrayList<DictionarySynonyms>
+    wordsInit: ArrayList<DictionaryElement>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-    private var wordsList: ArrayList<DictionarySynonyms> = wordsInit
+    private var wordsList: ArrayList<DictionaryElement> = wordsInit
     private var onItemClickListener: OnDictionaryClick? = null
 
 
-    fun updateData(wordsList: ArrayList<DictionarySynonyms>) {
+    fun updateData(wordsList: ArrayList<DictionaryElement>) {
         this@DictionaryAdapter.wordsList = wordsList
         notifyDataSetChanged()
     }
@@ -27,19 +26,15 @@ class DictionaryAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            DictionaryType.WORD.value -> DictionaryNormalHolder(
+            2 -> DictionarySynonymsHolder(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.tile_translate_word, parent, false), onItemClickListener)
 
-            DictionaryType.PART_SPEECH.value -> DictionaryPartSpeechHolder(
+            1 -> DictionaryPartSpeechHolder(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.tile_translate_partspeech, parent, false))
 
-            else -> {
-                DictionaryPartSpeechHolder(
-                    LayoutInflater.from(parent.context).inflate(
-                        R.layout.tile_translate_partspeech, parent, false))
-            }
+            else -> throw IllegalArgumentException("Unexpected viewType: $viewType")
         }
 
     }
@@ -49,10 +44,18 @@ class DictionaryAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val word = wordsList[position]
-
-        when (word.type) {
-            DictionaryType.WORD -> {
+            when (val word = wordsList[position]) {
+            is DictionaryElement.Synonyms -> {
+                val synonymsHolder = holder as DictionarySynonymsHolder
+                val syn = word as DictionaryElement.Synonyms
+                synonymsHolder.bind(syn)
+            }
+            is DictionaryElement.PartSpeech -> {
+                val partSpeechHolder = holder as DictionaryPartSpeechHolder
+                val ps = word as DictionaryElement.PartSpeech
+                partSpeechHolder.bind(ps)
+            }
+            /*DictionaryType.WORD -> {
                 val normalHolder = holder as DictionaryNormalHolder
                 normalHolder.bind(wordsList[position])
             }
@@ -60,12 +63,15 @@ class DictionaryAdapter(
             DictionaryType.PART_SPEECH -> {
                 val loadingHolder = holder as DictionaryPartSpeechHolder
                 loadingHolder.bind(wordsList[position])
-            }
+            }*/
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return wordsList[position].type.value
+        return when (wordsList[position]) {
+            is DictionaryElement.Synonyms -> 2
+            is DictionaryElement.PartSpeech -> 1
+        }
     }
 
     class RecyclerViewItemDecoration(private val spaceSize: Int) : RecyclerView.ItemDecoration() {

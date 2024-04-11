@@ -9,7 +9,7 @@ import com.learnwithsubs.video_view.domain.toDictionaryWord
 class GetWordsFromYandexDictionaryUseCase(
     private val yandexDictionaryRepository: TranslatorRepository
 ) {
-    suspend fun invoke(model: TranslationModel): DictionaryWord? { //TODO mapper?
+    suspend fun invoke(model: TranslationModel): DictionaryWord? {
         return yandexDictionaryRepository.getWordsFromYandexDictionary(
             key = TranslationKeyAPI.YANDEX_DICTIONARY_KEY,
             lang = "${model.inputLanguage}-${model.outputLanguage}",

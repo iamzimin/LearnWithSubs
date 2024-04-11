@@ -121,8 +121,7 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
             } else {
                 translateDialogBind.outputWord.setText(dict.translation)
                 translateDialogBind.outputWord.clearFocus()
-                val updatedPartSpeech = vm.changePartSpeech(context = context.applicationContext, list = dict.synonyms)
-                adapter.updateData(wordsList = updatedPartSpeech)
+                adapter.updateData(wordsList = dict.dictionaryElement)
             }
 
         }

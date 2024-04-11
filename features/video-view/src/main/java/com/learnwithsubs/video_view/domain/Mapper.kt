@@ -1,14 +1,12 @@
 package com.learnwithsubs.video_view.domain
 
-import com.example.yandex_dictionary_api.models.DictionaryTypeDTO
+import com.example.yandex_dictionary_api.models.DictionaryElementDTO
+import com.example.yandex_dictionary_api.models.DictionarySynonymsDTO
 import com.example.yandex_dictionary_api.models.DictionaryWordDTO
 import com.learnwithsubs.database.domain.models.VideoDBO
-import com.learnwithsubs.database.domain.models.VideoErrorTypeDBO
-import com.learnwithsubs.database.domain.models.VideoLoadingTypeDBO
-import com.learnwithsubs.database.domain.models.VideoStatusDBO
 import com.learnwithsubs.database.domain.models.WordTranslationDBO
+import com.learnwithsubs.video_view.domain.models.DictionaryElement
 import com.learnwithsubs.video_view.domain.models.DictionarySynonyms
-import com.learnwithsubs.video_view.domain.models.DictionaryType
 import com.learnwithsubs.video_view.domain.models.DictionaryWord
 import com.learnwithsubs.video_view.domain.models.Video
 import com.learnwithsubs.video_view.domain.models.WordTranslation
@@ -46,29 +44,29 @@ internal fun VideoDBO.toVideo() : Video {
 }
 
 internal fun DictionaryWordDTO.toDictionaryWord(): DictionaryWord {
-    val mappedSynonyms = ArrayList<DictionarySynonyms>()
-    for (synonymDTO in synonyms) {
-        mappedSynonyms.add(
-            DictionarySynonyms(
-                id = synonymDTO.id,
-                word = synonymDTO.word,
-                translation = synonymDTO.translation,
-                partSpeech = synonymDTO.partSpeech,
-                type = synonymDTO.type.toDictionaryType()
-            )
-        )
+    val mappedElements = dictionaryElement.map { dtoElement ->
+        when (dtoElement) {
+            is DictionaryElementDTO.PartSpeech -> {
+                DictionaryElement.PartSpeech(dtoElement.partSpeech)
+            }
+            is DictionaryElementDTO.Synonyms -> {
+                DictionaryElement.Synonyms(dtoElement.dictionarySynonymsDTO.toDictionarySynonyms())
+            }
+        }
     }
+
     return DictionaryWord(
         translation = translation,
-        synonyms = mappedSynonyms
+        dictionaryElement = ArrayList(mappedElements)
     )
 }
 
-internal fun DictionaryTypeDTO.toDictionaryType(): DictionaryType {
-    return when (this) {
-        DictionaryTypeDTO.WORD -> DictionaryType.WORD
-        DictionaryTypeDTO.PART_SPEECH -> DictionaryType.PART_SPEECH
-    }
+internal fun DictionarySynonymsDTO.toDictionarySynonyms(): DictionarySynonyms {
+    return DictionarySynonyms(
+        id = id,
+        word = word,
+        translation = translation
+    )
 }
 
 

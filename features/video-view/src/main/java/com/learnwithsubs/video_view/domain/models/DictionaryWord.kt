@@ -1,19 +1,17 @@
 package com.learnwithsubs.video_view.domain.models
 
 data class DictionaryWord(
-    var translation: String,
-    var synonyms: ArrayList<DictionarySynonyms>
+    val translation: String,
+    val dictionaryElement: ArrayList<DictionaryElement>,
 )
+
+sealed class DictionaryElement {
+    data class PartSpeech(val partSpeech: String?) : DictionaryElement()
+    data class Synonyms(val dictionarySynonyms: DictionarySynonyms) : DictionaryElement()
+}
 
 data class DictionarySynonyms(
     val id: Int,
     val word: String,
     val translation: String,
-    var partSpeech: String,
-    val type: DictionaryType
 )
-
-enum class DictionaryType(val value: Int) {
-    WORD(1),
-    PART_SPEECH(2)
-}

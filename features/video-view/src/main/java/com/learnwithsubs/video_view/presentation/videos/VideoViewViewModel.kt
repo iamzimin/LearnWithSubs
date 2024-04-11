@@ -146,19 +146,4 @@ class VideoViewViewModel @Inject constructor(
         }
     }
 
-    fun changePartSpeech(context: Context, list: ArrayList<DictionarySynonyms>):  ArrayList<DictionarySynonyms> {
-        for (elem in list) {
-            when (elem.partSpeech) {
-                "noun" -> elem.partSpeech = context.getString(R.string.noun)
-                "adjective" -> elem.partSpeech = context.getString(R.string.adjective)
-                "adverb" -> elem.partSpeech = context.getString(R.string.adverb)
-                "participle" -> elem.partSpeech = context.getString(R.string.participle)
-                "predicative" -> elem.partSpeech = context.getString(R.string.predicative)
-
-                else -> {}
-            }
-        }
-        return list
-    }
-
 }
