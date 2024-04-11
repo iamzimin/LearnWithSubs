@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.base.VideoConstants
-import com.example.yandex_dictionary_api.models.DictionarySynonyms
-import com.example.yandex_dictionary_api.models.DictionaryWordDTO
 import com.learnwithsubs.video_view.R
+import com.learnwithsubs.video_view.domain.models.DictionarySynonyms
+import com.learnwithsubs.video_view.domain.models.DictionaryWord
 import com.learnwithsubs.video_view.domain.models.Subtitle
 import com.learnwithsubs.video_view.domain.models.TranslationModel
 import com.learnwithsubs.video_view.domain.models.Video
@@ -40,7 +40,7 @@ class VideoViewViewModel @Inject constructor(
 
     private var subtitleList: List<Subtitle> = emptyList()
 
-    val dictionaryWordsLiveData =  MutableLiveData<DictionaryWordDTO?>()
+    val dictionaryWordsLiveData =  MutableLiveData<DictionaryWord?>()
     val translatorTranslationLiveData = MutableLiveData<String?>()
 
     fun initCurrentVideo(videoId: Int) {
