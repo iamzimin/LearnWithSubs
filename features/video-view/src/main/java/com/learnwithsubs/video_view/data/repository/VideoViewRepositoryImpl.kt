@@ -15,7 +15,7 @@ class VideoViewRepositoryImpl(
     private val videoDao: VideoListDao,
     private val wordDao: WordListDao,
 ) : VideoViewRepository {
-    override fun getVideoSubtitles(video: VideoDBO): List<Subtitle>? {
+    override fun getVideoSubtitles(video: Video): List<Subtitle>? {
         val subtitlesPath = if (video.isOwnSubtitles)
              File(video.outputPath, VideoConstants.OWN_SUBTITLES)
         else File(video.outputPath, VideoConstants.GENERATED_SUBTITLES)
@@ -34,8 +34,13 @@ class VideoViewRepositoryImpl(
         return videoDao.getVideoById(id = videoID)
     }
 
-    override suspend fun updateVideo(video: VideoDBO) {
-        videoDao.insertVideo(videoDBO = video)
+    override suspend fun updateVideo(video: Video) {
+        videoDao.updateVideo(
+            id = video.id,
+            name = video.name,
+            watchProgress = video.watchProgress,
+            saveWords = video.saveWords,
+            outputPath = video.outputPath)
     }
 
     override suspend fun saveWord(word: WordTranslationDBO) {

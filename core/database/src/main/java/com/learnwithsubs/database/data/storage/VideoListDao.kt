@@ -16,6 +16,9 @@ interface VideoListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertVideo(videoDBO: VideoDBO)
 
+    @Query("UPDATE videodbo SET name = :name, watchProgress = :watchProgress, saveWords = :saveWords, outputPath = :outputPath WHERE id = :id")
+    suspend fun updateVideo(id: Int?, name: String, watchProgress: Int?, saveWords: Int?, outputPath: String?)
+
     @Delete
     suspend fun deleteVideo(videoDBO: VideoDBO)
 

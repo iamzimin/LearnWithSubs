@@ -3,13 +3,14 @@ package com.learnwithsubs.word_list.data.repository
 import com.learnwithsubs.database.data.storage.WordListDao
 import com.learnwithsubs.database.domain.models.WordTranslationDBO
 import com.learnwithsubs.word_list.domain.models.WordTranslation
+import com.learnwithsubs.word_list.domain.repository.WordListRepository
 import com.learnwithsubs.word_list.domain.toWordTranslationDBO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class WordListRepositoryImpl(
     private val wordListDao: WordListDao
-) : com.learnwithsubs.word_list.domain.repository.WordListRepository {
+) : WordListRepository {
     override fun getWords(): Flow<List<WordTranslationDBO>> {
         return wordListDao.getWords()
     }
