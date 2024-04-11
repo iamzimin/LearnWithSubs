@@ -24,7 +24,7 @@ import kotlin.coroutines.suspendCoroutine
 
 
 class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
-    private val videoTranscodeProgressLiveData: MutableLiveData<VideoTranscode?> = MutableLiveData()
+    private val videoTranscodeProgressLiveData: MutableLiveData<Pair<Int?, Int>> = MutableLiveData()
     private lateinit var transcodeVideoExecutionId: FFmpegSession
     private lateinit var extractAudioExecutionId: FFmpegSession
 
@@ -41,7 +41,7 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
         FFmpegKitConfig.enableStatisticsCallback {
             videoTranscode.uploadingProgress = ((it.time / videoTranscode.duration.toDouble()) * 100).toInt()
             if (videoTranscode.uploadingProgress > 100) videoTranscode.uploadingProgress = 0
-            videoTranscodeProgressLiveData.postValue(videoTranscode)
+            videoTranscodeProgressLiveData.postValue(Pair(videoTranscode.id, videoTranscode.uploadingProgress))
         }
 
         transcodeVideoExecutionId = FFmpegKit.executeAsync(command, object : FFmpegSessionCompleteCallback {
@@ -80,7 +80,7 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
         FFmpegKitConfig.enableStatisticsCallback {
             videoTranscode.uploadingProgress = ((it.time / videoTranscode.duration.toDouble()) * 100).toInt()
             if (videoTranscode.uploadingProgress > 100) videoTranscode.uploadingProgress = 0
-            videoTranscodeProgressLiveData.postValue(videoTranscode)
+            videoTranscodeProgressLiveData.postValue(Pair(videoTranscode.id, videoTranscode.uploadingProgress))
         }
 
         extractAudioExecutionId = FFmpegKit.executeAsync(command, object : FFmpegSessionCompleteCallback {
@@ -96,7 +96,7 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
                         continuation.resume(null)
                     } else {
                         Log.i("FFmpeg", "Async command execution failed with returnCode=${session.returnCode}.")
-                        videoTranscode.errorType = VideoTranscodeErrorType.DECODING_VIDEO
+                        videoTranscode.errorType = VideoTranscodeErrorType.EXTRACTING_AUDIO
                         continuation.resume(videoTranscode)
                     }
                 }
@@ -109,7 +109,7 @@ class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
             FFmpegKit.cancel(extractAudioExecutionId.sessionId)
     }
 
-    override fun getVideoProgressLiveData(): MutableLiveData<VideoTranscode?> {
+    override fun getVideoProgressLiveData(): MutableLiveData<Pair<Int?, Int>> {
         return videoTranscodeProgressLiveData
     }
 

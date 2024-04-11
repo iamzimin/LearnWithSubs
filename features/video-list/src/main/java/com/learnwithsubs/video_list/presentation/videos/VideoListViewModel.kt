@@ -34,7 +34,7 @@ class VideoListViewModel @Inject constructor(
     private var filter: String? = null
     var editableVideo: Video? = null
 
-    val videoProgressLiveData: MutableLiveData<Video?> = videoListUseCases.getVideoProgressLiveData.invoke()
+    val videoProgressLiveData: MutableLiveData<Pair<Int?, Int>> = videoListUseCases.getVideoProgressLiveData.invoke()
     val errorTypeLiveData = MutableLiveData<Video?>()
 
     private val videoSemaphore = Semaphore(1)

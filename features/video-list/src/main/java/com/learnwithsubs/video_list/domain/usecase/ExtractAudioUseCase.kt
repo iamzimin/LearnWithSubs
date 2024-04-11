@@ -10,6 +10,6 @@ class ExtractAudioUseCase(
     private val videoTranscodeRepository: VideoTranscodeRepository
 ) {
     suspend fun invoke(video: Video): Video? {
-        return videoTranscodeRepository.extractAudio(video.toVideoTranscode())?.toVideo()
+        return videoTranscodeRepository.extractAudio(video.toVideoTranscode())?.toVideo(videoAdditionalFields = video)
     }
 }

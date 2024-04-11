@@ -15,6 +15,14 @@ class VideoListAdapter(
     override var itemList: ArrayList<Video>
 ): SelectableAdapter<Video>(itemList) {
 
+    fun updateVideoProgress(videoId: Int?, uploadingProgress: Int) {
+        val position = itemList.indexOfFirst { it.id == videoId }
+        if (position != -1) {
+            itemList[position].uploadingProgress = uploadingProgress
+            notifyItemChanged(position)
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             VideoStatus.NORMAL_VIDEO.value -> NormalVideoViewHolder(

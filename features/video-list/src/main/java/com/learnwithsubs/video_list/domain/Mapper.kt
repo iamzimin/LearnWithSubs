@@ -2,8 +2,6 @@ package com.learnwithsubs.video_list.domain
 
 import com.example.video_transcode.domain.models.VideoTranscode
 import com.example.video_transcode.domain.models.VideoTranscodeErrorType
-import com.example.video_transcode.domain.models.VideoTranscodeLoadingType
-import com.example.video_transcode.domain.models.VideoTranscodeStatus
 import com.learnwithsubs.database.domain.models.VideoDBO
 import com.learnwithsubs.database.domain.models.VideoErrorTypeDBO
 import com.learnwithsubs.database.domain.models.VideoLoadingTypeDBO
@@ -51,7 +49,7 @@ internal fun VideoDBO.toVideo() : Video {
     )
 }
 
-internal fun VideoTranscode.toVideo() : Video {
+/*internal fun VideoTranscode.toVideo() : Video {
     return Video(
         id = this.id,
         videoStatus = this.videoStatus.toVideoStatus(),
@@ -68,24 +66,44 @@ internal fun VideoTranscode.toVideo() : Video {
         outputPath = this.outputPath,
         timestamp = this.timestamp
     )
+}*/
+
+
+internal fun VideoTranscode.toVideo(videoAdditionalFields: Video) : Video {
+    return Video(
+        id = this.id,
+        videoStatus = videoAdditionalFields.videoStatus,
+        loadingType = videoAdditionalFields.loadingType,
+        errorType = this.errorType?.toVideoErrorType(),
+        isOwnSubtitles = videoAdditionalFields.isOwnSubtitles,
+        name = videoAdditionalFields.name,
+        duration = this.duration,
+        watchProgress = videoAdditionalFields.watchProgress,
+        saveWords = videoAdditionalFields.saveWords,
+        uploadingProgress = this.uploadingProgress,
+        URI = videoAdditionalFields.URI,
+        inputPath = this.inputPath,
+        outputPath = this.outputPath,
+        timestamp = videoAdditionalFields.timestamp
+    )
 }
 
 internal fun Video.toVideoTranscode() : VideoTranscode {
     return VideoTranscode(
         id = this.id,
-        videoStatus = this.videoStatus.toVideoTranscodeStatus(),
-        loadingType = this.loadingType.toVideoTranscodeLoadingType(),
+        //videoStatus = this.videoStatus.toVideoTranscodeStatus(),
+        //loadingType = this.loadingType.toVideoTranscodeLoadingType(),
         errorType = this.errorType?.toVideoTranscodeErrorType(),
-        isOwnSubtitles = this.isOwnSubtitles,
-        name = this.name,
+        //isOwnSubtitles = this.isOwnSubtitles,
+        //name = this.name,
         duration = this.duration,
-        watchProgress = this.watchProgress,
-        saveWords = this.saveWords,
+        //watchProgress = this.watchProgress,
+        //saveWords = this.saveWords,
         uploadingProgress = this.uploadingProgress,
-        URI = this.URI,
+        //URI = this.URI,
         inputPath = this.inputPath,
         outputPath = this.outputPath,
-        timestamp = this.timestamp
+        //timestamp = this.timestamp
     )
 }
 
@@ -154,57 +172,18 @@ internal fun VideoErrorTypeDBO.toVideoErrorType(): VideoErrorType {
 
 
 
-internal fun VideoStatus.toVideoTranscodeStatus(): VideoTranscodeStatus {
-    return when (this) {
-        VideoStatus.NORMAL_VIDEO -> VideoTranscodeStatus.NORMAL_VIDEO
-        VideoStatus.LOADING_VIDEO -> VideoTranscodeStatus.LOADING_VIDEO
-    }
-}
-internal fun VideoLoadingType.toVideoTranscodeLoadingType(): VideoTranscodeLoadingType {
-    return when (this) {
-        VideoLoadingType.WAITING -> VideoTranscodeLoadingType.WAITING
-        VideoLoadingType.EXTRACTING_AUDIO -> VideoTranscodeLoadingType.EXTRACTING_AUDIO
-        VideoLoadingType.DECODING_VIDEO -> VideoTranscodeLoadingType.DECODING_VIDEO
-        VideoLoadingType.LOADING_AUDIO -> VideoTranscodeLoadingType.LOADING_AUDIO
-        VideoLoadingType.GENERATING_SUBTITLES -> VideoTranscodeLoadingType.GENERATING_SUBTITLES
-        VideoLoadingType.DONE -> VideoTranscodeLoadingType.DONE
-    }
-}
 internal fun VideoErrorType.toVideoTranscodeErrorType(): VideoTranscodeErrorType {
     return when (this) {
-        VideoErrorType.PROCESSING_VIDEO -> VideoTranscodeErrorType.PROCESSING_VIDEO
         VideoErrorType.EXTRACTING_AUDIO -> VideoTranscodeErrorType.EXTRACTING_AUDIO
         VideoErrorType.DECODING_VIDEO -> VideoTranscodeErrorType.DECODING_VIDEO
-        VideoErrorType.UPLOADING_AUDIO -> VideoTranscodeErrorType.UPLOADING_AUDIO
-        VideoErrorType.GENERATING_SUBTITLES -> VideoTranscodeErrorType.GENERATING_SUBTITLES
+        else -> throw IllegalArgumentException("Invalid VideoLoadingType: $this")
     }
 }
 
 
-
-
-internal fun VideoTranscodeStatus.toVideoStatus(): VideoStatus {
-    return when (this) {
-        VideoTranscodeStatus.NORMAL_VIDEO -> VideoStatus.NORMAL_VIDEO
-        VideoTranscodeStatus.LOADING_VIDEO -> VideoStatus.LOADING_VIDEO
-    }
-}
-internal fun VideoTranscodeLoadingType.toVideoLoadingType(): VideoLoadingType {
-    return when (this) {
-        VideoTranscodeLoadingType.WAITING -> VideoLoadingType.WAITING
-        VideoTranscodeLoadingType.EXTRACTING_AUDIO -> VideoLoadingType.EXTRACTING_AUDIO
-        VideoTranscodeLoadingType.DECODING_VIDEO -> VideoLoadingType.DECODING_VIDEO
-        VideoTranscodeLoadingType.LOADING_AUDIO -> VideoLoadingType.LOADING_AUDIO
-        VideoTranscodeLoadingType.GENERATING_SUBTITLES -> VideoLoadingType.GENERATING_SUBTITLES
-        VideoTranscodeLoadingType.DONE -> VideoLoadingType.DONE
-    }
-}
 internal fun VideoTranscodeErrorType.toVideoErrorType(): VideoErrorType {
     return when (this) {
-        VideoTranscodeErrorType.PROCESSING_VIDEO -> VideoErrorType.PROCESSING_VIDEO
         VideoTranscodeErrorType.EXTRACTING_AUDIO -> VideoErrorType.EXTRACTING_AUDIO
         VideoTranscodeErrorType.DECODING_VIDEO -> VideoErrorType.DECODING_VIDEO
-        VideoTranscodeErrorType.UPLOADING_AUDIO -> VideoErrorType.UPLOADING_AUDIO
-        VideoTranscodeErrorType.GENERATING_SUBTITLES -> VideoErrorType.GENERATING_SUBTITLES
     }
 }

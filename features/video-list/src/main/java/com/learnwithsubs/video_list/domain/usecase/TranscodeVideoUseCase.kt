@@ -9,6 +9,6 @@ class TranscodeVideoUseCase(
     private val videoTranscodeRepository: VideoTranscodeRepository
 ) {
     suspend fun invoke(video: Video): Video? {
-        return videoTranscodeRepository.transcodeVideo(videoTranscode = video.toVideoTranscode())?.toVideo()
+        return videoTranscodeRepository.transcodeVideo(videoTranscode = video.toVideoTranscode())?.toVideo(videoAdditionalFields = video)
     }
 }

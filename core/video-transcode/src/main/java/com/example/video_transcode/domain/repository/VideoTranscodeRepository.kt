@@ -8,6 +8,6 @@ interface VideoTranscodeRepository {
     fun cancelTranscodeVideo()
     suspend fun extractAudio(videoTranscode: VideoTranscode): VideoTranscode?
     fun cancelExtractAudio()
-    fun getVideoProgressLiveData(): MutableLiveData<VideoTranscode?>
+    fun getVideoProgressLiveData(): MutableLiveData<Pair<Int?, Int>>
     suspend fun extractPreview(videoTranscode: VideoTranscode)
 }

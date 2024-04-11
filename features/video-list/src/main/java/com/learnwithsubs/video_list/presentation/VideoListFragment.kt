@@ -142,7 +142,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
 
         vm.videoProgressLiveData.observe(viewLifecycleOwner) { videoProgress ->
             if (videoProgress != null)
-                adapter.updateItem(videoProgress.copy())
+                adapter.updateVideoProgress(videoId = videoProgress.first, uploadingProgress = videoProgress.second)
         }
 
         return videoListFragmentBinding.root
