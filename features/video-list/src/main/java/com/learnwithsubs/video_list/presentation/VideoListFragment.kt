@@ -57,7 +57,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
         vm = ViewModelProvider(this, vmFactory)[VideoListViewModel::class.java]
 
         videoListFragmentBinding = FragmentVideoListBinding.inflate(inflater, container, false)
-        searchViewBinding = SearchViewBinding.inflate(this@VideoListFragment.layoutInflater)
+        searchViewBinding = videoListFragmentBinding.searchBar
         val sortByDialog = SortByDialog(fragment = this@VideoListFragment, vm = vm, adapter = adapter)
         val renameDialog = RenameDialog(fragment = this@VideoListFragment, vm = vm, adapter = adapter)
         setupRecyclerView()
