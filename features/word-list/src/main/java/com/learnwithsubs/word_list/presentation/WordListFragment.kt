@@ -1,16 +1,12 @@
 package com.learnwithsubs.word_list.presentation
 
-import android.app.Dialog
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -18,16 +14,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.base.OnSelectChange
 import com.learnwithsubs.word_list.R
-import com.learnwithsubs.word_list.databinding.DialogWordListMenuEditBinding
 import com.learnwithsubs.word_list.databinding.DialogWordListMenuSortByBinding
 import com.learnwithsubs.word_list.databinding.FragmentWordListBinding
 import com.learnwithsubs.word_list.databinding.SearchViewBinding
 import com.learnwithsubs.word_list.di.DaggerWordListAppComponent
 import com.learnwithsubs.word_list.di.WordListAppModule
-import com.learnwithsubs.word_list.domain.models.WordTranslation
 import com.example.base.OnSelectionModeChange
 import com.learnwithsubs.word_list.presentation.adapter.WordListTitleAdapter
-import java.util.Date
 import javax.inject.Inject
 
 class WordListFragment : Fragment(), OnSelectChange {
@@ -37,7 +30,7 @@ class WordListFragment : Fragment(), OnSelectChange {
 
     private lateinit var fragmentWordListBinding: FragmentWordListBinding
     private lateinit var searchViewBinding: SearchViewBinding
-    private lateinit var dialogWordListMenuEditBinding: DialogWordListMenuEditBinding
+    //private lateinit var dialogWordListMenuEditBinding: DialogWordListMenuEditBinding
     private lateinit var sortByDialogBinding: DialogWordListMenuSortByBinding
 
     private lateinit var context: Context
@@ -51,17 +44,15 @@ class WordListFragment : Fragment(), OnSelectChange {
     ): View {
         context = requireContext()
         DaggerWordListAppComponent.builder().wordListAppModule(WordListAppModule(context = context)).build().inject(this)
-        //DaggerWordListAppComponent.builder().build().inject(this)
+        vm = ViewModelProvider(this, vmFactory)[WordListViewModel::class.java]
 
         val videoListActivity = requireActivity()
         fragmentWordListBinding = FragmentWordListBinding.inflate(inflater, container, false)
-        dialogWordListMenuEditBinding = DialogWordListMenuEditBinding.inflate(videoListActivity.layoutInflater)
         sortByDialogBinding = DialogWordListMenuSortByBinding.inflate(videoListActivity.layoutInflater)
         searchViewBinding = fragmentWordListBinding.searchBar
+        val editDialog = EditDialog(fragment = this@WordListFragment, vm = vm, adapter = adapter)
         setupRecyclerView()
 
-//        (videoListActivity.applicationContext as App).wordListAppComponent.inject(this)
-        vm = ViewModelProvider(this, vmFactory)[WordListViewModel::class.java]
 
         vm.wordList.observe(viewLifecycleOwner) { wordList ->
             wordList ?: return@observe
@@ -83,11 +74,11 @@ class WordListFragment : Fragment(), OnSelectChange {
         }
         fragmentWordListBinding.editMenu.setOnClickListener {
             vm.editableWord = adapter.getEditableItem()
-            openEditMenu()
+            editDialog.openEditMenu()
         }
         fragmentWordListBinding.addWordCard.setOnClickListener {
             vm.editableWord = null
-            openEditMenu()
+            editDialog.openEditMenu()
         }
         /*
         fragmentWordListBinding.sortBy.setOnClickListener {
@@ -115,48 +106,6 @@ class WordListFragment : Fragment(), OnSelectChange {
         fragmentWordListBinding.wordList.adapter = adapter
         adapter.setListener(this)
         (fragmentWordListBinding.wordList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-    }
-
-
-
-
-    private fun openEditMenu() {
-        val editMenu = Dialog(context)
-        editMenu.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        val dialogView = dialogWordListMenuEditBinding.root
-        val parentView = dialogView.parent as? ViewGroup
-        parentView?.removeView(dialogView)
-        editMenu.setContentView(dialogView)
-
-        dialogWordListMenuEditBinding.word.setText(vm.editableWord?.word)
-        dialogWordListMenuEditBinding.translation.setText(vm.editableWord?.translation)
-
-
-        dialogWordListMenuEditBinding.save.setOnClickListener {
-            val word = vm.editableWord
-            if (word == null) {
-                val newWord = WordTranslation(
-                    word = dialogWordListMenuEditBinding.word.text.toString(),
-                    translation = dialogWordListMenuEditBinding.translation.text.toString(),
-                    nativeLanguage = "ru", //TODO
-                    learnLanguage = "en",
-                    timestamp = Date().time
-                )
-                vm.editWord(newWord)
-            } else {
-                word.word = dialogWordListMenuEditBinding.word.text.toString()
-                word.translation = dialogWordListMenuEditBinding.translation.text.toString()
-                vm.editWord(word)
-            }
-
-            adapter.changeMode(isSelectionMode = false)
-            editMenu.dismiss()
-            vm.editableWord = null
-        }
-
-        editMenu.show()
-        editMenu.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        editMenu.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
     private fun changeCardVisibility(cardView: CardView, isVisible: Boolean) {

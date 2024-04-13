@@ -16,7 +16,7 @@ internal fun WordTranslation.toWordTranslationDBO() : WordTranslationDBO {
     )
 }
 
-internal fun WordTranslationDBO.toWordTranslation() : WordTranslation { //TODO
+internal fun WordTranslationDBO.toWordTranslation() : WordTranslation {
     return WordTranslation(
         id = this.id,
         word = this.word,
