@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/module_bottom_menu"
+<!--    <item android:id="@+id/module_bottom_menu"
         android:icon="@drawable/module"
         android:iconTint="?attr/background_dark"
-        android:title="@string/module"/>
+        android:title="@string/module"/>-->
 
     <item android:id="@+id/words_bottom_menu"
         android:icon="@drawable/list_unordered"
@@ -16,13 +16,13 @@
         android:iconTint="?attr/background_dark"
         android:title="@string/video"/>
 
-    <item android:id="@+id/favourite_bottom_menu"
+<!--    <item android:id="@+id/favourite_bottom_menu"
         android:icon="@drawable/favourite"
         android:iconTint="?attr/background_dark"
-        android:title="@string/favourite"/>
+        android:title="@string/favourite"/>-->
 
     <item android:id="@+id/account_bottom_menu"
         android:icon="@drawable/user"
         android:iconTint="?attr/background_dark"
-        android:title="@string/account"/>
+        android:title="@string/settings"/>
 </menu>

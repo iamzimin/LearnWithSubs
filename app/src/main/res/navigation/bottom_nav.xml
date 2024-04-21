@@ -5,10 +5,10 @@
     android:id="@+id/bottom_nav"
     app:startDestination="@+id/video_bottom_menu">
 
-    <fragment android:id="@+id/module_bottom_menu"
+<!--    <fragment android:id="@+id/module_bottom_menu"
         android:name="com.learnwithsubs.ModuleListFragment"
         tools:layout="@layout/fragment_module_list"
-        android:label="@string/module"/>
+        android:label="@string/module"/>-->
 
     <fragment android:id="@+id/words_bottom_menu"
         android:name="com.learnwithsubs.word_list.presentation.WordListFragment"
@@ -20,14 +20,14 @@
         tools:layout="@layout/fragment_video_list"
         android:label="@string/video"/>
 
-    <fragment android:id="@+id/favourite_bottom_menu"
+<!--    <fragment android:id="@+id/favourite_bottom_menu"
         android:name="com.learnwithsubs.ModuleListFragment"
         tools:layout="@layout/fragment_module_list"
-        android:label="@string/favourite"/>
+        android:label="@string/favourite"/>-->
 
     <fragment android:id="@+id/account_bottom_menu"
-        android:name="com.learnwithsubs.ModuleListFragment"
-        tools:layout="@layout/fragment_module_list"
-        android:label="@string/account"/>
+        android:name="com.learnwithsubs.settings.presentation.SettingsFragment"
+        tools:layout="@layout/fragment_settings"
+        android:label="@string/settings"/>
 
 </navigation>

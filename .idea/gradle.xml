@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/core/video-transcode" />
             <option value="$PROJECT_DIR$/core/yandex-dictionary-api" />
             <option value="$PROJECT_DIR$/features" />
+            <option value="$PROJECT_DIR$/features/settings" />
             <option value="$PROJECT_DIR$/features/video-list" />
             <option value="$PROJECT_DIR$/features/video-view" />
             <option value="$PROJECT_DIR$/features/word-list" />
