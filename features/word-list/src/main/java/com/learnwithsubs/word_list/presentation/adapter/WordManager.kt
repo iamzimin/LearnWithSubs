@@ -1,6 +1,7 @@
-package com.learnwithsubs.word_list.presentation.model
+package com.learnwithsubs.word_list.presentation.adapter
 
 import com.learnwithsubs.word_list.domain.models.WordTranslation
+import com.learnwithsubs.word_list.presentation.model.WordTitle
 
 class WordManager {
     private var list = ArrayList<WordTitle>()

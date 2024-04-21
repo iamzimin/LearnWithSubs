@@ -8,7 +8,6 @@ import com.example.base.OnSelectChange
 import com.learnwithsubs.word_list.R
 import com.learnwithsubs.word_list.domain.models.WordTranslation
 import com.learnwithsubs.word_list.presentation.model.WordList
-import com.learnwithsubs.word_list.presentation.model.WordManager
 import com.learnwithsubs.word_list.presentation.model.WordTitle
 
 class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
