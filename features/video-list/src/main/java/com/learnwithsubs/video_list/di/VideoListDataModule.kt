@@ -59,8 +59,10 @@ class VideoListDataModule {
 
     @Provides
     @Singleton
-    fun provideVideoTranscodeRepository(): VideoTranscodeRepository {
-        return VideoTranscodeRepositoryImpl()
+    fun provideVideoTranscodeRepository(context: Context): VideoTranscodeRepository {
+        return VideoTranscodeRepositoryImpl(
+            context = context
+        )
     }
 
     @Provides

@@ -23,7 +23,7 @@ class WordListRepositoryImpl(
         wordListDao.insertWord(word = word)
     }
 
-    override suspend fun deleteWord(word: WordTranslationDBO) { //TODO wordId?
+    override suspend fun deleteWord(word: WordTranslationDBO) {
         wordListDao.deleteWord(word = word)
     }
 }

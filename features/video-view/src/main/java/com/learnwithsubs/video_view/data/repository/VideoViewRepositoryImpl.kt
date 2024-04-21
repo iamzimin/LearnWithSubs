@@ -75,7 +75,7 @@ class VideoViewRepositoryImpl(
     private fun parseTime(timeString: String): Long {
         val parts = timeString.split("[:,]".toRegex()).toTypedArray()
 
-        val hours = parts[0].toLong() //TODO Exception?
+        val hours = parts[0].toLong()
         val minutes = parts[1].toLong()
         val seconds = parts[2].toLong()
         val milliseconds = parts[3].toLong()

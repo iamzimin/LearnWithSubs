@@ -1,5 +1,6 @@
 package com.example.video_transcode.data.repository
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.os.Environment
@@ -23,7 +24,9 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 
-class VideoTranscodeRepositoryImpl : VideoTranscodeRepository {
+class VideoTranscodeRepositoryImpl(
+    context: Context
+) : VideoTranscodeRepository {
     private val videoTranscodeProgressLiveData: MutableLiveData<Pair<Int?, Int>> = MutableLiveData()
     private lateinit var transcodeVideoExecutionId: FFmpegSession
     private lateinit var extractAudioExecutionId: FFmpegSession
