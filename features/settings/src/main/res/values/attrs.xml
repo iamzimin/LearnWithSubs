@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="bottom_icons_dark"/>
+    <attr name="background_dark"/>
+    <attr name="text_color"/>
+    <attr name="main_color"/>
+    <attr name="search_field"/>
+
+    <!--Video Tile-->
+    <attr name="background_video_tile_dark"/>
+    <attr name="background_video_selected_tile_dark"/>
+    <attr name="select_video_outline_dark"/>
+
+    <!--Unavailable Video Tile-->
+    <attr name="video_text_unavailable_dark"/>
+    <attr name="background_unavailable_video_tile_dark"/>
+
+    <!--Video upload-->
+    <attr name="video_upload_green_card"/>
+    <attr name="video_close_selection_mode_card"/>
+    <!--Pop-up SortBy-->
+    <attr name="button_normal_dark"/>
+    <attr name="button_pressed_dark"/>
+
+    <!--Pop-up Menu-->
+    <attr name="pop_up_menu_background"/>
+    <attr name="pop_up_menu_line"/>
+
+    <!--Bottom Menu-->
+    <attr name="bottom_navigation_default"/>
+
+    <!--Word List-->
+    <attr name="word_title_background_dark"/>
+
+</resources>
