@@ -32,6 +32,27 @@ class SettingsFragment : Fragment() {
 
         settingsFragmentBinding = FragmentSettingsBinding.inflate(inflater, container, false)
 
+
+        settingsFragmentBinding.languageCard.setOnClickListener {
+
+        }
+
+        settingsFragmentBinding.styleCard.setOnClickListener {
+
+        }
+
+        settingsFragmentBinding.translatorSourceCard.setOnClickListener {
+
+        }
+
+        settingsFragmentBinding.nativeLanguageCard.setOnClickListener {
+
+        }
+
+        settingsFragmentBinding.learningLanguageCard.setOnClickListener {
+
+        }
+
         return settingsFragmentBinding.root
     }
 
