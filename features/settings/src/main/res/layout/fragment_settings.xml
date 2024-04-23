@@ -276,6 +276,7 @@
                                     </LinearLayout>
 
                                     <ImageButton
+                                        android:id="@+id/native_language_download"
                                         android:layout_width="45dp"
                                         android:layout_height="45dp"
                                         style="@style/ImageDownload"
@@ -334,6 +335,7 @@
                                     </LinearLayout>
 
                                     <ImageButton
+                                        android:id="@+id/learning_language_download"
                                         android:layout_width="45dp"
                                         android:layout_height="45dp"
                                         style="@style/ImageDownload"

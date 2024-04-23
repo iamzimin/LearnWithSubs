@@ -15,11 +15,24 @@ import com.example.settings.R
 import com.example.settings.databinding.SettingsRadioButtonDialogBinding
 import com.learnwithsubs.settings.presentation.settings.SettingsViewModel
 
-class RadioButtonSelectionDialog(fragment: Fragment, private val title: String, private val options: Array<String>) {
+class RadioButtonSelectionDialog(
+    fragment: Fragment,
+    private val title: String,
+    private val options: Array<String>,
+    private val selected: String,
+) {
     private val context: Context = fragment.requireContext()
     private val settingsRadioButtonDialogBinding: SettingsRadioButtonDialogBinding = SettingsRadioButtonDialogBinding.inflate(fragment.layoutInflater)
     private val radioButtonDialog: Dialog = Dialog(context)
     private var radioGroup: RadioGroup
+
+    private lateinit var onItemSelectedListener: ((String) -> Unit)
+    fun setOnItemSelectedListener(listener: (String) -> Unit) {
+        this.onItemSelectedListener = listener
+    }
+    private fun notifyItemSelectedListener(selectedText: String) {
+        onItemSelectedListener.invoke(selectedText)
+    }
 
     init {
         radioButtonDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -57,14 +70,19 @@ class RadioButtonSelectionDialog(fragment: Fragment, private val title: String, 
             RadioGroup.LayoutParams.MATCH_PARENT,
             RadioGroup.LayoutParams.WRAP_CONTENT
         )
+        radioButton.tag = text
+        radioGroup.addView(radioButton)
+
+        if (text == selected) {
+            radioButton.isChecked = true
+        }
         radioButton.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 val selectedText = buttonView.text.toString()
-
+                notifyItemSelectedListener(selectedText)
                 radioButtonDialog.dismiss()
             }
         }
-        radioGroup.addView(radioButton)
     }
 
 

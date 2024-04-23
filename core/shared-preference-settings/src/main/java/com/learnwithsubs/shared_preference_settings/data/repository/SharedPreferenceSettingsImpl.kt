@@ -2,9 +2,10 @@ package com.learnwithsubs.shared_preference_settings.data.repository
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.learnwithsubs.shared_preference_settings.R
 import com.learnwithsubs.shared_preference_settings.domain.repository.SharedPreferenceSettings
 
-class SharedPreferenceSettingsImpl(context: Context) : SharedPreferenceSettings {
+class SharedPreferenceSettingsImpl(private val context: Context) : SharedPreferenceSettings {
     companion object {
         private const val PREF_FILE_NAME = "LearnWithSubs"
         private const val KEY_APP_LANGUAGE = "app_language"
@@ -13,6 +14,7 @@ class SharedPreferenceSettingsImpl(context: Context) : SharedPreferenceSettings 
         private const val KEY_NATIVE_LANGUAGE = "native_language"
         private const val KEY_LEARNING_LANGUAGE = "learning_language"
     }
+
 
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE)
     private val editor: SharedPreferences.Editor = sharedPreferences.edit()
@@ -23,7 +25,7 @@ class SharedPreferenceSettingsImpl(context: Context) : SharedPreferenceSettings 
     }
 
     override fun getAppLanguage(): String? {
-        return sharedPreferences.getString(KEY_APP_LANGUAGE, null)
+        return sharedPreferences.getString(KEY_APP_LANGUAGE, context.getString(R.string.english))
     }
 
     override fun saveAppStyle(appStyle: String) {
@@ -32,7 +34,7 @@ class SharedPreferenceSettingsImpl(context: Context) : SharedPreferenceSettings 
     }
 
     override fun getAppStyle(): String? {
-        return sharedPreferences.getString(KEY_APP_STYLE, null)
+        return sharedPreferences.getString(KEY_APP_STYLE, context.getString(R.string.dark))
     }
 
     override fun saveTranslatorSource(source: String) {
@@ -41,7 +43,7 @@ class SharedPreferenceSettingsImpl(context: Context) : SharedPreferenceSettings 
     }
 
     override fun getTranslatorSource(): String? {
-        return sharedPreferences.getString(KEY_TRANSLATOR_SOURCE, null)
+        return sharedPreferences.getString(KEY_TRANSLATOR_SOURCE, context.getString(R.string.android))
     }
 
     override fun saveNativeLanguage(nativeLanguage: String) {
@@ -50,7 +52,7 @@ class SharedPreferenceSettingsImpl(context: Context) : SharedPreferenceSettings 
     }
 
     override fun getNativeLanguage(): String? {
-        return sharedPreferences.getString(KEY_NATIVE_LANGUAGE, null)
+        return sharedPreferences.getString(KEY_NATIVE_LANGUAGE, context.getString(R.string.russian))
     }
 
     override fun saveLearningLanguage(learningLanguage: String) {
@@ -59,6 +61,6 @@ class SharedPreferenceSettingsImpl(context: Context) : SharedPreferenceSettings 
     }
 
     override fun getLearningLanguage(): String? {
-        return sharedPreferences.getString(KEY_LEARNING_LANGUAGE, null)
+        return sharedPreferences.getString(KEY_LEARNING_LANGUAGE, context.getString(R.string.english))
     }
 }
