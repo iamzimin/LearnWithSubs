@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import com.example.settings.R
 import com.example.settings.databinding.FragmentSettingsBinding
 import com.learnwithsubs.settings.di.DaggerSettingsAppComponent
 import com.learnwithsubs.settings.di.SettingsAppModule
@@ -24,6 +25,9 @@ class SettingsFragment : Fragment() {
 
     private val appContext: Context by lazy { requireContext() }
 
+    private val languages: Array<String> = arrayOf("English", "Russian", "Spain")
+    private val styles: Array<String> = arrayOf("Light", "Dark")
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -32,13 +36,26 @@ class SettingsFragment : Fragment() {
 
         settingsFragmentBinding = FragmentSettingsBinding.inflate(inflater, container, false)
 
+        val languageDialog = RadioButtonSelectionDialog(
+            fragment = this@SettingsFragment,
+            title = getString(R.string.language),
+            options = languages,
+        )
+
+        val styleDialog = RadioButtonSelectionDialog(
+            fragment = this@SettingsFragment,
+            title = getString(R.string.style),
+            options = styles,
+        )
+
+
 
         settingsFragmentBinding.languageCard.setOnClickListener {
-
+            languageDialog.openMenu()
         }
 
         settingsFragmentBinding.styleCard.setOnClickListener {
-
+            styleDialog.openMenu()
         }
 
         settingsFragmentBinding.translatorSourceCard.setOnClickListener {

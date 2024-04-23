@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="section_name">20sp</dimen>
-    <dimen name="video_name_in_video_tile">17sp</dimen>
-    <dimen name="video_description_in_video_tile">11sp</dimen>
-    <dimen name="icon_bottom_menu">28sp</dimen>
-    <dimen name="language_in_translate_dialog">18sp</dimen>
-    <dimen name="word_to_translate_in_translate_dialog">17sp</dimen>
-    <dimen name="dialog_menu_margins">15sp</dimen>
-    <dimen name="subtitle_indentation_with_interface">70sp</dimen>
-    <dimen name="subtitle_indentation_without_interface">20sp</dimen>
+    <dimen name="radio_button_text_start_padding">8sp</dimen>
+    <dimen name="radio_button_text_vertical_padding">10sp</dimen>
 </resources>
