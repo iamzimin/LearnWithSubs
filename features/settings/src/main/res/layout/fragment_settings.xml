@@ -244,33 +244,45 @@
                                 style="@style/CardViewSettingsRadioButton">
 
                                 <LinearLayout
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    style="@style/RadioButtonInnerLayout">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/native_language"
-                                        style="@style/RadioButtonTitleText"/>
+                                    android:orientation="horizontal">
 
                                     <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content">
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        style="@style/RadioButtonInnerLayout">
 
                                         <TextView
-                                            android:id="@+id/native_language_text"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="@string/english"
-                                            style="@style/RadioButtonSubTitleText"/>
+                                            android:text="@string/native_language"
+                                            style="@style/RadioButtonTitleText"/>
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content">
+
+                                            <TextView
+                                                android:id="@+id/native_language_text"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="@string/english"
+                                                style="@style/RadioButtonSubTitleText"/>
+
+                                        </LinearLayout>
 
                                     </LinearLayout>
 
+                                    <ImageButton
+                                        android:layout_width="45dp"
+                                        android:layout_height="45dp"
+                                        style="@style/ImageDownload"
+                                        app:srcCompat="@drawable/download">
+                                    </ImageButton>
                                 </LinearLayout>
-
                             </com.google.android.material.card.MaterialCardView>
-
                         </LinearLayout>
 
                         <ImageView
@@ -283,6 +295,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
+
                             <com.google.android.material.card.MaterialCardView
                                 android:id="@+id/learning_language_card"
                                 android:layout_width="match_parent"
@@ -290,31 +303,43 @@
                                 style="@style/CardViewSettingsRadioButton">
 
                                 <LinearLayout
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    style="@style/RadioButtonInnerLayout">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/learning_language"
-                                        style="@style/RadioButtonTitleText"/>
+                                    android:orientation="horizontal">
 
                                     <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content">
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        style="@style/RadioButtonInnerLayout">
 
                                         <TextView
-                                            android:id="@+id/learning_language_text"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="@string/russian"
-                                            style="@style/RadioButtonSubTitleText"/>
+                                            android:text="@string/learning_language"
+                                            style="@style/RadioButtonTitleText"/>
 
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content">
+
+                                            <TextView
+                                                android:id="@+id/learning_language_text"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="@string/russian"
+                                                style="@style/RadioButtonSubTitleText"/>
+
+                                        </LinearLayout>
                                     </LinearLayout>
 
+                                    <ImageButton
+                                        android:layout_width="45dp"
+                                        android:layout_height="45dp"
+                                        style="@style/ImageDownload"
+                                        app:srcCompat="@drawable/download">
+                                    </ImageButton>
                                 </LinearLayout>
-
                             </com.google.android.material.card.MaterialCardView>
 
                         </LinearLayout>
