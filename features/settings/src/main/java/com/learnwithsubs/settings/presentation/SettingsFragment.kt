@@ -1,7 +1,6 @@
 package com.learnwithsubs.settings.presentation
 
 import android.content.Context
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +17,7 @@ import com.learnwithsubs.settings.di.DaggerSettingsAppComponent
 import com.learnwithsubs.settings.di.SettingsAppModule
 import com.learnwithsubs.settings.presentation.settings.SettingsViewModel
 import com.learnwithsubs.settings.presentation.settings.SettingsViewModelFactory
+import java.lang.reflect.Field
 import javax.inject.Inject
 
 
@@ -134,7 +134,7 @@ class SettingsFragment : Fragment() {
 
         settingsBinding.nativeLanguageDownload.setOnClickListener{
             val modelManager = RemoteModelManager.getInstance()
-            val language = vm.getTwoFirst(settingsBinding.nativeLanguageText.text.toString())
+            val language = convertToISO639(settingsBinding.nativeLanguageText.text.toString()) ?: return@setOnClickListener
             val model = TranslateRemoteModel.Builder(language).build()
             modelManager.download(model, DownloadConditions.Builder().build())
                 .addOnSuccessListener {
@@ -148,7 +148,7 @@ class SettingsFragment : Fragment() {
 
         settingsBinding.learningLanguageDownload.setOnClickListener{
             val modelManager = RemoteModelManager.getInstance()
-            val language = vm.getTwoFirst(settingsBinding.learningLanguageText.text.toString())
+            val language = convertToISO639(settingsBinding.learningLanguageText.text.toString()) ?: return@setOnClickListener
             val model = TranslateRemoteModel.Builder(language).build()
             modelManager.download(model, DownloadConditions.Builder().build())
                 .addOnSuccessListener {
@@ -163,15 +163,14 @@ class SettingsFragment : Fragment() {
         changeDownloadButtonVisibility(selectedText = settingsBinding.translatorSourceText.text.toString())
         checkIsLanguagesDownload()
 
-
         return settingsBinding.root
     }
 
     private fun checkIsLanguagesDownload() {
         RemoteModelManager.getInstance().getDownloadedModels(TranslateRemoteModel::class.java)
             .addOnSuccessListener { models ->
-                val isNativeModelDownloaded = models.any { it.language == vm.getTwoFirst(settingsBinding.nativeLanguageText.text.toString()) }
-                val isLearningModelDownloaded = models.any { it.language == vm.getTwoFirst(settingsBinding.learningLanguageText.text.toString()) }
+                val isNativeModelDownloaded = models.any { it.language == convertToISO639(settingsBinding.nativeLanguageText.text.toString()) }
+                val isLearningModelDownloaded = models.any { it.language == convertToISO639(settingsBinding.learningLanguageText.text.toString()) }
 
                 if (isNativeModelDownloaded) {
                     showOnlyNative(settingsBinding.nativeLanguageCheck)
@@ -206,7 +205,17 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    
+    private fun convertToISO639(word: String): String? { //TODO
+        val fields: Array<Field> = R.string::class.java.fields
+        for (field in fields) {
+            val id = field.getInt(field)
+            val str = resources.getString(id)
+            if (str == word) {
+                return field.name.substring(0, 2).lowercase()
+            }
+        }
+        return null
+    }
 
     private fun changeDownloadButtonVisibility(selectedText: String) {
         if (selectedText == getString(R.string.android)) {
