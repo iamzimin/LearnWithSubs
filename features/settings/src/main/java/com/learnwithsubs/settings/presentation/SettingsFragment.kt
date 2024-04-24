@@ -1,14 +1,19 @@
 package com.learnwithsubs.settings.presentation
 
 import android.content.Context
+import android.content.res.Resources
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.iterator
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.settings.R
 import com.example.settings.databinding.FragmentSettingsBinding
+import com.google.mlkit.common.model.DownloadConditions
+import com.google.mlkit.common.model.RemoteModelManager
+import com.google.mlkit.nl.translate.TranslateRemoteModel
 import com.learnwithsubs.settings.di.DaggerSettingsAppComponent
 import com.learnwithsubs.settings.di.SettingsAppModule
 import com.learnwithsubs.settings.presentation.settings.SettingsViewModel
@@ -21,7 +26,7 @@ class SettingsFragment : Fragment() {
     lateinit var vmFactory: SettingsViewModelFactory
     private lateinit var vm: SettingsViewModel
 
-    private lateinit var settingsFragmentBinding: FragmentSettingsBinding
+    private lateinit var settingsBinding: FragmentSettingsBinding
 
     private val appContext: Context by lazy { requireContext() }
 
@@ -31,106 +36,184 @@ class SettingsFragment : Fragment() {
         DaggerSettingsAppComponent.builder().settingsAppModule(SettingsAppModule(context = appContext)).build().inject(this)
         vm = ViewModelProvider(this, vmFactory)[SettingsViewModel::class.java]
 
-        settingsFragmentBinding = FragmentSettingsBinding.inflate(inflater, container, false)
+        settingsBinding = FragmentSettingsBinding.inflate(inflater, container, false)
 
         val languages: Array<String> = arrayOf(getString(R.string.english), getString(R.string.russian), getString(R.string.spain))
         val styles: Array<String> = arrayOf(getString(R.string.light), getString(R.string.dark))
         val translatorSource: Array<String> = arrayOf(getString(R.string.server), getString(R.string.yandex), getString(R.string.android))
-        val nativeLanguage: Array<String> = arrayOf(getString(R.string.english), getString(R.string.russian), getString(R.string.spain))
-        val learningLanguage: Array<String> = arrayOf(getString(R.string.english), getString(R.string.russian), getString(R.string.spain))
+        val nativeLanguage: Array<String> = arrayOf(getString(R.string.english), getString(R.string.russian), getString(R.string.spain), getString(R.string.french), getString(R.string.japanese), getString(R.string.italian), getString(R.string.german))
+        val learningLanguage: Array<String> =  arrayOf(getString(R.string.english), getString(R.string.russian), getString(R.string.spain), getString(R.string.french), getString(R.string.japanese), getString(R.string.italian), getString(R.string.german))
 
-        settingsFragmentBinding.languageText.text = vm.getAppLanguage()
-        settingsFragmentBinding.styleText.text = vm.getAppStyle()
-        settingsFragmentBinding.translatorSourceText.text = vm.getTranslatorSource()
-        settingsFragmentBinding.nativeLanguageText.text = vm.getNativeLanguage()
-        settingsFragmentBinding.learningLanguageText.text = vm.getLearningLanguage()
+        settingsBinding.languageText.text = vm.getAppLanguage()
+        settingsBinding.styleText.text = vm.getAppStyle()
+        settingsBinding.translatorSourceText.text = vm.getTranslatorSource()
+        settingsBinding.nativeLanguageText.text = vm.getNativeLanguage()
+        settingsBinding.learningLanguageText.text = vm.getLearningLanguage()
 
 
         val languageDialog = RadioButtonSelectionDialog(
             fragment = this@SettingsFragment,
             title = getString(R.string.language),
             options = languages,
-            selected = settingsFragmentBinding.languageText.text.toString(),
+            selected = settingsBinding.languageText.text.toString(),
         )
         val styleDialog = RadioButtonSelectionDialog(
             fragment = this@SettingsFragment,
             title = getString(R.string.style),
             options = styles,
-            selected = settingsFragmentBinding.styleText.text.toString(),
+            selected = settingsBinding.styleText.text.toString(),
         )
         val translatorSourceDialog = RadioButtonSelectionDialog(
             fragment = this@SettingsFragment,
             title = getString(R.string.translator_source),
             options = translatorSource,
-            selected = settingsFragmentBinding.translatorSourceText.text.toString(),
+            selected = settingsBinding.translatorSourceText.text.toString(),
         )
         val nativeLanguageDialog = RadioButtonSelectionDialog(
             fragment = this@SettingsFragment,
             title = getString(R.string.native_language),
             options = nativeLanguage,
-            selected = settingsFragmentBinding.nativeLanguageText.text.toString(),
+            selected = settingsBinding.nativeLanguageText.text.toString(),
         )
         val learningLanguageDialog = RadioButtonSelectionDialog(
             fragment = this@SettingsFragment,
             title = getString(R.string.learning_language),
             options = learningLanguage,
-            selected = settingsFragmentBinding.learningLanguageText.text.toString(),
+            selected = settingsBinding.learningLanguageText.text.toString(),
         )
 
 
-        settingsFragmentBinding.languageCard.setOnClickListener {
+        // Language change
+        settingsBinding.languageCard.setOnClickListener {
             languageDialog.openMenu()
         }
         languageDialog.setOnItemSelectedListener { selectedText ->
             vm.saveAppLanguage(language = selectedText)
-            settingsFragmentBinding.languageText.text = selectedText
+            settingsBinding.languageText.text = selectedText
         }
 
-        settingsFragmentBinding.styleCard.setOnClickListener {
+        // Style change
+        settingsBinding.styleCard.setOnClickListener {
             styleDialog.openMenu()
         }
         styleDialog.setOnItemSelectedListener { selectedText ->
             vm.saveAppStyle(appStyle = selectedText)
-            settingsFragmentBinding.styleText.text = selectedText
+            settingsBinding.styleText.text = selectedText
         }
 
-        settingsFragmentBinding.translatorSourceCard.setOnClickListener {
+        // Translator type change
+        settingsBinding.translatorSourceCard.setOnClickListener {
             translatorSourceDialog.openMenu()
         }
         translatorSourceDialog.setOnItemSelectedListener { selectedText ->
             vm.saveTranslatorSource(source = selectedText)
-            settingsFragmentBinding.translatorSourceText.text = selectedText
+            settingsBinding.translatorSourceText.text = selectedText
             changeDownloadButtonVisibility(selectedText = selectedText)
         }
 
-        settingsFragmentBinding.nativeLanguageCard.setOnClickListener {
+        // Native language change
+        settingsBinding.nativeLanguageCard.setOnClickListener {
             nativeLanguageDialog.openMenu()
         }
         nativeLanguageDialog.setOnItemSelectedListener { selectedText ->
             vm.saveNativeLanguage(nativeLanguage = selectedText)
-            settingsFragmentBinding.nativeLanguageText.text = selectedText
+            settingsBinding.nativeLanguageText.text = selectedText
+            checkIsLanguagesDownload()
         }
 
-        settingsFragmentBinding.learningLanguageCard.setOnClickListener {
+        // Learning language change
+        settingsBinding.learningLanguageCard.setOnClickListener {
             learningLanguageDialog.openMenu()
         }
         learningLanguageDialog.setOnItemSelectedListener { selectedText ->
             vm.saveLearningLanguage(learningLanguage = selectedText)
-            settingsFragmentBinding.learningLanguageText.text = selectedText
+            settingsBinding.learningLanguageText.text = selectedText
+            checkIsLanguagesDownload()
         }
 
-        changeDownloadButtonVisibility(selectedText = settingsFragmentBinding.translatorSourceText.text.toString())
 
-        return settingsFragmentBinding.root
+        settingsBinding.nativeLanguageDownload.setOnClickListener{
+            val modelManager = RemoteModelManager.getInstance()
+            val language = vm.getTwoFirst(settingsBinding.nativeLanguageText.text.toString())
+            val model = TranslateRemoteModel.Builder(language).build()
+            modelManager.download(model, DownloadConditions.Builder().build())
+                .addOnSuccessListener {
+                    showOnlyNative(settingsBinding.nativeLanguageCheck)
+                }
+                .addOnFailureListener {
+                    showOnlyNative(settingsBinding.nativeLanguageDownload)
+                }
+            showOnlyNative(settingsBinding.nativeLanguageProgress)
+        }
+
+        settingsBinding.learningLanguageDownload.setOnClickListener{
+            val modelManager = RemoteModelManager.getInstance()
+            val language = vm.getTwoFirst(settingsBinding.learningLanguageText.text.toString())
+            val model = TranslateRemoteModel.Builder(language).build()
+            modelManager.download(model, DownloadConditions.Builder().build())
+                .addOnSuccessListener {
+                    showOnlyLearning(settingsBinding.learningLanguageCheck)
+                }
+                .addOnFailureListener {
+                    showOnlyLearning(settingsBinding.learningLanguageDownload)
+                }
+            showOnlyLearning(settingsBinding.learningLanguageProgress)
+        }
+
+        changeDownloadButtonVisibility(selectedText = settingsBinding.translatorSourceText.text.toString())
+        checkIsLanguagesDownload()
+
+
+        return settingsBinding.root
     }
+
+    private fun checkIsLanguagesDownload() {
+        RemoteModelManager.getInstance().getDownloadedModels(TranslateRemoteModel::class.java)
+            .addOnSuccessListener { models ->
+                val isNativeModelDownloaded = models.any { it.language == vm.getTwoFirst(settingsBinding.nativeLanguageText.text.toString()) }
+                val isLearningModelDownloaded = models.any { it.language == vm.getTwoFirst(settingsBinding.learningLanguageText.text.toString()) }
+
+                if (isNativeModelDownloaded) {
+                    showOnlyNative(settingsBinding.nativeLanguageCheck)
+                } else {
+                    showOnlyNative(settingsBinding.nativeLanguageDownload)
+                }
+
+                if (isLearningModelDownloaded) {
+                    showOnlyLearning(settingsBinding.learningLanguageCheck)
+                } else {
+                    showOnlyLearning(settingsBinding.learningLanguageDownload)
+                }
+            }
+    }
+
+    private fun showOnlyLearning(viewToShow: View?) {
+        for (layout in settingsBinding.learningGroup) {
+            if (layout == viewToShow) {
+                layout.visibility = View.VISIBLE
+            } else {
+                layout.visibility = View.GONE
+            }
+        }
+    }
+    private fun showOnlyNative(viewToShow: View?) {
+        for (layout in settingsBinding.nativeGroup) {
+            if (layout == viewToShow) {
+                layout.visibility = View.VISIBLE
+            } else {
+                layout.visibility = View.GONE
+            }
+        }
+    }
+
+    
 
     private fun changeDownloadButtonVisibility(selectedText: String) {
         if (selectedText == getString(R.string.android)) {
-            settingsFragmentBinding.nativeLanguageDownload.visibility = View.VISIBLE
-            settingsFragmentBinding.learningLanguageDownload.visibility = View.VISIBLE
+            checkIsLanguagesDownload()
         } else {
-            settingsFragmentBinding.nativeLanguageDownload.visibility = View.GONE
-            settingsFragmentBinding.learningLanguageDownload.visibility = View.GONE
+            showOnlyLearning(null)
+            showOnlyNative(null)
         }
     }
 }

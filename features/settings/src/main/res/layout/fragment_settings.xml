@@ -275,13 +275,37 @@
 
                                     </LinearLayout>
 
-                                    <ImageButton
-                                        android:id="@+id/native_language_download"
-                                        android:layout_width="45dp"
-                                        android:layout_height="45dp"
-                                        style="@style/ImageDownload"
-                                        app:srcCompat="@drawable/download">
-                                    </ImageButton>
+
+                                    <LinearLayout
+                                        android:id="@+id/native_group"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center">
+
+                                        <ImageButton
+                                            android:id="@+id/native_language_download"
+                                            android:layout_width="45dp"
+                                            android:layout_height="45dp"
+                                            style="@style/ImageDownload"
+                                            app:srcCompat="@drawable/download"/>
+
+                                        <ImageView
+                                            android:id="@+id/native_language_check"
+                                            android:layout_width="45dp"
+                                            android:layout_height="45dp"
+                                            style="@style/ImageDownload"
+                                            android:visibility="gone"
+                                            android:clickable="false"
+                                            android:focusable="false"
+                                            app:srcCompat="@drawable/check"/>
+
+                                        <ProgressBar
+                                            android:id="@+id/native_language_progress"
+                                            android:layout_width="45dp"
+                                            android:layout_height="45dp"
+                                            style="@style/ImageDownload"
+                                            android:visibility="gone"/>
+                                    </LinearLayout>
                                 </LinearLayout>
                             </com.google.android.material.card.MaterialCardView>
                         </LinearLayout>
@@ -334,13 +358,39 @@
                                         </LinearLayout>
                                     </LinearLayout>
 
-                                    <ImageButton
-                                        android:id="@+id/learning_language_download"
-                                        android:layout_width="45dp"
-                                        android:layout_height="45dp"
-                                        style="@style/ImageDownload"
-                                        app:srcCompat="@drawable/download">
-                                    </ImageButton>
+                                    <LinearLayout
+                                        android:id="@+id/learning_group"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center">
+
+                                        <ImageButton
+                                            android:id="@+id/learning_language_download"
+                                            android:layout_width="45dp"
+                                            android:layout_height="45dp"
+                                            style="@style/ImageDownload"
+                                            app:srcCompat="@drawable/download">
+                                        </ImageButton>
+
+                                        <ImageView
+                                            android:id="@+id/learning_language_check"
+                                            android:layout_width="45dp"
+                                            android:layout_height="45dp"
+                                            style="@style/ImageDownload"
+                                            android:visibility="gone"
+                                            android:clickable="false"
+                                            android:focusable="false"
+                                            app:srcCompat="@drawable/check">
+                                        </ImageView>
+
+                                        <ProgressBar
+                                            android:id="@+id/learning_language_progress"
+                                            android:layout_width="45dp"
+                                            android:layout_height="45dp"
+                                            style="@style/ImageDownload"
+                                            android:visibility="gone"/>
+
+                                    </LinearLayout>
                                 </LinearLayout>
                             </com.google.android.material.card.MaterialCardView>
 

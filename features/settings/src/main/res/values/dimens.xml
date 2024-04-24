@@ -2,4 +2,5 @@
 <resources>
     <dimen name="radio_button_text_start_padding">8sp</dimen>
     <dimen name="radio_button_text_vertical_padding">10sp</dimen>
+    <dimen name="section_name">20sp</dimen>
 </resources>

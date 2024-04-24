@@ -9,6 +9,10 @@
     <string name="english">English</string>
     <string name="russian">Russian</string>
     <string name="spain">Spain</string>
+    <string name="french">French</string>
+    <string name="japanese">Japanese</string>
+    <string name="italian">Italian</string>
+    <string name="german">German</string>
 
     <string name="style">Style</string>
     <string name="dark">Dark</string>

@@ -9,6 +9,14 @@ class SettingsViewModel @Inject constructor(
     val settingsUseCases: SettingsUseCases,
 ) : ViewModel() {
 
+    fun getTwoFirst(string: String): String {
+        return if (string.length >= 2) {
+            string.substring(0, 2).lowercase()
+        } else {
+            string
+        }
+    }
+
     fun saveAppLanguage(language: String) {
         settingsUseCases.saveAppLanguage.invoke(language = language)
     }
