@@ -5,7 +5,7 @@ import com.learnwithsubs.shared_preference_settings.domain.repository.SharedPref
 class GetLearningLanguage(
     private val sharedPreferenceSettings: SharedPreferenceSettings
 ) {
-    fun invoke(): String {
+    fun invoke(): Pair<String, String> {
         return sharedPreferenceSettings.getLearningLanguage()
     }
 }

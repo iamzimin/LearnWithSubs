@@ -24,7 +24,7 @@ class SettingsViewModel @Inject constructor(
     fun saveAppLanguage(language: String) {
         settingsUseCases.saveAppLanguage.invoke(language = language)
     }
-    fun getAppLanguage(): String {
+    fun getAppLanguage(): Pair<String, String> {
         return settingsUseCases.getAppLanguage.invoke()
     }
 
@@ -45,14 +45,14 @@ class SettingsViewModel @Inject constructor(
     fun saveNativeLanguage(nativeLanguage: String) {
         settingsUseCases.saveNativeLanguage.invoke(nativeLanguage = nativeLanguage)
     }
-    fun getNativeLanguage(): String {
+    fun getNativeLanguage(): Pair<String, String> {
         return settingsUseCases.getNativeLanguage.invoke()
     }
 
     fun saveLearningLanguage(learningLanguage: String) {
         settingsUseCases.saveLearningLanguage.invoke(learningLanguage = learningLanguage)
     }
-    fun getLearningLanguage(): String {
+    fun getLearningLanguage(): Pair<String, String> {
         return settingsUseCases.getLearningLanguage.invoke()
     }
 }

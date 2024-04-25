@@ -66,7 +66,7 @@ class SharedPreferenceSettingsImpl(private val context: Context) : SharedPrefere
         editor.putInt(KEY_APP_LANGUAGE, languageId)
         editor.apply()
     }
-    override fun getAppLanguage(): String {
+    override fun getAppLanguage(): Pair<String, String> {
         val languageId = sharedPreferences.getInt(KEY_APP_LANGUAGE, 1)
         return languageIdToString(id = languageId, context = context)
     }
@@ -97,7 +97,7 @@ class SharedPreferenceSettingsImpl(private val context: Context) : SharedPrefere
         editor.putInt(KEY_NATIVE_LANGUAGE, languageId)
         editor.apply()
     }
-    override fun getNativeLanguage(): String {
+    override fun getNativeLanguage(): Pair<String, String> {
         val languageId = sharedPreferences.getInt(KEY_NATIVE_LANGUAGE, 1)
         return languageIdToString(id = languageId, context = context)
     }
@@ -107,7 +107,7 @@ class SharedPreferenceSettingsImpl(private val context: Context) : SharedPrefere
         editor.putInt(KEY_LEARNING_LANGUAGE, languageId)
         editor.apply()
     }
-    override fun getLearningLanguage(): String {
+    override fun getLearningLanguage(): Pair<String, String> {
         val languageId = sharedPreferences.getInt(KEY_LEARNING_LANGUAGE, 2)
         return languageIdToString(id = languageId, context = context)
     }

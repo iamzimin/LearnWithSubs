@@ -7,7 +7,7 @@ interface SharedPreferenceSettings {
     fun getAllTranslatorLanguages(): Array<String>
 
     fun saveAppLanguage(language: String)
-    fun getAppLanguage(): String
+    fun getAppLanguage(): Pair<String, String>
 
     fun saveAppStyle(appStyle: String)
     fun getAppStyle(): String
@@ -16,8 +16,8 @@ interface SharedPreferenceSettings {
     fun getTranslatorSource(): String
 
     fun saveNativeLanguage(nativeLanguage: String)
-    fun getNativeLanguage(): String
+    fun getNativeLanguage(): Pair<String, String>
 
     fun saveLearningLanguage(learningLanguage: String)
-    fun getLearningLanguage(): String
+    fun getLearningLanguage(): Pair<String, String>
 }

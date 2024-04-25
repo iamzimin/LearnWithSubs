@@ -44,11 +44,11 @@ class SettingsFragment : Fragment() {
         val nativeLanguage: Array<String> = vm.getAllTranslatorLanguages()
         val learningLanguage: Array<String> = vm.getAllTranslatorLanguages()
 
-        settingsBinding.languageText.text = vm.getAppLanguage()
+        settingsBinding.languageText.text = vm.getAppLanguage().first
         settingsBinding.styleText.text = vm.getAppStyle()
         settingsBinding.translatorSourceText.text = vm.getTranslatorSource()
-        settingsBinding.nativeLanguageText.text = vm.getNativeLanguage()
-        settingsBinding.learningLanguageText.text = vm.getLearningLanguage()
+        settingsBinding.nativeLanguageText.text = vm.getNativeLanguage().first
+        settingsBinding.learningLanguageText.text = vm.getLearningLanguage().first
 
 
         val languageDialog = RadioButtonSelectionDialog(
