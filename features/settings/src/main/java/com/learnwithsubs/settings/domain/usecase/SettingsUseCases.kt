@@ -1,6 +1,11 @@
 package com.learnwithsubs.settings.domain.usecase
 
 data class SettingsUseCases(
+    val getAllAppLanguages: GetAllAppLanguages,
+    val getAllStyles: GetAllStyles,
+    val getAllTranslatorLanguages: GetAllTranslatorLanguages,
+    val getAllTranslatorSource: GetAllTranslatorSource,
+
     val saveAppLanguage: SaveAppLanguage,
     val getAppLanguage: GetAppLanguage,
 

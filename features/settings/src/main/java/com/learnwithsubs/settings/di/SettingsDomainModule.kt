@@ -1,6 +1,10 @@
 package com.learnwithsubs.settings.di
 
 import com.learnwithsubs.settings.domain.repository.SettingsRepository
+import com.learnwithsubs.settings.domain.usecase.GetAllAppLanguages
+import com.learnwithsubs.settings.domain.usecase.GetAllStyles
+import com.learnwithsubs.settings.domain.usecase.GetAllTranslatorLanguages
+import com.learnwithsubs.settings.domain.usecase.GetAllTranslatorSource
 import com.learnwithsubs.settings.domain.usecase.GetAppLanguage
 import com.learnwithsubs.settings.domain.usecase.GetAppStyle
 import com.learnwithsubs.settings.domain.usecase.GetLearningLanguage
@@ -26,6 +30,11 @@ class SettingsDomainModule {
         sharedPreferenceSettings: SharedPreferenceSettings,
     ): SettingsUseCases {
         return SettingsUseCases(
+            getAllAppLanguages = GetAllAppLanguages(sharedPreferenceSettings = sharedPreferenceSettings),
+            getAllStyles = GetAllStyles(sharedPreferenceSettings = sharedPreferenceSettings),
+            getAllTranslatorLanguages = GetAllTranslatorLanguages(sharedPreferenceSettings = sharedPreferenceSettings),
+            getAllTranslatorSource = GetAllTranslatorSource(sharedPreferenceSettings = sharedPreferenceSettings),
+
             saveAppLanguage = SaveAppLanguage(sharedPreferenceSettings = sharedPreferenceSettings),
             getAppLanguage = GetAppLanguage(sharedPreferenceSettings = sharedPreferenceSettings),
 

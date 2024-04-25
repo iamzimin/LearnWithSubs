@@ -5,7 +5,7 @@ import com.learnwithsubs.shared_preference_settings.domain.repository.SharedPref
 class GetTranslatorSource(
     private val sharedPreferenceSettings: SharedPreferenceSettings
 ) {
-    fun invoke(): String? {
+    fun invoke(): String {
         return sharedPreferenceSettings.getTranslatorSource()
     }
 }

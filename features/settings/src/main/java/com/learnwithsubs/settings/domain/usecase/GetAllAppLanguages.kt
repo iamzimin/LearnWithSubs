@@ -2,10 +2,10 @@ package com.learnwithsubs.settings.domain.usecase
 
 import com.learnwithsubs.shared_preference_settings.domain.repository.SharedPreferenceSettings
 
-class GetLearningLanguage(
+class GetAllAppLanguages(
     private val sharedPreferenceSettings: SharedPreferenceSettings
 ) {
-    fun invoke(): String {
-        return sharedPreferenceSettings.getLearningLanguage()
+    fun invoke(): Array<String> {
+        return sharedPreferenceSettings.getAllAppLanguages()
     }
 }

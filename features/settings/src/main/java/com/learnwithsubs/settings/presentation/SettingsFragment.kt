@@ -38,11 +38,11 @@ class SettingsFragment : Fragment() {
 
         settingsBinding = FragmentSettingsBinding.inflate(inflater, container, false)
 
-        val languages: Array<String> = arrayOf(getString(R.string.english), getString(R.string.russian), getString(R.string.spain))
-        val styles: Array<String> = arrayOf(getString(R.string.light), getString(R.string.dark))
-        val translatorSource: Array<String> = arrayOf(getString(R.string.server), getString(R.string.yandex), getString(R.string.android))
-        val nativeLanguage: Array<String> = arrayOf(getString(R.string.english), getString(R.string.russian), getString(R.string.spain), getString(R.string.french), getString(R.string.japanese), getString(R.string.italian), getString(R.string.german))
-        val learningLanguage: Array<String> =  arrayOf(getString(R.string.english), getString(R.string.russian), getString(R.string.spain), getString(R.string.french), getString(R.string.japanese), getString(R.string.italian), getString(R.string.german))
+        val languages: Array<String> = vm.getAllAppLanguages()
+        val styles: Array<String> = vm.getAllStyles()
+        val translatorSource: Array<String> = vm.getAllTranslatorSource()
+        val nativeLanguage: Array<String> = vm.getAllTranslatorLanguages()
+        val learningLanguage: Array<String> = vm.getAllTranslatorLanguages()
 
         settingsBinding.languageText.text = vm.getAppLanguage()
         settingsBinding.styleText.text = vm.getAppStyle()
@@ -218,7 +218,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun changeDownloadButtonVisibility(selectedText: String) {
-        if (selectedText == getString(R.string.android)) {
+        if (selectedText == getString(com.learnwithsubs.shared_preference_settings.R.string.android)) {
             checkIsLanguagesDownload()
         } else {
             showOnlyLearning(null)

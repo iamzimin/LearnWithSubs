@@ -3,7 +3,13 @@ package com.learnwithsubs.shared_preference_settings.data.repository
 import android.content.Context
 import android.content.SharedPreferences
 import com.learnwithsubs.shared_preference_settings.R
+import com.learnwithsubs.shared_preference_settings.domain.languageIdToString
+import com.learnwithsubs.shared_preference_settings.domain.stringToLanguageId
 import com.learnwithsubs.shared_preference_settings.domain.repository.SharedPreferenceSettings
+import com.learnwithsubs.shared_preference_settings.domain.stringToStyleId
+import com.learnwithsubs.shared_preference_settings.domain.stringToTranslatorSourceId
+import com.learnwithsubs.shared_preference_settings.domain.styleIdToString
+import com.learnwithsubs.shared_preference_settings.domain.translatorSourceIdToString
 
 class SharedPreferenceSettingsImpl(private val context: Context) : SharedPreferenceSettings {
     companion object {
@@ -19,48 +25,90 @@ class SharedPreferenceSettingsImpl(private val context: Context) : SharedPrefere
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE)
     private val editor: SharedPreferences.Editor = sharedPreferences.edit()
 
-    override fun saveAppLanguage(language: String) {
-        editor.putString(KEY_APP_LANGUAGE, language)
-        editor.apply()
+    override fun getAllAppLanguages(): Array<String> {
+        return arrayOf(
+            context.getString(R.string.english),
+            context.getString(R.string.russian),
+            context.getString(R.string.spain),
+            context.getString(R.string.french),
+            context.getString(R.string.japanese),
+            context.getString(R.string.italian),
+            context.getString(R.string.german),
+        )
     }
 
-    override fun getAppLanguage(): String? {
-        return sharedPreferences.getString(KEY_APP_LANGUAGE, context.getString(R.string.english))
+    override fun getAllStyles(): Array<String> {
+        return arrayOf(
+            context.getString(R.string.light),
+            context.getString(R.string.dark),
+        )
     }
+
+    override fun getAllTranslatorSource(): Array<String> {
+        return arrayOf(
+            context.getString(R.string.server),
+            context.getString(R.string.yandex),
+            context.getString(R.string.android),
+        )
+    }
+
+    override fun getAllTranslatorLanguages(): Array<String> {
+        return arrayOf(
+            context.getString(R.string.english),
+            context.getString(R.string.russian),
+            context.getString(R.string.spain),
+        )
+    }
+
+
+    override fun saveAppLanguage(language: String) {
+        val languageId = stringToLanguageId(language = language, context = context)
+        editor.putInt(KEY_APP_LANGUAGE, languageId)
+        editor.apply()
+    }
+    override fun getAppLanguage(): String {
+        val languageId = sharedPreferences.getInt(KEY_APP_LANGUAGE, 1)
+        return languageIdToString(id = languageId, context = context)
+    }
+
 
     override fun saveAppStyle(appStyle: String) {
-        editor.putString(KEY_APP_STYLE, appStyle)
+        val styleId = stringToStyleId(style = appStyle, context = context)
+        editor.putInt(KEY_APP_STYLE, styleId)
         editor.apply()
     }
-
-    override fun getAppStyle(): String? {
-        return sharedPreferences.getString(KEY_APP_STYLE, context.getString(R.string.dark))
+    override fun getAppStyle(): String {
+        val styleId = sharedPreferences.getInt(KEY_APP_STYLE, 1)
+        return styleIdToString(id = styleId, context = context)
     }
 
     override fun saveTranslatorSource(source: String) {
-        editor.putString(KEY_TRANSLATOR_SOURCE, source)
+        val languageId = stringToTranslatorSourceId(translatorSource = source, context = context)
+        editor.putInt(KEY_TRANSLATOR_SOURCE, languageId)
         editor.apply()
     }
-
-    override fun getTranslatorSource(): String? {
-        return sharedPreferences.getString(KEY_TRANSLATOR_SOURCE, context.getString(R.string.android))
+    override fun getTranslatorSource(): String {
+        val languageId = sharedPreferences.getInt(KEY_TRANSLATOR_SOURCE, 1)
+        return translatorSourceIdToString(id = languageId, context = context)
     }
 
     override fun saveNativeLanguage(nativeLanguage: String) {
-        editor.putString(KEY_NATIVE_LANGUAGE, nativeLanguage)
+        val languageId = stringToLanguageId(language = nativeLanguage, context = context)
+        editor.putInt(KEY_NATIVE_LANGUAGE, languageId)
         editor.apply()
     }
-
-    override fun getNativeLanguage(): String? {
-        return sharedPreferences.getString(KEY_NATIVE_LANGUAGE, context.getString(R.string.russian))
+    override fun getNativeLanguage(): String {
+        val languageId = sharedPreferences.getInt(KEY_NATIVE_LANGUAGE, 1)
+        return languageIdToString(id = languageId, context = context)
     }
 
     override fun saveLearningLanguage(learningLanguage: String) {
-        editor.putString(KEY_LEARNING_LANGUAGE, learningLanguage)
+        val languageId = stringToLanguageId(language = learningLanguage, context = context)
+        editor.putInt(KEY_LEARNING_LANGUAGE, languageId)
         editor.apply()
     }
-
-    override fun getLearningLanguage(): String? {
-        return sharedPreferences.getString(KEY_LEARNING_LANGUAGE, context.getString(R.string.english))
+    override fun getLearningLanguage(): String {
+        val languageId = sharedPreferences.getInt(KEY_LEARNING_LANGUAGE, 2)
+        return languageIdToString(id = languageId, context = context)
     }
 }
