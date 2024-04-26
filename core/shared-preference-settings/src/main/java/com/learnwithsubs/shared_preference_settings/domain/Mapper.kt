@@ -7,22 +7,16 @@ import java.util.Locale
 
 
 fun languageIdToString(id: Int, context: Context): Pair<String, String> {
-    val resourceId = when (id) {
-        1 -> R.string.english
-        2 -> R.string.russian
-        3 -> R.string.spain
-        4 -> R.string.french
-        5 -> R.string.japanese
-        6 -> R.string.italian
-        7 -> R.string.german
+    return when (id) {
+        1 -> Pair(context.getString(R.string.english), "en")
+        2 -> Pair(context.getString(R.string.russian), "ru")
+        3 -> Pair(context.getString(R.string.spain), "es")
+        4 -> Pair(context.getString(R.string.french), "fr")
+        5 -> Pair(context.getString(R.string.japanese), "ja")
+        6 -> Pair(context.getString(R.string.italian), "it")
+        7 -> Pair(context.getString(R.string.german), "de")
         else -> throw IllegalArgumentException("Invalid language ID")
     }
-    val config = Configuration(context.resources.configuration)
-    config.setLocale(Locale("en"))
-    val englishString = context.createConfigurationContext(config).getText(resourceId).toString()
-    val firstTwoLetters = englishString.take(2).lowercase()
-
-    return Pair(context.getString(resourceId), firstTwoLetters)
 }
 fun stringToLanguageId(language: String, context: Context): Int {
     return when (language) {

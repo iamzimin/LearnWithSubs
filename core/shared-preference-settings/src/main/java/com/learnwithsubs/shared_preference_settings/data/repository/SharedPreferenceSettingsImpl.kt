@@ -57,6 +57,8 @@ class SharedPreferenceSettingsImpl(private val context: Context) : SharedPrefere
             context.getString(R.string.english),
             context.getString(R.string.russian),
             context.getString(R.string.spain),
+            context.getString(R.string.japanese),
+            context.getString(R.string.french),
         )
     }
 

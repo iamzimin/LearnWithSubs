@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -28,6 +29,8 @@ class SettingsFragment : Fragment() {
 
     private lateinit var settingsBinding: FragmentSettingsBinding
 
+    private lateinit var nativeLanguagePair: Pair<String, String>
+    private lateinit var learningLanguagePair: Pair<String, String>
     private val appContext: Context by lazy { requireContext() }
 
     override fun onCreateView(
@@ -44,11 +47,14 @@ class SettingsFragment : Fragment() {
         val nativeLanguage: Array<String> = vm.getAllTranslatorLanguages()
         val learningLanguage: Array<String> = vm.getAllTranslatorLanguages()
 
+        nativeLanguagePair = vm.getNativeLanguage()
+        learningLanguagePair = vm.getLearningLanguage()
+
         settingsBinding.languageText.text = vm.getAppLanguage().first
         settingsBinding.styleText.text = vm.getAppStyle()
         settingsBinding.translatorSourceText.text = vm.getTranslatorSource()
-        settingsBinding.nativeLanguageText.text = vm.getNativeLanguage().first
-        settingsBinding.learningLanguageText.text = vm.getLearningLanguage().first
+        settingsBinding.nativeLanguageText.text = nativeLanguagePair.first
+        settingsBinding.learningLanguageText.text = learningLanguagePair.first
 
 
         val languageDialog = RadioButtonSelectionDialog(
@@ -73,13 +79,13 @@ class SettingsFragment : Fragment() {
             fragment = this@SettingsFragment,
             title = getString(R.string.native_language),
             options = nativeLanguage,
-            selected = settingsBinding.nativeLanguageText.text.toString(),
+            selected = nativeLanguagePair.first,
         )
         val learningLanguageDialog = RadioButtonSelectionDialog(
             fragment = this@SettingsFragment,
             title = getString(R.string.learning_language),
             options = learningLanguage,
-            selected = settingsBinding.learningLanguageText.text.toString(),
+            selected = learningLanguagePair.first,
         )
 
 
@@ -117,7 +123,8 @@ class SettingsFragment : Fragment() {
         }
         nativeLanguageDialog.setOnItemSelectedListener { selectedText ->
             vm.saveNativeLanguage(nativeLanguage = selectedText)
-            settingsBinding.nativeLanguageText.text = selectedText
+            nativeLanguagePair = vm.getNativeLanguage()
+            settingsBinding.nativeLanguageText.text = nativeLanguagePair.first
             checkIsLanguagesDownload()
         }
 
@@ -127,20 +134,21 @@ class SettingsFragment : Fragment() {
         }
         learningLanguageDialog.setOnItemSelectedListener { selectedText ->
             vm.saveLearningLanguage(learningLanguage = selectedText)
-            settingsBinding.learningLanguageText.text = selectedText
+            learningLanguagePair = vm.getLearningLanguage()
+            settingsBinding.learningLanguageText.text = learningLanguagePair.first
             checkIsLanguagesDownload()
         }
 
 
         settingsBinding.nativeLanguageDownload.setOnClickListener{
             val modelManager = RemoteModelManager.getInstance()
-            val language = convertToISO639(settingsBinding.nativeLanguageText.text.toString()) ?: return@setOnClickListener
-            val model = TranslateRemoteModel.Builder(language).build()
+            val model = TranslateRemoteModel.Builder(nativeLanguagePair.second).build()
             modelManager.download(model, DownloadConditions.Builder().build())
                 .addOnSuccessListener {
                     showOnlyNative(settingsBinding.nativeLanguageCheck)
                 }
                 .addOnFailureListener {
+                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                     showOnlyNative(settingsBinding.nativeLanguageDownload)
                 }
             showOnlyNative(settingsBinding.nativeLanguageProgress)
@@ -148,13 +156,13 @@ class SettingsFragment : Fragment() {
 
         settingsBinding.learningLanguageDownload.setOnClickListener{
             val modelManager = RemoteModelManager.getInstance()
-            val language = convertToISO639(settingsBinding.learningLanguageText.text.toString()) ?: return@setOnClickListener
-            val model = TranslateRemoteModel.Builder(language).build()
+            val model = TranslateRemoteModel.Builder(learningLanguagePair.second).build()
             modelManager.download(model, DownloadConditions.Builder().build())
                 .addOnSuccessListener {
                     showOnlyLearning(settingsBinding.learningLanguageCheck)
                 }
                 .addOnFailureListener {
+                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                     showOnlyLearning(settingsBinding.learningLanguageDownload)
                 }
             showOnlyLearning(settingsBinding.learningLanguageProgress)
@@ -169,8 +177,8 @@ class SettingsFragment : Fragment() {
     private fun checkIsLanguagesDownload() {
         RemoteModelManager.getInstance().getDownloadedModels(TranslateRemoteModel::class.java)
             .addOnSuccessListener { models ->
-                val isNativeModelDownloaded = models.any { it.language == convertToISO639(settingsBinding.nativeLanguageText.text.toString()) }
-                val isLearningModelDownloaded = models.any { it.language == convertToISO639(settingsBinding.learningLanguageText.text.toString()) }
+                val isNativeModelDownloaded = models.any { it.language == nativeLanguagePair.second }
+                val isLearningModelDownloaded = models.any { it.language == learningLanguagePair.second }
 
                 if (isNativeModelDownloaded) {
                     showOnlyNative(settingsBinding.nativeLanguageCheck)
@@ -203,18 +211,6 @@ class SettingsFragment : Fragment() {
                 layout.visibility = View.GONE
             }
         }
-    }
-
-    private fun convertToISO639(word: String): String? { //TODO
-        val fields: Array<Field> = R.string::class.java.fields
-        for (field in fields) {
-            val id = field.getInt(field)
-            val str = resources.getString(id)
-            if (str == word) {
-                return field.name.substring(0, 2).lowercase()
-            }
-        }
-        return null
     }
 
     private fun changeDownloadButtonVisibility(selectedText: String) {
