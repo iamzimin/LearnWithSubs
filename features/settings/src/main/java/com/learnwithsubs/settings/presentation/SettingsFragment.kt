@@ -125,7 +125,7 @@ class SettingsFragment : Fragment() {
             vm.saveNativeLanguage(nativeLanguage = selectedText)
             nativeLanguagePair = vm.getNativeLanguage()
             settingsBinding.nativeLanguageText.text = nativeLanguagePair.first
-            checkIsLanguagesDownload()
+            checkIsNativeDownloaded()
         }
 
         // Learning language change
@@ -136,7 +136,7 @@ class SettingsFragment : Fragment() {
             vm.saveLearningLanguage(learningLanguage = selectedText)
             learningLanguagePair = vm.getLearningLanguage()
             settingsBinding.learningLanguageText.text = learningLanguagePair.first
-            checkIsLanguagesDownload()
+            checkIsLearningDownloaded()
         }
 
 
@@ -150,6 +150,9 @@ class SettingsFragment : Fragment() {
                 .addOnFailureListener {
                     Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                     showOnlyNative(settingsBinding.nativeLanguageDownload)
+                }
+                .addOnCanceledListener {
+                    showOnlyNative(null)
                 }
             showOnlyNative(settingsBinding.nativeLanguageProgress)
         }
@@ -165,27 +168,25 @@ class SettingsFragment : Fragment() {
                     Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                     showOnlyLearning(settingsBinding.learningLanguageDownload)
                 }
+                .addOnCanceledListener {
+                    showOnlyNative(null)
+                }
             showOnlyLearning(settingsBinding.learningLanguageProgress)
         }
 
         changeDownloadButtonVisibility(selectedText = settingsBinding.translatorSourceText.text.toString())
-        checkIsLanguagesDownload()
 
         return settingsBinding.root
     }
 
     private fun checkIsLanguagesDownload() {
+        checkIsNativeDownloaded()
+        checkIsLearningDownloaded()
+    }
+    private fun checkIsLearningDownloaded() {
         RemoteModelManager.getInstance().getDownloadedModels(TranslateRemoteModel::class.java)
             .addOnSuccessListener { models ->
-                val isNativeModelDownloaded = models.any { it.language == nativeLanguagePair.second }
                 val isLearningModelDownloaded = models.any { it.language == learningLanguagePair.second }
-
-                if (isNativeModelDownloaded) {
-                    showOnlyNative(settingsBinding.nativeLanguageCheck)
-                } else {
-                    showOnlyNative(settingsBinding.nativeLanguageDownload)
-                }
-
                 if (isLearningModelDownloaded) {
                     showOnlyLearning(settingsBinding.learningLanguageCheck)
                 } else {
@@ -193,10 +194,26 @@ class SettingsFragment : Fragment() {
                 }
             }
     }
+    private fun checkIsNativeDownloaded() {
+        RemoteModelManager.getInstance().getDownloadedModels(TranslateRemoteModel::class.java)
+            .addOnSuccessListener { models ->
+                val isNativeModelDownloaded = models.any { it.language == nativeLanguagePair.second }
+                if (isNativeModelDownloaded) {
+                    showOnlyNative(settingsBinding.nativeLanguageCheck)
+                } else {
+                    showOnlyNative(settingsBinding.nativeLanguageDownload)
+                }
+            }
+    }
 
     private fun showOnlyLearning(viewToShow: View?) {
+        var newViewToShow: View? = viewToShow
+        if (settingsBinding.translatorSourceText.text.toString() != getString(com.learnwithsubs.shared_preference_settings.R.string.android)) {
+            newViewToShow = null
+        }
+
         for (layout in settingsBinding.learningGroup) {
-            if (layout == viewToShow) {
+            if (layout == newViewToShow) {
                 layout.visibility = View.VISIBLE
             } else {
                 layout.visibility = View.GONE
@@ -204,8 +221,13 @@ class SettingsFragment : Fragment() {
         }
     }
     private fun showOnlyNative(viewToShow: View?) {
+        var newViewToShow: View? = viewToShow
+        if (settingsBinding.translatorSourceText.text.toString() != getString(com.learnwithsubs.shared_preference_settings.R.string.android)) {
+            newViewToShow = null
+        }
+
         for (layout in settingsBinding.nativeGroup) {
-            if (layout == viewToShow) {
+            if (layout == newViewToShow) {
                 layout.visibility = View.VISIBLE
             } else {
                 layout.visibility = View.GONE
@@ -220,5 +242,6 @@ class SettingsFragment : Fragment() {
             showOnlyLearning(null)
             showOnlyNative(null)
         }
+        val modelManager = RemoteModelManager.getInstance()
     }
 }
