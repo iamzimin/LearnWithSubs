@@ -7,6 +7,7 @@
     <attr name="search_field"/>
 
     <attr name="card_background"/>
+    <attr name="text_color_unavailable"/>
 
 
 

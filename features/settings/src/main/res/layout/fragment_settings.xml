@@ -79,7 +79,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="@string/language"
-                                        style="@style/RadioButtonTitleText"/>
+                                        style="@style/RadioButtonTitleTextAvailable"/>
 
                                     <LinearLayout
                                         android:layout_width="wrap_content"
@@ -90,7 +90,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="@string/english"
-                                            style="@style/RadioButtonSubTitleText"/>
+                                            style="@style/RadioButtonSubTitleTextAvailable"/>
 
                                     </LinearLayout>
 
@@ -125,7 +125,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="@string/style"
-                                        style="@style/RadioButtonTitleText"/>
+                                        style="@style/RadioButtonTitleTextAvailable"/>
 
                                     <LinearLayout
                                         android:layout_width="wrap_content"
@@ -136,7 +136,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="@string/dark"
-                                            style="@style/RadioButtonSubTitleText"/>
+                                            style="@style/RadioButtonSubTitleTextAvailable"/>
 
                                     </LinearLayout>
 
@@ -195,7 +195,8 @@
                                 android:id="@+id/translator_source_card"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                style="@style/CardViewSettingsRadioButton">
+                                style="@style/CardViewSettingsRadioButton"
+                                android:clickable="false">
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -206,7 +207,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="@string/translator_source"
-                                        style="@style/RadioButtonTitleText"/>
+                                        style="@style/RadioButtonTitleTextAvailable"/>
 
                                     <LinearLayout
                                         android:layout_width="wrap_content"
@@ -217,7 +218,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="@string/server"
-                                            style="@style/RadioButtonSubTitleText"/>
+                                            style="@style/RadioButtonSubTitleTextAvailable"/>
 
                                     </LinearLayout>
 
@@ -241,7 +242,8 @@
                                 android:id="@+id/native_language_card"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                style="@style/CardViewSettingsRadioButton">
+                                style="@style/CardViewSettingsRadioButton"
+                                android:clickable="false">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -255,10 +257,11 @@
                                         style="@style/RadioButtonInnerLayout">
 
                                         <TextView
+                                            android:id="@+id/native_language_title"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="@string/native_language"
-                                            style="@style/RadioButtonTitleText"/>
+                                            style="@style/RadioButtonTitleTextAvailable"/>
 
                                         <LinearLayout
                                             android:layout_width="wrap_content"
@@ -269,7 +272,7 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:text="@string/english"
-                                                style="@style/RadioButtonSubTitleText"/>
+                                                style="@style/RadioButtonSubTitleTextAvailable"/>
 
                                         </LinearLayout>
 
@@ -287,6 +290,7 @@
                                             android:layout_width="45dp"
                                             android:layout_height="45dp"
                                             style="@style/ImageDownload"
+                                            android:visibility="gone"
                                             app:srcCompat="@drawable/download"/>
 
                                         <ImageView
@@ -294,6 +298,7 @@
                                             android:layout_width="45dp"
                                             android:layout_height="45dp"
                                             style="@style/ImageDownload"
+                                            android:background="@null"
                                             android:visibility="gone"
                                             android:clickable="false"
                                             android:focusable="false"
@@ -304,7 +309,10 @@
                                             android:layout_width="45dp"
                                             android:layout_height="45dp"
                                             style="@style/ImageDownload"
-                                            android:visibility="gone"/>
+                                            android:background="@null"
+                                            android:visibility="gone"
+                                            android:clickable="false"
+                                            android:focusable="false"/>
                                     </LinearLayout>
                                 </LinearLayout>
                             </com.google.android.material.card.MaterialCardView>
@@ -325,7 +333,8 @@
                                 android:id="@+id/learning_language_card"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                style="@style/CardViewSettingsRadioButton">
+                                style="@style/CardViewSettingsRadioButton"
+                                android:clickable="false">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -339,10 +348,11 @@
                                         style="@style/RadioButtonInnerLayout">
 
                                         <TextView
+                                            android:id="@+id/learning_language_title"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="@string/learning_language"
-                                            style="@style/RadioButtonTitleText"/>
+                                            style="@style/RadioButtonTitleTextAvailable"/>
 
                                         <LinearLayout
                                             android:layout_width="wrap_content"
@@ -353,7 +363,7 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:text="@string/russian"
-                                                style="@style/RadioButtonSubTitleText"/>
+                                                style="@style/RadioButtonSubTitleTextAvailable"/>
 
                                         </LinearLayout>
                                     </LinearLayout>
@@ -369,6 +379,7 @@
                                             android:layout_width="45dp"
                                             android:layout_height="45dp"
                                             style="@style/ImageDownload"
+                                            android:visibility="gone"
                                             app:srcCompat="@drawable/download">
                                         </ImageButton>
 
@@ -377,6 +388,7 @@
                                             android:layout_width="45dp"
                                             android:layout_height="45dp"
                                             style="@style/ImageDownload"
+                                            android:background="@null"
                                             android:visibility="gone"
                                             android:clickable="false"
                                             android:focusable="false"
@@ -388,7 +400,10 @@
                                             android:layout_width="45dp"
                                             android:layout_height="45dp"
                                             style="@style/ImageDownload"
-                                            android:visibility="gone"/>
+                                            android:background="@null"
+                                            android:visibility="gone"
+                                            android:clickable="false"
+                                            android:focusable="false"/>
 
                                     </LinearLayout>
                                 </LinearLayout>
@@ -409,8 +424,6 @@
 
 
     </ScrollView>
-
-
 
 
 

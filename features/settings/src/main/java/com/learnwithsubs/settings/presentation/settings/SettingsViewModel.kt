@@ -1,12 +1,18 @@
 package com.learnwithsubs.settings.presentation.settings
 
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.tasks.Task
 import com.learnwithsubs.settings.domain.usecase.SettingsUseCases
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
     val settingsUseCases: SettingsUseCases,
 ) : ViewModel() {
+    var nativeDownloadingTask: Task<Void>? = null
+    var learningDownloadingTask: Task<Void>? = null
+
+    var nativeLanguagePair: Pair<String, String> = getNativeLanguage()
+    var learningLanguagePair: Pair<String, String> = getLearningLanguage()
 
     fun getAllAppLanguages(): Array<String> {
         return settingsUseCases.getAllAppLanguages.invoke()

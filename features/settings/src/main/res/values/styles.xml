@@ -43,12 +43,20 @@
         <item name="android:orientation">vertical</item>
         <item name="android:layout_marginHorizontal">25sp</item>
     </style>
-    <style name="RadioButtonTitleText">
+    <style name="RadioButtonTitleTextAvailable">
         <item name="android:textColor">?attr/text_color</item>
         <item name="android:textSize">20sp</item>
     </style>
-    <style name="RadioButtonSubTitleText">
+    <style name="RadioButtonTitleTextUnavailable">
+        <item name="android:textColor">@color/text_color_unavailable</item> <!--TODO attr-->
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="RadioButtonSubTitleTextAvailable">
         <item name="android:textColor">?attr/text_color</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="RadioButtonSubTitleTextUnavailable">
+        <item name="android:textColor">@color/text_color_unavailable</item> <!--TODO attr-->
         <item name="android:textSize">15sp</item>
     </style>
 

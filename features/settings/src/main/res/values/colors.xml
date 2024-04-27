@@ -22,6 +22,7 @@
     <color name="background_dark">#2F2E3E</color>
     <color name="text_main_dark">#FFFFFFFF</color>
     <color name="card_background">#4D4D67</color>
+    <color name="text_color_unavailable">#767582</color>
 
 
 

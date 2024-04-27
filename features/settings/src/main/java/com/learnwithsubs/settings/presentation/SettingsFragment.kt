@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -30,13 +29,8 @@ class SettingsFragment : Fragment() {
 
     private lateinit var settingsBinding: FragmentSettingsBinding
 
-    private lateinit var nativeLanguagePair: Pair<String, String>
-    private lateinit var learningLanguagePair: Pair<String, String>
-
-    private var nativeDownloadingTask: Task<Void>? = null
-    private var learningDownloadingTask: Task<Void>? = null
-
     private val appContext: Context by lazy { requireContext() }
+    private val remoteModel: RemoteModelManager = RemoteModelManager.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -52,14 +46,11 @@ class SettingsFragment : Fragment() {
         val nativeLanguage: Array<String> = vm.getAllTranslatorLanguages()
         val learningLanguage: Array<String> = vm.getAllTranslatorLanguages()
 
-        nativeLanguagePair = vm.getNativeLanguage()
-        learningLanguagePair = vm.getLearningLanguage()
-
         settingsBinding.languageText.text = vm.getAppLanguage().first
         settingsBinding.styleText.text = vm.getAppStyle()
         settingsBinding.translatorSourceText.text = vm.getTranslatorSource()
-        settingsBinding.nativeLanguageText.text = nativeLanguagePair.first
-        settingsBinding.learningLanguageText.text = learningLanguagePair.first
+        settingsBinding.nativeLanguageText.text = vm.nativeLanguagePair.first
+        settingsBinding.learningLanguageText.text = vm.learningLanguagePair.first
 
 
         val languageDialog = RadioButtonSelectionDialog(
@@ -84,13 +75,13 @@ class SettingsFragment : Fragment() {
             fragment = this@SettingsFragment,
             title = getString(R.string.native_language),
             options = nativeLanguage,
-            selected = nativeLanguagePair.first,
+            selected = vm.nativeLanguagePair.first,
         )
         val learningLanguageDialog = RadioButtonSelectionDialog(
             fragment = this@SettingsFragment,
             title = getString(R.string.learning_language),
             options = learningLanguage,
-            selected = learningLanguagePair.first,
+            selected = vm.learningLanguagePair.first,
         )
 
 
@@ -119,7 +110,7 @@ class SettingsFragment : Fragment() {
         translatorSourceDialog.setOnItemSelectedListener { selectedText ->
             vm.saveTranslatorSource(source = selectedText)
             settingsBinding.translatorSourceText.text = selectedText
-            changeDownloadButtonVisibility(selectedText = selectedText)
+            changeLanguageCardVisibility(selectedText = selectedText)
         }
 
         // Native language change
@@ -128,9 +119,9 @@ class SettingsFragment : Fragment() {
         }
         nativeLanguageDialog.setOnItemSelectedListener { selectedText ->
             vm.saveNativeLanguage(nativeLanguage = selectedText)
-            nativeLanguagePair = vm.getNativeLanguage()
-            settingsBinding.nativeLanguageText.text = nativeLanguagePair.first
-            updateNativeButton()
+            vm.nativeLanguagePair = vm.getNativeLanguage()
+            settingsBinding.nativeLanguageText.text = vm.nativeLanguagePair.first
+            updateNativeCard()
         }
 
         // Learning language change
@@ -139,61 +130,46 @@ class SettingsFragment : Fragment() {
         }
         learningLanguageDialog.setOnItemSelectedListener { selectedText ->
             vm.saveLearningLanguage(learningLanguage = selectedText)
-            learningLanguagePair = vm.getLearningLanguage()
-            settingsBinding.learningLanguageText.text = learningLanguagePair.first
-            updateLearningButton()
+            vm.learningLanguagePair = vm.getLearningLanguage()
+            settingsBinding.learningLanguageText.text = vm.learningLanguagePair.first
+            updateLearningCard()
         }
 
 
-        settingsBinding.nativeLanguageDownload.setOnClickListener{
-            val modelManager = RemoteModelManager.getInstance()
-            val model = TranslateRemoteModel.Builder(nativeLanguagePair.second).build()
-            nativeDownloadingTask = modelManager.download(model, DownloadConditions.Builder().build())
-                .addOnSuccessListener {
-                    showOnlyInGroup(settingsBinding.nativeLanguageCheck, settingsBinding.nativeGroup)
-                }
-                .addOnFailureListener {
-                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
-                    showOnlyInGroup(settingsBinding.nativeLanguageDownload, settingsBinding.nativeGroup)
-                }
-                .addOnCanceledListener {
-                    showOnlyInGroup(null, settingsBinding.nativeGroup)
-                }
+        settingsBinding.nativeLanguageDownload.setOnClickListener {
+            val model = TranslateRemoteModel.Builder(vm.nativeLanguagePair.second).build()
+            vm.nativeDownloadingTask = remoteModel.download(model, DownloadConditions.Builder().build())
+            attachNativeTaskCallback(task = vm.nativeDownloadingTask)
+            changeNativeCardAvailability(false)
             showOnlyInGroup(settingsBinding.nativeLanguageProgress, settingsBinding.nativeGroup)
         }
 
-        settingsBinding.learningLanguageDownload.setOnClickListener{
-            val modelManager = RemoteModelManager.getInstance()
-            val model = TranslateRemoteModel.Builder(learningLanguagePair.second).build()
-            learningDownloadingTask = modelManager.download(model, DownloadConditions.Builder().build())
-                .addOnSuccessListener {
-                    showOnlyInGroup(settingsBinding.learningLanguageCheck, settingsBinding.learningGroup)
-                }
-                .addOnFailureListener {
-                    Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
-                    showOnlyInGroup(settingsBinding.learningLanguageDownload, settingsBinding.learningGroup)
-                }
-                .addOnCanceledListener {
-                    showOnlyInGroup(null, settingsBinding.learningGroup)
-                }
+        settingsBinding.learningLanguageDownload.setOnClickListener {
+            val model = TranslateRemoteModel.Builder(vm.learningLanguagePair.second).build()
+            vm.learningDownloadingTask = remoteModel.download(model, DownloadConditions.Builder().build())
+            attachLearningTaskCallback(task = vm.learningDownloadingTask)
+            changeLearningCardAvailability(false)
             showOnlyInGroup(settingsBinding.learningLanguageProgress, settingsBinding.learningGroup)
         }
 
-        changeDownloadButtonVisibility(selectedText = settingsBinding.translatorSourceText.text.toString())
+        changeLanguageCardVisibility(selectedText = settingsBinding.translatorSourceText.text.toString())
+        attachNativeTaskCallback(task = vm.nativeDownloadingTask)
+        attachLearningTaskCallback(task = vm.learningDownloadingTask)
 
         return settingsBinding.root
     }
 
-    private fun updateLanguagesButton() {
-        updateNativeButton()
-        updateLearningButton()
+    private fun updateLanguagesCard() {
+        updateNativeCard()
+        updateLearningCard()
     }
-    private fun updateLearningButton() {
-        RemoteModelManager.getInstance().getDownloadedModels(TranslateRemoteModel::class.java)
+    private fun updateLearningCard() {
+        remoteModel.getDownloadedModels(TranslateRemoteModel::class.java)
             .addOnSuccessListener { models ->
-                val isLearningModelDownloaded = models.any { it.language == learningLanguagePair.second }
-                val isLearningModelDownloadingComplete = learningDownloadingTask?.isSuccessful ?: true
+                val isLearningModelDownloaded = models.any { it.language == vm.learningLanguagePair.second }
+                val isLearningModelDownloadingComplete = vm.learningDownloadingTask?.isSuccessful ?: true
 
+                changeLearningCardAvailability(isLearningModelDownloadingComplete)
                 if (isLearningModelDownloaded) {
                     showOnlyInGroup(settingsBinding.learningLanguageCheck, settingsBinding.learningGroup)
                 } else if (!isLearningModelDownloadingComplete) {
@@ -203,12 +179,13 @@ class SettingsFragment : Fragment() {
                 }
             }
     }
-    private fun updateNativeButton() {
-        RemoteModelManager.getInstance().getDownloadedModels(TranslateRemoteModel::class.java)
+    private fun updateNativeCard() {
+        remoteModel.getDownloadedModels(TranslateRemoteModel::class.java)
             .addOnSuccessListener { models ->
-                val isNativeModelDownloaded = models.any { it.language == nativeLanguagePair.second }
-                val isNativeModelDownloadingComplete = nativeDownloadingTask?.isSuccessful ?: true
+                val isNativeModelDownloaded = models.any { it.language == vm.nativeLanguagePair.second }
+                val isNativeModelDownloadingComplete = vm.nativeDownloadingTask?.isSuccessful ?: true
 
+                changeNativeCardAvailability(isNativeModelDownloadingComplete)
                 if (isNativeModelDownloaded) {
                     showOnlyInGroup(settingsBinding.nativeLanguageCheck, settingsBinding.nativeGroup)
                 } else if (!isNativeModelDownloadingComplete) {
@@ -219,14 +196,18 @@ class SettingsFragment : Fragment() {
             }
     }
 
+
+    private fun isAndroidSourceSelected(): Boolean {
+        return try {
+            return settingsBinding.translatorSourceText.text.toString() == getString(com.learnwithsubs.shared_preference_settings.R.string.android)
+        } catch (_: Exception) { false }
+    }
+
     private fun showOnlyInGroup(viewToShow: View?, group: LinearLayout) {
         var newViewToShow: View? = viewToShow
-        try {
-            if (settingsBinding.translatorSourceText.text.toString() != getString(com.learnwithsubs.shared_preference_settings.R.string.android)) {
-                newViewToShow = null
-            }
-        } catch (_: Exception) { }
-
+        if (!isAndroidSourceSelected()) {
+            newViewToShow = null
+        }
 
         for (layout in group) {
             if (layout == newViewToShow) {
@@ -237,12 +218,70 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    private fun changeDownloadButtonVisibility(selectedText: String) {
-        if (selectedText == getString(com.learnwithsubs.shared_preference_settings.R.string.android)) {
-            updateLanguagesButton()
+    private fun changeLanguageCardVisibility(selectedText: String) {
+        try {
+            if (selectedText == getString(com.learnwithsubs.shared_preference_settings.R.string.android)) {
+                updateLanguagesCard()
+            } else {
+                changeNativeCardAvailability(true)
+                changeLearningCardAvailability(true)
+                showOnlyInGroup(null, settingsBinding.learningGroup)
+                showOnlyInGroup(null, settingsBinding.nativeGroup)
+            }
+        } catch (_: Exception) { }
+    }
+
+    private fun changeNativeCardAvailability(isAvailable: Boolean) {
+        settingsBinding.nativeLanguageCard.isClickable = isAvailable
+        if (isAvailable) {
+            settingsBinding.nativeLanguageTitle.setTextAppearance(appContext, R.style.RadioButtonTitleTextAvailable)
+            settingsBinding.nativeLanguageText.setTextAppearance(appContext, R.style.RadioButtonSubTitleTextAvailable)
         } else {
-            showOnlyInGroup(null, settingsBinding.learningGroup)
-            showOnlyInGroup(null, settingsBinding.nativeGroup)
+            settingsBinding.nativeLanguageTitle.setTextAppearance(appContext, R.style.RadioButtonTitleTextUnavailable)
+            settingsBinding.nativeLanguageText.setTextAppearance(appContext, R.style.RadioButtonSubTitleTextUnavailable)
+        }
+    }
+    private fun changeLearningCardAvailability(isAvailable: Boolean) {
+        settingsBinding.learningLanguageCard.isClickable = isAvailable
+        if (isAvailable) {
+            settingsBinding.learningLanguageTitle.setTextAppearance(appContext, R.style.RadioButtonTitleTextAvailable)
+            settingsBinding.learningLanguageText.setTextAppearance(appContext, R.style.RadioButtonSubTitleTextAvailable)
+        } else {
+            settingsBinding.learningLanguageTitle.setTextAppearance(appContext, R.style.RadioButtonTitleTextUnavailable)
+            settingsBinding.learningLanguageText.setTextAppearance(appContext, R.style.RadioButtonSubTitleTextUnavailable)
+        }
+    }
+
+    private fun attachLearningTaskCallback(task: Task<Void>?) {
+        task?.addOnSuccessListener {
+                changeLearningCardAvailability(true)
+                showOnlyInGroup(settingsBinding.learningLanguageCheck, settingsBinding.learningGroup)
+            }?.addOnFailureListener {
+                changeLearningCardAvailability(true)
+                showOnlyInGroup(settingsBinding.learningLanguageDownload, settingsBinding.learningGroup)
+            }?.addOnCanceledListener {
+                changeLearningCardAvailability(true)
+                showOnlyInGroup(null, settingsBinding.learningGroup)
+            }
+    }
+    private fun attachNativeTaskCallback(task: Task<Void>?) {
+        task?.addOnSuccessListener {
+                changeNativeCardAvailability(true)
+                showOnlyInGroup(settingsBinding.nativeLanguageCheck, settingsBinding.nativeGroup)
+            }?.addOnFailureListener {
+                changeNativeCardAvailability(true)
+                showOnlyInGroup(settingsBinding.nativeLanguageDownload, settingsBinding.nativeGroup)
+            }?.addOnCanceledListener {
+                changeNativeCardAvailability(true)
+                showOnlyInGroup(null, settingsBinding.nativeGroup)
+            }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        if (isAndroidSourceSelected()) {
+            updateLanguagesCard()
         }
     }
 }

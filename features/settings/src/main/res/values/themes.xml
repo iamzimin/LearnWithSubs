@@ -23,6 +23,7 @@
         <item name="text_color">@color/text_main_dark</item>
 
         <item name="card_background">@color/card_background</item>
+        <item name="text_color_unavailable">@color/text_color_unavailable</item>
 
 
     </style>
