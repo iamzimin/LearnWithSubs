@@ -2,12 +2,12 @@ package com.learnwithsubs.video_view.domain.usecase
 
 import com.example.yandex_translator_api.domain.TranslationKeyAPI
 import com.learnwithsubs.video_view.domain.models.TranslationModel
-import com.example.yandex_translator_api.domain.repository.TranslatorRepository
+import com.example.yandex_translator_api.domain.repository.YandexTranslatorRepository
 import com.learnwithsubs.video_view.domain.models.DictionaryWord
 import com.learnwithsubs.video_view.domain.toDictionaryWord
 
 class GetWordsFromYandexDictionaryUseCase(
-    private val yandexDictionaryRepository: TranslatorRepository
+    private val yandexDictionaryRepository: YandexTranslatorRepository
 ) {
     suspend fun invoke(model: TranslationModel): DictionaryWord? {
         return yandexDictionaryRepository.getWordsFromYandexDictionary(

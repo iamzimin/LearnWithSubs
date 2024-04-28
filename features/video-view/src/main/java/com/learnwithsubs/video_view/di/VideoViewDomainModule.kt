@@ -1,6 +1,8 @@
 package com.learnwithsubs.video_view.di
 
-import com.example.yandex_translator_api.domain.repository.TranslatorRepository
+import com.example.yandex_translator_api.domain.repository.YandexTranslatorRepository
+import com.learnwithsubs.android_translator.domain.repository.AndroidTranslatorRepository
+import com.learnwithsubs.server_translator_api.domain.repository.ServerTranslatorRepository
 import com.learnwithsubs.shared_preference_settings.domain.repository.SharedPreferenceSettings
 import com.learnwithsubs.video_view.domain.repository.VideoViewRepository
 import com.learnwithsubs.video_view.domain.usecase.GetLearningLanguage
@@ -25,7 +27,9 @@ class VideoViewDomainModule {
     @Singleton
     fun provideVideoViewUseCase(
         videoViewRepository: VideoViewRepository,
-        translatorRepository: TranslatorRepository,
+        yandexTranslatorRepository: YandexTranslatorRepository,
+        serverTranslatorRepository: ServerTranslatorRepository,
+        androidTranslatorRepository: AndroidTranslatorRepository,
         sharedPreferenceSettings: SharedPreferenceSettings,
     ): VideoViewUseCases {
         return VideoViewUseCases(
@@ -36,13 +40,13 @@ class VideoViewDomainModule {
                 videoViewRepository
             ),
             getWordsFromYandexDictionaryUseCase = GetWordsFromYandexDictionaryUseCase(
-                translatorRepository
+                yandexTranslatorRepository
             ),
             getTranslationFromServerUseCase = GetTranslationFromServerUseCase(
-                translatorRepository
+                serverTranslatorRepository
             ),
             getTranslationFromAndroidUseCase = GetTranslationFromAndroidUseCase(
-                translatorRepository
+                androidTranslatorRepository
             ),
             saveWordUseCase = SaveWordUseCase(
                 videoViewRepository

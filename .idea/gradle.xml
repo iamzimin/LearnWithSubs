@@ -11,9 +11,11 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/android-translator" />
             <option value="$PROJECT_DIR$/core/base" />
             <option value="$PROJECT_DIR$/core/database" />
             <option value="$PROJECT_DIR$/core/server-api" />
+            <option value="$PROJECT_DIR$/core/server-translator-api" />
             <option value="$PROJECT_DIR$/core/shared-preference-settings" />
             <option value="$PROJECT_DIR$/core/video-transcode" />
             <option value="$PROJECT_DIR$/core/yandex-translator-api" />

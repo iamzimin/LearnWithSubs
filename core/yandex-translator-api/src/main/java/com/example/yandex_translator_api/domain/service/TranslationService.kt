@@ -12,11 +12,4 @@ interface TranslationService {
         @Query("lang") lang: String,
         @Query("text") word: String
     ): Call<YandexDictionaryResponse>
-
-    @POST("/get_translation")
-    fun getWordsFromServerTranslator(
-        @Query("word") word: String,
-        @Query("fromLang") fromLang: String,
-        @Query("toLang") toLang: String
-    ): Call<String>
 }

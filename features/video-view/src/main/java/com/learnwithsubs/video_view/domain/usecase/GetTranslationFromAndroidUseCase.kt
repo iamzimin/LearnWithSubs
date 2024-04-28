@@ -1,13 +1,13 @@
 package com.learnwithsubs.video_view.domain.usecase
 
-import com.example.yandex_translator_api.domain.repository.TranslatorRepository
+import com.learnwithsubs.android_translator.domain.repository.AndroidTranslatorRepository
 import com.learnwithsubs.video_view.domain.models.TranslationModel
 
 class GetTranslationFromAndroidUseCase(
-    private val translatorRepository: TranslatorRepository
+    private val androidTranslatorRepository: AndroidTranslatorRepository
 ) {
     suspend fun invoke(model: TranslationModel): String? {
-        return translatorRepository.getWordsFromAndroidTranslator(
+        return androidTranslatorRepository.getWordsFromAndroidTranslator(
             word = model.word,
             fromLang = model.inputLanguage,
             toLang = model.outputLanguage

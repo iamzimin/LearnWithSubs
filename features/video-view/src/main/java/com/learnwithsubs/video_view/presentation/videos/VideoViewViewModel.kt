@@ -139,18 +139,4 @@ class VideoViewViewModel @Inject constructor(
             translatorTranslationLiveData.postValue(translate)
         }
     }
-
-    /*fun getFullTranslation(word: String, inputLang: String, outputLang: String) {
-        val translationModel = TranslationModel(
-            word = word,
-            inputLanguage = inputLang,
-            outputLanguage = outputLang,
-        )
-        if (false) { //TODO взять настроек
-            getWordsFromServerTranslator(translationModel = translationModel)
-        } else {
-            getWordsFromAndroidTranslator(translationModel = translationModel)
-        }
-    }*/
-
 }

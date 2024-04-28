@@ -2,12 +2,16 @@ package com.learnwithsubs.video_view.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.yandex_translator_api.data.repository.TranslatorRepositoryImpl
-import com.example.yandex_translator_api.domain.repository.TranslatorRepository
+import com.example.yandex_translator_api.data.repository.YandexTranslatorRepositoryImpl
+import com.example.yandex_translator_api.domain.repository.YandexTranslatorRepository
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.learnwithsubs.android_translator.data.repository.AndroidTranslatorRepositoryImpl
+import com.learnwithsubs.android_translator.domain.repository.AndroidTranslatorRepository
 import com.learnwithsubs.database.data.storage.VideoDatabase
 import com.learnwithsubs.database.data.storage.WordDatabase
+import com.learnwithsubs.server_translator_api.data.repository.ServerTranslatorRepositoryImpl
+import com.learnwithsubs.server_translator_api.domain.repository.ServerTranslatorRepository
 import com.learnwithsubs.shared_preference_settings.data.repository.SharedPreferenceSettingsImpl
 import com.learnwithsubs.shared_preference_settings.domain.repository.SharedPreferenceSettings
 import com.learnwithsubs.video_view.domain.repository.VideoViewRepository
@@ -89,12 +93,26 @@ class VideoViewDataModule {
     @Singleton
     fun provideYandexDictionaryRepository(
         @Named("YandexDictionary") yandexRetrofit: Retrofit,
-        @Named("Server") serverRetrofit: Retrofit
-    ): TranslatorRepository {
-        return TranslatorRepositoryImpl(
+    ): YandexTranslatorRepository {
+        return YandexTranslatorRepositoryImpl(
             yandexRetrofit,
-            serverRetrofit
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideServerTranslatorRepository(
+        @Named("Server") serverRetrofit: Retrofit
+    ): ServerTranslatorRepository {
+        return ServerTranslatorRepositoryImpl(
+            serverRetrofit,
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideAndroidTranslatorRepository(): AndroidTranslatorRepository {
+        return AndroidTranslatorRepositoryImpl()
     }
 
     @Provides

@@ -41,6 +41,8 @@ dependencies {
     implementation project(':core:database')
     implementation project(':core:base')
     implementation project(':core:yandex-translator-api')
+    implementation project(':core:server-translator-api')
+    implementation project(':core:android-translator')
     implementation project(':core:shared-preference-settings')
 
     implementation 'androidx.core:core-ktx:1.10.1'
