@@ -25,7 +25,9 @@ class TranslatorRepositoryImpl(
 
         return if (wordResponse.isSuccessful) {
             val apiResponse = wordResponse.body() ?: return null
-            apiResponse.DictionaryWordDTO()
+            return try {
+                apiResponse.DictionaryWordDTO()
+            } catch (e: Exception) { null }
         } else {
             null
         }

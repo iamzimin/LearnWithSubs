@@ -9,9 +9,9 @@ import android.view.Window
 import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.mlkit.nl.translate.TranslateLanguage
 import com.learnwithsubs.video_view.R
 import com.learnwithsubs.video_view.databinding.DialogTranslateBinding
+import com.learnwithsubs.video_view.domain.models.TranslationModel
 import com.learnwithsubs.video_view.domain.models.WordTranslation
 import com.learnwithsubs.video_view.presentation.adapter.DictionaryAdapter
 import com.learnwithsubs.video_view.presentation.adapter.OnDictionaryClick
@@ -25,30 +25,37 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
     private val dialogMenu = Dialog(activity)
     private val adapter = DictionaryAdapter(wordsInit = ArrayList())
 
-    private lateinit var ttsFrom: TextToSpeech
-    private lateinit var ttsTo: TextToSpeech
+    private var ttsFrom: TextToSpeech
+    private var ttsTo: TextToSpeech
 
-    private var nativeLanguage = TranslateLanguage.RUSSIAN
-    private var learnLanguage = TranslateLanguage.ENGLISH
-
+    private val nativeLanguage: Pair<String, String> = vm.getNativeLanguage()
+    private val learnLanguage: Pair<String, String> = vm.getLearningLanguage()
+    private val translatorSource: String = vm.getTranslatorSource()
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            ttsFrom.language = Locale(nativeLanguage)
-            ttsTo.language = Locale(learnLanguage)
+            ttsFrom.language = Locale(nativeLanguage.second)
+            ttsTo.language = Locale(learnLanguage.second)
         }
     }
 
     fun openTranslateDialog() {
-        val textToTranslate = vm.textToTranslate
-
-        vm.getWordsFromDictionary(
-            inputLang = learnLanguage,
-            outputLang = nativeLanguage,
-            word = textToTranslate
+        val translationModel = TranslationModel(
+            word = vm.textToTranslate,
+            inputLanguage = learnLanguage.second,
+            outputLanguage = nativeLanguage.second,
         )
+        when (translatorSource) {
+            context.getString(com.learnwithsubs.shared_preference_settings.R.string.server) ->
+                vm.getTranslationFromServer(translationModel = translationModel)
+            context.getString(com.learnwithsubs.shared_preference_settings.R.string.yandex) ->
+                vm.getTranslationFromYandexDictionary(translationModel = translationModel)
+            context.getString(com.learnwithsubs.shared_preference_settings.R.string.android) ->
+                vm.getTranslationFromAndroid(translationModel = translationModel)
+            else -> { }
+        }
 
-        translateDialogBind.inputWord.setText(textToTranslate)
+        translateDialogBind.inputWord.setText(translationModel.word)
         translateDialogBind.inputWord.clearFocus()
 
         dialogMenu.show()
@@ -63,7 +70,10 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
         dialogMenu.setContentView(translateDialogBind.root)
         translateDialogBind.dictionaryRecycler.layoutManager = LinearLayoutManager(context)
         translateDialogBind.dictionaryRecycler.adapter = adapter
-        translateDialogBind.translatorType.text = "Yandex Translator" // TODO select the type of translator from the settings
+        translateDialogBind.translatorType.text = translatorSource
+
+        translateDialogBind.inputLanguage.text = learnLanguage.first
+        translateDialogBind.outputLanguage.text = nativeLanguage.first
 
         val itemDecoration = DictionaryAdapter.RecyclerViewItemDecoration(10)
         translateDialogBind.dictionaryRecycler.addItemDecoration(itemDecoration)
@@ -72,23 +82,12 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
             dialogMenu.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
 
-        getLanguageFromSettings()
-
-
 
         dialogMenu.setOnDismissListener {
             translateDialogBind.inputWord.setText("")
             translateDialogBind.outputWord.setText("")
             adapter.updateData(wordsList = ArrayList())
         }
-
-        translateDialogBind.audioInputWord.setOnClickListener {
-            ttsFrom.speak(translateDialogBind.inputWord.text, TextToSpeech.QUEUE_FLUSH, null, "")
-        }
-        translateDialogBind.audioOutputWord.setOnClickListener {
-            ttsTo.speak(translateDialogBind.outputWord.text, TextToSpeech.QUEUE_FLUSH, null, "")
-        }
-
 
 
         ttsFrom = TextToSpeech(context, this)
@@ -102,11 +101,11 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
         }
 
         translateDialogBind.saveWord.setOnClickListener {
-            vm.saveWord( //TODO
+            vm.saveWord(
                 WordTranslation(
                     word = translateDialogBind.inputWord.text.toString(),
                     translation = translateDialogBind.outputWord.text.toString(),
-                    nativeLanguage = "ru", learnLanguage = "en",
+                    nativeLanguage = nativeLanguage.second, learnLanguage = learnLanguage.second,
                     videoID = vm.currentVideo?.id, videoName = vm.currentVideo?.name,
                     timestamp = Date().time,
                 )
@@ -116,14 +115,9 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
 
         // Translate
         vm.dictionaryWordsLiveData.observe(activity as LifecycleOwner) { dict ->
-            if (dict == null) { //TODO вынести словарь и перевод в одну фнккцию
-                vm.getFullTranslation(word = vm.textToTranslate, inputLang = learnLanguage, outputLang = nativeLanguage)
-            } else {
-                translateDialogBind.outputWord.setText(dict.translation)
-                translateDialogBind.outputWord.clearFocus()
-                adapter.updateData(wordsList = dict.dictionaryElement)
-            }
-
+            translateDialogBind.outputWord.setText(dict.translation)
+            translateDialogBind.outputWord.clearFocus()
+            adapter.updateData(wordsList = dict.dictionaryElement)
         }
         vm.translatorTranslationLiveData.observe(activity as LifecycleOwner) { transl ->
             transl ?: Toast.makeText(context, R.string.server_for_translation_is_not_available, Toast.LENGTH_SHORT).show()
@@ -131,24 +125,6 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
             translateDialogBind.outputWord.setText(text)
             translateDialogBind.outputWord.clearFocus()
         }
-    }
-
-    private fun getLanguageFromSettings() {
-        val nativeLanguageRes = R.string.russian // TODO взять язык из настроек
-        val learnLanguageRes = R.string.english  // TODO взять язык из настроек
-
-        translateDialogBind.inputLanguage.text = context.getString(learnLanguageRes)
-        translateDialogBind.outputLanguage.text = context.getString(nativeLanguageRes)
-
-        /*val config = Configuration(resources.configuration)
-        config.setLocale(Locale("en"))
-        val englishResources = createConfigurationContext(config).resources
-
-        val nativeLanguage = englishResources.getString(nativeLanguageRes)
-        val learnLanguage = englishResources.getString(learnLanguageRes)*/
-
-        //this.nativeLanguage = TODO взять язык из настроек
-        //this.learnLanguage = TODO взять язык из настроек
     }
 
 

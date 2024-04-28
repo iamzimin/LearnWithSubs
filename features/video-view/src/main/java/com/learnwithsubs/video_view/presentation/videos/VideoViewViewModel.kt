@@ -1,12 +1,9 @@
 package com.learnwithsubs.video_view.presentation.videos
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.base.VideoConstants
-import com.learnwithsubs.video_view.R
-import com.learnwithsubs.video_view.domain.models.DictionarySynonyms
 import com.learnwithsubs.video_view.domain.models.DictionaryWord
 import com.learnwithsubs.video_view.domain.models.Subtitle
 import com.learnwithsubs.video_view.domain.models.TranslationModel
@@ -40,7 +37,7 @@ class VideoViewViewModel @Inject constructor(
 
     private var subtitleList: List<Subtitle> = emptyList()
 
-    val dictionaryWordsLiveData =  MutableLiveData<DictionaryWord?>()
+    val dictionaryWordsLiveData =  MutableLiveData<DictionaryWord>()
     val translatorTranslationLiveData = MutableLiveData<String?>()
 
     fun initCurrentVideo(videoId: Int) {
@@ -80,6 +77,16 @@ class VideoViewViewModel @Inject constructor(
         }
     }
 
+    fun getTranslatorSource(): String {
+        return videoViewUseCases.getTranslatorSource.invoke()
+    }
+    fun getNativeLanguage(): Pair<String, String> {
+        return videoViewUseCases.getNativeLanguage.invoke()
+    }
+    fun getLearningLanguage(): Pair<String, String> {
+        return videoViewUseCases.getLearningLanguage.invoke()
+    }
+
 
     fun updateCurrentTime(currTime: Int) {
         currentVideoWatchTime = currTime
@@ -107,19 +114,33 @@ class VideoViewViewModel @Inject constructor(
             String.format("%02d:%02d", currMinutes, currSeconds)
     }
 
-    fun getWordsFromDictionary(word: String, inputLang: String, outputLang: String) {
-        val translationModel = TranslationModel(
-            word = word,
-            inputLanguage = inputLang,
-            outputLanguage = outputLang,
-        )
+
+    fun getTranslationFromYandexDictionary(translationModel: TranslationModel) {
         viewModelScope.launch {
             val translate = videoViewUseCases.getWordsFromYandexDictionaryUseCase.invoke(model = translationModel)
-            dictionaryWordsLiveData.postValue(translate)
+            if (translate == null) {
+                // TODO implement Yandex API
+            } else {
+                dictionaryWordsLiveData.postValue(translate ?: return@launch)
+            }
         }
     }
 
-    fun getFullTranslation(word: String, inputLang: String, outputLang: String) {
+    fun getTranslationFromServer(translationModel: TranslationModel) {
+        viewModelScope.launch {
+            val translate = videoViewUseCases.getTranslationFromServerUseCase.invoke(model = translationModel)
+            translatorTranslationLiveData.postValue(translate)
+        }
+    }
+
+    fun getTranslationFromAndroid(translationModel: TranslationModel) {
+        viewModelScope.launch {
+            val translate = videoViewUseCases.getTranslationFromAndroidUseCase.invoke(model = translationModel)
+            translatorTranslationLiveData.postValue(translate)
+        }
+    }
+
+    /*fun getFullTranslation(word: String, inputLang: String, outputLang: String) {
         val translationModel = TranslationModel(
             word = word,
             inputLanguage = inputLang,
@@ -130,20 +151,6 @@ class VideoViewViewModel @Inject constructor(
         } else {
             getWordsFromAndroidTranslator(translationModel = translationModel)
         }
-    }
-
-    private fun getWordsFromServerTranslator(translationModel: TranslationModel) {
-        viewModelScope.launch {
-            val translate = videoViewUseCases.getTranslationFromServerUseCase.invoke(model = translationModel)
-            translatorTranslationLiveData.postValue(translate)
-        }
-    }
-
-    private fun getWordsFromAndroidTranslator(translationModel: TranslationModel) {
-        viewModelScope.launch {
-            val translate = videoViewUseCases.getTranslationFromAndroidUseCase.invoke(model = translationModel)
-            translatorTranslationLiveData.postValue(translate)
-        }
-    }
+    }*/
 
 }

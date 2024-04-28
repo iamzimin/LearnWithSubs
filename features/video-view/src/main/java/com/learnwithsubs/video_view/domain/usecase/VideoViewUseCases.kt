@@ -8,4 +8,7 @@ data class VideoViewUseCases(
     val getTranslationFromServerUseCase: GetTranslationFromServerUseCase,
     val getTranslationFromAndroidUseCase: GetTranslationFromAndroidUseCase,
     val saveWordUseCase: SaveWordUseCase,
+    val getNativeLanguage: GetNativeLanguage,
+    val getLearningLanguage: GetLearningLanguage,
+    val getTranslatorSource: GetTranslatorSource,
 )

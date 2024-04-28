@@ -8,6 +8,8 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.learnwithsubs.database.data.storage.VideoDatabase
 import com.learnwithsubs.database.data.storage.WordDatabase
+import com.learnwithsubs.shared_preference_settings.data.repository.SharedPreferenceSettingsImpl
+import com.learnwithsubs.shared_preference_settings.domain.repository.SharedPreferenceSettings
 import com.learnwithsubs.video_view.domain.repository.VideoViewRepository
 import dagger.Module
 import dagger.Provides
@@ -73,7 +75,10 @@ class VideoViewDataModule {
 
     @Provides
     @Singleton
-    fun provideVideoRepository(videoDB: VideoDatabase, wordDB:WordDatabase): VideoViewRepository {
+    fun provideVideoRepository(
+        videoDB: VideoDatabase,
+        wordDB:WordDatabase
+    ): VideoViewRepository {
         return com.learnwithsubs.video_view.data.repository.VideoViewRepositoryImpl(
             videoDB.videoListDao,
             wordDB.wordListDao
@@ -89,6 +94,16 @@ class VideoViewDataModule {
         return TranslatorRepositoryImpl(
             yandexRetrofit,
             serverRetrofit
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideSharedPreferenceSettingsRepository(
+        context: Context
+    ): SharedPreferenceSettings {
+        return SharedPreferenceSettingsImpl(
+            context
         )
     }
 }
