@@ -1,9 +1,9 @@
-package com.example.yandex_dictionary_api.data.repository
+package com.example.yandex_translator_api.data.repository
 
-import com.example.yandex_dictionary_api.domain.DictionaryWordDTO
-import com.example.yandex_dictionary_api.domain.repository.TranslatorRepository
-import com.example.yandex_dictionary_api.domain.service.TranslationService
-import com.example.yandex_dictionary_api.models.DictionaryWordDTO
+import com.example.yandex_translator_api.domain.DictionaryWordDTO
+import com.example.yandex_translator_api.domain.repository.TranslatorRepository
+import com.example.yandex_translator_api.domain.service.TranslationService
+import com.example.yandex_translator_api.models.DictionaryWordDTO
 import com.google.android.gms.tasks.Task
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions

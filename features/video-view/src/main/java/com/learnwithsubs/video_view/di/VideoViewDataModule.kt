@@ -2,8 +2,8 @@ package com.learnwithsubs.video_view.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.yandex_dictionary_api.data.repository.TranslatorRepositoryImpl
-import com.example.yandex_dictionary_api.domain.repository.TranslatorRepository
+import com.example.yandex_translator_api.data.repository.TranslatorRepositoryImpl
+import com.example.yandex_translator_api.domain.repository.TranslatorRepository
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.learnwithsubs.database.data.storage.VideoDatabase

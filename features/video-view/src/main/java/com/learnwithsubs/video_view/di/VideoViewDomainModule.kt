@@ -1,6 +1,6 @@
 package com.learnwithsubs.video_view.di
 
-import com.example.yandex_dictionary_api.domain.repository.TranslatorRepository
+import com.example.yandex_translator_api.domain.repository.TranslatorRepository
 import com.learnwithsubs.shared_preference_settings.domain.repository.SharedPreferenceSettings
 import com.learnwithsubs.video_view.domain.repository.VideoViewRepository
 import com.learnwithsubs.video_view.domain.usecase.GetLearningLanguage

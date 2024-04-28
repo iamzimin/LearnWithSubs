@@ -1,9 +1,9 @@
-package com.example.yandex_dictionary_api.domain
+package com.example.yandex_translator_api.domain
 
-import com.example.yandex_dictionary_api.models.DictionaryElementDTO
-import com.example.yandex_dictionary_api.models.DictionarySynonymsDTO
-import com.example.yandex_dictionary_api.models.DictionaryWordDTO
-import com.example.yandex_dictionary_api.models.YandexDictionaryResponse
+import com.example.yandex_translator_api.models.DictionaryElementDTO
+import com.example.yandex_translator_api.models.DictionarySynonymsDTO
+import com.example.yandex_translator_api.models.DictionaryWordDTO
+import com.example.yandex_translator_api.models.YandexDictionaryResponse
 
 internal fun YandexDictionaryResponse.DictionaryWordDTO() : DictionaryWordDTO {
     val definition = this.def

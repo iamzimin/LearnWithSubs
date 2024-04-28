@@ -1,6 +1,6 @@
-package com.example.yandex_dictionary_api.domain.repository
+package com.example.yandex_translator_api.domain.repository
 
-import com.example.yandex_dictionary_api.models.DictionaryWordDTO
+import com.example.yandex_translator_api.models.DictionaryWordDTO
 
 interface TranslatorRepository {
     suspend fun getWordsFromYandexDictionary(key: String, lang: String, word: String): DictionaryWordDTO?

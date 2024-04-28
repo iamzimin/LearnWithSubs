@@ -1,6 +1,6 @@
 package com.learnwithsubs.video_view.domain.usecase
 
-import com.example.yandex_dictionary_api.domain.repository.TranslatorRepository
+import com.example.yandex_translator_api.domain.repository.TranslatorRepository
 import com.learnwithsubs.video_view.domain.models.TranslationModel
 
 class GetTranslationFromAndroidUseCase(

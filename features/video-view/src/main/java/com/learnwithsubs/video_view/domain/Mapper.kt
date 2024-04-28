@@ -1,8 +1,8 @@
 package com.learnwithsubs.video_view.domain
 
-import com.example.yandex_dictionary_api.models.DictionaryElementDTO
-import com.example.yandex_dictionary_api.models.DictionarySynonymsDTO
-import com.example.yandex_dictionary_api.models.DictionaryWordDTO
+import com.example.yandex_translator_api.models.DictionaryElementDTO
+import com.example.yandex_translator_api.models.DictionarySynonymsDTO
+import com.example.yandex_translator_api.models.DictionaryWordDTO
 import com.learnwithsubs.database.domain.models.VideoDBO
 import com.learnwithsubs.database.domain.models.WordTranslationDBO
 import com.learnwithsubs.video_view.domain.models.DictionaryElement

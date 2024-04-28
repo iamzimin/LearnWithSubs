@@ -16,7 +16,7 @@
             <option value="$PROJECT_DIR$/core/server-api" />
             <option value="$PROJECT_DIR$/core/shared-preference-settings" />
             <option value="$PROJECT_DIR$/core/video-transcode" />
-            <option value="$PROJECT_DIR$/core/yandex-dictionary-api" />
+            <option value="$PROJECT_DIR$/core/yandex-translator-api" />
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/settings" />
             <option value="$PROJECT_DIR$/features/video-list" />

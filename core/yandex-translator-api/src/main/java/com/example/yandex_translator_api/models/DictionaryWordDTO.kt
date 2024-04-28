@@ -1,4 +1,4 @@
-package com.example.yandex_dictionary_api.models
+package com.example.yandex_translator_api.models
 
 data class DictionaryWordDTO(
     val translation: String,
