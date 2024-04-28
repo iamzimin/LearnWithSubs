@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.speech.tts.TextToSpeech
+import android.view.View
 import android.view.Window
 import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
@@ -87,6 +88,7 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
             translateDialogBind.inputWord.setText("")
             translateDialogBind.outputWord.setText("")
             adapter.updateData(wordsList = ArrayList())
+            translateDialogBind.dictionaryRecycler.visibility = View.GONE
         }
 
 
@@ -115,11 +117,13 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
 
         // Translate
         vm.dictionaryWordsLiveData.observe(activity as LifecycleOwner) { dict ->
+            translateDialogBind.dictionaryRecycler.visibility = View.VISIBLE
             translateDialogBind.outputWord.setText(dict.translation)
             translateDialogBind.outputWord.clearFocus()
             adapter.updateData(wordsList = dict.dictionaryElement)
         }
         vm.translatorTranslationLiveData.observe(activity as LifecycleOwner) { transl ->
+            translateDialogBind.dictionaryRecycler.visibility = View.GONE
             transl ?: Toast.makeText(context, R.string.server_for_translation_is_not_available, Toast.LENGTH_SHORT).show()
             val text = transl ?: return@observe
             translateDialogBind.outputWord.setText(text)
