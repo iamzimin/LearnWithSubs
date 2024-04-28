@@ -38,7 +38,8 @@ class VideoViewViewModel @Inject constructor(
     private var subtitleList: List<Subtitle> = emptyList()
 
     val dictionaryWordsLiveData =  MutableLiveData<DictionaryWord>()
-    val translatorTranslationLiveData = MutableLiveData<String?>()
+    val serverTranslationLiveData = MutableLiveData<String?>()
+    val androidTranslationLiveData = MutableLiveData<String?>()
 
     fun initCurrentVideo(videoId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -129,14 +130,14 @@ class VideoViewViewModel @Inject constructor(
     fun getTranslationFromServer(translationModel: TranslationModel) {
         viewModelScope.launch {
             val translate = videoViewUseCases.getTranslationFromServerUseCase.invoke(model = translationModel)
-            translatorTranslationLiveData.postValue(translate)
+            serverTranslationLiveData.postValue(translate)
         }
     }
 
     fun getTranslationFromAndroid(translationModel: TranslationModel) {
         viewModelScope.launch {
             val translate = videoViewUseCases.getTranslationFromAndroidUseCase.invoke(model = translationModel)
-            translatorTranslationLiveData.postValue(translate)
+            androidTranslationLiveData.postValue(translate)
         }
     }
 }

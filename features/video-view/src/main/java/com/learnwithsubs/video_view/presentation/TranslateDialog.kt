@@ -122,9 +122,16 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
             translateDialogBind.outputWord.clearFocus()
             adapter.updateData(wordsList = dict.dictionaryElement)
         }
-        vm.translatorTranslationLiveData.observe(activity as LifecycleOwner) { transl ->
+        vm.serverTranslationLiveData.observe(activity as LifecycleOwner) { transl ->
             translateDialogBind.dictionaryRecycler.visibility = View.GONE
             transl ?: Toast.makeText(context, R.string.server_for_translation_is_not_available, Toast.LENGTH_SHORT).show()
+            val text = transl ?: return@observe
+            translateDialogBind.outputWord.setText(text)
+            translateDialogBind.outputWord.clearFocus()
+        }
+        vm.androidTranslationLiveData.observe(activity as LifecycleOwner) { transl ->
+            translateDialogBind.dictionaryRecycler.visibility = View.GONE
+            transl ?: Toast.makeText(context, R.string.model_not_downloaded, Toast.LENGTH_SHORT).show()
             val text = transl ?: return@observe
             translateDialogBind.outputWord.setText(text)
             translateDialogBind.outputWord.clearFocus()

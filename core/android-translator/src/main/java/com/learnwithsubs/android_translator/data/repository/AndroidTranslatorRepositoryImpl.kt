@@ -17,7 +17,6 @@ class AndroidTranslatorRepositoryImpl : AndroidTranslatorRepository {
             .setTargetLanguage(toLang)
             .build()
         val translator = Translation.getClient(options)
-        translator.downloadModelIfNeeded() //TODO delete
         val resultDeferred = CompletableDeferred<String?>()
 
         translator.translate(word).addOnCompleteListener { task: Task<String> ->
