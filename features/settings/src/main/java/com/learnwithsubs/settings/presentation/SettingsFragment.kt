@@ -107,6 +107,7 @@ class SettingsFragment : Fragment() {
         settingsBinding.translatorSourceCard.setOnClickListener {
             translatorSourceDialog.openMenu()
         }
+        settingsBinding.translatorSourceCard.isClickable = false
         translatorSourceDialog.setOnItemSelectedListener { selectedText ->
             vm.saveTranslatorSource(source = selectedText)
             settingsBinding.translatorSourceText.text = selectedText
@@ -117,6 +118,7 @@ class SettingsFragment : Fragment() {
         settingsBinding.nativeLanguageCard.setOnClickListener {
             nativeLanguageDialog.openMenu()
         }
+        settingsBinding.nativeLanguageCard.isClickable = false
         nativeLanguageDialog.setOnItemSelectedListener { selectedText ->
             vm.saveNativeLanguage(nativeLanguage = selectedText)
             vm.nativeLanguagePair = vm.getNativeLanguage()
@@ -128,6 +130,7 @@ class SettingsFragment : Fragment() {
         settingsBinding.learningLanguageCard.setOnClickListener {
             learningLanguageDialog.openMenu()
         }
+        settingsBinding.learningLanguageCard.isClickable = false
         learningLanguageDialog.setOnItemSelectedListener { selectedText ->
             vm.saveLearningLanguage(learningLanguage = selectedText)
             vm.learningLanguagePair = vm.getLearningLanguage()
@@ -157,6 +160,7 @@ class SettingsFragment : Fragment() {
         changeLanguageCardVisibility(selectedText = settingsBinding.translatorSourceText.text.toString())
         attachNativeTaskCallback(task = vm.nativeDownloadingTask)
         attachLearningTaskCallback(task = vm.learningDownloadingTask)
+        changeSourceCardAvailability(isAvailable = (vm.learningDownloadingTask?.isSuccessful ?: true) && (vm.nativeDownloadingTask?.isSuccessful ?: true))
 
         return settingsBinding.root
     }
