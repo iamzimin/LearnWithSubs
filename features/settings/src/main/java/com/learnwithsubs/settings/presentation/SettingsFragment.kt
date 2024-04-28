@@ -140,6 +140,7 @@ class SettingsFragment : Fragment() {
             val model = TranslateRemoteModel.Builder(vm.nativeLanguagePair.second).build()
             vm.nativeDownloadingTask = remoteModel.download(model, DownloadConditions.Builder().build())
             attachNativeTaskCallback(task = vm.nativeDownloadingTask)
+            changeSourceCardAvailability(false)
             changeNativeCardAvailability(false)
             showOnlyInGroup(settingsBinding.nativeLanguageProgress, settingsBinding.nativeGroup)
         }
@@ -148,6 +149,7 @@ class SettingsFragment : Fragment() {
             val model = TranslateRemoteModel.Builder(vm.learningLanguagePair.second).build()
             vm.learningDownloadingTask = remoteModel.download(model, DownloadConditions.Builder().build())
             attachLearningTaskCallback(task = vm.learningDownloadingTask)
+            changeSourceCardAvailability(false)
             changeLearningCardAvailability(false)
             showOnlyInGroup(settingsBinding.learningLanguageProgress, settingsBinding.learningGroup)
         }
@@ -160,6 +162,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun updateLanguagesCard() {
+        changeSourceCardAvailability(isAvailable = (vm.learningDownloadingTask?.isSuccessful ?: true) && (vm.nativeDownloadingTask?.isSuccessful ?: true))
         updateNativeCard()
         updateLearningCard()
     }
@@ -234,44 +237,60 @@ class SettingsFragment : Fragment() {
     private fun changeNativeCardAvailability(isAvailable: Boolean) {
         settingsBinding.nativeLanguageCard.isClickable = isAvailable
         if (isAvailable) {
-            settingsBinding.nativeLanguageTitle.setTextAppearance(appContext, R.style.RadioButtonTitleTextAvailable)
-            settingsBinding.nativeLanguageText.setTextAppearance(appContext, R.style.RadioButtonSubTitleTextAvailable)
+            settingsBinding.nativeLanguageTitle.setTextAppearance(R.style.RadioButtonTitleTextAvailable)
+            settingsBinding.nativeLanguageText.setTextAppearance(R.style.RadioButtonSubTitleTextAvailable)
         } else {
-            settingsBinding.nativeLanguageTitle.setTextAppearance(appContext, R.style.RadioButtonTitleTextUnavailable)
-            settingsBinding.nativeLanguageText.setTextAppearance(appContext, R.style.RadioButtonSubTitleTextUnavailable)
+            settingsBinding.nativeLanguageTitle.setTextAppearance(R.style.RadioButtonTitleTextUnavailable)
+            settingsBinding.nativeLanguageText.setTextAppearance(R.style.RadioButtonSubTitleTextUnavailable)
         }
     }
     private fun changeLearningCardAvailability(isAvailable: Boolean) {
         settingsBinding.learningLanguageCard.isClickable = isAvailable
         if (isAvailable) {
-            settingsBinding.learningLanguageTitle.setTextAppearance(appContext, R.style.RadioButtonTitleTextAvailable)
-            settingsBinding.learningLanguageText.setTextAppearance(appContext, R.style.RadioButtonSubTitleTextAvailable)
+            settingsBinding.learningLanguageTitle.setTextAppearance(R.style.RadioButtonTitleTextAvailable)
+            settingsBinding.learningLanguageText.setTextAppearance(R.style.RadioButtonSubTitleTextAvailable)
         } else {
-            settingsBinding.learningLanguageTitle.setTextAppearance(appContext, R.style.RadioButtonTitleTextUnavailable)
-            settingsBinding.learningLanguageText.setTextAppearance(appContext, R.style.RadioButtonSubTitleTextUnavailable)
+            settingsBinding.learningLanguageTitle.setTextAppearance(R.style.RadioButtonTitleTextUnavailable)
+            settingsBinding.learningLanguageText.setTextAppearance(R.style.RadioButtonSubTitleTextUnavailable)
+        }
+    }
+    private fun changeSourceCardAvailability(isAvailable: Boolean) {
+        settingsBinding.translatorSourceCard.isClickable = isAvailable
+        if (isAvailable) {
+            settingsBinding.translatorSourceTitle.setTextAppearance(R.style.RadioButtonTitleTextAvailable)
+            settingsBinding.translatorSourceText.setTextAppearance(R.style.RadioButtonSubTitleTextAvailable)
+        } else {
+            settingsBinding.translatorSourceTitle.setTextAppearance(R.style.RadioButtonTitleTextUnavailable)
+            settingsBinding.translatorSourceText.setTextAppearance(R.style.RadioButtonSubTitleTextUnavailable)
         }
     }
 
     private fun attachLearningTaskCallback(task: Task<Void>?) {
         task?.addOnSuccessListener {
+                changeSourceCardAvailability(isAvailable = (vm.learningDownloadingTask?.isSuccessful ?: true) && (vm.nativeDownloadingTask?.isSuccessful ?: true))
                 changeLearningCardAvailability(true)
                 showOnlyInGroup(settingsBinding.learningLanguageCheck, settingsBinding.learningGroup)
             }?.addOnFailureListener {
+                changeSourceCardAvailability(isAvailable = (vm.learningDownloadingTask?.isSuccessful ?: true) && (vm.nativeDownloadingTask?.isSuccessful ?: true))
                 changeLearningCardAvailability(true)
                 showOnlyInGroup(settingsBinding.learningLanguageDownload, settingsBinding.learningGroup)
             }?.addOnCanceledListener {
+                changeSourceCardAvailability(isAvailable = (vm.learningDownloadingTask?.isSuccessful ?: true) && (vm.nativeDownloadingTask?.isSuccessful ?: true))
                 changeLearningCardAvailability(true)
                 showOnlyInGroup(null, settingsBinding.learningGroup)
             }
     }
     private fun attachNativeTaskCallback(task: Task<Void>?) {
         task?.addOnSuccessListener {
+                changeSourceCardAvailability(isAvailable = (vm.learningDownloadingTask?.isSuccessful ?: true) && (vm.nativeDownloadingTask?.isSuccessful ?: true))
                 changeNativeCardAvailability(true)
                 showOnlyInGroup(settingsBinding.nativeLanguageCheck, settingsBinding.nativeGroup)
             }?.addOnFailureListener {
+                changeSourceCardAvailability(isAvailable = (vm.learningDownloadingTask?.isSuccessful ?: true) && (vm.nativeDownloadingTask?.isSuccessful ?: true))
                 changeNativeCardAvailability(true)
                 showOnlyInGroup(settingsBinding.nativeLanguageDownload, settingsBinding.nativeGroup)
             }?.addOnCanceledListener {
+                changeSourceCardAvailability(isAvailable = (vm.learningDownloadingTask?.isSuccessful ?: true) && (vm.nativeDownloadingTask?.isSuccessful ?: true))
                 changeNativeCardAvailability(true)
                 showOnlyInGroup(null, settingsBinding.nativeGroup)
             }
