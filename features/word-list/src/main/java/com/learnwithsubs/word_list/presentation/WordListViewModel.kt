@@ -4,11 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.learnwithsubs.word_list.domain.models.WordTranslation
+import com.learnwithsubs.word_list.domain.usecase.WordListUseCases
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class WordListViewModel @Inject constructor(
-    val wordListUseCases: com.learnwithsubs.word_list.domain.usecase.WordListUseCases
+    val wordListUseCases: WordListUseCases
 ) : ViewModel() {
 
     //private val wordListFlow: Flow<List<WordTranslation>> = wordListUseCases.getWordsListSortedByVideoIdUseCase.invoke()
@@ -34,6 +35,14 @@ class WordListViewModel @Inject constructor(
             wordListUseCases.loadWordUseCase.invoke(word)
         }
     }
+
+    fun getNativeLanguage(): Pair<String, String> {
+        return wordListUseCases.getNativeLanguage.invoke()
+    }
+    fun getLearningLanguage(): Pair<String, String> {
+        return wordListUseCases.getLearningLanguage.invoke()
+    }
+
 
     fun setFilterMode(filter: String?) {
         this.filter = filter

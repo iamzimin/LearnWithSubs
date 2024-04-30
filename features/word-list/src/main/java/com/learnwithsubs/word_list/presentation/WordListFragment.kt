@@ -13,13 +13,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.base.OnSelectChange
+import com.example.base.OnSelectionModeChange
 import com.learnwithsubs.word_list.R
 import com.learnwithsubs.word_list.databinding.DialogWordListMenuSortByBinding
 import com.learnwithsubs.word_list.databinding.FragmentWordListBinding
 import com.learnwithsubs.word_list.databinding.SearchViewBinding
 import com.learnwithsubs.word_list.di.DaggerWordListAppComponent
 import com.learnwithsubs.word_list.di.WordListAppModule
-import com.example.base.OnSelectionModeChange
 import com.learnwithsubs.word_list.presentation.adapter.WordListTitleAdapter
 import javax.inject.Inject
 
@@ -30,7 +30,6 @@ class WordListFragment : Fragment(), OnSelectChange {
 
     private lateinit var fragmentWordListBinding: FragmentWordListBinding
     private lateinit var searchViewBinding: SearchViewBinding
-    //private lateinit var dialogWordListMenuEditBinding: DialogWordListMenuEditBinding
     private lateinit var sortByDialogBinding: DialogWordListMenuSortByBinding
 
     private lateinit var context: Context

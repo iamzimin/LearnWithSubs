@@ -7,4 +7,6 @@ data class WordListUseCases(
     val sortWordListUseCases: SortWordListUseCase,
     val filterWordListUseCase: FilterWordListUseCase,
     val getWordsListSortedByVideoIdUseCase: GetWordsListSortedByVideoIdUseCase,
+    val getNativeLanguage: GetNativeLanguage,
+    val getLearningLanguage: GetLearningLanguage,
 )

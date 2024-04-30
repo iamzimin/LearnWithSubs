@@ -1,8 +1,11 @@
 package com.learnwithsubs.word_list.di
 
+import com.learnwithsubs.shared_preference_settings.domain.repository.SharedPreferenceSettings
 import com.learnwithsubs.word_list.domain.repository.WordListRepository
 import com.learnwithsubs.word_list.domain.usecase.DeleteWordUseCase
 import com.learnwithsubs.word_list.domain.usecase.FilterWordListUseCase
+import com.learnwithsubs.word_list.domain.usecase.GetLearningLanguage
+import com.learnwithsubs.word_list.domain.usecase.GetNativeLanguage
 import com.learnwithsubs.word_list.domain.usecase.GetWordListUseCase
 import com.learnwithsubs.word_list.domain.usecase.GetWordsListSortedByVideoIdUseCase
 import com.learnwithsubs.word_list.domain.usecase.LoadWordUseCase
@@ -18,7 +21,8 @@ class WordListDomainModule {
     @Provides
     @Singleton
     fun provideVideoListUseCases(
-        wordListRepository: WordListRepository
+        wordListRepository: WordListRepository,
+        sharedPreferenceSettings: SharedPreferenceSettings,
     ): WordListUseCases {
         return WordListUseCases(
             getWordListUseCase = GetWordListUseCase(
@@ -34,6 +38,12 @@ class WordListDomainModule {
             filterWordListUseCase = FilterWordListUseCase(),
             getWordsListSortedByVideoIdUseCase = GetWordsListSortedByVideoIdUseCase(
                 wordListRepository
+            ),
+            getNativeLanguage = GetNativeLanguage(
+                sharedPreferenceSettings
+            ),
+            getLearningLanguage = GetLearningLanguage(
+                sharedPreferenceSettings
             ),
         )
     }

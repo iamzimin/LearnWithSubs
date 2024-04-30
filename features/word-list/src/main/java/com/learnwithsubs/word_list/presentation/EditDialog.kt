@@ -16,6 +16,9 @@ class EditDialog(fragment: Fragment, private val vm: WordListViewModel, private 
     private val editDialogBinding: DialogWordListMenuEditBinding = DialogWordListMenuEditBinding.inflate(fragment.layoutInflater)
     private val editMenu = Dialog(context)
 
+    private val nativeLanguage: Pair<String, String> = vm.getNativeLanguage()
+    private val learnLanguage: Pair<String, String> = vm.getLearningLanguage()
+
     init {
         editMenu.requestWindowFeature(Window.FEATURE_NO_TITLE)
         val dialogView = editDialogBinding.root
@@ -30,8 +33,8 @@ class EditDialog(fragment: Fragment, private val vm: WordListViewModel, private 
                 val newWord = WordTranslation(
                     word = editDialogBinding.word.text.toString(),
                     translation = editDialogBinding.translation.text.toString(),
-                    nativeLanguage = "ru", //TODO
-                    learnLanguage = "en",
+                    nativeLanguage = nativeLanguage.second,
+                    learnLanguage = learnLanguage.second,
                     timestamp = Date().time
                 )
                 vm.editWord(newWord)
