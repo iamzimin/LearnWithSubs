@@ -1,7 +1,7 @@
 package com.learnwithsubs.video_list.domain.usecase
 
-import com.example.server_api.domain.repository.ServerInteractionRepository
 import com.example.base.VideoConstants
+import com.example.server_api.domain.repository.ServerInteractionRepository
 import com.learnwithsubs.video_list.domain.models.Video
 import com.learnwithsubs.video_list.domain.models.VideoErrorType
 import com.learnwithsubs.video_list.domain.repository.VideoListRepository
@@ -15,7 +15,7 @@ class GetSubtitlesFromServerUseCase(
 ) {
     suspend fun invoke(video: Video): Video {
         val file = File(video.outputPath, VideoConstants.EXTRACTED_AUDIO)
-        val subtitles = serverInteractionRepository.getSubtitles(videoFile = file)
+        val subtitles = serverInteractionRepository.getSubtitlesFromAudio(videoFile = file)
 
         if (subtitles == null) {
             video.apply { errorType = VideoErrorType.GENERATING_SUBTITLES }
