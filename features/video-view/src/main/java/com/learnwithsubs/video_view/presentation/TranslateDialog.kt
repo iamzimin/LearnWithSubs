@@ -10,7 +10,7 @@ import android.view.Window
 import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.learnwithsubs.video_view.R
+import com.learnwithsubs.resource.R
 import com.learnwithsubs.video_view.databinding.DialogTranslateBinding
 import com.learnwithsubs.video_view.domain.models.TranslationModel
 import com.learnwithsubs.video_view.domain.models.WordTranslation
@@ -47,11 +47,11 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
             outputLanguage = nativeLanguage.second,
         )
         when (translatorSource) {
-            context.getString(com.learnwithsubs.shared_preference_settings.R.string.server) ->
+            context.getString(R.string.server) ->
                 vm.getTranslationFromServer(translationModel = translationModel)
-            context.getString(com.learnwithsubs.shared_preference_settings.R.string.yandex) ->
+            context.getString(R.string.yandex) ->
                 vm.getTranslationFromYandexDictionary(translationModel = translationModel)
-            context.getString(com.learnwithsubs.shared_preference_settings.R.string.android) ->
+            context.getString(R.string.android) ->
                 vm.getTranslationFromAndroid(translationModel = translationModel)
             else -> { }
         }
@@ -64,7 +64,7 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
 
     init {
         dialogMenu.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogMenu.setContentView(R.layout.dialog_translate)
+        dialogMenu.setContentView(com.learnwithsubs.video_view.R.layout.dialog_translate)
 
         adapter.setOnItemClickListener(this@TranslateDialog)
 

@@ -9,7 +9,7 @@ import android.view.Window
 import androidx.fragment.app.Fragment
 import com.example.base.util.OrderType
 import com.example.base.util.VideoOrder
-import com.learnwithsubs.video_list.R
+import com.learnwithsubs.resource.R
 import com.learnwithsubs.video_list.databinding.DialogVideoListMenuSortByBinding
 import com.learnwithsubs.video_list.presentation.adapter.VideoListAdapter
 import com.learnwithsubs.video_list.presentation.videos.VideoListViewModel

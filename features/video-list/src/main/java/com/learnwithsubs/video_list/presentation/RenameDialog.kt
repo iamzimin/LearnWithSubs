@@ -9,7 +9,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.learnwithsubs.video_list.R
+import com.learnwithsubs.resource.R
 import com.learnwithsubs.video_list.databinding.DialogVideoListMenuRenameBinding
 import com.learnwithsubs.video_list.domain.models.VideoLoadingType
 import com.learnwithsubs.video_list.presentation.adapter.VideoListAdapter

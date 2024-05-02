@@ -2,7 +2,7 @@ package com.learnwithsubs.shared_preference_settings.domain
 
 import android.content.Context
 import android.content.res.Configuration
-import com.learnwithsubs.shared_preference_settings.R
+import com.learnwithsubs.resource.R
 import java.util.Locale
 
 

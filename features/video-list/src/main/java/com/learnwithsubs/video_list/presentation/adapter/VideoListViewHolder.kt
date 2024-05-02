@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.example.base.VideoConstants
-import com.learnwithsubs.video_list.R
+import com.learnwithsubs.resource.R
 import com.learnwithsubs.video_list.databinding.TileVideoBinding
 import com.learnwithsubs.video_list.databinding.TileVideoUploadingBinding
 import com.learnwithsubs.video_list.domain.models.Video

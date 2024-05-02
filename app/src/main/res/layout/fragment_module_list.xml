@@ -42,7 +42,7 @@
         app:tint="?attr/text_color" />
 
 
-    <include
+<!--    <include
         android:id="@+id/search_bar"
         layout="@layout/search_view"
         android:layout_width="match_parent"
@@ -53,7 +53,7 @@
         app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/video"
-        app:layout_constraintVertical_bias="0.020" />
+        app:layout_constraintVertical_bias="0.020" />-->
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/add_word_card"

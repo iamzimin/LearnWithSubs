@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="red">#FF0000</color>
+
+
+
+    <color name="TEST">#696b7a</color>
+
+
+    <color name="main_color">#9D80F6</color>
+    <color name="check_mark">#44FF36</color>
+
+    <!--____________Light Theme____________-->
+
+
+    <!--____________Dark Theme____________-->
+    <color name="button_normal">#41415F</color>
+    <color name="button_pressed">#28283C</color>
+
+    <color name="bottom_icons_dark">#FFFFFFFF</color>
+    <color name="background_dark">#2F2E3E</color>
+    <color name="text_main_dark">#FFFFFFFF</color>
+    <color name="search_field_dark">#3C445F</color>
+
+    <!--Video Tile-->
+    <color name="background_video_tile_dark">#46475C</color>
+    <color name="background_video_selected_tile_dark">#646478</color>
+    <color name="select_video_outline_dark">#FFFFFFFF</color>
+
+    <!--Unavailable Video Tile-->
+    <color name="video_text_unavailable_dark">#767582</color>
+    <color name="background_unavailable_video_tile_dark">#404153</color>
+
+    <!--Video upload-->
+    <color name="video_upload_green_card">#63C863</color>
+    <color name="video_close_selection_mode_card">#C84664</color>
+
+    <!--Pop-up Menu-->
+    <color name="pop_up_menu_background">#4D4D67</color>
+    <color name="pop_up_menu_line">#2F2E3E</color>
+
+    <!--Bottom Menu-->
+    <color name="bottom_navigation_default">#ACABB2</color>
+
+    <!--Word List-->
+    <color name="word_title_background_dark">#141928</color>
+
+
+    <!--Settings-->
+    <color name="card_background">#4D4D67</color>
+    <color name="text_color_unavailable">#767582</color>
+
+
+
+
+
+</resources>

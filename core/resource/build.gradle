@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.learnwithsubs.shared_preference_settings'
+    namespace 'com.learnwithsubs.resource'
     compileSdk 34
 
     defaultConfig {
@@ -20,6 +20,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    buildFeatures {
+        viewBinding true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -30,7 +35,6 @@ android {
 }
 
 dependencies {
-    implementation project(':core:resource')
 
     implementation 'androidx.core:core-ktx:1.13.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'

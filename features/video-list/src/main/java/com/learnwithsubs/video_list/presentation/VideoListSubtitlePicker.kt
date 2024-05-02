@@ -5,7 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.learnwithsubs.video_list.R
+import com.learnwithsubs.resource.R
 import com.learnwithsubs.video_list.domain.models.Video
 import com.learnwithsubs.video_list.presentation.videos.VideoListViewModel
 

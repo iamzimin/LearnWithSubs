@@ -9,7 +9,7 @@ import android.widget.LinearLayout
 import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.settings.R
+import com.learnwithsubs.resource.R
 import com.example.settings.databinding.FragmentSettingsBinding
 import com.google.android.gms.tasks.Task
 import com.google.mlkit.common.model.DownloadConditions
@@ -206,7 +206,7 @@ class SettingsFragment : Fragment() {
 
     private fun isAndroidSourceSelected(): Boolean {
         return try {
-            return settingsBinding.translatorSourceText.text.toString() == getString(com.learnwithsubs.shared_preference_settings.R.string.android)
+            return settingsBinding.translatorSourceText.text.toString() == getString(R.string.android)
         } catch (_: Exception) { false }
     }
 
@@ -227,7 +227,7 @@ class SettingsFragment : Fragment() {
 
     private fun changeLanguageCardVisibility(selectedText: String) {
         try {
-            if (selectedText == getString(com.learnwithsubs.shared_preference_settings.R.string.android)) {
+            if (selectedText == getString(R.string.android)) {
                 updateLanguagesCard()
             } else {
                 changeNativeCardAvailability(true)

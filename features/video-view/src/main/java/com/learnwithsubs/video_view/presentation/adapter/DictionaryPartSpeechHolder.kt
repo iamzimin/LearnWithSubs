@@ -2,7 +2,7 @@ package com.learnwithsubs.video_view.presentation.adapter
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.learnwithsubs.video_view.R
+import com.learnwithsubs.resource.R
 import com.learnwithsubs.video_view.databinding.TileTranslatePartspeechBinding
 import com.learnwithsubs.video_view.domain.models.DictionaryElement
 

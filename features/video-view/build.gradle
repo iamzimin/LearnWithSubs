@@ -38,6 +38,7 @@ android {
 
 dependencies {
     //implementation project(':app')
+    implementation project(':core:resource')
     implementation project(':core:database')
     implementation project(':core:base')
     implementation project(':core:yandex-translator-api')

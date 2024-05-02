@@ -1,0 +1,58 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.LearnWithSubs" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/background_dark</item>
+
+        <item name="main_color">@color/main_color</item>
+
+
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/background_dark</item>
+
+        <item name="bottom_icons_dark">@color/bottom_icons_dark</item>
+        <item name="background_dark">@color/background_dark</item>
+        <item name="text_color">@color/text_main_dark</item>
+        <item name="search_field">@color/search_field_dark</item>
+
+        <!--Video Tile-->
+        <item name="background_video_tile_dark">@color/background_video_tile_dark</item>
+        <item name="background_video_selected_tile_dark">@color/background_video_selected_tile_dark</item>
+        <item name="select_video_outline_dark">@color/select_video_outline_dark</item>
+
+        <!--Unavailable Video Tile-->
+        <item name="video_text_unavailable_dark">@color/video_text_unavailable_dark</item>
+        <item name="background_unavailable_video_tile_dark">@color/background_unavailable_video_tile_dark</item>
+
+        <!--Video upload-->
+        <item name="video_upload_green_card">@color/video_upload_green_card</item>
+        <item name="video_close_selection_mode_card">@color/video_close_selection_mode_card</item>
+
+        <!--Pop-up Menu-->
+        <item name="pop_up_menu_background">@color/pop_up_menu_background</item>
+        <item name="pop_up_menu_line">@color/pop_up_menu_line</item>
+        <!--Pop-up SortBy-->
+        <item name="button_normal_dark">@color/button_normal</item>
+        <item name="button_pressed_dark">@color/button_pressed</item>
+
+        <!--Bottom Menu-->
+        <item name="bottom_navigation_default">@color/bottom_navigation_default</item>
+
+        <!--Word List-->
+        <item name="word_title_background_dark">@color/word_title_background_dark</item>
+
+
+        <!--Settings-->
+        <item name="card_background">@color/card_background</item>
+        <item name="text_color_unavailable">@color/text_color_unavailable</item>
+
+    </style>
+</resources>

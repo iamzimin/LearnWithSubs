@@ -9,9 +9,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import androidx.fragment.app.Fragment
-import com.arthenica.ffmpegkit.FFprobeKit
-import com.learnwithsubs.video_list.R
-//import com.arthenica.mobileffmpeg.FFprobe
+import com.learnwithsubs.resource.R
 import com.learnwithsubs.video_list.domain.models.Video
 import com.learnwithsubs.video_list.domain.models.VideoErrorType
 import com.learnwithsubs.video_list.domain.models.VideoLoadingType

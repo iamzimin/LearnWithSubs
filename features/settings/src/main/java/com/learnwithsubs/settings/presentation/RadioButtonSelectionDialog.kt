@@ -11,9 +11,8 @@ import android.view.Window
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
-import com.example.settings.R
+import com.learnwithsubs.resource.R
 import com.example.settings.databinding.SettingsRadioButtonDialogBinding
-import com.learnwithsubs.settings.presentation.settings.SettingsViewModel
 
 class RadioButtonSelectionDialog(
     fragment: Fragment,

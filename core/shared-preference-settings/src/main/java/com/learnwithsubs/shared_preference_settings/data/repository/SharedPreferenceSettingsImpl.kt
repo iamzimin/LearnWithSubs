@@ -2,7 +2,7 @@ package com.learnwithsubs.shared_preference_settings.data.repository
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.learnwithsubs.shared_preference_settings.R
+import com.learnwithsubs.resource.R
 import com.learnwithsubs.shared_preference_settings.domain.languageIdToString
 import com.learnwithsubs.shared_preference_settings.domain.stringToLanguageId
 import com.learnwithsubs.shared_preference_settings.domain.repository.SharedPreferenceSettings

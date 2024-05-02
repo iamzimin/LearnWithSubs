@@ -1,7 +1,6 @@
 package com.learnwithsubs.video_view.presentation
 
 import android.Manifest
-import android.app.Dialog
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
@@ -26,7 +25,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import com.learnwithsubs.video_view.R
+import com.learnwithsubs.resource.R
 import com.learnwithsubs.video_view.databinding.ActivityVideoViewBinding
 import com.learnwithsubs.video_view.databinding.VideoViewInterfaceBinding
 import com.learnwithsubs.video_view.di.DaggerVideoViewAppComponent
@@ -58,8 +57,8 @@ class VideoViewActivity : AppCompatActivity() {
         vm = ViewModelProvider(this, vmFactory)[VideoViewViewModel::class.java]
 
         configSystemUI()
-        setContentView(R.layout.activity_video_view)
-        val videoViewLayout = findViewById<ConstraintLayout>(R.id.video_view_constraint_layout)
+        setContentView(com.learnwithsubs.video_view.R.layout.activity_video_view)
+        val videoViewLayout = findViewById<ConstraintLayout>(com.learnwithsubs.video_view.R.id.video_view_constraint_layout)
 
         val translateDialog = TranslateDialog(activity = this@VideoViewActivity, vm = vm)
         videoViewBind = ActivityVideoViewBinding.inflate(layoutInflater, videoViewLayout, true)

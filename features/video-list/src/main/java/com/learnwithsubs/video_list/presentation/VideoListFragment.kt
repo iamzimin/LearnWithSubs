@@ -17,9 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.base.OnSelectChange
 import com.example.base.OnSelectionModeChange
-import com.learnwithsubs.video_list.R
+import com.learnwithsubs.resource.R
 import com.learnwithsubs.video_list.databinding.FragmentVideoListBinding
-import com.learnwithsubs.video_list.databinding.SearchViewBinding
+import com.learnwithsubs.resource.databinding.SearchViewBinding
 import com.learnwithsubs.video_list.di.DaggerVideoListAppComponent
 import com.learnwithsubs.video_list.di.VideoListAppModule
 import com.learnwithsubs.video_list.domain.models.VideoErrorType
