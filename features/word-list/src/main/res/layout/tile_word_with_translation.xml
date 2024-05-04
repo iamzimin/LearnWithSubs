@@ -7,9 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@android:color/transparent"
-    app:cardElevation="0dp"
-    app:cardCornerRadius="0dp">
-<!--    app:cardBackgroundColor="?attr/background_video_tile_dark"-->
+    app:cardElevation="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,7 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="?attr/text_color"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/text_default"
                     android:paddingBottom="5dp"
                     android:text="12312433444123"/>
 
@@ -51,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="?attr/text_unavailable"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/text_small"
                     android:text="123123123"/>
 
 
@@ -70,10 +68,10 @@
             <ImageButton
                 android:id="@+id/audio_output_word"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="@dimen/image_size_small"
+                android:layout_height="@dimen/image_size_small"
 
-                android:padding="7dp"
+                android:padding="@dimen/image_padding"
                 android:scaleType="centerInside"
 
                 app:srcCompat="@drawable/sound_max"
@@ -82,11 +80,9 @@
             <CheckBox
                 android:id="@+id/select_check_box"
                 android:visibility="gone"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:clickable="false"
-                android:focusable="false"
-                android:background="@null"
+                style="@style/CardViewVideoCheckBox"
+                android:layout_width="@dimen/image_size_small"
+                android:layout_height="@dimen/image_size_small"
                 app:buttonTint="?attr/main_color"/>
 
         </LinearLayout>

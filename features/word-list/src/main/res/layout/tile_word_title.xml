@@ -30,11 +30,9 @@
 
                 <CheckBox
                     android:id="@+id/select_check_box"
+                    style="@style/CardViewVideoCheckBox"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:background="@null"
                     app:buttonTint="?attr/main_color"/>
 
             </LinearLayout>

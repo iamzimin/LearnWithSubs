@@ -15,7 +15,7 @@
         android:layout_marginTop="6dp"
         android:text="Module.."
         android:textColor="?attr/text_color"
-        android:textSize="@dimen/section_name"
+        android:textSize="@dimen/text_h1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

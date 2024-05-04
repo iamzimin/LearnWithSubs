@@ -22,23 +22,23 @@
             android:layout_marginHorizontal="15dp"
             android:layout_marginBottom="5dp"
             android:textColor="?attr/text_color"
-            android:textSize="@dimen/word_to_translate_in_translate_dialog"
+            android:textSize="@dimen/text_default"
             android:text="... Translator"/>
     </LinearLayout>
 
     <LinearLayout
-       android:orientation="vertical"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/translate_dialog_background"
-        android:paddingBottom="5dp">
+        android:background="@drawable/translate_dialog_background">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginHorizontal="15dp">
+            android:layout_marginBottom="@dimen/dialog_margin_vertical"
+            android:layout_marginHorizontal="@dimen/dialog_margin_horizontal">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -58,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:text="Language"
                         android:textColor="?attr/text_color"
-                        android:textSize="@dimen/language_in_translate_dialog"
+                        android:textSize="@dimen/text_default"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/language_arrow"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -89,7 +89,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Language"
-                        android:textSize="@dimen/language_in_translate_dialog"
+                        android:textSize="@dimen/text_default"
                         android:textColor="?attr/text_color"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/language_arrow"
@@ -117,18 +117,18 @@
                     android:layout_alignParentStart="true"
                     android:layout_toStartOf="@id/audio_input_word"
                     android:text="Input word"
-                    android:textSize="@dimen/word_to_translate_in_translate_dialog"
+                    android:textSize="@dimen/text_default"
                     android:textColor="?attr/text_color" />
 
                 <ImageButton
                     android:id="@+id/audio_input_word"
                     style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="@dimen/image_size_medium"
+                    android:layout_height="@dimen/image_size_medium"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
 
-                    android:padding="5dp"
+                    android:padding="@dimen/image_padding"
                     android:scaleType="centerInside"
 
                     app:srcCompat="@drawable/sound_max"
@@ -162,18 +162,18 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentStart="true"
                     android:text="Output word"
-                    android:textSize="@dimen/word_to_translate_in_translate_dialog"
+                    android:textSize="@dimen/text_default"
                     android:textColor="?attr/text_color" />
 
                 <ImageButton
                     android:id="@+id/audio_output_word"
                     style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="@dimen/image_size_medium"
+                    android:layout_height="@dimen/image_size_medium"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
 
-                    android:padding="5dp"
+                    android:padding="@dimen/image_padding"
                     android:scaleType="centerInside"
 
                     app:srcCompat="@drawable/sound_max"
@@ -194,34 +194,34 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <Button
+                    android:id="@+id/save_word"
+                    style="@style/SaveButton"
+                    android:layout_gravity="end"/>
+
+            </LinearLayout>
+
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <Button
-                android:id="@+id/save_word"
-                style="@style/SaveButton"
-                android:layout_marginTop="5dp"
-                android:layout_marginHorizontal="15dp"
-                android:layout_gravity="end" />
-        </LinearLayout>
     </LinearLayout>
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="vertical">-->
-<!--        <Button-->
-<!--            android:id="@+id/save_word"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:layout_marginHorizontal="15dp"-->
-<!--            android:backgroundTint="@color/video_upload_green_card"-->
-<!--            android:text="Save"-->
-<!--            android:layout_gravity="end" />-->
-<!--    </LinearLayout>-->
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:orientation="vertical">-->
+    <!--        <Button-->
+    <!--            android:id="@+id/save_word"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="40dp"-->
+    <!--            android:layout_marginHorizontal="15dp"-->
+    <!--            android:backgroundTint="@color/video_upload_green_card"-->
+    <!--            android:text="Save"-->
+    <!--            android:layout_gravity="end" />-->
+    <!--    </LinearLayout>-->
 
 
 </LinearLayout>

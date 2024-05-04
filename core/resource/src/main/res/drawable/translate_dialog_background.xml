@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <corners android:radius="15dp" />
+            <corners android:radius="@dimen/dialog_menu_margins" />
             <gradient
                 android:startColor="?attr/background_color"
                 android:endColor="?attr/background_color"
@@ -14,8 +14,8 @@
             <corners
                 android:topLeftRadius="0dp"
                 android:topRightRadius="0dp"
-                android:bottomLeftRadius="15dp"
-                android:bottomRightRadius="15dp" />
+                android:bottomLeftRadius="@dimen/dialog_menu_margins"
+                android:bottomRightRadius="@dimen/dialog_menu_margins" />
             <gradient
                 android:startColor="?attr/pop_up_menu_background"
                 android:endColor="?attr/pop_up_menu_background"

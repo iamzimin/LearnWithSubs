@@ -1,16 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="section_name">20sp</dimen>
-    <dimen name="video_name_in_video_tile">17sp</dimen>
-    <dimen name="video_description_in_video_tile">11sp</dimen>
+    <!--Setting-->
+    <dimen name="radio_button_text_start_padding">8sp</dimen>
+    <dimen name="radio_button_text_vertical_padding">10sp</dimen>
+
+    <!--Text size-->
+    <dimen name="text_h1">21sp</dimen>
+    <dimen name="text_h2">19sp</dimen>
+    <dimen name="text_default">17sp</dimen>
+    <dimen name="text_medium">15sp</dimen>
+    <dimen name="text_small">12sp</dimen>
+
+    <!--Image size-->
+    <dimen name="image_size_large">45sp</dimen>
+    <dimen name="image_size_medium">40sp</dimen>
+    <dimen name="image_size_small">35sp</dimen>
+    <dimen name="image_padding">5sp</dimen>
+
+    <!--Dialog-->
+    <dimen name="dialog_title_margit_top">10sp</dimen>
+    <dimen name="dialog_margin_vertical">10sp</dimen>
+    <dimen name="dialog_margin_horizontal">15sp</dimen>
+
     <dimen name="icon_bottom_menu">28sp</dimen>
-    <dimen name="language_in_translate_dialog">18sp</dimen>
-    <dimen name="word_to_translate_in_translate_dialog">17sp</dimen>
     <dimen name="dialog_menu_margins">15sp</dimen>
     <dimen name="subtitle_indentation_with_interface">70sp</dimen>
     <dimen name="subtitle_indentation_without_interface">20sp</dimen>
 
-    <!--Setting-->
-    <dimen name="radio_button_text_start_padding">8sp</dimen>
-    <dimen name="radio_button_text_vertical_padding">10sp</dimen>
+    <dimen name="search_margin_horizontal">10sp</dimen>
+
+    <dimen name="select_mode_layout_height">65sp</dimen>
+
+    <dimen name="card_corner">20sp</dimen>
+
 </resources>

@@ -8,50 +8,44 @@
     tools:context=".presentation.VideoListFragment"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="6dp">
-
-        <TextView
-            android:id="@+id/video"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:text="@string/video"
-            android:textColor="?attr/text_color"
-            android:textSize="@dimen/section_name" />
-
-        <ImageButton
-            android:id="@+id/sort_by"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="50dp"
-            android:layout_height="45dp"
-            android:layout_gravity="end"
-            android:layout_alignParentEnd="true"
-
-            android:padding="5dp"
-            android:scaleType="centerInside"
-
-            app:srcCompat="@drawable/sort_by"
-            app:tint="?attr/text_color" />
-
-    </RelativeLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp" >
+        android:layout_height="@dimen/image_size_large"
+        android:orientation="horizontal">
 
-        <include
-            android:id="@+id/search_bar"
-            layout="@layout/search_view"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_centerInParent="true"
+                android:text="@string/video"
+                android:textColor="?attr/text_color"
+                android:textSize="@dimen/text_h1" />
+
+            <ImageButton
+                android:id="@+id/sort_by"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="@dimen/image_size_large"
+                android:layout_height="@dimen/image_size_large"
+                android:padding="@dimen/image_padding"
+                android:scaleType="centerInside"
+                android:layout_alignParentEnd="true"
+
+                app:srcCompat="@drawable/sort_by"
+                app:tint="?attr/text_color" />
+
+        </RelativeLayout>
+
 
     </LinearLayout>
 
-
+    <include
+        android:id="@+id/search_bar"
+        layout="@layout/search_view"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -106,7 +100,7 @@
     <LinearLayout
         android:id="@+id/edit_list_layout"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="@dimen/select_mode_layout_height"
         android:visibility="gone"
         android:orientation="horizontal">
 
@@ -118,7 +112,7 @@
                 <ImageView
                     style="@style/ImageInEditListMenu"
                     android:padding="2dp"
-                    android:src="@drawable/srt_file" />
+                    android:src="@drawable/srt_file"/>
                 <TextView
                     android:id="@+id/add_subtitles_menu_text"
                     style="@style/TextInEditListMenu"
@@ -132,8 +126,7 @@
                 style="@style/TileInEditListMenu">
                 <ImageView
                     style="@style/ImageInEditListMenu"
-                    android:src="@drawable/edit"
-                    android:padding="1dp" />
+                    android:src="@drawable/edit"/>
                 <TextView
                     style="@style/TextInEditListMenu"
                     android:text="@string/rename"/>
@@ -146,7 +139,7 @@
                 style="@style/TileInEditListMenu">
                 <ImageView
                     style="@style/ImageInEditListMenu"
-                    android:src="@drawable/trash" />
+                    android:src="@drawable/trash"/>
                 <TextView
                     style="@style/TextInEditListMenu"
                     android:text="@string/delete"/>
@@ -159,7 +152,7 @@
                 style="@style/TileInEditListMenu">
                 <ImageView
                     style="@style/ImageInEditListMenu"
-                    android:src="@drawable/check_all" />
+                    android:src="@drawable/check_all"/>
                 <TextView
                     android:id="@+id/de_select_all_menu_text"
                     style="@style/TextInEditListMenu"

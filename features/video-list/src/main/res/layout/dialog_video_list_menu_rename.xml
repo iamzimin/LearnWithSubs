@@ -13,38 +13,37 @@
         android:orientation="vertical"
         style="@style/MenuBackground">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:textColor="?attr/text_color"
-            android:textSize="20sp"
-            android:text="@string/rename_video"
-            android:layout_gravity="center_horizontal"/>
-
-        <EditText
-            android:id="@+id/video_name_edittext"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxHeight="200dp"
-            android:layout_marginHorizontal="20dp"
-            android:hint="@string/enter_name"/>
+            android:layout_marginVertical="@dimen/dialog_margin_vertical"
+            android:layout_marginHorizontal="@dimen/dialog_margin_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/text_color"
+                android:textSize="@dimen/text_h2"
+                android:text="@string/rename_video"
+                android:layout_gravity="center_horizontal"/>
+
+            <EditText
+                android:id="@+id/video_name_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="200dp"
+                android:hint="@string/enter_name"/>
+
+            <Button
+                android:id="@+id/save"
+                style="@style/SaveButton"
+                android:layout_gravity="end" />
+
+            </LinearLayout>
 
 
         </LinearLayout>
-
-        <Button
-            android:id="@+id/save"
-            style="@style/SaveButton"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="5dp"
-            android:layout_gravity="end" />
-    </LinearLayout>
 
 
 </LinearLayout>
