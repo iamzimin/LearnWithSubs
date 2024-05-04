@@ -23,7 +23,7 @@
         android:layout_height="65dp"
         app:menu="@menu/bottom_menu"
         app:itemIconSize="@dimen/icon_bottom_menu"
-        android:background="?attr/background_dark"/>
+        android:background="?attr/background_color"/>
 
 
 </LinearLayout>

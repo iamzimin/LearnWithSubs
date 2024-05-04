@@ -41,7 +41,7 @@
                     android:id="@+id/word"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:textColor="?attr/text_color"
                     android:textSize="20sp"
                     android:paddingBottom="5dp"
                     android:text="12312433444123"/>
@@ -50,7 +50,7 @@
                     android:id="@+id/translation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#808080"
+                    android:textColor="?attr/text_unavailable"
                     android:textSize="15sp"
                     android:text="123123123"/>
 

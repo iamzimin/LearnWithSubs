@@ -74,7 +74,7 @@
 
                 <ImageView
                     style="@style/CardViewAddBackground"
-                    android:src="?attr/video_upload_green_card" />
+                    android:src="@color/video_upload_green_card" />
 
                 <ImageView
                     style="@style/CardViewAddImage"
@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content">
                 <ImageView
                     style="@style/CardViewAddBackground"
-                    android:src="?attr/video_close_selection_mode_card"/>
+                    android:src="@color/video_close_selection_mode_card"/>
                 <ImageView
                     style="@style/CardViewAddImage"
                     android:src="@drawable/close_bold" />

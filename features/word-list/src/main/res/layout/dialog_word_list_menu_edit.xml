@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:textColor="@color/text_main_dark"
+                android:textColor="?attr/text_color"
                 android:textSize="20sp"
                 android:text="@string/edit"
                 android:layout_gravity="center_horizontal"/>
@@ -36,6 +36,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="?attr/text_color"
                     android:textSize="20sp"
                     android:text="Word"/>
 
@@ -58,6 +59,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="?attr/text_color"
                     android:textSize="20sp"
                     android:text="Translation"/>
 

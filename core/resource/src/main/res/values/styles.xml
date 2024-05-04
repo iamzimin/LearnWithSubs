@@ -25,7 +25,7 @@
         <item name="android:background">@null</item>
     </style>
     <style name="ButtonSortByStyle" parent="Widget.MaterialComponents.Button">
-        <item name="android:backgroundTint">?attr/button_normal_dark</item>
+        <item name="android:backgroundTint">?attr/button_normal</item>
         <item name="android:textColor">?attr/text_color</item>
     </style>
 
@@ -55,14 +55,14 @@
         <item name="android:layout_width">30dp</item>
         <item name="android:layout_height">30dp</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:tint">?attr/bottom_navigation_default</item>
+        <item name="android:tint">?attr/bottom_navigation_icon</item>
     </style>
     <style name="TextInEditListMenu">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
-        <item name="android:tint">?attr/bottom_navigation_default</item>
+        <item name="android:tint">?attr/bottom_navigation_icon</item>
     </style>
 
     <!--video list add button-->
@@ -133,7 +133,7 @@
     <style name="SaveButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">40dp</item>
-        <item name="android:backgroundTint">?attr/video_upload_green_card</item>
+        <item name="android:backgroundTint">@color/video_upload_green_card</item>
         <item name="android:text">@string/save</item>
         <item name="android:textColor">?attr/text_color</item>
     </style>
@@ -149,7 +149,7 @@
     <style name="CardViewMain" parent="Widget.MaterialComponents.CardView">
         <item name="android:layout_marginHorizontal">25sp</item>
         <item name="android:layout_marginTop">10sp</item>
-        <item name="cardBackgroundColor">?card_background</item> <!--TODO attr-->
+        <item name="cardBackgroundColor">?attr/background_tile</item>
         <item name="cardCornerRadius">25dp</item>
     </style>
 
@@ -161,7 +161,7 @@
 
     <style name="ImageSeparation">
         <item name="android:background">@drawable/rounded</item>
-        <item name="android:backgroundTint">?attr/background_dark</item>
+        <item name="android:backgroundTint">?attr/background_color</item>
         <item name="android:minHeight">2sp</item>
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
@@ -192,7 +192,7 @@
         <item name="android:textSize">20sp</item>
     </style>
     <style name="RadioButtonTitleTextUnavailable">
-        <item name="android:textColor">?text_color_unavailable</item> <!--TODO attr-->
+        <item name="android:textColor">?attr/text_unavailable</item>
         <item name="android:textSize">20sp</item>
     </style>
     <style name="RadioButtonSubTitleTextAvailable">
@@ -200,7 +200,7 @@
         <item name="android:textSize">15sp</item>
     </style>
     <style name="RadioButtonSubTitleTextUnavailable">
-        <item name="android:textColor">?text_color_unavailable</item> <!--TODO attr-->
+        <item name="android:textColor">?attr/text_unavailable</item> <!--TODO attr-->
         <item name="android:textSize">15sp</item>
     </style>
 

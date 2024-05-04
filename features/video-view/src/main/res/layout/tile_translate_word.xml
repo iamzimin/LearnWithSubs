@@ -12,7 +12,7 @@
     android:foreground="?android:attr/selectableItemBackground"
 
     app:cardCornerRadius="20dp"
-    app:cardBackgroundColor="?attr/background_video_tile_dark"
+    app:cardBackgroundColor="?attr/background_tile"
 
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"

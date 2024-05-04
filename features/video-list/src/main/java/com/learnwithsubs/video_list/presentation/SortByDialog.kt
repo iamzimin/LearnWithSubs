@@ -3,6 +3,7 @@ package com.learnwithsubs.video_list.presentation
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
@@ -86,10 +87,16 @@ class SortByDialog(fragment: Fragment, private val vm: VideoListViewModel, priva
 
     private fun setButtonColors(ascending: Boolean) {
         sortByDialogBinding.ascending.setBackgroundColor(
-            if (ascending) context.applicationContext.getColor(R.color.button_pressed)
-            else context.getColor(R.color.button_normal))
+            if (ascending) resolveColorAttr(R.attr.button_pressed)
+            else resolveColorAttr(R.attr.button_normal))
         sortByDialogBinding.descending.setBackgroundColor(
-            if (ascending) context.getColor(R.color.button_normal)
-            else context.getColor(R.color.button_pressed))
+            if (ascending) resolveColorAttr(R.attr.button_normal)
+            else resolveColorAttr(R.attr.button_pressed))
+    }
+
+    private fun resolveColorAttr(attr: Int): Int {
+        val typedValue = TypedValue()
+        context.theme.resolveAttribute(attr, typedValue, true)
+        return typedValue.data
     }
 }

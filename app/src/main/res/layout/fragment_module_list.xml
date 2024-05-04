@@ -65,7 +65,7 @@
             android:layout_height="wrap_content">
             <ImageView
                 style="@style/CardViewAddBackground"
-                android:src="?attr/video_upload_green_card"/>
+                android:src="@color/video_upload_green_card"/>
             <ImageView
                 style="@style/CardViewAddImage"
                 android:src="@drawable/user" />
