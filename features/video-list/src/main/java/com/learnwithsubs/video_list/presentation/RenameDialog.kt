@@ -56,7 +56,7 @@ class RenameDialog(fragment: Fragment, private val vm: VideoListViewModel, priva
             Toast.makeText(context, context.getString(R.string.the_video_does_not_exist), Toast.LENGTH_SHORT).show()
         } else if (video.loadingType != VideoLoadingType.DONE) {
             // Если видео не загружено - его нельзя редактировать
-            Toast.makeText(context, context.getString(R.string.the_video_is_uploading), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.video_is_uploading), Toast.LENGTH_SHORT).show()
         } else {
             // Обновляем и загружаем видео
             video.name = textView.text.toString()
