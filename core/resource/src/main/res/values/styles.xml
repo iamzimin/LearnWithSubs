@@ -13,7 +13,7 @@
         <item name="cardBackgroundColor">@android:color/transparent</item>
         <item name="cardElevation">0dp</item>
     </style>
-    <style name="CheckBoxSortByStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
+    <style name="RadioButtonSortByStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">
         <item name="android:clickable">false</item>
         <item name="android:focusable">false</item>
         <item name="android:background">@null</item>

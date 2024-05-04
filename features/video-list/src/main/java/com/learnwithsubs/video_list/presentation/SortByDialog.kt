@@ -27,9 +27,9 @@ class SortByDialog(fragment: Fragment, private val vm: VideoListViewModel, priva
         parentView?.removeView(dialogView)
         sortByDialog.setContentView(dialogView)
 
-        sortByDialogBinding.nameCheckBox.isChecked = vm.getVideoOrder() is VideoOrder.Name
-        sortByDialogBinding.dateCheckBox.isChecked = vm.getVideoOrder() is VideoOrder.Date
-        sortByDialogBinding.durationCheckBox.isChecked = vm.getVideoOrder() is VideoOrder.Duration
+        sortByDialogBinding.nameRadioButton.isChecked = vm.getVideoOrder() is VideoOrder.Name
+        sortByDialogBinding.dateRadioButton.isChecked = vm.getVideoOrder() is VideoOrder.Date
+        sortByDialogBinding.durationRadioButton.isChecked = vm.getVideoOrder() is VideoOrder.Duration
 
         val sortType = vm.getVideoOrder()
         setButtonColors(ascending = sortType.orderType is OrderType.Ascending)
@@ -71,9 +71,9 @@ class SortByDialog(fragment: Fragment, private val vm: VideoListViewModel, priva
         }
 
         vm.videoOrder.observe(fragment.viewLifecycleOwner) { sortMode ->
-            sortByDialogBinding.nameCheckBox.isChecked = sortMode is VideoOrder.Name
-            sortByDialogBinding.dateCheckBox.isChecked = sortMode is VideoOrder.Date
-            sortByDialogBinding.durationCheckBox.isChecked = sortMode is VideoOrder.Duration
+            sortByDialogBinding.nameRadioButton.isChecked = sortMode is VideoOrder.Name
+            sortByDialogBinding.dateRadioButton.isChecked = sortMode is VideoOrder.Date
+            sortByDialogBinding.durationRadioButton.isChecked = sortMode is VideoOrder.Duration
         }
 
         sortByDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
