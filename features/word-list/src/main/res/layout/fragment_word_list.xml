@@ -55,7 +55,8 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/word_list"
-            style="@style/RecyclerInEditListMenu"/>
+            style="@style/RecyclerInEditListMenu"
+            android:layout_marginTop="10dp"/>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/add_word_card"
