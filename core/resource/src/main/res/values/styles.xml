@@ -8,13 +8,7 @@
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
 
-    <!--video list menu-->
-    <style name="CardViewVideoListMenu" parent="Widget.MaterialComponents.CardView">
-        <item name="android:layout_marginHorizontal">20dp</item>
-        <item name="android:layout_marginTop">15dp</item>
-    </style>
-
-    <!--video list menu sort by-->
+<!--Menu sort by-->
     <style name="CardViewSortByStyle" parent="CardViewClickableFocusable">
         <item name="cardBackgroundColor">@android:color/transparent</item>
         <item name="cardElevation">0dp</item>
@@ -29,7 +23,7 @@
         <item name="android:textColor">?attr/text_color</item>
     </style>
 
-    <!--video list edit list menu-->
+<!--Selectable menu-->
     <style name="CardViewInEditListMenu" parent="CardViewClickableFocusable">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -45,12 +39,12 @@
         <item name="android:orientation">vertical</item>
         <item name="android:layout_gravity">center</item>
     </style>
-    <style name="RecyclerInEditListMenu">
+<!--    <style name="RecyclerInEditListMenu">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:scrollbars">vertical</item>
         <item name="android:layout_marginTop">10dp</item>
-    </style>
+    </style>-->
     <style name="ImageInEditListMenu">
         <item name="android:layout_width">30dp</item>
         <item name="android:layout_height">30dp</item>
@@ -65,7 +59,7 @@
         <item name="android:tint">?attr/bottom_navigation_icon</item>
     </style>
 
-    <!--video list add button-->
+<!--Add button-->
     <style name="CardViewAdd" parent="CardViewClickableFocusable">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -86,7 +80,7 @@
         <item name="android:layout_marginEnd">20dp</item>
     </style>
 
-    <!--video list add button-->
+<!--Video Card-->
     <style name="CardViewVideo" parent="CardViewClickableFocusable">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">70dp</item>
@@ -144,28 +138,25 @@
 
 
 
-    <!--Settings-->
-    <!--Main Card View-->
+<!--Settings-->
+<!--Main Card View-->
     <style name="CardViewMain" parent="Widget.MaterialComponents.CardView">
         <item name="android:layout_marginHorizontal">25sp</item>
         <item name="android:layout_marginTop">10sp</item>
         <item name="cardBackgroundColor">?attr/background_tile</item>
         <item name="cardCornerRadius">25dp</item>
     </style>
-
     <style name="MainTitleText">
         <item name="android:textColor">?attr/text_color</item>
         <item name="android:textSize">20sp</item>
         <item name="android:layout_marginHorizontal">25sp</item>
     </style>
-
     <style name="ImageSeparation">
         <item name="android:background">@drawable/rounded</item>
         <item name="android:backgroundTint">?attr/background_color</item>
         <item name="android:minHeight">2sp</item>
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
-
     <style name="ImageDownload" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:clickable">true</item>
@@ -175,7 +166,7 @@
         <item name="tint">?attr/text_color</item>
     </style>
 
-    <!--Radio button Card View-->
+<!--Radio button Card View-->
     <style name="CardViewSettingsRadioButton" parent="Widget.MaterialComponents.CardView">
         <item name="cardBackgroundColor">@android:color/transparent</item>
         <item name="android:clickable">true</item>
@@ -200,27 +191,8 @@
         <item name="android:textSize">15sp</item>
     </style>
     <style name="RadioButtonSubTitleTextUnavailable">
-        <item name="android:textColor">?attr/text_unavailable</item> <!--TODO attr-->
+        <item name="android:textColor">?attr/text_unavailable</item>
         <item name="android:textSize">15sp</item>
     </style>
-
-
-    <!--<style name="MenuBackground">
-        <item name="android:background">@drawable/rounded</item>
-        <item name="android:backgroundTint">?card_background</item> &lt;!&ndash;TODO attr&ndash;&gt;
-    </style>-->
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 </resources>

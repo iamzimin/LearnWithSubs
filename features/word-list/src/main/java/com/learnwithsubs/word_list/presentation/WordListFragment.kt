@@ -15,9 +15,8 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.base.OnSelectChange
 import com.example.base.OnSelectionModeChange
 import com.learnwithsubs.resource.R
-import com.learnwithsubs.word_list.databinding.DialogWordListMenuSortByBinding
-import com.learnwithsubs.word_list.databinding.FragmentWordListBinding
 import com.learnwithsubs.resource.databinding.SearchViewBinding
+import com.learnwithsubs.word_list.databinding.FragmentWordListBinding
 import com.learnwithsubs.word_list.di.DaggerWordListAppComponent
 import com.learnwithsubs.word_list.di.WordListAppModule
 import com.learnwithsubs.word_list.presentation.adapter.WordListTitleAdapter
@@ -30,7 +29,6 @@ class WordListFragment : Fragment(), OnSelectChange {
 
     private lateinit var fragmentWordListBinding: FragmentWordListBinding
     private lateinit var searchViewBinding: SearchViewBinding
-    private lateinit var sortByDialogBinding: DialogWordListMenuSortByBinding
 
     private lateinit var context: Context
 
@@ -47,7 +45,6 @@ class WordListFragment : Fragment(), OnSelectChange {
 
         val videoListActivity = requireActivity()
         fragmentWordListBinding = FragmentWordListBinding.inflate(inflater, container, false)
-        sortByDialogBinding = DialogWordListMenuSortByBinding.inflate(videoListActivity.layoutInflater)
         searchViewBinding = fragmentWordListBinding.searchBar
         val editDialog = EditDialog(fragment = this@WordListFragment, vm = vm, adapter = adapter)
         setupRecyclerView()
