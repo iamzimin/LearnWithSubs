@@ -24,15 +24,10 @@ class VideoListActivity : AppCompatActivity(), OnSelectionModeChange {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val sps = SharedPreferenceSettingsImpl(context = applicationContext)
-        val styles: Array<String> = sps.getAllStyles()
-        val themeId = when (val appStyle = sps.getAppStyle()) {
-            styles[0] -> com.learnwithsubs.resource.R.style.Theme_LearnWithSubsLight
-            styles[1] -> com.learnwithsubs.resource.R.style.Theme_LearnWithSubsDark
-            else -> throw IllegalArgumentException("Unknown app style: $appStyle")
-        }
-        setTheme(themeId)
-
+        val spsLanguage = SharedPreferenceSettingsImpl(context = baseContext)
+        spsLanguage.saveAppLanguage(spsLanguage.getAppLanguage().first)
+        val spsStyle = SharedPreferenceSettingsImpl(context = this)
+        spsStyle.saveAppStyle(spsStyle.getAppStyle())
 
 
         videoListBinding = ActivityVideoListBinding.inflate(layoutInflater)

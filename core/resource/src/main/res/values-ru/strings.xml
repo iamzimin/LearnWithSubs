@@ -1,0 +1,117 @@
+<resources>
+    <string name="app_name">LearnWithSubs</string>
+
+    <!--All-->
+    <string name="word_list">Список слов</string>
+    <string name="video">Видео</string>
+    <string name="settings">Настройки</string>
+    <string name="search">Поиск</string>
+
+    <string name="select_all">Выделить все</string>
+    <string name="deselect_all">Снять выделение</string>
+    <string name="delete">Удалить</string>
+    <string name="rename">Переименовать</string>
+
+
+
+    <!--Video list-->
+    <string name="name">Название</string>
+    <string name="alphabet">Алфавит</string>
+    <string name="date">Дата</string>
+    <string name="duration">Продолжительность</string>
+    <string name="ascending">По возрастанию</string>
+    <string name="descending">По убыванию</string>
+    <string name="clear">Очистить</string>
+    <string name="apply">Применить</string>
+
+    <string name="enter_name">Введите название</string>
+    <string name="rename_video">Переименовать видео</string>
+    <string name="edit">Редактировать</string>
+
+    <string name="video_duration">Продолжительность</string>
+    <string name="video_saved_words">Сохраненные слова</string>
+    <string name="video_is_uploading">Видео загружается</string>
+
+    <string name="storage_access_required">Требуется доступ к хранилищу</string>
+
+    <string name="video_loading_status">Статус</string>
+    <string name="video_loading_status_waiting">Ожидание</string>
+    <string name="video_loading_status_loading_audio">Загрузка аудио</string>
+    <string name="video_loading_status_decoding_video">Декодирование видео</string>
+    <string name="video_loading_status_extracting_audio">Извлечение аудио</string>
+    <string name="video_loading_status_generating_subtitles">Генерация субтитров</string>
+    <string name="video_loading_status_done">Готово</string>
+
+    <string name="video_processing_error">Ошибка обработки видео</string>
+    <string name="audio_extraction_error">Ошибка извлечения аудио</string>
+    <string name="video_decoding_error">Ошибка декодирования видео</string>
+    <string name="audio_upload_error">Ошибка загрузки аудио</string>
+    <string name="subtitle_generation_error">Ошибка генерации субтитров</string>
+    <string name="subtitle_extraction_error">Ошибка извлечения субтитров</string>
+
+    <string name="add_subtitles">Добавить субтитры</string>
+    <string name="return_subtitles">Вернуть субтитры</string>
+    <string name="add_preview">Добавить превью</string>
+
+
+
+    <!--Video view-->
+    <string name="noun">Существительное</string>
+    <string name="adjective">Прилагательное</string>
+    <string name="adverb">Наречие</string>
+    <string name="participle">Причастие</string>
+    <string name="predicative">Предикатив</string>
+
+    <string name="yandex_service_is_not_available">Сервис Яндекса недоступен</string>
+    <string name="server_for_translation_is_not_available">Сервер для перевода недоступен</string>
+    <string name="wrong_subtitle_format">Неверный формат субтитров</string>
+
+    <string name="save">Сохранить</string>
+    <string name="translate">Перевести</string>
+
+    <string name="submenu">Подменю</string>
+    <string name="copy">Копировать</string>
+    <string name="share">Поделиться</string>
+    <string name="sort_by">Сортировать по</string>
+
+    <string name="the_video_does_not_exist">Видео не существует</string>
+    <string name="model_not_downloaded">Модель не загружена</string>
+
+
+
+    <!--Word List-->
+    <string name="custom">Пользовательский</string>
+
+
+
+    <!--Settings-->
+    <string name="customization">Кастомизация</string>
+
+    <string name="language">Язык</string>
+    <string name="style">Стиль</string>
+    <string name="learning">Обучение</string>
+    <string name="translator_source">Источник перевода</string>
+
+    <string name="native_language">Родной язык</string>
+    <string name="learning_language">Язык обучения</string>
+
+
+
+    <!--Resource-->
+    <string name="english">Английский</string>
+    <string name="russian">Русский</string>
+    <string name="spain">Испанский</string>
+    <string name="french">Французский</string>
+    <string name="japanese">Японский</string>
+    <string name="italian">Итальянский</string>
+    <string name="german">Немецкий</string>
+
+    <string name="dark">Темная</string>
+    <string name="light">Светлая</string>
+
+    <string name="server">Сервер</string>
+    <string name="yandex">Яндекс</string>
+    <string name="android">Андроид</string>
+
+
+</resources>

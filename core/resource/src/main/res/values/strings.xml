@@ -1,8 +1,7 @@
 <resources>
-    <string name="app_name">LearnWithSubs</string>
+    <string name="app_name" translatable="false">LearnWithSubs</string>
 
     <!--All-->
-    <string name="videos">Videos</string>
     <string name="word_list">Word list</string>
     <string name="video">Video</string>
     <string name="settings">Settings</string>

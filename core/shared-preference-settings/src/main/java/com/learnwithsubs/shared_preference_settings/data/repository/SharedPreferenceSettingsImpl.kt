@@ -2,14 +2,16 @@ package com.learnwithsubs.shared_preference_settings.data.repository
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import com.learnwithsubs.resource.R
 import com.learnwithsubs.shared_preference_settings.domain.languageIdToString
-import com.learnwithsubs.shared_preference_settings.domain.stringToLanguageId
 import com.learnwithsubs.shared_preference_settings.domain.repository.SharedPreferenceSettings
+import com.learnwithsubs.shared_preference_settings.domain.stringToLanguageId
 import com.learnwithsubs.shared_preference_settings.domain.stringToStyleId
 import com.learnwithsubs.shared_preference_settings.domain.stringToTranslatorSourceId
 import com.learnwithsubs.shared_preference_settings.domain.styleIdToString
 import com.learnwithsubs.shared_preference_settings.domain.translatorSourceIdToString
+import java.util.Locale
 
 class SharedPreferenceSettingsImpl(private val context: Context) : SharedPreferenceSettings {
     companion object {
@@ -67,6 +69,18 @@ class SharedPreferenceSettingsImpl(private val context: Context) : SharedPrefere
         val languageId = stringToLanguageId(language = language, context = context)
         editor.putInt(KEY_APP_LANGUAGE, languageId)
         editor.apply()
+
+        val languages = getAllAppLanguages()
+        val locale = when (language) {
+            languages[0] -> Locale("en")
+            languages[1] -> Locale("ru")
+            else -> throw IllegalArgumentException("Unknown language: $language")
+        }
+        Locale.setDefault(locale)
+        val configuration = Configuration().apply {
+            setLocale(locale)
+        }
+        context.resources.updateConfiguration(configuration, context.resources.displayMetrics)
     }
     override fun getAppLanguage(): Pair<String, String> {
         val languageId = sharedPreferences.getInt(KEY_APP_LANGUAGE, 1)
@@ -78,6 +92,14 @@ class SharedPreferenceSettingsImpl(private val context: Context) : SharedPrefere
         val styleId = stringToStyleId(style = appStyle, context = context)
         editor.putInt(KEY_APP_STYLE, styleId)
         editor.apply()
+
+        val styles = getAllStyles()
+        val themeId = when (appStyle) {
+            styles[0] -> R.style.Theme_LearnWithSubsLight
+            styles[1] -> R.style.Theme_LearnWithSubsDark
+            else -> throw IllegalArgumentException("Unknown app style: $appStyle")
+        }
+        context.setTheme(themeId)
     }
     override fun getAppStyle(): String {
         val styleId = sharedPreferences.getInt(KEY_APP_STYLE, 1)

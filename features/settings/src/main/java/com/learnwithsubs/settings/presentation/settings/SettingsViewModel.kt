@@ -14,6 +14,11 @@ class SettingsViewModel @Inject constructor(
     var nativeLanguagePair: Pair<String, String> = getNativeLanguage()
     var learningLanguagePair: Pair<String, String> = getLearningLanguage()
 
+    fun updateLanguagePair() {
+        nativeLanguagePair = getNativeLanguage()
+        learningLanguagePair = getLearningLanguage()
+    }
+
     fun getAllAppLanguages(): Array<String> {
         return settingsUseCases.getAllAppLanguages.invoke()
     }

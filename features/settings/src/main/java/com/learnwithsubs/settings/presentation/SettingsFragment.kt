@@ -40,11 +40,12 @@ class SettingsFragment : Fragment() {
 
         settingsBinding = FragmentSettingsBinding.inflate(inflater, container, false)
 
+        vm.updateLanguagePair()
+
         val languages: Array<String> = vm.getAllAppLanguages()
         val styles: Array<String> = vm.getAllStyles()
         val translatorSource: Array<String> = vm.getAllTranslatorSource()
-        val nativeLanguage: Array<String> = vm.getAllTranslatorLanguages()
-        val learningLanguage: Array<String> = vm.getAllTranslatorLanguages()
+        val translatorLanguages: Array<String> = vm.getAllTranslatorLanguages()
 
         settingsBinding.languageText.text = vm.getAppLanguage().first
         settingsBinding.styleText.text = vm.getAppStyle()
@@ -74,13 +75,13 @@ class SettingsFragment : Fragment() {
         val nativeLanguageDialog = RadioButtonSelectionDialog(
             fragment = this@SettingsFragment,
             title = getString(R.string.native_language),
-            options = nativeLanguage,
+            options = translatorLanguages,
             selected = vm.nativeLanguagePair.first,
         )
         val learningLanguageDialog = RadioButtonSelectionDialog(
             fragment = this@SettingsFragment,
             title = getString(R.string.learning_language),
-            options = learningLanguage,
+            options = translatorLanguages,
             selected = vm.learningLanguagePair.first,
         )
 
@@ -92,6 +93,7 @@ class SettingsFragment : Fragment() {
         languageDialog.setOnItemSelectedListener { selectedText ->
             vm.saveAppLanguage(language = selectedText)
             settingsBinding.languageText.text = selectedText
+            activity?.recreate()
         }
 
         // Style change
@@ -101,13 +103,6 @@ class SettingsFragment : Fragment() {
         styleDialog.setOnItemSelectedListener { selectedText ->
             vm.saveAppStyle(appStyle = selectedText)
             settingsBinding.styleText.text = selectedText
-
-            val themeId = when (selectedText) {
-                styles[0] -> R.style.Theme_LearnWithSubsLight
-                styles[1] -> R.style.Theme_LearnWithSubsDark
-                else -> throw IllegalArgumentException("Unknown app style: $selectedText")
-            }
-            appContext.setTheme(themeId)
             activity?.recreate()
         }
 
