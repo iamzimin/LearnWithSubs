@@ -2,6 +2,8 @@
     <style name="Theme.LearnWithSubsLight" parent="Theme.MaterialComponents">
         <item name="android:statusBarColor">?attr/background_color</item>
         <item name="android:windowBackground">?attr/background_color</item>
+        <item name="android:colorControlNormal">?attr/background_color</item>
+        <item name="android:colorEdgeEffect">?attr/main_color</item>
 
         <item name="background_color">#FFFFFF</item>
         <item name="main_color">#02A593</item>

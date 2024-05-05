@@ -22,6 +22,9 @@
         android:layout_width="match_parent"
         android:layout_height="65dp"
         app:menu="@menu/bottom_menu"
+        app:itemIconTint="?attr/text_color"
+        app:itemTextColor="?attr/text_color"
+        app:itemRippleColor="?attr/main_color"
         app:itemIconSize="@dimen/icon_bottom_menu"
         android:background="?attr/background_color"/>
 
