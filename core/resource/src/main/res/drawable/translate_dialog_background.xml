@@ -4,8 +4,8 @@
         <shape android:shape="rectangle">
             <corners android:radius="@dimen/dialog_menu_margins" />
             <gradient
-                android:startColor="?attr/background_color"
-                android:endColor="?attr/background_color"
+                android:startColor="?attr/dialog_translate_header"
+                android:endColor="?attr/dialog_translate_header"
                 android:angle="90" />
         </shape>
     </item>
@@ -17,8 +17,8 @@
                 android:bottomLeftRadius="@dimen/dialog_menu_margins"
                 android:bottomRightRadius="@dimen/dialog_menu_margins" />
             <gradient
-                android:startColor="?attr/pop_up_menu_background"
-                android:endColor="?attr/pop_up_menu_background"
+                android:startColor="?attr/dialog_translate_footer"
+                android:endColor="?attr/dialog_translate_footer"
                 android:angle="90" />
         </shape>
     </item>

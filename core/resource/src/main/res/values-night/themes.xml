@@ -22,13 +22,14 @@
 
 
         <!--Pop-up SortBy-->
-        <item name="pop_up_menu_background">#4D4D67</item>
-        <item name="pop_up_menu_line">#2F2E3E</item>
+        <item name="pop_up_menu_background">?attr/background_color</item>
+        <item name="pop_up_menu_line">?attr/main_color</item>
 
         <!--Bottom Menu-->
-        <item name="bottom_navigation_icon">#ACABB2</item>
+        <item name="bottom_navigation_icon">?attr/text_color</item>
 
-        <!--Word List-->
-        <item name="word_title_background">#141928</item>
+        <!--Video View-->
+        <item name="dialog_translate_header">?attr/background_color</item>
+        <item name="dialog_translate_footer">?attr/background_tile</item>
     </style>
 </resources>

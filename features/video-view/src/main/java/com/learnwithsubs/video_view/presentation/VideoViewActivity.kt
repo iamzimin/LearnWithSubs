@@ -26,6 +26,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.learnwithsubs.resource.R
+import com.learnwithsubs.shared_preference_settings.data.repository.SharedPreferenceSettingsImpl
 import com.learnwithsubs.video_view.databinding.ActivityVideoViewBinding
 import com.learnwithsubs.video_view.databinding.VideoViewInterfaceBinding
 import com.learnwithsubs.video_view.di.DaggerVideoViewAppComponent
@@ -52,6 +53,16 @@ class VideoViewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val sps = SharedPreferenceSettingsImpl(context = applicationContext)
+        val styles: Array<String> = sps.getAllStyles()
+        val themeId = when (val appStyle = sps.getAppStyle()) {
+            styles[0] -> R.style.Theme_LearnWithSubsLight
+            styles[1] -> R.style.Theme_LearnWithSubsDark
+            else -> throw IllegalArgumentException("Unknown app style: $appStyle")
+        }
+        setTheme(themeId)
+
+
         DaggerVideoViewAppComponent.builder().videoViewAppModule(VideoViewAppModule(context = this))
             .build().inject(this)
         vm = ViewModelProvider(this, vmFactory)[VideoViewViewModel::class.java]

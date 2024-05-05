@@ -19,7 +19,8 @@
 
         <!--Tile-->
         <item name="background_tile">#D1EDEA</item>
-        <item name="background_tile_unavailable">#99B1AE</item>
+        <item name="background_tile_unavailable">#B9D3D0</item>
+
 
         <!--Pop-up SortBy-->
         <item name="pop_up_menu_background">?attr/background_color</item>
@@ -28,7 +29,8 @@
         <!--Bottom Menu-->
         <item name="bottom_navigation_icon">?attr/text_color</item>
 
-        <!--Word List-->
-        <item name="word_title_background">?attr/background_tile</item>
+        <!--Video View-->
+        <item name="dialog_translate_header">?attr/background_tile</item>
+        <item name="dialog_translate_footer">?attr/background_color</item>
     </style>
 </resources>
