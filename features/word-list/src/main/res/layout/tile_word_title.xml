@@ -22,6 +22,7 @@
                     android:id="@+id/title"
                     android:layout_width="0dp"
                     android:layout_height="25dp"
+                    android:textColor="?attr/text_color"
                     android:layout_weight="1"
                     android:layout_gravity="center"
                     android:gravity="center_vertical"

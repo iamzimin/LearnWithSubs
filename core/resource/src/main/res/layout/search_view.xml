@@ -25,6 +25,7 @@
                 android:layout_height="35dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
+                android:textColor="?attr/text_color"
 
                 android:hint="@string/search"
                 android:inputType="textPersonName"

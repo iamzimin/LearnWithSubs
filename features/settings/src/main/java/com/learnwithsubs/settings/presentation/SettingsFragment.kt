@@ -9,12 +9,12 @@ import android.widget.LinearLayout
 import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.learnwithsubs.resource.R
 import com.example.settings.databinding.FragmentSettingsBinding
 import com.google.android.gms.tasks.Task
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.TranslateRemoteModel
+import com.learnwithsubs.resource.R
 import com.learnwithsubs.settings.di.DaggerSettingsAppComponent
 import com.learnwithsubs.settings.di.SettingsAppModule
 import com.learnwithsubs.settings.presentation.settings.SettingsViewModel
@@ -101,6 +101,14 @@ class SettingsFragment : Fragment() {
         styleDialog.setOnItemSelectedListener { selectedText ->
             vm.saveAppStyle(appStyle = selectedText)
             settingsBinding.styleText.text = selectedText
+
+            val themeId = when (selectedText) {
+                styles[0] -> R.style.Theme_LearnWithSubsLight
+                styles[1] -> R.style.Theme_LearnWithSubsDark
+                else -> throw IllegalArgumentException("Unknown app style: $selectedText")
+            }
+            appContext.setTheme(themeId)
+            activity?.recreate()
         }
 
         // Translator type change

@@ -44,6 +44,7 @@ dependencies {
     implementation project(':features:word-list')
     implementation project(':features:settings')
     implementation project(':core:base')
+    implementation project(':core:shared-preference-settings')
 
 
     implementation 'androidx.core:core-ktx:1.12.0'

@@ -1,23 +1,25 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.LearnWithSubs" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.LearnWithSubsDark" parent="Theme.MaterialComponents">
         <item name="android:statusBarColor">?attr/background_color</item>
         <item name="android:windowBackground">?attr/background_color</item>
         <item name="background_color">#2F2E3E</item>
-        <item name="main_color">@color/main_color</item>
-        <item name="text_color">@color/text_color</item>
+        <item name="main_color">#9D80F6</item>
+
+        <!--Button-->
+        <item name="button_normal">#41415F</item>
+        <item name="button_pressed">#28283C</item>
+
+        <!--Text-->
+        <item name="text_color">#FFFFFFFF</item>
+        <item name="text_unavailable">#767582</item>
 
         <!--Search field-->
         <item name="search_field">#3C445F</item>
 
         <!--Tile-->
         <item name="background_tile">#46475C</item>
-        <item name="background_tile_selected">#646478</item>
         <item name="background_tile_unavailable">#404153</item>
-        <item name="text_unavailable">#767582</item>
 
-        <!--Button-->
-        <item name="button_normal">#41415F</item>
-        <item name="button_pressed">#28283C</item>
 
         <!--Pop-up SortBy-->
         <item name="pop_up_menu_background">#4D4D67</item>

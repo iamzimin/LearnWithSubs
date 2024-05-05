@@ -5,9 +5,6 @@
     <color name="red">#FF0000</color>
 
     <!--____________All____________-->
-    <color name="main_color">#9D80F6</color>
-    <color name="text_color">#FFFFFFFF</color>
-
     <color name="check_mark">#44FF36</color>
     <color name="video_upload_green_card">#63C863</color>
     <color name="video_close_selection_mode_card">#C84664</color>

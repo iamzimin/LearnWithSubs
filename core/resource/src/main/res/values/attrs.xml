@@ -2,20 +2,21 @@
 <resources>
     <attr name="background_color"/>
     <attr name="main_color"/>
+
+    <!--Button-->
+    <attr name="button_normal"/>
+    <attr name="button_pressed"/>
+
+    <!--Text-->
     <attr name="text_color"/>
+    <attr name="text_unavailable"/>
 
     <!--Search field-->
     <attr name="search_field"/>
 
     <!--Tile-->
     <attr name="background_tile"/>
-    <attr name="background_tile_selected"/>
     <attr name="background_tile_unavailable"/>
-    <attr name="text_unavailable"/>
-
-    <!--Button-->
-    <attr name="button_normal"/>
-    <attr name="button_pressed"/>
 
     <!--Pop-up Menu-->
     <attr name="pop_up_menu_background"/>
