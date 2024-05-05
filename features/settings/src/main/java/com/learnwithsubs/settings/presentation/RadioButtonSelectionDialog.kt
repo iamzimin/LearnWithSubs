@@ -4,14 +4,14 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.util.TypedValue
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
-import com.learnwithsubs.resource.R
+import com.example.settings.R
 import com.example.settings.databinding.SettingsRadioButtonDialogBinding
 
 class RadioButtonSelectionDialog(
@@ -53,22 +53,10 @@ class RadioButtonSelectionDialog(
     }
 
     private fun addRadioButton(text: String) {
-        val radioButton = RadioButton(context)
+        val inflater = LayoutInflater.from(context)
+        val radioButton = inflater.inflate(R.layout.radio_button, null) as RadioButton
+
         radioButton.text = text
-
-        val typedArray = context.obtainStyledAttributes(intArrayOf(R.attr.text_color))
-        val textColor = typedArray.getColor(0, Color.RED)
-        typedArray.recycle()
-
-        radioButton.setTextColor(textColor)
-        radioButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
-        val paddingStart = context.resources.getDimensionPixelSize(R.dimen.radio_button_text_start_padding)
-        val verticalMargin = context.resources.getDimensionPixelSize(R.dimen.radio_button_text_vertical_padding)
-        radioButton.setPaddingRelative(paddingStart, verticalMargin, 0, verticalMargin)
-        radioButton.layoutParams = RadioGroup.LayoutParams(
-            RadioGroup.LayoutParams.MATCH_PARENT,
-            RadioGroup.LayoutParams.WRAP_CONTENT
-        )
         radioButton.tag = text
         radioGroup.addView(radioButton)
 

@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:textColor="?attr/text_color"
-                android:textSize="20sp"
+                android:textSize="@dimen/text_h1"
                 android:text="text"
                 android:layout_gravity="center_horizontal"/>
 
