@@ -41,20 +41,24 @@ class VideoListActivity : AppCompatActivity(), OnSelectionModeChange {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), PERMISSION_REQUEST_CODE)
         }
 
-        val navHostFragment: NavHostFragment? =
-            supportFragmentManager.findFragmentById(videoListBinding.fragmentContainer.id) as NavHostFragment?
+        val navHostFragment: NavHostFragment? = videoListBinding.fragmentContainer.getFragment()
         if (navHostFragment != null) {
             NavigationUI.setupWithNavController(videoListBinding.fragmentNavigation, navHostFragment.navController)
         }
+
 
         navHostFragment?.childFragmentManager?.let { fragmentManager ->
             val fragment = fragmentManager.fragments.find { fragment -> fragment is VideoListFragment } as? VideoListFragment
             fragment?.attachSelectionMode(this@VideoListActivity)
         }
 
-        navHostFragment?.childFragmentManager?.addFragmentOnAttachListener { _, fragment ->
-            if (fragment is WordListFragment) {
-                fragment.attachSelectionMode(this@VideoListActivity)
+        navHostFragment?.childFragmentManager?.addOnBackStackChangedListener {
+            for (fragment in navHostFragment.childFragmentManager.fragments) {
+                if (fragment is WordListFragment) {
+                    fragment.attachSelectionMode(this@VideoListActivity)
+                } else if (fragment is VideoListFragment) {
+                    fragment.attachSelectionMode(this@VideoListActivity)
+                }
             }
         }
     }
