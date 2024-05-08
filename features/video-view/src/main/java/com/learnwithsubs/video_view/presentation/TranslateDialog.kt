@@ -21,7 +21,8 @@ import java.util.Date
 import java.util.Locale
 
 class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : OnDictionaryClick, TextToSpeech.OnInitListener {
-    private val context = activity.applicationContext
+    private val appContext = activity.applicationContext
+    private val baseContext = activity.baseContext
     private val translateDialogBind: DialogTranslateBinding = DialogTranslateBinding.inflate(activity.layoutInflater)
     private val dialogMenu = Dialog(activity)
     private val adapter = DictionaryAdapter(wordsInit = ArrayList())
@@ -47,9 +48,9 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
             outputLanguage = nativeLanguage.second,
         )
         when (translatorSource) {
-            context.getString(R.string.yandex_plus_android) ->
+            baseContext.getString(R.string.yandex_plus_android) ->
                 vm.getTranslationFromYandexAndroid(translationModel = translationModel)
-            context.getString(R.string.yandex_plus_server) ->
+            baseContext.getString(R.string.yandex_plus_server) ->
                 vm.getTranslationFromYandexServer(translationModel = translationModel)
             else -> { }
         }
@@ -67,7 +68,7 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
         adapter.setOnItemClickListener(this@TranslateDialog)
 
         dialogMenu.setContentView(translateDialogBind.root)
-        translateDialogBind.dictionaryRecycler.layoutManager = LinearLayoutManager(context)
+        translateDialogBind.dictionaryRecycler.layoutManager = LinearLayoutManager(appContext)
         translateDialogBind.dictionaryRecycler.adapter = adapter
         translateDialogBind.translatorType.text = translatorSource
 
@@ -90,8 +91,8 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
         }
 
 
-        ttsFrom = TextToSpeech(context, this)
-        ttsTo = TextToSpeech(context, this)
+        ttsFrom = TextToSpeech(appContext, this)
+        ttsTo = TextToSpeech(appContext, this)
 
         translateDialogBind.audioInputWord.setOnClickListener {
             ttsFrom.speak(translateDialogBind.inputWord.text, TextToSpeech.QUEUE_FLUSH, null, "")
@@ -122,14 +123,14 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
         }
         vm.serverTranslationLiveData.observe(activity as LifecycleOwner) { transl ->
             translateDialogBind.dictionaryRecycler.visibility = View.GONE
-            transl ?: Toast.makeText(context, R.string.server_for_translation_is_not_available, Toast.LENGTH_SHORT).show()
+            transl ?: Toast.makeText(appContext, R.string.server_for_translation_is_not_available, Toast.LENGTH_SHORT).show()
             val text = transl ?: return@observe
             translateDialogBind.outputWord.setText(text)
             translateDialogBind.outputWord.clearFocus()
         }
         vm.androidTranslationLiveData.observe(activity as LifecycleOwner) { transl ->
             translateDialogBind.dictionaryRecycler.visibility = View.GONE
-            transl ?: Toast.makeText(context, R.string.model_not_downloaded, Toast.LENGTH_SHORT).show()
+            transl ?: Toast.makeText(appContext, R.string.model_not_downloaded, Toast.LENGTH_SHORT).show()
             val text = transl ?: return@observe
             translateDialogBind.outputWord.setText(text)
             translateDialogBind.outputWord.clearFocus()
