@@ -26,7 +26,6 @@
 
     <string name="enter_name">Введите название</string>
     <string name="rename_video">Переименовать видео</string>
-    <string name="edit">Редактировать</string>
 
     <string name="video_duration">Продолжительность</string>
     <string name="video_saved_words">Сохраненные слова</string>
@@ -81,7 +80,11 @@
 
     <!--Word List-->
     <string name="custom">Пользовательский</string>
-
+    <string name="edit">Редактировать</string>
+    <string name="word">Слово</string>
+    <string name="translation">Перевод</string>
+    <string name="enter_word">Введите слово</string>
+    <string name="enter_translation">Введите перевод</string>
 
 
     <!--Settings-->

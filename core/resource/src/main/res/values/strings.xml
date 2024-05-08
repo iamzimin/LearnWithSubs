@@ -26,7 +26,6 @@
 
     <string name="enter_name">Enter name</string>
     <string name="rename_video">Rename Video</string>
-    <string name="edit">Edit</string>
 
     <string name="video_duration">Duration</string>
     <string name="video_saved_words">Saved words</string>
@@ -81,6 +80,11 @@
 
     <!--Word List-->
     <string name="custom">Custom</string>
+    <string name="edit">Edit</string>
+    <string name="word">Word</string>
+    <string name="translation">Translation</string>
+    <string name="enter_word">Enter word</string>
+    <string name="enter_translation">Enter translation</string>
 
 
 

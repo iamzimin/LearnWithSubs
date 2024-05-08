@@ -40,14 +40,15 @@
                     android:layout_height="wrap_content"
                     android:textColor="?attr/text_color"
                     android:textSize="@dimen/text_h2"
-                    android:text="Word"/>
+                    android:text="@string/word"/>
 
                 <EditText
                     android:id="@+id/word"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="@style/TextArea"
                     android:maxHeight="200dp"
-                    android:hint="Enter word"/>
+                    android:hint="@string/enter_word"/>
 
             </LinearLayout>
 
@@ -62,14 +63,15 @@
                     android:layout_height="wrap_content"
                     android:textColor="?attr/text_color"
                     android:textSize="@dimen/text_h2"
-                    android:text="Translation"/>
+                    android:text="@string/translation"/>
 
                 <EditText
                     android:id="@+id/translation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="@style/TextArea"
                     android:maxHeight="200dp"
-                    android:hint="Enter translation"/>
+                    android:hint="@string/enter_translation"/>
 
                 <Button
                     android:id="@+id/save"
