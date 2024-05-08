@@ -109,9 +109,7 @@
     <string name="dark">Dark</string>
     <string name="light">Light</string>
 
-    <string name="server">Server</string>
-    <string name="yandex">Yandex</string>
-    <string name="android">Android</string>
-
+    <string name="yandex_plus_android">Yandex+Android</string>
+    <string name="yandex_plus_server">Yandex+Server</string>
 
 </resources>

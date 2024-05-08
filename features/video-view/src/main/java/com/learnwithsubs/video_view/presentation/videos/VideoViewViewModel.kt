@@ -116,28 +116,29 @@ class VideoViewViewModel @Inject constructor(
     }
 
 
-    fun getTranslationFromYandexDictionary(translationModel: TranslationModel) {
+    fun getTranslationFromYandexServer(translationModel: TranslationModel) {
         viewModelScope.launch {
-            val translate = videoViewUseCases.getWordsFromYandexDictionaryUseCase.invoke(model = translationModel)
-            if (translate == null) {
-                // TODO implement Yandex API
+            val yandexTranslate = videoViewUseCases.getWordsFromYandexDictionaryUseCase.invoke(model = translationModel)
+
+            if (yandexTranslate != null) {
+                dictionaryWordsLiveData.postValue(yandexTranslate ?: return@launch)
             } else {
-                dictionaryWordsLiveData.postValue(translate ?: return@launch)
+                val serverTranslate = videoViewUseCases.getTranslationFromServerUseCase.invoke(model = translationModel)
+                serverTranslationLiveData.postValue(serverTranslate)
             }
         }
     }
 
-    fun getTranslationFromServer(translationModel: TranslationModel) {
+    fun getTranslationFromYandexAndroid(translationModel: TranslationModel) {
         viewModelScope.launch {
-            val translate = videoViewUseCases.getTranslationFromServerUseCase.invoke(model = translationModel)
-            serverTranslationLiveData.postValue(translate)
-        }
-    }
+            val yandexTranslate = videoViewUseCases.getWordsFromYandexDictionaryUseCase.invoke(model = translationModel)
 
-    fun getTranslationFromAndroid(translationModel: TranslationModel) {
-        viewModelScope.launch {
-            val translate = videoViewUseCases.getTranslationFromAndroidUseCase.invoke(model = translationModel)
-            androidTranslationLiveData.postValue(translate)
+            if (yandexTranslate != null) {
+                dictionaryWordsLiveData.postValue(yandexTranslate ?: return@launch)
+            } else {
+                val translate = videoViewUseCases.getTranslationFromAndroidUseCase.invoke(model = translationModel)
+                androidTranslationLiveData.postValue(translate)
+            }
         }
     }
 }

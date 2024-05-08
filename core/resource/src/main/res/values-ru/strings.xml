@@ -109,9 +109,7 @@
     <string name="dark">Темная</string>
     <string name="light">Светлая</string>
 
-    <string name="server">Сервер</string>
-    <string name="yandex">Яндекс</string>
-    <string name="android">Андроид</string>
-
+    <string name="yandex_plus_android">Яндекс+Андроид</string>
+    <string name="yandex_plus_server">Яндекс+Сервер</string>
 
 </resources>

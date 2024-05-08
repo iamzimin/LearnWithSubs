@@ -221,7 +221,7 @@
                                             android:id="@+id/translator_source_text"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="@string/server"
+                                            android:text="@string/yandex_plus_server"
                                             style="@style/RadioButtonSubTitleTextAvailable"/>
 
                                     </LinearLayout>

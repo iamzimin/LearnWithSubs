@@ -1,9 +1,7 @@
 package com.learnwithsubs.shared_preference_settings.domain
 
 import android.content.Context
-import android.content.res.Configuration
 import com.learnwithsubs.resource.R
-import java.util.Locale
 
 
 fun languageIdToString(id: Int, context: Context): Pair<String, String> {
@@ -52,17 +50,15 @@ fun stringToStyleId(style: String, context: Context): Int {
 
 fun translatorSourceIdToString(id: Int, context: Context): String {
     return when (id) {
-        1 -> context.getString(R.string.server)
-        2 -> context.getString(R.string.yandex)
-        3 -> context.getString(R.string.android)
+        1 -> context.getString(R.string.yandex_plus_android)
+        2 -> context.getString(R.string.yandex_plus_server)
         else -> throw IllegalArgumentException("Invalid Translator Source ID")
     }
 }
 fun stringToTranslatorSourceId(translatorSource: String, context: Context): Int {
     return when (translatorSource) {
-        context.getString(R.string.server) -> 1
-        context.getString(R.string.yandex) -> 2
-        context.getString(R.string.android) -> 3
+        context.getString(R.string.yandex_plus_android) -> 1
+        context.getString(R.string.yandex_plus_server) -> 2
         else -> throw IllegalArgumentException("Invalid Translator Source")
     }
 }

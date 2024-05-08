@@ -209,7 +209,7 @@ class SettingsFragment : Fragment() {
 
     private fun isAndroidSourceSelected(): Boolean {
         return try {
-            return settingsBinding.translatorSourceText.text.toString() == getString(R.string.android)
+            return settingsBinding.translatorSourceText.text.toString() == getString(R.string.yandex_plus_android)
         } catch (_: Exception) { false }
     }
 
@@ -230,7 +230,7 @@ class SettingsFragment : Fragment() {
 
     private fun changeLanguageCardVisibility(selectedText: String) {
         try {
-            if (selectedText == getString(R.string.android)) {
+            if (selectedText == getString(R.string.yandex_plus_android)) {
                 updateLanguagesCard()
             } else {
                 changeNativeCardAvailability(true)

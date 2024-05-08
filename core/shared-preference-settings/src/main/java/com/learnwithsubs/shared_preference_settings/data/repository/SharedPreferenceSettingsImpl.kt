@@ -48,9 +48,8 @@ class SharedPreferenceSettingsImpl(private val context: Context) : SharedPrefere
 
     override fun getAllTranslatorSource(): Array<String> {
         return arrayOf(
-            context.getString(R.string.server),
-            context.getString(R.string.yandex),
-            context.getString(R.string.android),
+            context.getString(R.string.yandex_plus_android),
+            context.getString(R.string.yandex_plus_server),
         )
     }
 
