@@ -32,7 +32,7 @@
         <item name="bottom_navigation_icon">?attr/text_color</item>
 
         <!--Video View-->
-        <item name="dialog_translate_header">?attr/background_color</item>
-        <item name="dialog_translate_footer">?attr/background_tile</item>
+        <item name="dialog_translate_header">?attr/search_field</item>
+        <item name="dialog_translate_footer">?attr/background_color</item>
     </style>
 </resources>

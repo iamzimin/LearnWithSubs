@@ -31,6 +31,7 @@
             android:id="@+id/word_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="?attr/text_color"
             android:paddingEnd="10dp"
             android:text="1"/>
 
@@ -43,12 +44,14 @@
                 android:id="@+id/similar_word"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="?attr/text_color"
                 android:text="Hello"/>
 
             <TextView
                 android:id="@+id/similar_word_translate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="?attr/text_color"
                 android:text="Привет"/>
 
         </LinearLayout>
