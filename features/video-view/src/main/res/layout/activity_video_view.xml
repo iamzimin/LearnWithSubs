@@ -34,10 +34,9 @@
 
         android:layout_marginBottom="80dp"
         android:gravity="center"
-        android:text=""
         android:textIsSelectable="true"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="@dimen/text_h2"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

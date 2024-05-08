@@ -312,7 +312,7 @@
                                             android:layout_width="45dp"
                                             android:layout_height="45dp"
                                             style="@style/ImageDownload"
-                                            android:background="@null"
+                                            android:indeterminateTint="?attr/main_color"
                                             android:visibility="gone"
                                             android:clickable="false"
                                             android:focusable="false"/>
@@ -402,7 +402,7 @@
                                             android:layout_width="45dp"
                                             android:layout_height="45dp"
                                             style="@style/ImageDownload"
-                                            android:background="@null"
+                                            android:indeterminateTint="?attr/main_color"
                                             android:visibility="gone"
                                             android:clickable="false"
                                             android:focusable="false"/>
