@@ -55,11 +55,16 @@
 
 
     <!--Video view-->
-    <string name="noun">Noun</string> <!--TODO add more-->
+    <string name="noun">Noun</string>
     <string name="adjective">Adjective</string>
     <string name="adverb">Adverb</string>
     <string name="participle">Participle</string>
     <string name="predicative">Predicative</string>
+    <string name="verb">Verb</string>
+    <string name="interjection">Interjection</string>
+    <string name="pronoun">Pronoun</string>
+    <string name="conjunction">Conjunction</string>
+    <string name="preposition">Preposition</string>
 
     <string name="yandex_service_is_not_available">The yandex service is not available</string>
     <string name="server_for_translation_is_not_available">Server for translation is not available</string>

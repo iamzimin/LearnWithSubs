@@ -6,7 +6,6 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.base.util.OrderType
 import com.example.base.util.VideoOrder
-import com.example.video_transcode.domain.repository.VideoTranscodeRepository
 import com.learnwithsubs.video_list.domain.models.Video
 import com.learnwithsubs.video_list.domain.models.VideoLoadingType
 import com.learnwithsubs.video_list.domain.models.VideoStatus
@@ -16,7 +15,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.withContext
-import java.io.File
 import java.util.LinkedList
 import javax.inject.Inject
 
@@ -70,7 +68,8 @@ class VideoListViewModel @Inject constructor(
                     // Обработка извлечение аудио
                     poolList.loadingType = VideoLoadingType.EXTRACTING_AUDIO
                     editVideo(poolList)
-                    // TODO Return, если null (пользователь отменил загрузку)
+
+                    // Return, если null (пользователь отменил загрузку)
                     val extractedAudio: Video = videoListUseCases.extractAudioUseCase.invoke(poolList) ?: return@withContext
                     // Если ошибка не пуста, то отправка ошибки + остановка обработки
                     if (extractedAudio.errorType != null) {

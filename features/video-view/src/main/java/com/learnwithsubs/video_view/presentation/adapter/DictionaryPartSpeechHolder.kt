@@ -19,11 +19,11 @@ class DictionaryPartSpeechHolder(
             "adverb" -> ps = itemView.context.getString(R.string.adverb)
             "participle" -> ps = itemView.context.getString(R.string.participle)
             "predicative" -> ps = itemView.context.getString(R.string.predicative)
-            /*"verb" -> ps = itemView.context.getString(R.string.verb)
+            "verb" -> ps = itemView.context.getString(R.string.verb)
             "interjection" -> ps = itemView.context.getString(R.string.interjection)
             "pronoun" -> ps = itemView.context.getString(R.string.pronoun)
-            "conjunction" -> ps = itemView.context.getString(R.string.pronoun)
-            "preposition" -> ps = itemView.context.getString(R.string.preposition)*/ //TODO
+            "conjunction" -> ps = itemView.context.getString(R.string.conjunction)
+            "preposition" -> ps = itemView.context.getString(R.string.preposition)
         }
         binding.partSpeech.text = ps
     }

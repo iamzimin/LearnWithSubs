@@ -60,6 +60,11 @@
     <string name="adverb">Наречие</string>
     <string name="participle">Причастие</string>
     <string name="predicative">Предикатив</string>
+    <string name="verb">Глагол</string>
+    <string name="interjection">Междометие</string>
+    <string name="pronoun">Местоимение</string>
+    <string name="conjunction">Союз</string>
+    <string name="preposition">Предлог</string>
 
     <string name="yandex_service_is_not_available">Сервис Яндекса недоступен</string>
     <string name="server_for_translation_is_not_available">Сервер для перевода недоступен</string>
