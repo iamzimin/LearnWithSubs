@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.example.yandex_translator_api.data.repository.YandexTranslatorRepositoryImpl
 import com.example.yandex_translator_api.domain.repository.YandexTranslatorRepository
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.learnwithsubs.android_translator.data.repository.AndroidTranslatorRepositoryImpl
 import com.learnwithsubs.android_translator.domain.repository.AndroidTranslatorRepository
 import com.learnwithsubs.database.data.storage.VideoDatabase
@@ -14,13 +12,12 @@ import com.learnwithsubs.server_translator_api.data.repository.ServerTranslatorR
 import com.learnwithsubs.server_translator_api.domain.repository.ServerTranslatorRepository
 import com.learnwithsubs.shared_preference_settings.data.repository.SharedPreferenceSettingsImpl
 import com.learnwithsubs.shared_preference_settings.domain.repository.SharedPreferenceSettings
+import com.learnwithsubs.video_view.data.repository.VideoViewRepositoryImpl
 import com.learnwithsubs.video_view.domain.repository.VideoViewRepository
 import dagger.Module
 import dagger.Provides
-import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -50,9 +47,10 @@ class VideoViewDataModule {
     @Singleton
     @Named("YandexDictionary")
     fun provideYandexDictionaryRetrofit(): Retrofit {
-        val BASE_URL = "https://dictionary.yandex.net/api/v1/"
+        val baseUrl = "https://dictionary.yandex.net/api/v1/dicservice.json/"
+
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -61,19 +59,11 @@ class VideoViewDataModule {
     @Singleton
     @Named("Server")
     fun provideServerRetrofit(): Retrofit {
-        val gson: Gson = GsonBuilder()
-            .setLenient()
-            .create()
-
-        val okHttpClient: OkHttpClient = OkHttpClient.Builder()
-            .connectTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(0, TimeUnit.SECONDS).build()
+        val baseUrl = "http://192.168.0.104:8000/"
 
         return Retrofit.Builder()
-            //.baseUrl("http://10.0.2.2:8000/")
-            .baseUrl("http://192.168.0.107:8000/")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create(gson))
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
@@ -83,7 +73,7 @@ class VideoViewDataModule {
         videoDB: VideoDatabase,
         wordDB:WordDatabase
     ): VideoViewRepository {
-        return com.learnwithsubs.video_view.data.repository.VideoViewRepositoryImpl(
+        return VideoViewRepositoryImpl(
             videoDB.videoListDao,
             wordDB.wordListDao
         )

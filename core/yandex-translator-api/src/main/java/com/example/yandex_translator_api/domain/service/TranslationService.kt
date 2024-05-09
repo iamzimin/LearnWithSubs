@@ -6,7 +6,7 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface TranslationService {
-    @POST("dicservice.json/lookup")
+    @POST("lookup")
     fun getWordsFromDictionary(
         @Query("key") key: String,
         @Query("lang") lang: String,

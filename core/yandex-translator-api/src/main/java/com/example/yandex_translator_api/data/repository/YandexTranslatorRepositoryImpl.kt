@@ -1,5 +1,6 @@
 package com.example.yandex_translator_api.data.repository
 
+import android.util.Log
 import com.example.yandex_translator_api.domain.DictionaryWordDTO
 import com.example.yandex_translator_api.domain.repository.YandexTranslatorRepository
 import com.example.yandex_translator_api.domain.service.TranslationService
@@ -16,15 +17,25 @@ class YandexTranslatorRepositoryImpl(
         word: String
     ): DictionaryWordDTO? {
         val apiService = yandexRetrofit.create(TranslationService::class.java)
-        val wordResponse = apiService.getWordsFromDictionary(key = key, lang = lang, word = word).awaitResponse()
 
-        return if (wordResponse.isSuccessful) {
-            val apiResponse = wordResponse.body() ?: return null
-            return try {
-                apiResponse.DictionaryWordDTO()
-            } catch (e: Exception) { null }
-        } else {
-            null
+        try {
+            val wordResponse = apiService.getWordsFromDictionary(key = key, lang = lang, word = word).awaitResponse()
+
+            return if (wordResponse.isSuccessful) {
+                val apiResponse = wordResponse.body() ?: return null
+                return try {
+                    apiResponse.DictionaryWordDTO()
+                } catch (e: Exception) {
+                    Log.e("Error", "There is no such word in the dictionary: $word")
+                    null
+                }
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            Log.e("Error", "API not available")
+            return null
         }
+
     }
 }
