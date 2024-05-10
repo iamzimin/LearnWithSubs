@@ -29,20 +29,22 @@ class SharedPreferenceSettingsImpl(private val context: Context) : SharedPrefere
 
     override fun getAllAppLanguages(): Array<String> {
         return arrayOf(
+            context.getString(R.string.chinese),
             context.getString(R.string.english),
+            context.getString(R.string.french),
+            context.getString(R.string.german),
+            context.getString(R.string.italian),
+            context.getString(R.string.japanese),
+            context.getString(R.string.korean),
             context.getString(R.string.russian),
             context.getString(R.string.spain),
-            context.getString(R.string.french),
-            context.getString(R.string.japanese),
-            context.getString(R.string.italian),
-            context.getString(R.string.german),
         )
     }
 
     override fun getAllStyles(): Array<String> {
         return arrayOf(
-            context.getString(R.string.light),
             context.getString(R.string.dark),
+            context.getString(R.string.light),
         )
     }
 
@@ -55,11 +57,15 @@ class SharedPreferenceSettingsImpl(private val context: Context) : SharedPrefere
 
     override fun getAllTranslatorLanguages(): Array<String> {
         return arrayOf(
+            context.getString(R.string.chinese),
             context.getString(R.string.english),
+            context.getString(R.string.french),
+            context.getString(R.string.german),
+            context.getString(R.string.italian),
+            context.getString(R.string.japanese),
+            context.getString(R.string.korean),
             context.getString(R.string.russian),
             context.getString(R.string.spain),
-            context.getString(R.string.japanese),
-            context.getString(R.string.french),
         )
     }
 
@@ -71,8 +77,15 @@ class SharedPreferenceSettingsImpl(private val context: Context) : SharedPrefere
 
         val languages = getAllAppLanguages()
         val locale = when (language) {
-            languages[0] -> Locale("en")
-            languages[1] -> Locale("ru")
+            languages[0] -> Locale("zh")
+            languages[1] -> Locale("en")
+            languages[2] -> Locale("fr")
+            languages[3] -> Locale("de")
+            languages[4] -> Locale("it")
+            languages[5] -> Locale("ja")
+            languages[6] -> Locale("ko")
+            languages[7] -> Locale("ru")
+            languages[8] -> Locale("es")
             else -> throw IllegalArgumentException("Unknown language: $language")
         }
         Locale.setDefault(locale)
@@ -94,8 +107,8 @@ class SharedPreferenceSettingsImpl(private val context: Context) : SharedPrefere
 
         val styles = getAllStyles()
         val themeId = when (appStyle) {
-            styles[0] -> R.style.Theme_LearnWithSubsLight
-            styles[1] -> R.style.Theme_LearnWithSubsDark
+            styles[0] -> R.style.Theme_LearnWithSubsDark
+            styles[1] -> R.style.Theme_LearnWithSubsLight
             else -> throw IllegalArgumentException("Unknown app style: $appStyle")
         }
         context.setTheme(themeId)
@@ -121,7 +134,7 @@ class SharedPreferenceSettingsImpl(private val context: Context) : SharedPrefere
         editor.apply()
     }
     override fun getNativeLanguage(): Pair<String, String> {
-        val languageId = sharedPreferences.getInt(KEY_NATIVE_LANGUAGE, 1)
+        val languageId = sharedPreferences.getInt(KEY_NATIVE_LANGUAGE, 8)
         return languageIdToString(id = languageId, context = context)
     }
 

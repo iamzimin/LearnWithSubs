@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">LearnWithSubs</string>
+
+    <!--All-->
+    <string name="word_list">単語リスト</string>
+    <string name="video">ビデオ</string>
+    <string name="settings">設定</string>
+    <string name="search">検索</string>
+
+    <string name="select_all">すべて選択</string>
+    <string name="deselect_all">すべて選択解除</string>
+    <string name="delete">削除</string>
+    <string name="rename">名前を変更</string>
+
+    <!--Video list-->
+    <string name="name">名前</string>
+    <string name="alphabet">アルファベット順</string>
+    <string name="date">日付</string>
+    <string name="duration">期間</string>
+    <string name="ascending">昇順</string>
+    <string name="descending">降順</string>
+    <string name="clear">クリア</string>
+    <string name="apply">適用</string>
+
+    <string name="enter_name">名前を入力</string>
+    <string name="rename_video">ビデオの名前を変更</string>
+
+    <string name="video_duration">期間</string>
+    <string name="video_saved_words">保存された単語</string>
+    <string name="video_is_uploading">ビデオをアップロードしています</string>
+
+    <string name="storage_access_required">ストレージアクセスが必要です</string>
+
+    <string name="video_loading_status">ステータス</string>
+    <string name="video_loading_status_waiting">待機中</string>
+    <string name="video_loading_status_loading_audio">オーディオを読み込んでいます</string>
+    <string name="video_loading_status_decoding_video">ビデオをデコードしています</string>
+    <string name="video_loading_status_extracting_audio">オーディオを抽出しています</string>
+    <string name="video_loading_status_generating_subtitles">字幕を生成しています</string>
+    <string name="video_loading_status_done">完了</string>
+
+    <string name="video_processing_error">ビデオ処理エラー</string>
+    <string name="audio_extraction_error">オーディオ抽出エラー</string>
+    <string name="video_decoding_error">ビデオデコードエラー</string>
+    <string name="audio_upload_error">オーディオアップロードエラー</string>
+    <string name="subtitle_generation_error">字幕生成エラー</string>
+    <string name="subtitle_extraction_error">字幕抽出エラー</string>
+
+    <string name="add_subtitles">字幕を追加</string>
+    <string name="return_subtitles">字幕を戻す</string>
+    <string name="add_preview">プレビューを追加</string>
+
+    <!--Video view-->
+    <string name="noun">名詞</string>
+    <string name="adjective">形容詞</string>
+    <string name="adverb">副詞</string>
+    <string name="participle">分詞</string>
+    <string name="predicative">述語</string>
+    <string name="verb">動詞</string>
+    <string name="interjection">間投詞</string>
+    <string name="pronoun">代名詞</string>
+    <string name="conjunction">接続詞</string>
+    <string name="preposition">前置詞</string>
+
+    <string name="yandex_service_is_not_available">Yandex サービスは利用できません</string>
+    <string name="server_for_translation_is_not_available">翻訳用サーバーが利用できません</string>
+    <string name="wrong_subtitle_format">誤った字幕形式</string>
+
+    <string name="save">保存</string>
+    <string name="translate">翻訳</string>
+
+    <string name="submenu">サブメニュー</string>
+    <string name="copy">コピー</string>
+    <string name="share">共有</string>
+    <string name="sort_by">並び替え</string>
+
+    <string name="the_video_does_not_exist">ビデオが存在しません</string>
+    <string name="model_not_downloaded">モデルがダウンロードされていません</string>
+
+    <!--Word List-->
+    <string name="custom">カスタム</string>
+    <string name="edit">編集</string>
+    <string name="word">単語</string>
+    <string name="translation">翻訳</string>
+    <string name="enter_word">単語を入力</string>
+    <string name="enter_translation">翻訳を入力</string>
+
+    <!--Settings-->
+    <string name="customization">カスタマイズ</string>
+    <string name="language">言語</string>
+    <string name="style">スタイル</string>
+    <string name="learning">学習</string>
+    <string name="translator_source">翻訳元</string>
+    <string name="native_language">母国語</string>
+    <string name="learning_language">学習言語</string>
+
+    <!--Resource-->
+    <string name="chinese">中国語</string>
+    <string name="english">英語</string>
+    <string name="russian">ロシア語</string>
+    <string name="spain">スペイン語</string>
+    <string name="french">フランス語</string>
+    <string name="japanese">日本語</string>
+    <string name="korean">韓国語</string>
+    <string name="italian">イタリア語</string>
+    <string name="german">ドイツ語</string>
+    <string name="dark">ダーク</string>
+    <string name="light">ライト</string>
+    <string name="yandex_plus_android">Yandex+Android</string>
+    <string name="yandex_plus_server">Yandex+サーバー</string>
+
+</resources>

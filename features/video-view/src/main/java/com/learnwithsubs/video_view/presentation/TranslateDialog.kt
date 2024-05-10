@@ -36,8 +36,8 @@ class TranslateDialog(activity: Activity, private val vm: VideoViewViewModel) : 
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            ttsFrom.language = Locale(nativeLanguage.second)
-            ttsTo.language = Locale(learnLanguage.second)
+            ttsFrom.language = Locale(learnLanguage.second)
+            ttsTo.language = Locale(nativeLanguage.second)
         }
     }
 

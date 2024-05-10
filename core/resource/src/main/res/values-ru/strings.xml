@@ -19,16 +19,16 @@
     <string name="alphabet">Алфавит</string>
     <string name="date">Дата</string>
     <string name="duration">Продолжительность</string>
-    <string name="ascending">По возрастанию</string>
-    <string name="descending">По убыванию</string>
+    <string name="ascending">Возрастание</string>
+    <string name="descending">Убывание</string>
     <string name="clear">Очистить</string>
     <string name="apply">Применить</string>
 
     <string name="enter_name">Введите название</string>
     <string name="rename_video">Переименовать видео</string>
 
-    <string name="video_duration">Продолжительность</string>
-    <string name="video_saved_words">Сохраненные слова</string>
+    <string name="video_duration">Продолжит.</string>
+    <string name="video_saved_words">Сохр. слова</string>
     <string name="video_is_uploading">Видео загружается</string>
 
     <string name="storage_access_required">Требуется доступ к хранилищу</string>
@@ -106,11 +106,13 @@
 
 
     <!--Resource-->
+    <string name="chinese">Китайский</string>
     <string name="english">Английский</string>
     <string name="russian">Русский</string>
     <string name="spain">Испанский</string>
     <string name="french">Французский</string>
     <string name="japanese">Японский</string>
+    <string name="korean">Корейский</string>
     <string name="italian">Итальянский</string>
     <string name="german">Немецкий</string>
 

@@ -43,7 +43,7 @@
                     android:id="@+id/saved_words"
                     style="@style/CardViewVideoStatistics"
                     android:textColor="?attr/text_color"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="10dp"
                     android:text="Saved words: 1423" />
             </LinearLayout>
 

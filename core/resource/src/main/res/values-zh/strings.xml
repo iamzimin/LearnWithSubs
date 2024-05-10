@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">LearnWithSubs</string>
+
+    <!--All-->
+    <string name="word_list">单词列表</string>
+    <string name="video">视频</string>
+    <string name="settings">设置</string>
+    <string name="search">搜索</string>
+
+    <string name="select_all">全选</string>
+    <string name="deselect_all">取消全选</string>
+    <string name="delete">删除</string>
+    <string name="rename">重命名</string>
+
+
+
+    <!--Video list-->
+    <string name="name">名称</string>
+    <string name="alphabet">字母表</string>
+    <string name="date">日期</string>
+    <string name="duration">时长</string>
+    <string name="ascending">升序</string>
+    <string name="descending">降序</string>
+    <string name="clear">清除</string>
+    <string name="apply">应用</string>
+
+    <string name="enter_name">输入名称</string>
+    <string name="rename_video">重命名视频</string>
+
+    <string name="video_duration">时长</string>
+    <string name="video_saved_words">已保存单词</string>
+    <string name="video_is_uploading">视频正在上传</string>
+
+    <string name="storage_access_required">需要存储访问权限</string>
+
+    <string name="video_loading_status">状态</string>
+    <string name="video_loading_status_waiting">等待中</string>
+    <string name="video_loading_status_loading_audio">加载音频</string>
+    <string name="video_loading_status_decoding_video">解码视频</string>
+    <string name="video_loading_status_extracting_audio">提取音频</string>
+    <string name="video_loading_status_generating_subtitles">生成字幕</string>
+    <string name="video_loading_status_done">完成</string>
+
+    <string name="video_processing_error">视频处理错误</string>
+    <string name="audio_extraction_error">音频提取错误</string>
+    <string name="video_decoding_error">视频解码错误</string>
+    <string name="audio_upload_error">音频上传错误</string>
+    <string name="subtitle_generation_error">字幕生成错误</string>
+    <string name="subtitle_extraction_error">字幕提取错误</string>
+
+    <string name="add_subtitles">添加字幕</string>
+    <string name="return_subtitles">返回字幕</string>
+    <string name="add_preview">添加预览</string>
+
+
+
+    <!--Video view-->
+    <string name="noun">名词</string>
+    <string name="adjective">形容词</string>
+    <string name="adverb">副词</string>
+    <string name="participle">分词</string>
+    <string name="predicative">表语</string>
+    <string name="verb">动词</string>
+    <string name="interjection">感叹词</string>
+    <string name="pronoun">代词</string>
+    <string name="conjunction">连词</string>
+    <string name="preposition">介词</string>
+
+    <string name="yandex_service_is_not_available">Yandex服务不可用</string>
+    <string name="server_for_translation_is_not_available">翻译服务器不可用</string>
+    <string name="wrong_subtitle_format">错误的字幕格式</string>
+
+    <string name="save">保存</string>
+    <string name="translate">翻译</string>
+
+    <string name="submenu">子菜单</string>
+    <string name="copy">复制</string>
+    <string name="share">分享</string>
+    <string name="sort_by">排序方式</string>
+
+    <string name="the_video_does_not_exist">视频不存在</string>
+    <string name="model_not_downloaded">模型未下载</string>
+
+
+
+    <!--Word List-->
+    <string name="custom">自定义</string>
+    <string name="edit">编辑</string>
+    <string name="word">单词</string>
+    <string name="translation">翻译</string>
+    <string name="enter_word">输入单词</string>
+    <string name="enter_translation">输入翻译</string>
+
+
+
+    <!--Settings-->
+    <string name="customization">自定义</string>
+
+    <string name="language">语言</string>
+    <string name="style">风格</string>
+    <string name="learning">学习</string>
+    <string name="translator_source">翻译来源</string>
+
+    <string name="native_language">母语</string>
+    <string name="learning_language">学习语言</string>
+
+
+
+    <!--Resource-->
+    <string name="chinese">中文</string>
+    <string name="english">英语</string>
+    <string name="russian">俄语</string>
+    <string name="spain">西班牙语</string>
+    <string name="french">法语</string>
+    <string name="japanese">日语</string>
+    <string name="korean">韩国人</string>
+    <string name="italian">意大利语</string>
+    <string name="german">德语</string>
+
+    <string name="dark">暗色</string>
+    <string name="light">明色</string>
+
+    <string name="yandex_plus_android">Yandex+Android</string>
+    <string name="yandex_plus_server">Yandex+服务器</string>
+
+</resources>

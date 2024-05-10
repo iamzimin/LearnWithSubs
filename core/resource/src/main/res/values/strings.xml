@@ -107,13 +107,15 @@
 
 
     <!--Resource-->
+    <string name="chinese">Chinese</string>
     <string name="english">English</string>
+    <string name="french">French</string>
+    <string name="german">German</string>
+    <string name="italian">Italian</string>
+    <string name="japanese">Japanese</string>
+    <string name="korean">Korean</string>
     <string name="russian">Russian</string>
     <string name="spain">Spain</string>
-    <string name="french">French</string>
-    <string name="japanese">Japanese</string>
-    <string name="italian">Italian</string>
-    <string name="german">German</string>
 
     <string name="dark">Dark</string>
     <string name="light">Light</string>

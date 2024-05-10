@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">LearnWithSubs</string>
+
+    <!--All-->
+    <string name="word_list">단어 목록</string>
+    <string name="video">비디오</string>
+    <string name="settings">설정</string>
+    <string name="search">검색</string>
+
+    <string name="select_all">모두 선택</string>
+    <string name="deselect_all">모두 선택 취소</string>
+    <string name="delete">삭제</string>
+    <string name="rename">이름 바꾸기</string>
+
+
+
+    <!--Video list-->
+    <string name="name">이름</string>
+    <string name="alphabet">알파벳순</string>
+    <string name="date">날짜</string>
+    <string name="duration">기간</string>
+    <string name="ascending">오름차순</string>
+    <string name="descending">내림차순</string>
+    <string name="clear">지우기</string>
+    <string name="apply">적용</string>
+
+    <string name="enter_name">이름 입력</string>
+    <string name="rename_video">비디오 이름 바꾸기</string>
+
+    <string name="video_duration">기간</string>
+    <string name="video_saved_words">저장된 단어</string>
+    <string name="video_is_uploading">비디오 업로드 중</string>
+
+    <string name="storage_access_required">저장소 액세스 필요</string>
+
+    <string name="video_loading_status">상태</string>
+    <string name="video_loading_status_waiting">대기 중</string>
+    <string name="video_loading_status_loading_audio">오디오 로딩 중</string>
+    <string name="video_loading_status_decoding_video">비디오 디코딩 중</string>
+    <string name="video_loading_status_extracting_audio">오디오 추출 중</string>
+    <string name="video_loading_status_generating_subtitles">자막 생성 중</string>
+    <string name="video_loading_status_done">완료</string>
+
+    <string name="video_processing_error">비디오 처리 오류</string>
+    <string name="audio_extraction_error">오디오 추출 오류</string>
+    <string name="video_decoding_error">비디오 디코딩 오류</string>
+    <string name="audio_upload_error">오디오 업로드 오류</string>
+    <string name="subtitle_generation_error">자막 생성 오류</string>
+    <string name="subtitle_extraction_error">자막 추출 오류</string>
+
+    <string name="add_subtitles">자막 추가</string>
+    <string name="return_subtitles">자막 되돌리기</string>
+    <string name="add_preview">미리 보기 추가</string>
+
+
+
+    <!--Video view-->
+    <string name="noun">명사</string>
+    <string name="adjective">형용사</string>
+    <string name="adverb">부사</string>
+    <string name="participle">분사</string>
+    <string name="predicative">서술격</string>
+    <string name="verb">동사</string>
+    <string name="interjection">감탄사</string>
+    <string name="pronoun">대명사</string>
+    <string name="conjunction">접속사</string>
+    <string name="preposition">전치사</string>
+
+    <string name="yandex_service_is_not_available">Yandex 서비스를 사용할 수 없습니다</string>
+    <string name="server_for_translation_is_not_available">번역 서버를 사용할 수 없습니다</string>
+    <string name="wrong_subtitle_format">잘못된 자막 형식</string>
+
+    <string name="save">저장</string>
+    <string name="translate">번역</string>
+
+    <string name="submenu">서브메뉴</string>
+    <string name="copy">복사</string>
+    <string name="share">공유</string>
+    <string name="sort_by">정렬 기준</string>
+
+    <string name="the_video_does_not_exist">비디오가 존재하지 않습니다</string>
+    <string name="model_not_downloaded">모델이 다운로드되지 않았습니다</string>
+
+
+
+    <!--Word List-->
+    <string name="custom">사용자 지정</string>
+    <string name="edit">편집</string>
+    <string name="word">단어</string>
+    <string name="translation">번역</string>
+    <string name="enter_word">단어 입력</string>
+    <string name="enter_translation">번역 입력</string>
+
+
+
+    <!--Settings-->
+    <string name="customization">사용자 지정</string>
+
+    <string name="language">언어</string>
+    <string name="style">스타일</string>
+    <string name="learning">학습</string>
+    <string name="translator_source">번역기 출처</string>
+
+    <string name="native_language">모국어</string>
+    <string name="learning_language">학습 언어</string>
+
+
+
+    <!--Resource-->
+    <string name="chinese">중국어</string>
+    <string name="english">영어</string>
+    <string name="russian">러시아어</string>
+    <string name="spain">스페인어</string>
+    <string name="french">프랑스어</string>
+    <string name="japanese">일본어</string>
+    <string name="korean">한국어</string>
+    <string name="italian">이탈리아어</string>
+    <string name="german">독일어</string>
+
+    <string name="dark">다크</string>
+    <string name="light">라이트</string>
+
+    <string name="yandex_plus_android">Yandex+Android</string>
+    <string name="yandex_plus_server">Yandex+서버</string>
+
+</resources>

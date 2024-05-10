@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">LearnWithSubs</string>
+
+    <!--All-->
+    <string name="word_list">Liste de mots</string>
+    <string name="video">Vidéo</string>
+    <string name="settings">Paramètres</string>
+    <string name="search">Recherche</string>
+
+    <string name="select_all">Tout sélectionner</string>
+    <string name="deselect_all">Tout désélectionner</string>
+    <string name="delete">Supprimer</string>
+    <string name="rename">Renommer</string>
+
+
+
+    <!--Video list-->
+    <string name="name">Nom</string>
+    <string name="alphabet">Alphabet</string>
+    <string name="date">Date</string>
+    <string name="duration">Durée</string>
+    <string name="ascending">Croissant</string>
+    <string name="descending">Décroissant</string>
+    <string name="clear">Effacer</string>
+    <string name="apply">Appliquer</string>
+
+    <string name="enter_name">Entrer le nom</string>
+    <string name="rename_video">Renommer la vidéo</string>
+
+    <string name="video_duration">Durée</string>
+    <string name="video_saved_words">Mots enregistrés</string>
+    <string name="video_is_uploading">La vidéo est en cours de téléchargement</string>
+
+    <string name="storage_access_required">Accès au stockage requis</string>
+
+    <string name="video_loading_status">Statut</string>
+    <string name="video_loading_status_waiting">En attente</string>
+    <string name="video_loading_status_loading_audio">Chargement de l\'audio</string>
+    <string name="video_loading_status_decoding_video">Décodage de la vidéo</string>
+    <string name="video_loading_status_extracting_audio">Extraction de l\'audio</string>
+    <string name="video_loading_status_generating_subtitles">Génération des sous-titres</string>
+    <string name="video_loading_status_done">Terminé</string>
+
+    <string name="video_processing_error">Erreur de traitement de la vidéo</string>
+    <string name="audio_extraction_error">Erreur d\'extraction audio</string>
+    <string name="video_decoding_error">Erreur de décodage de la vidéo</string>
+    <string name="audio_upload_error">Erreur de téléchargement de l\'audio</string>
+    <string name="subtitle_generation_error">Erreur de génération de sous-titres</string>
+    <string name="subtitle_extraction_error">Erreur d\'extraction de sous-titres</string>
+
+    <string name="add_subtitles">Ajouter des sous-titres</string>
+    <string name="return_subtitles">Retourner les sous-titres</string>
+    <string name="add_preview">Ajouter un aperçu</string>
+
+
+
+    <!--Video view-->
+    <string name="noun">Nom</string>
+    <string name="adjective">Adjectif</string>
+    <string name="adverb">Adverbe</string>
+    <string name="participle">Participe</string>
+    <string name="predicative">Prédicat</string>
+    <string name="verb">Verbe</string>
+    <string name="interjection">Interjection</string>
+    <string name="pronoun">Pronom</string>
+    <string name="conjunction">Conjonction</string>
+    <string name="preposition">Préposition</string>
+
+    <string name="yandex_service_is_not_available">Le service Yandex n\'est pas disponible</string>
+    <string name="server_for_translation_is_not_available">Le serveur de traduction n\'est pas disponible</string>
+    <string name="wrong_subtitle_format">Format de sous-titres incorrect</string>
+
+    <string name="save">Enregistrer</string>
+    <string name="translate">Traduire</string>
+
+    <string name="submenu">Sous-menu</string>
+    <string name="copy">Copier</string>
+    <string name="share">Partager</string>
+    <string name="sort_by">Trier par</string>
+
+    <string name="the_video_does_not_exist">La vidéo n\'existe pas</string>
+    <string name="model_not_downloaded">Le modèle n\'a pas été téléchargé</string>
+
+
+
+    <!--Word List-->
+    <string name="custom">Personnalisé</string>
+    <string name="edit">Éditer</string>
+    <string name="word">Mot</string>
+    <string name="translation">Traduction</string>
+    <string name="enter_word">Entrer le mot</string>
+    <string name="enter_translation">Entrer la traduction</string>
+
+
+
+    <!--Settings-->
+    <string name="customization">Personnalisation</string>
+
+    <string name="language">Langue</string>
+    <string name="style">Style</string>
+    <string name="learning">Apprentissage</string>
+    <string name="translator_source">Source de traduction</string>
+
+    <string name="native_language">Langue maternelle</string>
+    <string name="learning_language">Langue d\'apprentissage</string>
+
+
+
+    <!--Resource-->
+    <string name="chinese">Chinois</string>
+    <string name="english">Anglais</string>
+    <string name="russian">Russe</string>
+    <string name="spain">Espagnol</string>
+    <string name="french">Français</string>
+    <string name="japanese">Japonais</string>
+    <string name="korean">Сoréen</string>
+    <string name="italian">Italien</string>
+    <string name="german">Allemand</string>
+
+    <string name="dark">Foncé</string>
+    <string name="light">Clair</string>
+
+    <string name="yandex_plus_android">Yandex+Android</string>
+    <string name="yandex_plus_server">Yandex+Serveur</string>
+
+</resources>

@@ -64,7 +64,7 @@
                     android:id="@+id/loading_status"
                     style="@style/CardViewVideoStatistics"
                     android:textColor="?attr/text_unavailable"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="10dp"
                     android:text="Status: " />
             </LinearLayout>
 
