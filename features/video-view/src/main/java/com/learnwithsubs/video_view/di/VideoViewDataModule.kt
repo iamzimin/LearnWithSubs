@@ -59,7 +59,7 @@ class VideoViewDataModule {
     @Singleton
     @Named("Server")
     fun provideServerRetrofit(): Retrofit {
-        val baseUrl = "http://192.168.0.104:8000/"
+        val baseUrl = "http://192.168.0.100:8000/"
 
         return Retrofit.Builder()
             .baseUrl(baseUrl)

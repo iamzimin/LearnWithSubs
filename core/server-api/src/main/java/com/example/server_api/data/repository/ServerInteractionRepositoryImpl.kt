@@ -27,11 +27,11 @@ class ServerInteractionRepositoryImpl(
                 null
             }
         } catch (e: Exception) {
-            Log.e("Error", "Server not available")
-            return null
-            /*"""1
+            /*Log.e("Error", "Server not available")
+            return null*/
+            """1
 00:00:00,000 --> 00:00:10,000
-Hello world, this is a test message for translation""".trimIndent()*/
+Hello world, this is a test message for translation""".trimIndent()
         }
     }
 }

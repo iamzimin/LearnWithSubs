@@ -275,10 +275,6 @@ class VideoViewActivity : AppCompatActivity() {
             }
         }
 
-        videoViewIBind.videoMenuButton.setOnClickListener {
-            timer?.cancel()
-            vm.videoPlaying.value = false
-        }
 
         // Video play/pause
         videoViewIBind.pauseVideoButton.setOnClickListener {
