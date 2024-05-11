@@ -27,7 +27,8 @@
                     android:layout_gravity="center"
                     android:gravity="center_vertical"
                     android:maxLines="1"
-                    android:text="123123123"/>
+                    android:text="123"
+                    tools:ignore="HardcodedText" />
 
                 <CheckBox
                     android:id="@+id/select_check_box"

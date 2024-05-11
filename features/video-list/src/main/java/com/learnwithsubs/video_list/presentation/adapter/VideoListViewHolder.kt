@@ -1,5 +1,6 @@
 package com.learnwithsubs.video_list.presentation.adapter
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.view.View
@@ -16,7 +17,7 @@ import com.learnwithsubs.video_list.domain.models.VideoLoadingType
 import java.io.File
 import java.util.concurrent.TimeUnit
 
-// Родительский класс для всех видео ViewHolder
+// Parent class for all video ViewHolder
 abstract class VideoViewHolder(
     itemView: View
 ) : RecyclerView.ViewHolder(itemView) {
@@ -24,6 +25,7 @@ abstract class VideoViewHolder(
     protected val savedWords: String = itemView.context.getString(R.string.video_saved_words)
     protected val videoIsUploading: String = itemView.context.getString(R.string.video_is_uploading)
 
+    @SuppressLint("DefaultLocale")
     protected fun formatDuration(duration: Long): String {
         val hours = TimeUnit.MILLISECONDS.toHours(duration)
         val minutes = TimeUnit.MILLISECONDS.toMinutes(duration) % 60L
@@ -35,13 +37,14 @@ abstract class VideoViewHolder(
     abstract fun bind(video: Video, isSelected: Boolean)
 }
 
-// ViewHolder для обычного видео
+// ViewHolder for a regular video
 class NormalVideoViewHolder(
     itemView: View,
     private val adapter: VideoListAdapter
 ) : VideoViewHolder(itemView) {
     private val binding = TileVideoBinding.bind(itemView)
 
+    @SuppressLint("SetTextI18n")
     override fun bind(video: Video, isSelected: Boolean) {
         binding.videoName.text = video.name
         binding.duration.text = "${duration}: ${formatDuration(video.duration)}"
@@ -85,13 +88,14 @@ class NormalVideoViewHolder(
     }
 }
 
-// ViewHolder для видео в статусе "загрузка"
+// ViewHolder for videos with the "download" status
 class LoadingVideoViewHolder(
     itemView: View,
     private val adapter: VideoListAdapter
 ) : VideoViewHolder(itemView) {
     private val binding = TileVideoUploadingBinding.bind(itemView)
 
+    @SuppressLint("SetTextI18n")
     override fun bind(video: Video, isSelected: Boolean) {
         binding.videoName.text = video.name
         binding.selectCheckBox.isChecked = isSelected

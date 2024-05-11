@@ -1,5 +1,6 @@
 package com.learnwithsubs.settings.presentation
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
@@ -16,8 +17,8 @@ import com.example.settings.databinding.SettingsRadioButtonDialogBinding
 
 class RadioButtonSelectionDialog(
     fragment: Fragment,
-    private val title: String,
-    private val options: Array<String>,
+    title: String,
+    options: Array<String>,
     private val selected: String,
 ) {
     private val context: Context = fragment.requireContext()
@@ -58,6 +59,7 @@ class RadioButtonSelectionDialog(
         }
     }
 
+    @SuppressLint("InflateParams")
     private fun addRadioButton(text: String) {
         val inflater = LayoutInflater.from(context)
         val radioButton = inflater.inflate(R.layout.radio_button, null) as RadioButton

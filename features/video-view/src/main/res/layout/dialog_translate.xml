@@ -23,7 +23,7 @@
             android:layout_marginBottom="5dp"
             android:textColor="@color/white"
             android:textSize="@dimen/text_default"
-            android:text="... Translator"/>
+            android:text="@string/empty"/>
     </LinearLayout>
 
     <LinearLayout
@@ -56,7 +56,7 @@
                         android:id="@+id/input_language"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Language"
+                        android:text="@string/empty"
                         android:textColor="?attr/text_color"
                         android:textSize="@dimen/text_default"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -88,7 +88,7 @@
                         android:id="@+id/output_language"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Language"
+                        android:text="@string/empty"
                         android:textSize="@dimen/text_default"
                         android:textColor="?attr/text_color"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -116,9 +116,8 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentStart="true"
                     android:layout_toStartOf="@id/audio_input_word"
-                    android:text="Input word"
                     android:textSize="@dimen/text_default"
-                    android:textColor="?attr/text_color" />
+                    android:textColor="?attr/text_color"/>
 
                 <ImageButton
                     android:id="@+id/audio_input_word"
@@ -161,9 +160,8 @@
                     android:layout_gravity="center"
                     android:layout_centerVertical="true"
                     android:layout_alignParentStart="true"
-                    android:text="Output word"
                     android:textSize="@dimen/text_default"
-                    android:textColor="?attr/text_color" />
+                    android:textColor="?attr/text_color"/>
 
                 <ImageButton
                     android:id="@+id/audio_output_word"

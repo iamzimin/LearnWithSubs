@@ -7,7 +7,6 @@ import com.learnwithsubs.database.domain.models.VideoDBO
 import com.learnwithsubs.database.domain.models.WordTranslationDBO
 import com.learnwithsubs.video_view.domain.models.Subtitle
 import com.learnwithsubs.video_view.domain.models.Video
-import com.learnwithsubs.video_view.domain.models.WordTranslation
 import com.learnwithsubs.video_view.domain.repository.VideoViewRepository
 import java.io.File
 

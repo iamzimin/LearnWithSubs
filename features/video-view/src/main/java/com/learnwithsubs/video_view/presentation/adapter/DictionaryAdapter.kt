@@ -1,5 +1,6 @@
 package com.learnwithsubs.video_view.presentation.adapter
 
+import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ class DictionaryAdapter(
     private var onItemClickListener: OnDictionaryClick? = null
 
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateData(wordsList: ArrayList<DictionaryElement>) {
         this@DictionaryAdapter.wordsList = wordsList
         notifyDataSetChanged()
@@ -47,13 +49,11 @@ class DictionaryAdapter(
             when (val word = wordsList[position]) {
             is DictionaryElement.Synonyms -> {
                 val synonymsHolder = holder as DictionarySynonymsHolder
-                val syn = word as DictionaryElement.Synonyms
-                synonymsHolder.bind(syn)
+                synonymsHolder.bind(word)
             }
             is DictionaryElement.PartSpeech -> {
                 val partSpeechHolder = holder as DictionaryPartSpeechHolder
-                val ps = word as DictionaryElement.PartSpeech
-                partSpeechHolder.bind(ps)
+                partSpeechHolder.bind(word)
             }
             /*DictionaryType.WORD -> {
                 val normalHolder = holder as DictionaryNormalHolder

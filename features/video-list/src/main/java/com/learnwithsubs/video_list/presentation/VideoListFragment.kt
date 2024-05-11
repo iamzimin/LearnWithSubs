@@ -18,8 +18,8 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.base.OnSelectChange
 import com.example.base.OnSelectionModeChange
 import com.learnwithsubs.resource.R
-import com.learnwithsubs.video_list.databinding.FragmentVideoListBinding
 import com.learnwithsubs.resource.databinding.SearchViewBinding
+import com.learnwithsubs.video_list.databinding.FragmentVideoListBinding
 import com.learnwithsubs.video_list.di.DaggerVideoListAppComponent
 import com.learnwithsubs.video_list.di.VideoListAppModule
 import com.learnwithsubs.video_list.domain.models.VideoErrorType
@@ -194,18 +194,18 @@ class VideoListFragment : Fragment(), OnSelectChange {
     }
 
 
-    // Если выделено всё
+    // If all is selected
     override fun onSelectAll() {
         videoListFragmentBinding.deSelectAllMenuText.text = appContext.getString(R.string.deselect_all)
         changeCardVisibility(cardView = videoListFragmentBinding.deleteMenu, isVisible = true)
     }
 
-    // Если было выделено всё, а стало на 1 и более меньше
+    // If everything was allocated, but it became 1 or more less
     override fun onDeselectAll() {
         videoListFragmentBinding.deSelectAllMenuText.text = appContext.getString(R.string.select_all)
     }
 
-    // Если не выделено ничего
+    // If nothing is highlighted
     override fun onZeroSelect() {
         videoListFragmentBinding.deSelectAllMenuText.text = appContext.getString(R.string.select_all)
 
@@ -214,7 +214,7 @@ class VideoListFragment : Fragment(), OnSelectChange {
         changeCardVisibility(cardView = videoListFragmentBinding.addSubtitlesMenu, isVisible = false)
     }
 
-    // Если выделено только 1 видео
+    // If only 1 video is highlighted
     override fun onSingleSelected() {
         setTextInSubtitleMenu()
         changeCardVisibility(cardView = videoListFragmentBinding.deleteMenu, isVisible = true)
@@ -227,14 +227,14 @@ class VideoListFragment : Fragment(), OnSelectChange {
         }
     }
 
-    // Если выделено было выделено 1 видео, а стало любое другое число
+    // If 1 video was highlighted, but became any other number
     override fun onNotSingleSelected() {
         setTextInSubtitleMenu()
         changeCardVisibility(cardView = videoListFragmentBinding.addSubtitlesMenu, isVisible = false)
         changeCardVisibility(cardView = videoListFragmentBinding.renameMenu, isVisible = false)
     }
 
-    // Если выделено более 1 видео
+    // If more than 1 video is highlighted
     override fun onSomeSelect() {
         changeCardVisibility(cardView = videoListFragmentBinding.deleteMenu, isVisible = true)
     }

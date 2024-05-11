@@ -110,7 +110,7 @@ class VideoViewActivity : AppCompatActivity() {
         } else
             vm.currentVideo?.let { vm.openVideo(video = it, isPlaying = true) }
 
-        videoViewBind.subtitle.setCustomSelectionActionModeCallback(object : ActionMode.Callback {
+        videoViewBind.subtitle.customSelectionActionModeCallback = object : ActionMode.Callback {
             override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
                 menu.clear()
                 menu.add(R.string.translate)
@@ -140,7 +140,7 @@ class VideoViewActivity : AppCompatActivity() {
             }
 
             override fun onDestroyActionMode(mode: ActionMode) {}
-        })
+        }
 
 
         // Live Data - Click Listener

@@ -23,7 +23,7 @@ internal fun Video.toVideoDBO() : VideoDBO {
         watchProgress = this.watchProgress,
         saveWords = this.saveWords,
         uploadingProgress = this.uploadingProgress,
-        URI = this.URI,
+        uri = this.uri,
         inputPath = this.inputPath,
         outputPath = this.outputPath,
         timestamp = this.timestamp
@@ -42,7 +42,7 @@ internal fun VideoDBO.toVideo() : Video {
         watchProgress = this.watchProgress,
         saveWords = this.saveWords,
         uploadingProgress = this.uploadingProgress,
-        URI = this.URI,
+        uri = this.uri,
         inputPath = this.inputPath,
         outputPath = this.outputPath,
         timestamp = this.timestamp
@@ -81,7 +81,7 @@ internal fun VideoTranscode.toVideo(videoAdditionalFields: Video) : Video {
         watchProgress = videoAdditionalFields.watchProgress,
         saveWords = videoAdditionalFields.saveWords,
         uploadingProgress = this.uploadingProgress,
-        URI = videoAdditionalFields.URI,
+        uri = videoAdditionalFields.uri,
         inputPath = this.inputPath,
         outputPath = this.outputPath,
         timestamp = videoAdditionalFields.timestamp

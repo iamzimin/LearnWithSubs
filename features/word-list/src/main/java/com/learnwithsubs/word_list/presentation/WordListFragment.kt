@@ -126,18 +126,18 @@ class WordListFragment : Fragment(), OnSelectChange {
     }
 
 
-    // Если выделено всё
+    // If all is selected
     override fun onSelectAll() {
         fragmentWordListBinding.deSelectAllMenuText.text = context.getString(R.string.deselect_all)
         changeCardVisibility(cardView = fragmentWordListBinding.deleteMenu, isVisible = true)
     }
 
-    // Если было выделено всё, а стало на 1 и более меньше
+    // If everything was allocated, but it became 1 or more less
     override fun onDeselectAll() {
         fragmentWordListBinding.deSelectAllMenuText.text = context.getString(R.string.select_all)
     }
 
-    // Если не выделено ничего
+    // If nothing is highlighted
     override fun onZeroSelect() {
         fragmentWordListBinding.deSelectAllMenuText.text = context.getString(R.string.select_all)
 
@@ -145,13 +145,13 @@ class WordListFragment : Fragment(), OnSelectChange {
         changeCardVisibility(cardView = fragmentWordListBinding.editMenu, isVisible = false)
     }
 
-    // Если выделено только 1 видео
+    // If only 1 video is highlighted
     override fun onSingleSelected() {
         changeCardVisibility(cardView = fragmentWordListBinding.deleteMenu, isVisible = true)
         changeCardVisibility(cardView = fragmentWordListBinding.editMenu, isVisible = true)
     }
 
-    // Если выделено было выделено 1 видео, а стало любое другое число
+    // If 1 video was highlighted, but became any other number
     override fun onNotSingleSelected() {
         changeCardVisibility(cardView = fragmentWordListBinding.editMenu, isVisible = false)
     }

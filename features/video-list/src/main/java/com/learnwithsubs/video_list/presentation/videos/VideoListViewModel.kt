@@ -65,40 +65,40 @@ class VideoListViewModel @Inject constructor(
                 try {
                     poolList = processQueue.poll() ?: return@withContext
 
-                    // Обработка извлечение аудио
+                    // Processing audio extraction
                     poolList.loadingType = VideoLoadingType.EXTRACTING_AUDIO
                     editVideo(poolList)
 
-                    // Return, если null (пользователь отменил загрузку)
+                    // Return if null (the user canceled the download)
                     val extractedAudio: Video = videoListUseCases.extractAudioUseCase.invoke(poolList) ?: return@withContext
-                    // Если ошибка не пуста, то отправка ошибки + остановка обработки
+                    // If the error is not empty, then sending the error + stopping processing
                     if (extractedAudio.errorType != null) {
                         errorTypeLiveData.postValue(extractedAudio)
                         return@withContext
                     }
 
-                    // Декодирование видео
+                    // Video decoding
                     val transcodeVideo = async {
                         poolList.loadingType = VideoLoadingType.DECODING_VIDEO
                         editVideo(poolList)
                         return@async videoListUseCases.transcodeVideoUseCase.invoke(poolList)
                     }
 
-                    // Загрузка аудио и сохранение субтитров
+                    // Download audio and save subtitles
                     val subtitlesFromServer = async {
                        return@async videoListUseCases.getSubtitlesFromServerUseCase.invoke(extractedAudio)
                     }
 
-                    // Ожидание декодирования видео
-                    // Return, если null (пользователь отменил загрузку)
+                    // Waiting for video decoding
+                    // Return if null (the user canceled the download)
                     val recodedVideo = transcodeVideo.await() ?: return@withContext
-                    // Если ошибка не пуста, то отправка ошибки + остановка обработки
+                    // If the error is not empty, then sending the error + stopping processing
                     if (recodedVideo.errorType != null) {
                         errorTypeLiveData.postValue(recodedVideo)
                         return@withContext
                     }
 
-                    // После выполненеия декодирования ставится стстус генерации субтитров, если они ещё не готовы
+                    // After decoding, the subtitle generation status is set if they are not ready yet
                     if (subtitlesFromServer.isActive) {
                         poolList.loadingType = VideoLoadingType.GENERATING_SUBTITLES
                         editVideo(poolList)
@@ -109,10 +109,10 @@ class VideoListViewModel @Inject constructor(
                         return@withContext
                     }
 
-                    // Генерация превью
+                    // Preview generation
                     videoListUseCases.extractVideoPreviewUseCase.invoke(recodedVideo)
 
-                    // Успешное завершение
+                    // Successful completion
                     recodedVideo.videoStatus = VideoStatus.NORMAL_VIDEO
                     recodedVideo.loadingType = VideoLoadingType.DONE
                     editVideo(recodedVideo)

@@ -1,6 +1,5 @@
 package com.learnwithsubs.settings.di
 
-import com.learnwithsubs.settings.domain.repository.SettingsRepository
 import com.learnwithsubs.settings.domain.usecase.GetAllAppLanguages
 import com.learnwithsubs.settings.domain.usecase.GetAllStyles
 import com.learnwithsubs.settings.domain.usecase.GetAllTranslatorLanguages
@@ -26,7 +25,6 @@ class SettingsDomainModule {
     @Provides
     @Singleton
     fun provideSettingsUseCases(
-        settingsRepository: SettingsRepository,
         sharedPreferenceSettings: SharedPreferenceSettings,
     ): SettingsUseCases {
         return SettingsUseCases(

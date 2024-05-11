@@ -28,7 +28,8 @@
                 android:id="@+id/video_name"
                 style="@style/CardViewVideoName"
                 android:textColor="?attr/text_color"
-                android:text="Video"/>
+                android:text="Video"
+                tools:ignore="HardcodedText" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -38,13 +39,15 @@
                     android:id="@+id/duration"
                     style="@style/CardViewVideoStatistics"
                     android:textColor="?attr/text_color"
-                    android:text="Duration: 1:23:45" />
+                    android:text="Duration: 1:23:45"
+                    tools:ignore="HardcodedText" />
                 <TextView
                     android:id="@+id/saved_words"
                     style="@style/CardViewVideoStatistics"
                     android:textColor="?attr/text_color"
                     android:layout_marginStart="10dp"
-                    android:text="Saved words: 1423" />
+                    android:text="Saved words: 1423"
+                    tools:ignore="HardcodedText" />
             </LinearLayout>
 
             <ProgressBar

@@ -59,7 +59,7 @@ class VideoListVideoPicker(private val fragment: Fragment, private val requestCo
                 name = videoName,
                 inputPath = path,
                 duration = videoDuration,
-                URI = selectedVideoUri.toString(),
+                uri = selectedVideoUri.toString(),
                 timestamp = currentTime
             )
 

@@ -95,7 +95,7 @@ class SharedPreferenceSettingsImpl(private val context: Context) : SharedPrefere
         context.resources.updateConfiguration(configuration, context.resources.displayMetrics)
     }
     override fun getAppLanguage(): Pair<String, String> {
-        val languageId = sharedPreferences.getInt(KEY_APP_LANGUAGE, 1)
+        val languageId = sharedPreferences.getInt(KEY_APP_LANGUAGE, 2)
         return languageIdToString(id = languageId, context = context)
     }
 

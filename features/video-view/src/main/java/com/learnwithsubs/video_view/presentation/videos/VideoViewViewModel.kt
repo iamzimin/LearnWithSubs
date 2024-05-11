@@ -1,5 +1,6 @@
 package com.learnwithsubs.video_view.presentation.videos
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -104,6 +105,7 @@ class VideoViewViewModel @Inject constructor(
     }
 
 
+    @SuppressLint("DefaultLocale")
     private fun formatTime(time: Long): String {
         val currHours = time / 1000L / 3600L
         val currMinutes = time / 1000L / 60L % 60L

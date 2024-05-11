@@ -34,7 +34,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="89"
-                android:textColor="?attr/text_color" />
+                android:textColor="?attr/text_color"
+                tools:ignore="HardcodedText" />
         </RelativeLayout>
 
 
@@ -49,7 +50,8 @@
                 android:id="@+id/video_name"
                 style="@style/CardViewVideoName"
                 android:textColor="?attr/text_unavailable"
-                android:text="Video"/>
+                android:text="Video"
+                tools:ignore="HardcodedText" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -59,13 +61,15 @@
                     android:id="@+id/duration"
                     style="@style/CardViewVideoStatistics"
                     android:textColor="?attr/text_unavailable"
-                    android:text="Duration: 1:23:45" />
+                    android:text="Duration: 1:23:45"
+                    tools:ignore="HardcodedText" />
                 <TextView
                     android:id="@+id/loading_status"
                     style="@style/CardViewVideoStatistics"
                     android:textColor="?attr/text_unavailable"
                     android:layout_marginStart="10dp"
-                    android:text="Status: " />
+                    android:text="Status: "
+                    tools:ignore="HardcodedText" />
             </LinearLayout>
 
         </LinearLayout>

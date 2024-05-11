@@ -52,13 +52,13 @@ class RenameDialog(fragment: Fragment, private val vm: VideoListViewModel, priva
         val video = vm.videoList.value?.find { it.id == vm.editableVideo?.id }?.copy()
 
         if (video == null) {
-            // Если видео не найдено - его нельзя редактировать
+            // If the video is not found, it cannot be edited
             Toast.makeText(context, context.getString(R.string.the_video_does_not_exist), Toast.LENGTH_SHORT).show()
         } else if (video.loadingType != VideoLoadingType.DONE) {
-            // Если видео не загружено - его нельзя редактировать
+            // If the video is not uploaded, it cannot be edited
             Toast.makeText(context, context.getString(R.string.video_is_uploading), Toast.LENGTH_SHORT).show()
         } else {
-            // Обновляем и загружаем видео
+            // Updating and uploading videos
             video.name = textView.text.toString()
             vm.editVideo(video = video)
         }

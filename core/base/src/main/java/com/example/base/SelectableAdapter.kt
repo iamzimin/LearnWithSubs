@@ -1,5 +1,6 @@
 package com.example.base
 
+import android.annotation.SuppressLint
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
@@ -67,12 +68,14 @@ abstract class SelectableAdapter<T : Identifiable>(
         changeMode(isSelectionMode = true)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun deselectAll() {
         selectedItems.clear()
         notifyDataSetChanged()
         callbacks(this.itemList)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun changeMode(isSelectionMode: Boolean) {
         this.isSelectionMode = isSelectionMode
         if (!isSelectionMode) {

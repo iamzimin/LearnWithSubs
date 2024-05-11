@@ -19,7 +19,7 @@ data class VideoDBO(
     var watchProgress: Int = 0,
     var saveWords: Int = 0,
     var uploadingProgress: Int = 0,
-    val URI: String,
+    val uri: String,
     val inputPath: String = "",
     var outputPath: String = "",
     val timestamp: Long,

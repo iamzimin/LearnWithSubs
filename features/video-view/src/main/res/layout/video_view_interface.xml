@@ -42,7 +42,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:layout_marginHorizontal="80dp"
-                android:text="Video123123123123"
+                android:text="@string/empty"
                 android:maxLines="2"
                 android:textColor="@color/white"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -157,7 +157,8 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/video_play_seek_bar"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            tools:ignore="HardcodedText" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

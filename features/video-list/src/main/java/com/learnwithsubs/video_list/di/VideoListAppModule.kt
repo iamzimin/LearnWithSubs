@@ -25,7 +25,6 @@ class VideoListAppModule(val context: Context) {
     ): VideoListViewModelFactory {
         return VideoListViewModelFactory(
             videoListUseCases = videoListUseCases,
-            videoTranscodeRepository = videoTranscodeRepository
         )
     }
 }

@@ -24,7 +24,8 @@
                 android:layout_centerInParent="true"
                 android:text="@string/video"
                 android:textColor="?attr/text_color"
-                android:textSize="@dimen/text_h1" />
+                android:textSize="@dimen/text_h1"
+                tools:ignore="RelativeOverlap" />
 
             <ImageButton
                 android:id="@+id/sort_by"

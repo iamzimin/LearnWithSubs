@@ -1,5 +1,6 @@
 package com.learnwithsubs.word_list.presentation.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -70,10 +71,10 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return items.getListSize() - 1
     }
 
-    private fun getParentTileId(Xindex: Int): Int {
+    private fun getParentTileId(indexX: Int): Int {
         var index = 0
         val list = items.getList()
-        for (i in 0 until Xindex) {
+        for (i in 0 until indexX) {
             index += list[i].wordList.size + 1
         }
         return index
@@ -88,12 +89,13 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         else
             selectedItems.removeWord(elem = word.data, index = index)
 
-        val pos = getParentTileId(Xindex = index)
+        val pos = getParentTileId(indexX = index)
         notifyItemChanged(pos)
 
         callbacks()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun selectAll() {
         selectedItems.setData(list = items.getList())
         notifyDataSetChanged()
@@ -114,12 +116,14 @@ class WordListTitleAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyItemRangeChanged(position, items.getTitle(index).wordList.size + 1)
         callbacks()
     }
+    @SuppressLint("NotifyDataSetChanged")
     fun deselectAll() {
         clearSelectionList()
         notifyDataSetChanged()
         callbacks()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun changeMode(isSelectionMode: Boolean) {
         this.isSelectionMode = isSelectionMode
         if (!isSelectionMode)
