@@ -23,11 +23,12 @@ class VideoListActivity : AppCompatActivity(), OnSelectionModeChange {
     private lateinit var videoListBinding: ActivityVideoListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         val spsLanguage = SharedPreferenceSettingsImpl(context = baseContext)
         spsLanguage.saveAppLanguage(spsLanguage.getAppLanguage().first)
         val spsStyle = SharedPreferenceSettingsImpl(context = this)
         spsStyle.saveAppStyle(spsStyle.getAppStyle())
+
+        super.onCreate(savedInstanceState)
 
 
         videoListBinding = ActivityVideoListBinding.inflate(layoutInflater)

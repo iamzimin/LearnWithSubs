@@ -3,6 +3,7 @@ package com.learnwithsubs.shared_preference_settings.data.repository
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import androidx.appcompat.app.AppCompatDelegate
 import com.learnwithsubs.resource.R
 import com.learnwithsubs.shared_preference_settings.domain.languageIdToString
 import com.learnwithsubs.shared_preference_settings.domain.repository.SharedPreferenceSettings
@@ -107,8 +108,14 @@ class SharedPreferenceSettingsImpl(private val context: Context) : SharedPrefere
 
         val styles = getAllStyles()
         val themeId = when (appStyle) {
-            styles[0] -> R.style.Theme_LearnWithSubsDark
-            styles[1] -> R.style.Theme_LearnWithSubsLight
+            styles[0] -> {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                R.style.Theme_LearnWithSubsDark
+            }
+            styles[1] -> {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                R.style.Theme_LearnWithSubsLight
+            }
             else -> throw IllegalArgumentException("Unknown app style: $appStyle")
         }
         context.setTheme(themeId)
