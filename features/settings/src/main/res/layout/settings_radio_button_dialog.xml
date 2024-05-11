@@ -30,20 +30,25 @@
 
         </LinearLayout>
 
-
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/scroll_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginHorizontal="20dp">
+            android:layout_height="@dimen/settings_dialog_max_height"
+            android:scrollbars="none">
 
-
-            <RadioGroup
-                android:id="@+id/radio_group"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginHorizontal="20dp">
 
-<!--                    <RadioButton
+
+                <RadioGroup
+                    android:id="@+id/radio_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!--<RadioButton
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
@@ -52,14 +57,18 @@
                         android:text="q12323">
                     </RadioButton>-->
 
-            </RadioGroup>
+                </RadioGroup>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10sp"/>
 
-        </LinearLayout>
+            </LinearLayout>
+
+        </ScrollView>
+
+
 
     </LinearLayout>
 

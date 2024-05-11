@@ -32,6 +32,7 @@
                 android:id="@+id/video_name_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/TextArea"
                 android:maxHeight="200dp"
                 android:hint="@string/enter_name"/>
 

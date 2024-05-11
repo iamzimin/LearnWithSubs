@@ -40,6 +40,12 @@ class RadioButtonSelectionDialog(
         parentView?.removeView(dialogView)
         radioButtonDialog.setContentView(dialogView)
 
+        if (options.size > 5) {
+            settingsRadioButtonDialogBinding.scrollView.layoutParams.height = context.resources.getDimensionPixelSize(com.learnwithsubs.resource.R.dimen.settings_dialog_max_height)
+        } else {
+            settingsRadioButtonDialogBinding.scrollView.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        }
+
         radioButtonDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         radioButtonDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         radioButtonDialog.window?.setGravity(Gravity.CENTER)

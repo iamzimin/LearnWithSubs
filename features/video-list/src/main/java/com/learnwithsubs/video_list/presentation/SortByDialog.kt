@@ -79,6 +79,7 @@ class SortByDialog(fragment: Fragment, private val vm: VideoListViewModel, priva
         sortByDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         sortByDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         sortByDialog.window?.setGravity(Gravity.BOTTOM)
+        sortByDialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
     }
 
     fun openSortByMenu() {

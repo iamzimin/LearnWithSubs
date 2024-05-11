@@ -33,4 +33,6 @@
 
     <dimen name="card_corner">20sp</dimen>
 
+    <dimen name="settings_dialog_max_height">310dp</dimen>
+
 </resources>

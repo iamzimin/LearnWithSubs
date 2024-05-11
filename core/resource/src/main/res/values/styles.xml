@@ -142,11 +142,17 @@
         <item name="android:textColorHint">?attr/text_unavailable</item>
     </style>
 
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+    </style>
 
 
 
 
-<!--Settings-->
+
+
+    <!--Settings-->
 <!--Main Card View-->
     <style name="CardViewMain" parent="Widget.MaterialComponents.CardView">
         <item name="android:layout_marginHorizontal">15dp</item>
