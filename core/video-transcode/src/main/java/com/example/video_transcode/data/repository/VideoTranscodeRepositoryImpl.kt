@@ -3,7 +3,6 @@ package com.example.video_transcode.data.repository
 import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
-import android.os.Environment
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.arthenica.ffmpegkit.FFmpegKit
@@ -31,8 +30,8 @@ class VideoTranscodeRepositoryImpl(
     private lateinit var transcodeVideoExecutionId: FFmpegSession
     private lateinit var extractAudioExecutionId: FFmpegSession
 
-    //val internalStorageDir = File(context.filesDir, "LearnWithSubs") //TODO release
-    private val externalStorageDir = File(Environment.getExternalStorageDirectory().toString(), "LearnWithSubs")
+    private val storageDir = File(context.filesDir, "LearnWithSubs") //TODO release
+    //private val storageDir = File(Environment.getExternalStorageDirectory().toString(), "LearnWithSubs")
 
     override suspend fun transcodeVideo(videoTranscode: VideoTranscode): VideoTranscode? = suspendCoroutine { continuation ->
         val videoFolder = getVideoFolderPath(videoTranscode)
@@ -138,7 +137,7 @@ class VideoTranscodeRepositoryImpl(
     }
 
     private fun getVideoFolderPath(videoTranscode: VideoTranscode): File {
-        val videoFolder = File(externalStorageDir, videoTranscode.id.toString())
+        val videoFolder = File(storageDir, videoTranscode.id.toString())
 
         if (!videoFolder.exists())
             videoFolder.mkdirs()

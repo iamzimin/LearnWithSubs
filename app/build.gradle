@@ -43,7 +43,6 @@ dependencies {
     implementation project(':features:video-view')
     implementation project(':features:word-list')
     implementation project(':features:settings')
-    implementation project(':core:base')
     implementation project(':core:shared-preference-settings')
 
 
@@ -56,49 +55,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
-
-    //Room
-    def room_version = "2.6.1"
-    implementation "androidx.room:room-common:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-
-    //DHilt
-    //implementation 'com.google.dagger:hilt-android:2.46.1'
-    //kapt 'com.google.dagger:hilt-android-compiler:2.46.1'
-
-    //Dagger2
-    implementation 'com.google.dagger:dagger:2.46.1'
-    kapt 'com.google.dagger:dagger-compiler:2.46.1'
-    implementation 'javax.inject:javax.inject:1'
-
-    //ViewModel - LiveData
-    def lifecycle_version = "2.7.0"
-    implementation("androidx.lifecycle:lifecycle-common:$lifecycle_version")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1'
-
-    //FFmpeg
-    //implementation 'com.arthenica:mobile-ffmpeg-full:4.4'
-    implementation 'com.arthenica:ffmpeg-kit-full:5.1'
-
-    //Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
-
     //Fragment
     implementation 'androidx.navigation:navigation-fragment-ktx:2.7.7'
     implementation 'androidx.navigation:navigation-ui-ktx:2.7.7'
-
-    //Coil
-    implementation 'io.coil-kt:coil:2.4.0'
-
-    //Progress Bar
-    implementation 'com.google.android.material:material:1.12.0'
-
-    //Translate
-    implementation 'com.google.mlkit:translate:17.0.2'
 }
